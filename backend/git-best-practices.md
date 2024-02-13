@@ -2,23 +2,22 @@
 
 (https://gist.github.com/karmenatwork/e0dbe33e1c553e1a998839737c8c799a)
 
-We have two branches main and staging; no direct modifications are made to these.
+We have two branches main and develop. 
 
-- **main**: contains code that's currently run in production.
-- **staging**: contains code for the upcoming release to production. Deployed to cloud for testing, and is the branch where all development code is merged into.
+- **main**: contains code that's currently run in production. When code in the develop branch is ready to be deployed to production, all of the changes should be merged into main and then tagged with a release number. This code will go through a QA environment before being deployed to production.
 - **develop**: where development code is pushed, and is the branch where all feature branches are merged into.
-The main branch is considered ***origin/develop*** and it is the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release. As a developer, you will you be branching and merging from staging.
+  The main branch is considered **_origin/develop_** and it is the main branch where the source code of HEAD always reflects a state with the latest delivered development changes for the next release. As a developer, you will you be branching and merging from develop.
 
-Consider ***origin/main*** to always represent the latest code deployed to production. During day to day development, the main branch will not be interacted with.
+Consider **_origin/main_** to always represent the latest code deployed to production. During day to day development, the main branch will not be interacted with.
 
 ## Branch Naming Convention
 
 We branch out from the latest development branch; and branches are named in this pattern:
 
     <branch-author>/<branch-type>/<branch-name>
-  
-### branch-author  
-    
+
+### branch-author
+
     <autor name or initial> is for maintaining a point-of-contact context.
 
 easily to group/search using Git's pattern matching options.
@@ -43,12 +42,7 @@ Depending on the type of code you will be working on, we use different branch na
     <tr>
       <td>Production</td>
       <td>main</td>
-      <td>Accepts merges from Staging and Hotfixes</td>
-    </tr>
-     <tr>
-      <td>Staging</td>
-      <td>staging</td>
-      <td>Accepts merges from Develop</td>
+      <td>Accepts merges from Develop and Hotfixes</td>
     </tr>
     <tr>
       <td>Develop</td>
@@ -58,12 +52,12 @@ Depending on the type of code you will be working on, we use different branch na
     <tr>
       <td>Features/Issues</td>
       <td>feature/*</td>
-      <td>Always branch off HEAD of Staging|Develop </td>
+      <td>Always branch off HEAD of Develop </td>
     </tr>
     <tr>
       <td>Bugfixes </td>
       <td>fix/*</td>
-      <td>Always branch off  Staging|Develop </td>
+      <td>Always branch off Develop </td>
     </tr>
     <tr>
       <td>Hotfix</td>
@@ -73,18 +67,18 @@ Depending on the type of code you will be working on, we use different branch na
     <tr>
       <td>Tech Debt</td>
       <td>debt/*</td>
-      <td>Always branch off  Staging|Develop </td>
+      <td>Always branch off  Develop </td>
     </tr>
     <tr>
       <td>Test</td>
       <td>test/*</td>
-      <td>Always branch off  Staging | Develop </td>
+      <td>Always branch off Develop </td>
     </tr>
   </tbody>
 </table>
 
 - feature/{name of feature} contains code for features.
-- fix/{name of issue} contains code for bug fixes. 
-- hotfix/{name of hotfix} contains code for fixing production 
+- fix/{name of issue} contains code for bug fixes.
+- hotfix/{name of hotfix} contains code for fixing production
 - debt/{name of tech deb} contains code for any Tech Investments
 - test/{name of test related code } contains everything test related to our test automation infrastructure, test dependencies.
