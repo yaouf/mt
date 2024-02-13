@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "aaron-bond.better-comments",
+    "esbenp.prettier-vscode",
+    "mgmcdermott.vscode-language-babel",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-ssh-edit",
+    "ms-vscode.remote-explorer"
+  ]
+}
