@@ -2,6 +2,10 @@ import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { Platform, Alert } from "react-native";
 
+/**
+ * test code ! will edit
+ * @returns
+ */
 export async function registerForPushNotificationsAsync() {
   let token;
   console.log("registerForPushNotificationsAsync called");

@@ -4,11 +4,11 @@ import { useRef } from "react";
 import { View, Button } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type Props = {
+type HomeProps = {
   navigation: StackNavigationProp<any, any>;
 };
 
-function Home({ navigation }: Props) {
+function Home({ navigation }: HomeProps) {
   const webviewRef = useRef<WebView>(null);
 
   return (
