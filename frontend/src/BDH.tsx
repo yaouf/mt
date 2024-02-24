@@ -9,6 +9,9 @@ import SettingsScreen from "./pages/SettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
+/**
+ * @returns Main app component 
+ */
 export default function BDH() {
   useEffect(() => {
     registerForPushNotificationsAsync();
