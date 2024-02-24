@@ -1,6 +1,8 @@
 # https://github.com/github/gitignore/blob/main/Node.gitignore
 # Logs
 logs
+logs/**/*
+logs/*
 *.log
 npm-debug.log*
 yarn-debug.log*
