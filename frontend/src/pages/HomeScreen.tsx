@@ -8,6 +8,12 @@ type HomeProps = {
   navigation: StackNavigationProp<any, any>;
 };
 
+/**
+ * Home screen with embedded web view
+ *
+ * @param param navigation param from BDH parent component
+ * @returns Home Screen
+ */
 function Home({ navigation }: HomeProps) {
   const webviewRef = useRef<WebView>(null);
 
