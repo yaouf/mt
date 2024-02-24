@@ -10,7 +10,5 @@
     "esModuleInterop": true
   },
   "compileOnSave": true,
-  "include": [
-    "src"
-, "src/url/example.ts"  ]
+  "include": ["src", "src/url/helloWorld.ts", "knexfile.ts, data"]
 }

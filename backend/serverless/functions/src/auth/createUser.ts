@@ -3,5 +3,5 @@ import * as logger from "firebase-functions/logger";
 
 export const createUser = user().onCreate(user => {
   logger.info("Creating a new user", { structuredData: true });
-  // TODO: create a new user in user table with userId, email, name
+  // TODO SANA: create a new user in user table with userId, email, name
 });

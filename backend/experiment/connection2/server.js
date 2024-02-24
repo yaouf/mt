@@ -29,7 +29,6 @@ try {
 //     });
     await db.schema.createTable("devices", table => {
       table.increments("id").primary(); // Assuming 'id' as the primary key
-      table.integer("deviceId").unique().notNullable(); // Assuming 'deviceId' should be unique and not null
       table.string("deviceType").notNullable();
       table.boolean("breakingNewsAlerts").notNullable();
       table.boolean("weeklySummaryAlerts").notNullable();
