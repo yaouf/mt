@@ -5,8 +5,8 @@ type ResponseData = {
   message: string;
 };
 
-// TODO: create different handler for each push category (i.e. breaking news, weekly summary)
-export default function handler(
+// TODO CALVIN: create different handler for breaking news category, called breakingHandler
+export default function dashboardHandler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
