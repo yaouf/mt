@@ -6,11 +6,12 @@ import HomeScreen from "./pages/HomeScreen";
 import SectionsScreen from "./pages/SectionsScreen";
 import SearchScreen from "./pages/SearchScreen";
 import SettingsScreen from "./pages/SettingsScreen";
+import LoginScreen from "./pages/LoginScreen";
 
 const Tab = createBottomTabNavigator();
 
 /**
- * @returns Main app component 
+ * @returns Main app component
  */
 export default function BDH() {
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function BDH() {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Sections" component={SectionsScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="Login" component={LoginScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
