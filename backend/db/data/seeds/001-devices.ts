@@ -10,7 +10,7 @@ export async function seed(knex: Knex): Promise<void> {
       deviceType: "iOS",
       breakingNewsAlerts: true,
       weeklySummaryAlerts: false,
-      expoPushToken: "ExpoToken[123]",
+      expoPushToken: "ExpoPushToken[123]",
     }
   ]);
 }

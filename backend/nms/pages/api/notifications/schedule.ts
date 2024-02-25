@@ -1,21 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-  import { Expo, ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
+import { Expo, ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
+import db from "../../../db/data/db-config";
 
 type ResponseData = {
   message: string;
 };
 
 // TODO CALVIN: create different handler for breaking news category, called breakingHandler
-export default function dashboardHandler(
+export default async function dashboardHandler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-
   // Create a new Expo SDK client
   // optionally providing an access token if you have enabled push security
   // TODO: enable push security
-  // TODO: query sql server for push token list for a category
-  
+  // TODO YASSIR: query sql server for push token list for a category
+
+  // select all from devices table and log result
+  const allDevices = await db("devices").select();
+  console.log(allDevices);
+
   const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
   const somePushTokens: string[] = [
     "ExponentPushToken[98FnGADJ4AOEqyomeGRsRR]",
