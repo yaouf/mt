@@ -4,20 +4,10 @@ import db from "../../data/db-config";
 
 export const createDevice = onRequest(async (request, response) => {
   logger.info("Creating a new device", { structuredData: true });
-  // TODO CHRISTIAN: create a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken?
-//   const db = knex(config.development);
-
-//   await db.schema.createTable("devices", table => {
-//     table.increments("id").primary(); 
-//     table.integer("deviceId").unique().notNullable(); 
-//     table.string("deviceType").notNullable();
-//     table.boolean("breakingNewsAlerts").notNullable();
-//     table.boolean("weeklySummaryAlerts").notNullable();
-//     table.string("expoPushToken").unique(); 
-//   });
-
+  // TODO CHRISTIAN: create a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
+// Assume info above is in request body as json. If any required fields are missing, return an error status code
   const insertedRows = await db("devices").insert({
-    deviceType: "Phone",
+    deviceType: "Android",
     breakingNewsAlerts: true,
     weeklySummaryAlerts: false,
     expoPushToken: "ExpoToken[124]",

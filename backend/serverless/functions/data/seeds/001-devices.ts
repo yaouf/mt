@@ -7,7 +7,7 @@ export async function seed(knex: Knex): Promise<void> {
   // Inserts seed entries
   await knex("devices").insert([
     {
-      deviceType: "Phone",
+      deviceType: "iOS",
       breakingNewsAlerts: true,
       weeklySummaryAlerts: false,
       expoPushToken: "ExpoToken[123]",
