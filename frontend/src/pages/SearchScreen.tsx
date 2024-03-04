@@ -1,5 +1,6 @@
 import { View, Text, TextInput, Pressable, FlatList } from "react-native";
-import { StyleSheet } from "react-native";
+// import { StyleSheet } from "react-native";
+import { styles } from "../styles/search";
 import React, { useState } from "react";
 import Item from "../components/Item";
 
@@ -12,7 +13,6 @@ import Item from "../components/Item";
  *
  * @returns Search screen
  */
-
 function SearchScreen() {
   const [text, onChangeText] = useState("");
   const [searchResults, setSearchResults] = useState("");
@@ -71,18 +71,18 @@ function SearchScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  titleText: {
-    fontSize: 40,
-    fontWeight: "bold",
-    paddingBottom: 20,
-  },
-  button: {
-    backgroundColor: "brown",
-    height: 30,
-    width: 70,
-    borderRadius: 10,
-  },
-});
+// const styles = StyleSheet.create({
+//   titleText: {
+//     fontSize: 40,
+//     fontWeight: "bold",
+//     paddingBottom: 20,
+//   },
+//   button: {
+//     backgroundColor: "brown",
+//     height: 30,
+//     width: 70,
+//     borderRadius: 10,
+//   },
+// });
 
 export default SearchScreen;

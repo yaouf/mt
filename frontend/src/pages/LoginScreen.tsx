@@ -1,12 +1,5 @@
-import { Dispatch, SetStateAction, useState } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-
-type LoginProps = {
-  loggedIn: boolean;
-  setLoggedIn: Dispatch<SetStateAction<boolean>>;
-  username: string;
-  setUsername: Dispatch<SetStateAction<string>>;
-};
+import { LoginProps } from "../types";
 
 /**
  * Page for login
