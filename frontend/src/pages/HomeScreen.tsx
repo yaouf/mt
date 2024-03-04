@@ -1,8 +1,9 @@
 import { WebView , WebViewNavigation } from "react-native-webview";
 import { StyleSheet } from "react-native";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { View, Button } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { BackHandler, Platform } from "react-native";
 
 type HomeProps = {
   navigation: StackNavigationProp<any, any>;
@@ -17,6 +18,28 @@ type HomeProps = {
 
 function Home({ navigation }: HomeProps) {
   const webviewRef = useRef<WebView>(null);
+
+        // kiera ex of android back 
+<!--   const onAndroidBackPress = () => {
+    if (webviewRef.current) {
+      webviewRef.current.goBack();
+      return true; // prevent default behavior (exit app)
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      BackHandler.addEventListener("hardwareBackPress", onAndroidBackPress);
+      return () => {
+        BackHandler.removeEventListener(
+          "hardwareBackPress",
+          onAndroidBackPress
+        );
+      };
+    }
+  }, []); -->
+
  
   // Define the function to handle navigation state change
   const handleNavigationStateChange = (navState: any) => {
@@ -55,9 +78,31 @@ function Home({ navigation }: HomeProps) {
   return (
     <View style={styles.container}>
       <WebView
+        originWhitelist={["*"]}
         ref={webviewRef}
         source={{ uri: 'https://www.browndailyherald.com/' }}
         style={styles.webview}
+        // kiera - added for swiping to close and back on android
+<!--         allowsBackForwardNavigationGestures={true}
+        onNavigationStateChange={(navState) => {
+          if (navState.canGoBack) {
+            // The WebView is not at the top of its history stack (aka not home page)
+            navigation.setOptions({
+              headerLeft: () => (
+                <Button
+                  onPress={() => webviewRef.current?.goBack()}
+                  title="Back"
+                  color="#000"
+                />
+              ),
+            });
+          } else {
+            navigation.setOptions({
+              headerLeft: () => null,
+            });
+          }
+        }} -->
+
         onNavigationStateChange={handleNavigationStateChange}
         onShouldStartLoadWithRequest={shouldStartLoadWithRequest}
       />
