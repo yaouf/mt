@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { View, Text, Button, Switch } from "react-native";
+import { Dispatch, SetStateAction, useState } from "react";
+import { View, Text, Switch, Pressable, StyleSheet } from "react-native";
+
+type LoginProps = {
+  loggedIn: boolean;
+  setLoggedIn: Dispatch<SetStateAction<boolean>>;
+  username: string;
+  setUsername: Dispatch<SetStateAction<string>>;
+};
 
 /**
  * Page for settings
@@ -12,14 +19,33 @@ import { View, Text, Button, Switch } from "react-native";
  *
  * @returns Settings screen
  */
-function Settings() {
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [name, setName] = useState<string>("");
+function Settings({
+  loggedIn,
+  setLoggedIn,
+  username,
+  setUsername,
+}: LoginProps) {
+  // const [name, setName] = useState<string>("");
   const [pushNotifs, setPushNotifs] = useState<boolean>(false);
+  // const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
+  const styles = StyleSheet.create({
+    button: {
+      backgroundColor: "#808080",
+      padding: 10,
+      borderRadius: 5,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    buttonText: {
+      color: "#fff",
+      fontSize: 16,
+    },
+  });
 
   function handleLogin() {
     setLoggedIn(true);
-    setName("X"); //??
+    setUsername("X"); //??
     console.log("Logged in.");
   }
 
@@ -39,18 +65,26 @@ function Settings() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       {loggedIn ? (
         <>
-          <Text>{name}</Text>
-          <Button title="Delete account" onPress={handleDelete} />
+          <Text>{username}</Text>
+          <Pressable onPress={handleDelete} style={styles.button}>
+            <Text style={styles.buttonText}>Delete account</Text>
+          </Pressable>
           <Text>Push Notifications</Text>
           <Switch value={pushNotifs} onValueChange={handlePushNotifs} />
-          <Button title="Contact us" onPress={handleContact} />
+          <Pressable onPress={handleContact} style={styles.button}>
+            <Text style={styles.buttonText}>Contact us</Text>
+          </Pressable>
         </>
       ) : (
         <>
-          <Button title="Login" onPress={handleLogin} />
+          <Pressable onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
+          </Pressable>
           <Text>Push Notifications</Text>
           <Switch value={pushNotifs} onValueChange={handlePushNotifs} />
-          <Button title="Contact us" onPress={handleContact} />
+          <Pressable onPress={handleContact}>
+            <Text>Contact us</Text>
+          </Pressable>
         </>
       )}
     </View>
