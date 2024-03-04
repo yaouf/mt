@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { registerForPushNotificationsAsync } from "./code/push";
@@ -43,14 +43,38 @@ export default function BDH() {
    registerForPushNotificationsAsync();
  }, []);
 
- return (
-   <NavigationContainer>
-     <Tab.Navigator>
-       <Tab.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }}/>
-       <Tab.Screen name="Sections" component={SectionsScreen} />
-       <Tab.Screen name="Search" component={SearchScreen} />
-       <Tab.Screen name="Settings" component={SettingsScreen} />
-     </Tab.Navigator>
-   </NavigationContainer>
- );
+  const [username, setUsername] = useState<string>("");
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+
+  return (
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }}/>
+        <Tab.Screen name="Sections" component={SectionsScreen} />
+        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen
+          name="Settings"
+          component={() => (
+            <SettingsScreen
+              loggedIn={loggedIn}
+              setLoggedIn={setLoggedIn}
+              username={username}
+              setUsername={setUsername}
+            />
+          )}
+        />
+        <Tab.Screen
+          name="Login"
+          component={() => (
+            <LoginScreen
+              loggedIn={loggedIn}
+              setLoggedIn={setLoggedIn}
+              username={username}
+              setUsername={setUsername}
+            />
+          )}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
 }
