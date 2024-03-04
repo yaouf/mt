@@ -2,11 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { StackScreenProps } from '@react-navigation/stack';
-
-type YourParamListType = {
- Home: undefined; // No additional parameters for the Home screen
- Article: { articleUrl: string }; // Parameter for the Article screen
-};
+import { YourParamListType } from '../types';
 
 type ArticleProps = StackScreenProps<YourParamListType, 'Article'>;
 

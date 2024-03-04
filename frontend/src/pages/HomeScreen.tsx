@@ -1,13 +1,8 @@
-import { WebView , WebViewNavigation } from "react-native-webview";
+import { WebView, WebViewNavigation } from "react-native-webview";
 import { StyleSheet } from "react-native";
 import { useEffect, useRef } from "react";
 import { View, Button } from "react-native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { BackHandler, Platform } from "react-native";
-
-type HomeProps = {
-  navigation: StackNavigationProp<any, any>;
-};
+import { HomeProps } from "../types";
 
 /**
  * Home screen with embedded web view
@@ -15,11 +10,10 @@ type HomeProps = {
  * @param param navigation param from BDH parent component
  * @returns Home Screen
  */
-
-function Home({ navigation }: HomeProps) {
+function HomeScreen({ navigation }: HomeProps) {
   const webviewRef = useRef<WebView>(null);
 
-  // for android back 
+  // for android back
   // const onAndroidBackPress = () => {
   //   if (webviewRef.current) {
   //     webviewRef.current.goBack();
@@ -40,7 +34,6 @@ function Home({ navigation }: HomeProps) {
   //   }
   // }, []);
 
- 
   // Define the function to handle navigation state change
   const handleNavigationStateChange = (navState: any) => {
     if (navState.canGoBack) {
@@ -59,48 +52,46 @@ function Home({ navigation }: HomeProps) {
       });
     }
   };
- 
+
   // Define the function to determine whether to load the request or not
   const shouldStartLoadWithRequest = (event: WebViewNavigation) => {
-    const url = event.url || '';
- 
+    const url = event.url || "";
+
     // Check if the URL contains the specific string
-    if (url.includes('/article/')) {
+    if (url.includes("/article/")) {
       // Redirect to Article component
-      navigation.navigate('Article', { articleUrl: url });
+      navigation.navigate("Article", { articleUrl: url });
       // Do not load the URL
       return false;
     }
     // Continue loading for other URLs
     return true;
   };
- 
+
   return (
     <View style={styles.container}>
       <WebView
         originWhitelist={["*"]}
         ref={webviewRef}
-        source={{ uri: 'https://www.browndailyherald.com/' }}
+        source={{ uri: "https://www.browndailyherald.com/" }}
         style={styles.webview}
-
         onNavigationStateChange={handleNavigationStateChange}
         onShouldStartLoadWithRequest={shouldStartLoadWithRequest}
 
         // for back swipe on ios
         // allowsBackForwardNavigationGestures={true}
-
       />
     </View>
   );
- }
- 
- export default Home;
- 
- const styles = StyleSheet.create({
+}
+
+export default HomeScreen;
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   webview: {
     flex: 1,
   },
- }); 
+});

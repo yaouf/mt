@@ -1,12 +1,6 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { View, Text, Switch, Pressable, StyleSheet } from "react-native";
-
-type LoginProps = {
-  loggedIn: boolean;
-  setLoggedIn: Dispatch<SetStateAction<boolean>>;
-  username: string;
-  setUsername: Dispatch<SetStateAction<string>>;
-};
+import { LoginProps } from "../types";
 
 /**
  * Page for settings
@@ -19,7 +13,7 @@ type LoginProps = {
  *
  * @returns Settings screen
  */
-function Settings({
+function SettingsScreen({
   loggedIn,
   setLoggedIn,
   username,
@@ -91,4 +85,4 @@ function Settings({
   );
 }
 
-export default Settings;
+export default SettingsScreen;
