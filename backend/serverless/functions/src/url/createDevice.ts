@@ -1,33 +1,16 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
-import knex from "knex";
+import db from "../../../../db/data/db-config";
 
 export const createDevice = onRequest(async (request, response) => {
   logger.info("Creating a new device", { structuredData: true });
-  // TODO: create a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken?
-  const db = knex({
-    client: "sqlite3",
-    connection: {
-      filename: "../data.db",
-    },
-    useNullAsDefault: true,
-  });
-
-  await db.schema.createTable("devices", table => {
-    table.increments("id").primary(); 
-    table.integer("deviceId").unique().notNullable(); 
-    table.string("deviceType").notNullable();
-    table.boolean("breakingNewsAlerts").notNullable();
-    table.boolean("weeklySummaryAlerts").notNullable();
-    table.string("expoPushToken").unique(); 
-  });
-
+  // TODO CHRISTIAN: create a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
+  // Assume info above is in request body as json. If any required fields are missing, return an error status code
   const insertedRows = await db("devices").insert({
-    deviceId: 2,
-    deviceType: "Phone",
+    deviceType: "Android",
     breakingNewsAlerts: true,
     weeklySummaryAlerts: false,
-    expoPushToken: "ExpoToken123",
+    expoPushToken: "ExpoPushToken[124]",
   });
 
   console.log(insertedRows);
@@ -35,8 +18,6 @@ export const createDevice = onRequest(async (request, response) => {
   // select all from devices table and log result
   const allDevices = await db("devices").select();
   console.log(allDevices);
-
-  
 
   response.send("Device created!");
 });
