@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 
 interface ItemProps {
   item: {
-    title: string;
+    headline: string;
     content: string;
     metadata?: object; // Optional Params
     ssts_id?: string; // Optional Params
@@ -14,7 +14,7 @@ interface ItemProps {
 const Item: React.FC<ItemProps> = ({ item }) => {
   return (
     <View style={styles.itemContainer}>
-      <Text style={styles.itemTitle}>{item.title}</Text>
+      <Text style={styles.itemTitle}>{item.headline}</Text>
       <Text>{item.content}</Text>
       {/* {item.metadata && <Text>Metadata: {JSON.stringify(item.metadata)}</Text>}
       {item.ssts_id && <Text>SSTS ID: {item.ssts_id}</Text>} */}

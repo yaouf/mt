@@ -9,6 +9,14 @@ export type LoginProps = {
   setUsername: Dispatch<SetStateAction<string>>;
 };
 
+export type NavProps = {
+  HomePage: undefined;
+  Sections: undefined;
+  Search: undefined;
+  Settings: LoginProps;
+  Login: LoginProps;
+};
+
 export type HomeProps = {
   navigation: StackNavigationProp<any, any>;
 };
