@@ -11,11 +11,10 @@ import ArticleScreen from "./components/Article";
 import LoginScreen from "./pages/LoginScreen";
 
 import { registerForPushNotificationsAsync } from "./code/push";
-import { LoginProps, YourParamListType } from "./types";
-
-const Tab = createBottomTabNavigator();
+import { NavProps, LoginProps, YourParamListType } from "./types";
 
 const HomeStack = createStackNavigator<YourParamListType>();
+const Tab = createBottomTabNavigator<NavProps>();
 
 const horizontalTransition = ({ current, layouts }: any) => {
   const translateX = current.progress.interpolate({
@@ -71,11 +70,12 @@ export default function BDH() {
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen
           name="Settings"
-          component={() => <SettingsScreen {...userProps} />}
+          // component={<SettingsScreen {...userProps} />}
+          children={() => <SettingsScreen {...userProps} />}
         />
         <Tab.Screen
           name="Login"
-          component={() => <LoginScreen {...userProps} />}
+          children={() => <LoginScreen {...userProps} />}
         />
       </Tab.Navigator>
     </NavigationContainer>
