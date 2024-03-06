@@ -13,6 +13,7 @@ export async function up(knex: Knex): Promise<void> {
       .then(() =>
         knex.schema.createTable("users", table => {
           table.increments("id").primary();
+          table.string("userId").unique().notNullable();
           table.string("email").unique().notNullable();
           table.string("name").notNullable();
         })
