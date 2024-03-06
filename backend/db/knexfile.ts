@@ -2,6 +2,7 @@
 
 import { Knex } from "knex";
 
+// TODO: if updating this, change filename to ./dev.sqlite3, then run changes specified in README.md, then change filename back to ../../db/dev.sqlite3
 
 const config: { [key: string]: Knex.Config } = {
   development: {
