@@ -135,10 +135,6 @@ export async function dashboardHandler(
 }
 
 
-
-
-
-
 export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   // Ensure that the request type is for breaking news alerts
   if (!req.body.tags.includes("breaking")) {
@@ -169,7 +165,7 @@ export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<
     messages.push({
       to: pushToken,
       sound: "default",
-      body: "DEFAULT MESSAGE BODY",
+      body: "Breaking News: " + req.body.title,
     });
   }
 
@@ -230,5 +226,5 @@ export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<
   })();
   res
     .status(200)
-    .json({ message: "Edit this file to schedule notifications!" });
+    .json({ message: "The notifications have been scheduled!" });
 }
