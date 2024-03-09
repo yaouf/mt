@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
 import { LoginProps } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
  * Page for login
@@ -14,9 +16,23 @@ function LoginScreen({
   setLoggedIn,
   username,
   setUsername,
+  community,
+  setCommunity,
 }: LoginProps) {
-  // const [name, setName] = useState<string>("");
-  // const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  // State of whether user has already visited the login screen
+  const [hasVisited, setHasVisited] = useState<boolean>(false);
+
+  // AsyncStorage allows data to be stored only on the user's local device - info is saved like a dictionary
+  useEffect(() => {
+    // Function that checks if user has opened login screen before
+    const checkFirstVisit = async () => {
+      const hasVisited = await AsyncStorage.getItem("hasVisited");
+      if (hasVisited) {
+        setHasVisited(true);
+      }
+    };
+    checkFirstVisit();
+  }, []);
 
   const styles = StyleSheet.create({
     button: {
@@ -32,23 +48,45 @@ function LoginScreen({
     },
   });
 
-  function handleLogin() {
+  async function handleLogin(community: string) {
+    await AsyncStorage.setItem("hasVisited", "true"); // Pauses the rest of the login functionality until hasVisited is set to true
     setLoggedIn(true);
-    setUsername("X"); //??
-    console.log("Logged in.");
+    setUsername("Blueno"); //??
+    setCommunity(community);
+    console.log("Logged in as part of ${community}");
+  }
+
+  // if (!loggedIn) {
+  //   console.log("Not logged in anymore");
+  //   await AsyncStorage.setItem("hasVisited", "false");
+  //   // setHasVisited(false);
+  // }
+  // Only show login screen on first load
+  if (hasVisited) {
+    console.log("You can't come here again!");
+    // Navigate to Home
   }
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {loggedIn ? (
+      {!loggedIn ? (
         <>
-          <Text>{username}</Text>
+          <Pressable onPress={() => handleLogin("Brown")}>
+            <Text>Login to Brown Community with {username}</Text>
+          </Pressable>
+          <Pressable onPress={() => handleLogin("Other")}>
+            <Text>Login to Other Community with {username}</Text>
+          </Pressable>
+          <Pressable onPress={() => handleLogin("Skip")}>
+            <Text>I don't want to Login</Text>
+          </Pressable>
         </>
       ) : (
         <>
-          <Pressable onPress={handleLogin} style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
-          </Pressable>
+          <Text>
+            {" "}
+            Welcome, {username} to {community}
+          </Text>
         </>
       )}
     </View>

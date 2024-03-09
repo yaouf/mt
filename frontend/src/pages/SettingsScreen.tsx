@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { View, Text, Switch, Pressable, StyleSheet } from "react-native";
-import { LoginProps } from "../types";
+import { LoginProps, HomeProps } from "../types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { WebView, WebViewNavigation } from "react-native-webview";
+import { useNavigationBuilder, useNavigation } from "@react-navigation/native";
 
 /**
  * Page for settings
@@ -18,6 +21,8 @@ function SettingsScreen({
   setLoggedIn,
   username,
   setUsername,
+  community,
+  setCommunity,
 }: LoginProps) {
   // const [name, setName] = useState<string>("");
   const [pushNotifs, setPushNotifs] = useState<boolean>(false);
@@ -43,8 +48,13 @@ function SettingsScreen({
     console.log("Logged in.");
   }
 
-  function handleDelete() {
-    console.log("Account deleted.");
+  async function handleDelete() {
+    AsyncStorage.setItem("hasVisited", "false"); // Pauses the rest of the login functionality until hasVisited is set to true
+    setLoggedIn(false);
+    setUsername(""); //??
+    setCommunity("");
+    console.log("Logged Out");
+    console.log("Navigating back to Login");
   }
 
   function handlePushNotifs() {
@@ -80,6 +90,11 @@ function SettingsScreen({
             <Text>Contact us</Text>
           </Pressable>
         </>
+      )}
+      {loggedIn && (
+        <Pressable onPress={handleDelete} style={styles.button}>
+          <Text style={styles.buttonText}>Logout</Text>
+        </Pressable>
       )}
     </View>
   );

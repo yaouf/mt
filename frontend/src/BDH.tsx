@@ -50,12 +50,15 @@ export default function BDH() {
 
   const [username, setUsername] = useState<string>("");
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [community, setCommunity] = useState<string>("");
 
   const userProps: LoginProps = {
     loggedIn: loggedIn,
     setLoggedIn: setLoggedIn,
     username: username,
     setUsername: setUsername,
+    community: community,
+    setCommunity: setCommunity,
   };
 
   return (
