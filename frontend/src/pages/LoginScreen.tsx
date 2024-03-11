@@ -50,17 +50,21 @@ function LoginScreen({
 
   async function handleLogin(community: string) {
     await AsyncStorage.setItem("hasVisited", "true"); // Pauses the rest of the login functionality until hasVisited is set to true
-    setLoggedIn(true);
-    setUsername("Blueno"); //??
+    // If Logged In as Brown or Other Community, set as logged in
+    if (community != "Guest") {
+      setLoggedIn(true);
+      setUsername("Blueno");
+      console.log("Logged into Brown or Other!");
+    }
+    // If Guest Browsing, set to not logged in
+    else {
+      setLoggedIn(false);
+      console.log("Browsing as Guest");
+    }
+    // Setting the community
     setCommunity(community);
-    console.log("Logged in as part of ${community}");
   }
 
-  // if (!loggedIn) {
-  //   console.log("Not logged in anymore");
-  //   await AsyncStorage.setItem("hasVisited", "false");
-  //   // setHasVisited(false);
-  // }
   // Only show login screen on first load
   if (hasVisited) {
     console.log("You can't come here again!");
@@ -72,13 +76,13 @@ function LoginScreen({
       {!loggedIn ? (
         <>
           <Pressable onPress={() => handleLogin("Brown")}>
-            <Text>Login to Brown Community with {username}</Text>
+            <Text>Login to Brown Community</Text>
           </Pressable>
           <Pressable onPress={() => handleLogin("Other")}>
-            <Text>Login to Other Community with {username}</Text>
+            <Text>Login to Other Community</Text>
           </Pressable>
-          <Pressable onPress={() => handleLogin("Skip")}>
-            <Text>I don't want to Login</Text>
+          <Pressable onPress={() => handleLogin("Guest")}>
+            <Text>I don't want to Login!</Text>
           </Pressable>
         </>
       ) : (

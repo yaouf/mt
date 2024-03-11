@@ -48,7 +48,7 @@ function SettingsScreen({
     console.log("Logged in.");
   }
 
-  async function handleDelete() {
+  async function handleLogout() {
     AsyncStorage.setItem("hasVisited", "false"); // Pauses the rest of the login functionality until hasVisited is set to true
     setLoggedIn(false);
     setUsername(""); //??
@@ -70,7 +70,7 @@ function SettingsScreen({
       {loggedIn ? (
         <>
           <Text>{username}</Text>
-          <Pressable onPress={handleDelete} style={styles.button}>
+          <Pressable onPress={handleLogout} style={styles.button}>
             <Text style={styles.buttonText}>Delete account</Text>
           </Pressable>
           <Text>Push Notifications</Text>
@@ -92,7 +92,7 @@ function SettingsScreen({
         </>
       )}
       {loggedIn && (
-        <Pressable onPress={handleDelete} style={styles.button}>
+        <Pressable onPress={handleLogout} style={styles.button}>
           <Text style={styles.buttonText}>Logout</Text>
         </Pressable>
       )}
