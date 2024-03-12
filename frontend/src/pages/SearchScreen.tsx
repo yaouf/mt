@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, FlatList } from "react-native";
 import { styles } from "../styles/search";
 import React, { useState } from "react";
 import Item from "../components/Item";
+import CustomButton from "../components/CustomButton";
 
 /**
  * Page for search (separate page just for now)
@@ -56,12 +57,13 @@ function SearchScreen() {
           alignContent: "center",
         }}
       />
-      <Pressable style={styles.button} onPress={fetchSearchResults}>
+      <CustomButton onPress={fetchSearchResults} text={"Submit"}></CustomButton>
+      {/* <Pressable style={styles.button} onPress={fetchSearchResults}>
         <Text style={{ color: "white", paddingLeft: 10, paddingTop: 7 }}>
           {" "}
           Submit{" "}
         </Text>
-      </Pressable>
+      </Pressable> */}
       <FlatList
         data={articles}
         renderItem={({ item }) => <Item item={item} />}
