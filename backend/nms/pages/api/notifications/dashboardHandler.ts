@@ -6,8 +6,7 @@ type ResponseData = {
   message: string;
 };
 
-// TODO CALVIN: create different handler for breaking news category, called breakingHandler
-export async function dashboardHandler(
+export default async function dashboardHandler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
