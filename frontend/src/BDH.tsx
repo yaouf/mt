@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createStackNavigator, } from "@react-navigation/stack";
 
 import HomeScreen from "./pages/HomeScreen";
 import SectionsScreen from "./pages/SectionsScreen";
@@ -11,9 +11,9 @@ import ArticleScreen from "./components/Article";
 import LoginScreen from "./pages/LoginScreen";
 
 import { registerForPushNotificationsAsync } from "./code/push";
-import { NavProps, LoginProps, YourParamListType } from "./types";
+import { NavProps, LoginProps, ComponentParams } from "./types";
 
-const HomeStack = createStackNavigator<YourParamListType>();
+const HomeStack = createStackNavigator<ComponentParams>();
 const Tab = createBottomTabNavigator<NavProps>();
 
 const horizontalTransition = ({ current, layouts }: any) => {
