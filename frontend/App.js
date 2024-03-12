@@ -1,5 +1,5 @@
-import BDH from "./src/BDH";
+import BdhApp from "./src/BdhApp";
 
 export default function App() {
-  return <BDH />;
+  return <BdhApp />;
 }

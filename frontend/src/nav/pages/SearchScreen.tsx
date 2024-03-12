@@ -1,16 +1,12 @@
-import { View, Text, TextInput, Pressable, FlatList } from "react-native";
-// import { StyleSheet } from "react-native";
-import { styles } from "../styles/search";
+import { View, Text, TextInput, FlatList } from "react-native";
+import { styles } from "../../styles/search";
 import React, { useState } from "react";
-import Item from "../components/Item";
-import CustomButton from "../components/CustomButton";
+import Item from "../../components/Item";
+import CustomButton from "../../components/CustomButton";
 
 /**
  * Page for search (separate page just for now)
- *   - native search component
- *   - text entry and submit sends a call to https://www.browndailyherald.com/search?a=1&o=date&s=<search-input>
- *       - how to get json response??
- *   - render search results (or display search webview results for now)
+ *   - native search component makes call to search api, returns results
  *
  * @returns Search screen
  */
@@ -58,12 +54,6 @@ function SearchScreen() {
         }}
       />
       <CustomButton onPress={fetchSearchResults} text={"Submit"}></CustomButton>
-      {/* <Pressable style={styles.button} onPress={fetchSearchResults}>
-        <Text style={{ color: "white", paddingLeft: 10, paddingTop: 7 }}>
-          {" "}
-          Submit{" "}
-        </Text>
-      </Pressable> */}
       <FlatList
         data={articles}
         renderItem={({ item }) => <Item item={item} />}
@@ -72,19 +62,5 @@ function SearchScreen() {
     </View>
   );
 }
-
-// const styles = StyleSheet.create({
-//   titleText: {
-//     fontSize: 40,
-//     fontWeight: "bold",
-//     paddingBottom: 20,
-//   },
-//   button: {
-//     backgroundColor: "brown",
-//     height: 30,
-//     width: 70,
-//     borderRadius: 10,
-//   },
-// });
 
 export default SearchScreen;
