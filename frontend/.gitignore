@@ -33,3 +33,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+Dockerfile*
+xo
+config.debug.php

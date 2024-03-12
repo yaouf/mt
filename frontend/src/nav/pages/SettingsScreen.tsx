@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { View, Text, Switch, Pressable, StyleSheet } from "react-native";
-import { LoginProps, HomeProps } from "../types";
+import { UserProps } from "../../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { WebView, WebViewNavigation } from "react-native-webview";
-import { useNavigationBuilder, useNavigation } from "@react-navigation/native";
+import CustomButton from "../../components/CustomButton";
 
 /**
  * Page for settings
@@ -23,24 +22,24 @@ function SettingsScreen({
   setUsername,
   community,
   setCommunity,
-}: LoginProps) {
+}: UserProps) {
   // const [name, setName] = useState<string>("");
   const [pushNotifs, setPushNotifs] = useState<boolean>(false);
   // const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
-  const styles = StyleSheet.create({
-    button: {
-      backgroundColor: "#808080",
-      padding: 10,
-      borderRadius: 5,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    buttonText: {
-      color: "#fff",
-      fontSize: 16,
-    },
-  });
+  // const styles = StyleSheet.create({
+  //   button: {
+  //     backgroundColor: "#808080",
+  //     padding: 10,
+  //     borderRadius: 5,
+  //     alignItems: "center",
+  //     justifyContent: "center",
+  //   },
+  //   buttonText: {
+  //     color: "#fff",
+  //     fontSize: 16,
+  //   },
+  // });
 
   function handleLogin() {
     setLoggedIn(true);
@@ -70,32 +69,15 @@ function SettingsScreen({
       {loggedIn ? (
         <>
           <Text>{username}</Text>
-          <Pressable onPress={handleLogout} style={styles.button}>
-            <Text style={styles.buttonText}>Delete account</Text>
-          </Pressable>
-          <Text>Push Notifications</Text>
-          <Switch value={pushNotifs} onValueChange={handlePushNotifs} />
-          <Pressable onPress={handleContact} style={styles.button}>
-            <Text style={styles.buttonText}>Contact us</Text>
-          </Pressable>
+          <CustomButton text={"Logout"} onPress={handleLogout} />
+          <CustomButton text={"Delete account"} onPress={handleLogout} />
         </>
       ) : (
-        <>
-          <Pressable onPress={handleLogin} style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
-          </Pressable>
-          <Text>Push Notifications</Text>
-          <Switch value={pushNotifs} onValueChange={handlePushNotifs} />
-          <Pressable onPress={handleContact}>
-            <Text>Contact us</Text>
-          </Pressable>
-        </>
+        <CustomButton text={"Login"} onPress={handleLogin} />
       )}
-      {loggedIn && (
-        <Pressable onPress={handleLogout} style={styles.button}>
-          <Text style={styles.buttonText}>Logout</Text>
-        </Pressable>
-      )}
+      <Text>Push Notifications</Text>
+      <Switch value={pushNotifs} onValueChange={handlePushNotifs} />
+      <CustomButton text={"Contact us"} onPress={handleContact} />
     </View>
   );
 }

@@ -8,20 +8,25 @@ interface CustomButtonProps {
   style?: ViewStyle; // Allows for custom styles when we pass in our own styles
 }
 
-// Custom Button Component
-export const CustomButton: React.FC<CustomButtonProps> = ({
-  text,
-  onPress,
-  style = {},
-}) => (
-  <TouchableOpacity
-    onPress={onPress}
-    activeOpacity={0.7}
-    style={[styles.button, style]} // This array merges default style with custom style
-  >
-    <Text style={[styles.buttonText, style]}>{text}</Text>
-  </TouchableOpacity>
-);
+/**
+ * Reusable custom button component
+ *
+ * @param props - CustomButtonProps
+ * @returns button with the given text, functionality, and style (if not default)
+ */
+function CustomButton({ text, onPress, style }: CustomButtonProps) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
+      style={[styles.button, style]} // This array merges default style with custom style
+    >
+      <Text style={[styles.buttonText, style]}>{text}</Text>
+    </TouchableOpacity>
+  );
+}
+
+export default CustomButton;
 
 // Default Styling for Custom Button - when user does not pass in their own styles
 const styles = StyleSheet.create({
@@ -38,5 +43,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default CustomButton;
