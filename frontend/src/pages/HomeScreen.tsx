@@ -60,7 +60,7 @@ function HomeScreen({ navigation }: HomeProps) {
     // Check if the URL contains the specific string
     if (url.includes("/article/")) {
       // Redirect to Article component
-      navigation.navigate("Article", { articleUrl: url });
+      navigation.push("Article", { articleUrl: url });
       // Do not load the URL
       return false;
     }

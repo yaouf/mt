@@ -12,9 +12,9 @@ import ArticleScreen from "./components/Article";
 import LoginScreen from "./pages/LoginScreen";
 
 import { registerForPushNotificationsAsync } from "./code/push";
-import { NavProps, LoginProps, YourParamListType } from "./types";
+import { NavProps, LoginProps, ComponentParams } from "./types";
 
-const HomeStack = createStackNavigator<YourParamListType>();
+const HomeStack = createStackNavigator<ComponentParams>();
 const Tab = createBottomTabNavigator<NavProps>();
 
 const horizontalTransition = ({ current, layouts }: any) => {

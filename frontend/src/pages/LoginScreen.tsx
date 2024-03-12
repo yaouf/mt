@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { LoginProps } from "../types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { CustomButton } from "../components/CustomButton";
 /**
  * Page for login
  *   - show only on first load of the app
@@ -36,9 +36,12 @@ function LoginScreen({
 
   const styles = StyleSheet.create({
     button: {
-      backgroundColor: "#808080",
+      backgroundColor: "blue",
       padding: 10,
-      borderRadius: 5,
+      width: 100,
+      height: 30,
+      borderRadius: 20,
+      borderColor: "red",
       alignItems: "center",
       justifyContent: "center",
     },
@@ -91,6 +94,14 @@ function LoginScreen({
             {" "}
             Welcome, {username} to {community}
           </Text>
+          <CustomButton
+            onPress={handleLogin}
+            text="Log In!"
+            style={{ backgroundColor: "red" }}
+          ></CustomButton>
+          {/* <Pressable onPress={handleLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
+          </Pressable> */}
         </>
       )}
     </View>

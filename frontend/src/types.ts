@@ -24,7 +24,7 @@ export type HomeProps = {
 };
 
 // for home and article
-export type YourParamListType = {
+export type ComponentParams = {
   Home: undefined; // No additional parameters for the Home screen
   Article: { articleUrl: string }; // Parameter for the Article screen
 };
