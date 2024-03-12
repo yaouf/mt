@@ -1,7 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator, } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import HomeScreen from "./pages/HomeScreen";
 import SectionsScreen from "./pages/SectionsScreen";
@@ -44,18 +45,28 @@ const HomeStackScreen = () => (
  * @returns Main app component
  */
 export default function BDH() {
+  const [hasVisited, setHasVisited] = useState<boolean>(false);
+
   useEffect(() => {
     registerForPushNotificationsAsync();
+    const checkVisited = async () => {
+      const visited = await AsyncStorage.getItem("hasVisited");
+      if (visited) setHasVisited(true);
+    };
+    checkVisited();
   }, []);
 
   const [username, setUsername] = useState<string>("");
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [community, setCommunity] = useState<string>("");
 
   const userProps: LoginProps = {
     loggedIn: loggedIn,
     setLoggedIn: setLoggedIn,
     username: username,
     setUsername: setUsername,
+    community: community,
+    setCommunity: setCommunity,
   };
 
   return (
@@ -68,14 +79,16 @@ export default function BDH() {
         />
         <Tab.Screen name="Sections" component={SectionsScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
+        {!loggedIn && (
+          <Tab.Screen
+            name="Login"
+            children={() => <LoginScreen {...userProps} />}
+          />
+        )}
         <Tab.Screen
           name="Settings"
           // component={<SettingsScreen {...userProps} />}
           children={() => <SettingsScreen {...userProps} />}
-        />
-        <Tab.Screen
-          name="Login"
-          children={() => <LoginScreen {...userProps} />}
         />
       </Tab.Navigator>
     </NavigationContainer>

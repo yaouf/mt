@@ -7,6 +7,8 @@ export type LoginProps = {
   setLoggedIn: Dispatch<SetStateAction<boolean>>;
   username: string;
   setUsername: Dispatch<SetStateAction<string>>;
+  community: string;
+  setCommunity: Dispatch<SetStateAction<string>>;
 };
 
 export type NavProps = {
