@@ -11,7 +11,7 @@ export default async function breakingHandler(
     res: NextApiResponse<ResponseData>
 ) {
     // Ensure that the request type is for breaking news alerts
-    if (!req.body.tags.includes("breaking")) {
+    if (!req.body.tags || !req.body.tags.includes("breaking")) {
         return res.status(400).json({ message: "Invalid request type" });
     }
 
@@ -81,12 +81,12 @@ export default async function breakingHandler(
 
                 // Handle the receipts to determine if the notifications were successfully sent
                 for (let receiptId in receipts) {
-                    let { status, message, details } = receipts[receiptId];
+                    let { status, details } = receipts[receiptId];
                     if (status === 'ok') {
                         continue;
                     } else if (status === 'error') {
                         console.error(
-                            `There was an error sending a notification: ${message}`
+                            `There was an error sending a notification:`
                         );
                         if (details && 'error' in details) {
                             console.error(`The error code is ${details.error}`);

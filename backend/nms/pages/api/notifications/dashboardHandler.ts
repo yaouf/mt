@@ -206,12 +206,12 @@ export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<
 
         // Handle the receipts to determine if the notifications were successfully sent
         for (let receiptId in receipts) {
-          let { status, message, details } = receipts[receiptId];
+          let { status, details } = receipts[receiptId];
           if (status === 'ok') {
             continue;
           } else if (status === 'error') {
             console.error(
-              `There was an error sending a notification: ${message}`
+              `There was an error sending a notification:`
             );
             if (details && 'error' in details) {
               console.error(`The error code is ${details.error}`);
