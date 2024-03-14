@@ -11,6 +11,32 @@ Functions are in `functions` folder, and organized in subfolders according to th
 5. Run `npm run dev`
 6. Send a POST request to corresponding endpoint shown from CLI. 
 
+Example POST request format with fetch:
+
+```javascript
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
+var raw = JSON.stringify({
+  "deviceType": "iOS",
+  "breakingNewsAlerts": true,
+  "weeklySummaryAlerts": false,
+  "expoPushToken": "ExpoPushToken[12345]"
+});
+
+var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
+
+fetch("http://localhost:5000/bdh-mobileapp-dev/us-central1/createDevice", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+```
+
 There are two tables in the database: `users` and `devices`. Here is the schema for the tables:
 
 ```sql
