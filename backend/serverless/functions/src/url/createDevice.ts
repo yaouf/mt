@@ -1,7 +1,6 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
-import db from "../../../../db/data/db-config";
-
+import db from "../../../db/dist/data/db-config";
 export const createDevice = onRequest(async (request, response) => {
   logger.info("Creating a new device", { structuredData: true });
   // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
