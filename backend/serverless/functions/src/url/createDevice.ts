@@ -4,7 +4,7 @@ import db from "../../../../db/data/db-config";
 
 export const createDevice = onRequest(async (request, response) => {
   logger.info("Creating a new device", { structuredData: true });
-  // TODO SANA: create a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
+  // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
   // Assume info above is in request body as json. If any required fields are missing, return an error status code
 
   try {
