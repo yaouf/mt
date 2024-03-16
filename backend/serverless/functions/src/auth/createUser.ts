@@ -1,6 +1,6 @@
 import { user } from "firebase-functions/v1/auth";
 import * as logger from "firebase-functions/logger";
-import db from "../../../../db/data/db-config";
+import db from "../../../db/dist/data/db-config";
 
 export const createUser = user().onCreate(async user => {
   logger.info("Creating a new user", { structuredData: true });

@@ -2,6 +2,8 @@ import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 
+
+
 export const updateSettings = onRequest(async (request, response) => {
   try {
     logger.info("Updating user settings", { structuredData: true });
