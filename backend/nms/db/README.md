@@ -1,3 +1,10 @@
+To run locally:
+1. Go to the nms/db folder in integrated terminal.
+2. Run `npm run update`
+3. Go to the nms folder in integrated terminal.
+4. Run `npm run dev` to start the server and watch for changes.
+
+
 To edit a migration file:
 0. Modify the latest seed or migrations file.
 1. Go to the nms/db folder in integrated terminal.
