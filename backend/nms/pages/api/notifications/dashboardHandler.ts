@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Expo, ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
-import db from "../../../db/data/db-config";
+import db from "../../../dist/data/db-config";
+
 
 type ResponseData = {
   message: string;
@@ -133,27 +134,32 @@ export default async function dashboardHandler(
     .json({ message: "Edit this file to schedule notifications!" });
 }
 
-
-export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
+export async function breakingHandler(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
   // Ensure that the request type is for breaking news alerts
   if (!req.body.tags.includes("breaking")) {
     return res.status(400).json({ message: "Invalid request type" });
   }
 
   // Query the database for all devices that have enabled breaking news alerts
-  const allDevices = await db("devices").select('expoPushToken').where('breakingNewsAlerts', true);
+  const allDevices = await db("devices")
+    .select("expoPushToken")
+    .where("breakingNewsAlerts", true);
   console.log(allDevices);
 
   // Initialize a new Expo SDK client with the provided access token
   const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
 
   // Extract the Expo push tokens from the devices
-  const somePushTokens: string[] = allDevices.map((device) => device.expoPushToken);
+  const somePushTokens: string[] = allDevices.map(
+    device => device.expoPushToken
+  );
 
   // Create the messages that you want to send to clients
   const messages: ExpoPushMessage[] = [];
   for (const pushToken of somePushTokens) {
-
     // Validate the push token to ensure it's a valid Expo push token
     if (!Expo.isExpoPushToken(pushToken)) {
       console.error(`Push token ${pushToken} is not a valid Expo push token`);
@@ -189,7 +195,7 @@ export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<
   // Create an array to store the receipt IDs for each notification
   let receiptIds: string[] = [];
   for (let ticket of tickets) {
-    if (ticket && 'id' in ticket) {
+    if (ticket && "id" in ticket) {
       receiptIds.push(ticket.id);
     }
   }
@@ -207,13 +213,11 @@ export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<
         // Handle the receipts to determine if the notifications were successfully sent
         for (let receiptId in receipts) {
           let { status, details } = receipts[receiptId];
-          if (status === 'ok') {
+          if (status === "ok") {
             continue;
-          } else if (status === 'error') {
-            console.error(
-              `There was an error sending a notification:`
-            );
-            if (details && 'error' in details) {
+          } else if (status === "error") {
+            console.error(`There was an error sending a notification:`);
+            if (details && "error" in details) {
               console.error(`The error code is ${details.error}`);
             }
           }
@@ -223,7 +227,5 @@ export async function breakingHandler(req: NextApiRequest, res: NextApiResponse<
       }
     }
   })();
-  res
-    .status(200)
-    .json({ message: "The notifications have been scheduled!" });
+  res.status(200).json({ message: "The notifications have been scheduled!" });
 }

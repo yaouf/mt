@@ -12,9 +12,11 @@
     "expo-server-sdk": "^3.7.0",
     "knex": "^3.1.0",
     "next": "14.1.0",
+    "oracledb": "^6.4.0",
     "pg-query-stream": "^4.5.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/node": "20.11.26",

@@ -7,7 +7,7 @@ console.log(rootDir);
 // if rootDir is db, then use dist/dev.sqlite3
 // if rootDir is nms, then use db/dist/dev.sqlite3
 // (since db is nested under nms)
-const startPath = rootDir.endsWith("db") ? "" : "db/";
+const startPath = rootDir.endsWith("db") ? "../" : "";
 
 const config: { [key: string]: Knex.Config } = {
   development: {
