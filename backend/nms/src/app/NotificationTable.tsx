@@ -1,10 +1,11 @@
 import React from 'react';
 
-const NotificationTable = ({ scheduledNotifications }) => {
+const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }) => {
   const onDeleteNotification = async (notification) => {
     try {
       // Implement the logic to call the deleteNotification API
-      const response = await fetch('/api/notifications//deleteNotification', {
+      console.log('Deleting notification:', notification);
+      const response = await fetch('/api/notifications/deleteNotification', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -14,7 +15,8 @@ const NotificationTable = ({ scheduledNotifications }) => {
 
       if (response.ok) {
         console.log('Notification deleted successfully.');
-        // Update the UI or refetch the notifications as needed
+        const data = await response.json();
+        setScheduledNotifications(data);
       } else {
         console.error('Error deleting notification');
       }

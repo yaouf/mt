@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-const NotificationForm = () => {
+const NotificationForm = ({ setScheduledNotifications }) => {
   const [newNotification, setNewNotification] = useState({
     time: '',
     title: '',
@@ -19,7 +19,6 @@ const NotificationForm = () => {
 
   const handleScheduleNotification = async () => {
     try {
-      // Implement API call to addNotification here
       const response = await fetch('/api/notifications/addNotification', {
         method: 'POST',
         headers: {
@@ -29,8 +28,8 @@ const NotificationForm = () => {
       });
 
       if (response.ok) {
-        console.log('Scheduled Notification:', newNotification);
-        // Reset the form after scheduling
+        const data = await response.json();
+        setScheduledNotifications(data);
         setNewNotification({
           time: '',
           title: '',

@@ -24,8 +24,13 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <NotificationTable scheduledNotifications={scheduledNotifications} />
-      <NotificationForm />
+      <NotificationTable 
+        scheduledNotifications={scheduledNotifications}
+        setScheduledNotifications={setScheduledNotifications}
+      />
+      <NotificationForm
+        setScheduledNotifications={setScheduledNotifications} 
+      />
     </main>
   );
 }

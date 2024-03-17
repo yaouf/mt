@@ -18,7 +18,6 @@ export default async function getNotifications(
 ) {
   try {
     const notifications = await db("notifications").select("*");
-    console.log(notifications);
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error fetching notifications from the database:", error);

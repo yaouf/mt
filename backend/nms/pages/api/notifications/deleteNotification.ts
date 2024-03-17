@@ -18,6 +18,7 @@ export default async function deleteNotification(
 ) {
   try {
     // Assuming the request body contains the notification data
+    console.log(req.body);
     const { time, title, body } = req.body as Notification;
 
     // Validate required fields
@@ -31,9 +32,8 @@ export default async function deleteNotification(
       .del();
 
     if (deletedCount > 0) {
-      res.status(200).json({
-        message: "The notification has been deleted from the database.",
-      });
+      const notifications = await db("notifications").select("*");
+      res.status(200).json(notifications);
     } else {
       res.status(404).json({
         message: "Notification not found in the database.",
