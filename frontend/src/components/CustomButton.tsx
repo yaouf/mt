@@ -31,12 +31,12 @@ export default CustomButton;
 // Default Styling for Custom Button - when user does not pass in their own styles
 const styles = StyleSheet.create({
   button: {
-    height: 30,
-    width: 70,
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "brown",
+    padding: 10,
+    margin: 10,
   },
   buttonText: {
     color: "#fff",
