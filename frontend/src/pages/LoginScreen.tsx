@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
 type LoginProps = {
@@ -22,9 +22,6 @@ function LoginScreen({
   username,
   setUsername,
 }: LoginProps) {
-  // const [name, setName] = useState<string>("");
-  // const [loggedIn, setLoggedIn] = useState<boolean>(false);
-
   const styles = StyleSheet.create({
     button: {
       backgroundColor: "#808080",

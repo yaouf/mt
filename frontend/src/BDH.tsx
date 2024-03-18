@@ -7,14 +7,14 @@ import SectionsScreen from "./pages/SectionsScreen";
 import SearchScreen from "./pages/SearchScreen";
 import SettingsScreen from "./pages/SettingsScreen";
 import ArticleScreen from "./components/Article";
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "./pages/LoginScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 type YourParamListType = {
- Home: undefined;
- Article: { articleUrl: string };
+  Home: undefined;
+  Article: { articleUrl: string };
 };
 const HomeStack = createStackNavigator<YourParamListType>();
 
@@ -24,32 +24,44 @@ const horizontalTransition = ({ current, layouts }: any) => {
     outputRange: [layouts.screen.width, 0],
   });
 
-
   return { cardStyle: { transform: [{ translateX }] } };
 };
 
 const HomeStackScreen = () => (
- <HomeStack.Navigator>
-   <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false , }} />
-   <HomeStack.Screen name="Article" component={ArticleScreen} options={{cardStyleInterpolator: horizontalTransition, }} />
- </HomeStack.Navigator>
+  <HomeStack.Navigator>
+    <HomeStack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Article"
+      component={ArticleScreen}
+      options={{ cardStyleInterpolator: horizontalTransition }}
+    />
+  </HomeStack.Navigator>
 );
 
 /**
  * @returns Main app component
  */
 export default function BDH() {
- useEffect(() => {
-   registerForPushNotificationsAsync();
- }, []);
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
   const [username, setUsername] = useState<string>("");
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [pushNotifs, setPushNotifs] = useState<boolean>(false);
 
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeStackScreen} options={{ headerShown: false }}/>
+        <Tab.Screen
+          name="Home"
+          component={HomeStackScreen}
+          options={{ headerShown: false }}
+        />
         <Tab.Screen name="Sections" component={SectionsScreen} />
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen
@@ -60,6 +72,8 @@ export default function BDH() {
               setLoggedIn={setLoggedIn}
               username={username}
               setUsername={setUsername}
+              pushNotifs={pushNotifs}
+              setPushNotifs={setPushNotifs}
             />
           )}
         />
