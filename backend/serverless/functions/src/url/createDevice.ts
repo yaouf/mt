@@ -1,9 +1,21 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
-
+import { defineString } from "firebase-functions/params";
 
 export const createDevice = onRequest(async (request, response) => {
+  // Get the API key from the environment variables
+  const API_KEY = defineString("APIKEY").value();
+
+  // Get the apiKey from the request headers
+  const apiKey = request.headers["X-API-KEY"];
+
+  // Check if the API key is correct
+  if (!apiKey || apiKey !== API_KEY) {
+    response.status(401).send("Unauthorized")
+    return;
+  } 
+
   logger.info("Creating a new device", { structuredData: true });
   // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
   // Assume info above is in request body as json. If any required fields are missing, return an error status code
@@ -37,4 +49,5 @@ export const createDevice = onRequest(async (request, response) => {
   } catch (error) {
     response.status(500).send("Error: " + error);
   }
+
 });
