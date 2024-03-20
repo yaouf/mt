@@ -7,8 +7,9 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "allowJs": true
   },
   "compileOnSave": true,
-  "include": ["src", "../../db"]
+  "include": ["src"]
 }
