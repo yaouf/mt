@@ -16,12 +16,20 @@ export async function up(knex: Knex): Promise<void> {
           table.string("email").unique().notNullable();
           table.string("name").notNullable();
         })
+      )
+      .then(() =>
+        knex.schema.createTable("notifications", table => {
+          table.string("time").notNullable();
+          table.string("title").notNullable();
+          table.string("body").notNullable();
+        })
       );
 }
 
 
 export async function down(knex: Knex): Promise<void> {
    await knex.schema.dropTableIfExists("users");
-   return knex.schema.dropTableIfExists("devices");
+   await knex.schema.dropTableIfExists("devices");
+   return knex.schema.dropTableIfExists("notifications");
 }
 
