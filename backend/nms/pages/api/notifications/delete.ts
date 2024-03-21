@@ -24,8 +24,10 @@ export default async function deleteNotification(
     }
 
     const job = await notificationQueue.getJob(jobId.toString());
-    if(!job) {
-      return res.status(404).json({ message: "Notification not found in queue." });
+    if (!job) {
+      return res
+        .status(404)
+        .json({ message: "Notification not found in queue." });
     }
     await job.remove();
 
@@ -34,7 +36,8 @@ export default async function deleteNotification(
 
     if (deletedCount > 0) {
       const notifications = await db("notifications").select("*");
-      res.status(200).json(notifications);
+      console.log(notifications);
+      res.status(200).json({ message: "Notification successfully deleted." });
     } else {
       res.status(404).json({
         message: "Notification not found in database.",

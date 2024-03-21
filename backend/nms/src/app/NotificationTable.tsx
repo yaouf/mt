@@ -5,18 +5,19 @@ const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }
     try {
       // Implement the logic to call the deleteNotification API
       console.log('Deleting notification:', notification);
-      const response = await fetch('/api/notifications/deleteNotification', {
+      const response = await fetch('/api/notifications/delete', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(notification),
+        body: JSON.stringify({ jobId: notification.id }),
       });
 
       if (response.ok) {
         console.log('Notification deleted successfully.');
-        const data = await response.json();
-        setScheduledNotifications(data);
+        // TODO: uncomment this once the API sends the updated list of notifications
+        // const data = await response.json();
+        // setScheduledNotifications(data);
       } else {
         console.error('Error deleting notification');
       }
