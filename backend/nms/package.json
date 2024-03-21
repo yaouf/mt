@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "redis-server & next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "redis-server & next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -16,6 +16,8 @@
     "oracledb": "^6.4.0",
     "pg-query-stream": "^4.5.3",
     "react": "^18",
+    "react-aria": "^3.32.1",
+    "react-aria-components": "^1.1.1",
     "react-dom": "^18",
     "sqlite3": "^5.1.7"
   },
