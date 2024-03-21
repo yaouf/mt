@@ -19,7 +19,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   const handleScheduleNotification = async () => {
     try {
-      const response = await fetch('/api/notifications/addNotification', {
+      const response = await fetch('/api/notifications/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

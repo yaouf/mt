@@ -11,7 +11,7 @@ export default function Home() {
     // Fetch notifications from the API
     const fetchNotifications = async () => {
       try {
-        const response = await fetch('/api/notifications/getNotifications');
+        const response = await fetch('/api/notifications/');
         const data = await response.json();
         setScheduledNotifications(data);
       } catch (error) {
