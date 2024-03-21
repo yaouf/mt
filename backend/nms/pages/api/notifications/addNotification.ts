@@ -31,8 +31,9 @@ export default async function addNotification(
       body,
     });
 
-    const notifications = await db("notifications").select("*");
-    res.status(200).json(notifications);
+    res.status(200).json({
+      message: "The notification has been added to the database.",
+    });
   } catch (error) {
     console.error("Error adding notification to the database:", error);
     res.status(500).json({ message: "Internal server error." });

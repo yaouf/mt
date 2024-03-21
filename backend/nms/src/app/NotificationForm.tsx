@@ -28,6 +28,8 @@ const NotificationForm = ({ setScheduledNotifications }) => {
       });
 
       if (response.ok) {
+        console.log('Scheduled Notification:', newNotification);
+        // Reset the form after scheduling
         const data = await response.json();
         setScheduledNotifications(data);
         setNewNotification({
