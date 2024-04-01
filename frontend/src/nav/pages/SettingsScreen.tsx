@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { View, Text, Switch, Pressable, StyleSheet } from "react-native";
-import { UserProps } from "../../types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserProps } from "../../types/types";
 import CustomButton from "../../components/CustomButton";
+import { removeAsync, setAsync } from "../../code/helpers";
+import { notifToggle } from "../../styles/styles";
 
 /**
  * Page for settings
@@ -15,50 +15,62 @@ import CustomButton from "../../components/CustomButton";
  *
  * @returns Settings screen
  */
-function SettingsScreen({
-  loggedIn,
-  setLoggedIn,
-  username,
-  setUsername,
-  community,
-  setCommunity,
-}: UserProps) {
-  // const [name, setName] = useState<string>("");
-  const [pushNotifs, setPushNotifs] = useState<boolean>(false);
-  // const [loggedIn, setLoggedIn] = useState<boolean>(false);
-
-  // const styles = StyleSheet.create({
-  //   button: {
-  //     backgroundColor: "#808080",
-  //     padding: 10,
-  //     borderRadius: 5,
-  //     alignItems: "center",
-  //     justifyContent: "center",
-  //   },
-  //   buttonText: {
-  //     color: "#fff",
-  //     fontSize: 16,
-  //   },
-  // });
-
+function SettingsScreen(userProps: UserProps) {
+  /**
+   * login in user and update async storage
+   */
   function handleLogin() {
-    setLoggedIn(true);
-    setUsername("X"); //??
+    userProps.setLoggedIn(true);
+    const username = "X"; //TODO: get username from auth
+    userProps.setUsername(username);
+
+    setAsync("loggedIn", "true");
+    setAsync("username", username);
+
     console.log("Logged in.");
   }
 
+  /**
+   * logout user and clear async storage
+   */
   async function handleLogout() {
-    AsyncStorage.setItem("hasVisited", "false"); // Pauses the rest of the login functionality until hasVisited is set to true
-    setLoggedIn(false);
-    setUsername(""); //??
-    setCommunity("");
+    userProps.setLoggedIn(false);
+    userProps.setUsername("");
+    userProps.setCommunity("");
+
+    setAsync("loggedIn", "false");
+    removeAsync("username");
+    removeAsync("community");
+
     console.log("Logged Out");
-    console.log("Navigating back to Login");
   }
 
-  function handlePushNotifs() {
-    setPushNotifs((previousState) => !previousState);
+  /**
+   * delete account
+   * clear async storage
+   */
+  async function deleteUser() {
+    // call backend to delete, logout for now
+    handleLogout();
+    console.log("deleted account");
   }
+
+  // function handlePushNotifs() {
+  //   setPushNotifs((previousState) => !previousState);
+  // }
+
+  /**
+   * update settings in async storage, call backend update
+   */
+  const updateSettings = () => {
+    setAsync("breakingNotifs", JSON.stringify(userProps.breaking));
+    setAsync("weeklyNotifs", JSON.stringify(userProps.weekly));
+
+    // TODO: do i need to request push token again?
+    // is there a way to know if the backend already has it?
+    // or just do this everytime a setting is changed - update settings doesn't take a push token though
+    console.log("update settings!!");
+  };
 
   function handleContact() {
     console.log("Contact!");
@@ -66,17 +78,37 @@ function SettingsScreen({
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {loggedIn ? (
+      {userProps.loggedIn ? (
         <>
-          <Text>{username}</Text>
+          <Text>{userProps.username}</Text>
           <CustomButton text={"Logout"} onPress={handleLogout} />
-          <CustomButton text={"Delete account"} onPress={handleLogout} />
+          <CustomButton text={"Delete account"} onPress={deleteUser} />
         </>
       ) : (
         <CustomButton text={"Login"} onPress={handleLogin} />
       )}
-      <Text>Push Notifications</Text>
-      <Switch value={pushNotifs} onValueChange={handlePushNotifs} />
+      <View style={{ margin: 30 }}>
+        <Text>Push Notifications</Text>
+        <View style={notifToggle.toggleRow}>
+          <Text>Breaking News Alerts</Text>
+          <Switch
+            value={userProps.breaking}
+            onValueChange={() =>
+              userProps.setBreaking((previousState: boolean) => !previousState)
+            }
+          />
+        </View>
+        <View style={notifToggle.toggleRow}>
+          <Text>Weekly Summary </Text>
+          <Switch
+            value={userProps.weekly}
+            onValueChange={() =>
+              userProps.setWeekly((previousState: boolean) => !previousState)
+            }
+          />
+        </View>
+        <CustomButton text={"Save changes"} onPress={updateSettings} />
+      </View>
       <CustomButton text={"Contact us"} onPress={handleContact} />
     </View>
   );

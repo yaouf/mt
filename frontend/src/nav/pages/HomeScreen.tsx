@@ -1,7 +1,7 @@
 import { WebView, WebViewNavigation } from "react-native-webview";
 import { useRef } from "react";
 import { View, Button } from "react-native";
-import { HomeProps } from "../../types";
+import { HomeProps } from "../../types/types";
 import { baseStyles } from "../../styles/styles";
 
 /**
