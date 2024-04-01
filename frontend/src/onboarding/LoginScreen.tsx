@@ -1,27 +1,35 @@
 import { View } from "react-native";
-import { UserProps } from "../types";
+import { LoginProps } from "../types/types";
 import CustomButton from "../components/CustomButton";
+import { setAsync } from "../code/helpers";
 
-function Onboarding(userProps: UserProps) {
-  console.log("hereeee in onboarding");
+function LoginScreen(props: LoginProps) {
+  console.log("onboarding - login");
+  const userProps = props.route.params;
 
   function handleLogin(community: string) {
     // If Logged In as Brown or Other Community, set as logged in
     if (community != "Guest") {
       userProps.setLoggedIn(true);
       userProps.setUsername("Blueno");
+
+      setAsync("loggedIn", "true");
+      setAsync("username", "Blueno");
+
       console.log("Logged into Brown or Other!");
     }
     // If Guest Browsing, set to not logged in
     else {
       userProps.setLoggedIn(false);
       console.log("Browsing as Guest");
+      setAsync("loggedIn", "false");
     }
     // Setting the community
     userProps.setCommunity(community);
+    setAsync("community", community);
 
-    // set onboarding to true
-    userProps.setHasOnboarded(true);
+    // then continue to push notifs
+    props.navigation.navigate("PushNotifs");
   }
 
   return (
@@ -42,4 +50,4 @@ function Onboarding(userProps: UserProps) {
   );
 }
 
-export default Onboarding;
+export default LoginScreen;

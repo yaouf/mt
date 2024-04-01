@@ -36,3 +36,5 @@ yarn-error.*
 Dockerfile*
 xo
 config.debug.php
+
+.env

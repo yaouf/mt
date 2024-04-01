@@ -8,3 +8,9 @@ export const baseStyles = StyleSheet.create({
     flex: 1,
   },
 });
+
+export const notifToggle = StyleSheet.create({
+  toggleRow: {
+    flexDirection: "row",
+  },
+});
