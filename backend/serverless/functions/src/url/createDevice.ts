@@ -1,9 +1,22 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
-
+import { v4 as uuidv4 } from "uuid";
+import { defineString } from "firebase-functions/params";
 
 export const createDevice = onRequest(async (request, response) => {
+  // Get the API key from the environment variables
+  const API_KEY = defineString("APIKEY").value();
+
+  // Get the apiKey from the request headers
+  const apiKey = request.headers["X-API-KEY"];
+
+  // Check if the API key is correct
+  if (!apiKey || apiKey !== API_KEY) {
+    response.status(401).send("Unauthorized")
+    return;
+  } 
+
   logger.info("Creating a new device", { structuredData: true });
   // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
   // Assume info above is in request body as json. If any required fields are missing, return an error status code
@@ -19,12 +32,13 @@ export const createDevice = onRequest(async (request, response) => {
     
     // Insert the device into the devices table, and return the id of the inserted row
     const insertedRows = await db("devices").insert({
+      id: uuidv4(), // Generate a new UUID for the device
       deviceType: deviceType, 
       breakingNewsAlerts: breakingNewsAlerts,
       weeklySummaryAlerts: weeklySummaryAlerts,
       expoPushToken: expoPushToken, // Might be inserted as null (if not provided)
     }).returning("id");
-
+    // Only return id to the client if the insert was successful
     console.log(insertedRows);
 
     // Select all from devices table and log result
@@ -37,4 +51,5 @@ export const createDevice = onRequest(async (request, response) => {
   } catch (error) {
     response.status(500).send("Error: " + error);
   }
+
 });

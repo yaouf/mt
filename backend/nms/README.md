@@ -2,7 +2,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, install redis with 
+`brew install redis` on mac
+`sudo apt-get install redis-server` on ubuntu
+`choco install redis-64` on windows
+
+Then, run the development server:
 
 ```bash
 npm i 
