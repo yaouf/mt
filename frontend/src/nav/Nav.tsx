@@ -1,4 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { useEffect } from "react";
+import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import SectionsScreen from "./pages/SectionsScreen";
