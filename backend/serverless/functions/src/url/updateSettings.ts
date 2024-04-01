@@ -1,10 +1,21 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
-
-
+import { defineString } from "firebase-functions/params";
 
 export const updateSettings = onRequest(async (request, response) => {
+  // Get the API key from the environment variables
+  const API_KEY = defineString("APIKEY").value();
+
+  // Get the apiKey from the request headers
+  const apiKey = request.headers["X-API-KEY"];
+
+  // Check if the API key is correct
+  if (!apiKey || apiKey !== API_KEY) {
+    response.status(401).send("Unauthorized")
+    return;
+  } 
+  
   try {
     logger.info("Updating user settings", { structuredData: true });
 
