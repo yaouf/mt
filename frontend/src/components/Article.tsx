@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { WebView, WebViewNavigation } from "react-native-webview";
-import { ArticleProps } from "../types";
+import { ArticleProps } from "../types/types";
 import { baseStyles } from "../styles/styles";
 
 /**
