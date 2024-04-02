@@ -9,8 +9,8 @@ export const createDevice = onRequest(async (request, response) => {
   const API_KEY = defineString("APIKEY").value();
 
   // Get the apiKey from the request headers
-  const apiKey = request.headers["X-API-KEY"];
-
+  const apiKey = request.get("X-API-KEY");
+  console.log(apiKey, API_KEY);
   // Check if the API key is correct
   if (!apiKey || apiKey !== API_KEY) {
     response.status(401).send("Unauthorized")
