@@ -5,6 +5,7 @@ Functions are in `functions` folder, and organized in subfolders according to th
 ## Instructions for Local Development
 
 1. Download Visual Studio Code and recommended workspace extensions.
+2. Create a .env file under `serverless/functions` and add the APIKEY environment variable. 
 2. Open command prompt using `Ctrl + ~` and navigate to the `serverless/db` folder.
 3. Run `npm run update`
 4. Navigate the the `serverless/functions` folder.
