@@ -5,7 +5,7 @@ import { defineString } from "firebase-functions/params";
 
 export const updateSettings = onRequest(async (request, response) => {
   // Get the API key from the environment variables
-  const API_KEY = defineString("APIKEY").value();
+  const API_KEY = defineString("API_KEY").value();
 
   // Get the apiKey from the request headers
   const apiKey = request.headers["X-API-KEY"];
