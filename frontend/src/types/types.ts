@@ -40,6 +40,10 @@ export type ComponentParams = {
 
 export type ArticleProps = StackScreenProps<ComponentParams, "Article">;
 
+export type ShareProps = {
+  uri: string;
+};
+
 // for onboarding nav
 
 export type OnboardParams = {
