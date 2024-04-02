@@ -8,14 +8,14 @@ export const updateSettings = onRequest(async (request, response) => {
   const API_KEY = defineString("API_KEY").value();
 
   // Get the apiKey from the request headers
-  const apiKey = request.headers["X-API-KEY"];
+  const apiKey = request.get("X-API-KEY");
 
   // Check if the API key is correct
   if (!apiKey || apiKey !== API_KEY) {
-    response.status(401).send("Unauthorized")
+    response.status(401).send("Unauthorized");
     return;
-  } 
-  
+  }
+
   try {
     logger.info("Updating user settings", { structuredData: true });
 
