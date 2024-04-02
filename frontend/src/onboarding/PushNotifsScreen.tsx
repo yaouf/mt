@@ -5,7 +5,7 @@ import CustomButton from "../components/CustomButton";
 import { setAsync } from "../code/helpers";
 import { getPushToken } from "../code/pushNotifs";
 import { notifToggle } from "../styles/styles";
-import { API_KEY } from "@env";
+import { API_KEY, API_URL } from "@env";
 
 function PushNotifsScreen(props: PushNotifProps) {
   const userProps = props.route.params;
@@ -29,12 +29,9 @@ function PushNotifsScreen(props: PushNotifProps) {
       redirect: "follow",
     };
 
-    fetch(
-      "http://localhost:5000/bdh-mobileapp-dev/us-central1/createDevice",
-      requestOptions
-    )
+    fetch(API_URL + "/createDevice", requestOptions)
       .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((result) => console.log("!!!!!", result))
       .catch((error) => console.error(error));
   };
 
