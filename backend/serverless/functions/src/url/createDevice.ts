@@ -29,14 +29,14 @@ export const createDevice = onRequest(async (request, response) => {
       response.status(400).send("Missing required fields in request body");
       return;
     }
-    
+    // TODO: make this expoPushToken required
     // Insert the device into the devices table, and return the id of the inserted row
     const insertedRows = await db("devices").insert({
       id: uuidv4(), // Generate a new UUID for the device
       deviceType: deviceType, 
       breakingNewsAlerts: breakingNewsAlerts,
       weeklySummaryAlerts: weeklySummaryAlerts,
-      expoPushToken: expoPushToken, // Might be inserted as null (if not provided)
+      expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
     }).returning("id");
     // Only return id to the client if the insert was successful
     console.log(insertedRows);
