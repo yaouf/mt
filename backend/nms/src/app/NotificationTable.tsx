@@ -27,9 +27,9 @@ const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }
 
   const formatTags = (notification) => {
     const tags: string[] = [];
-    if (notification.breakingNews) tags.push("Breaking News");
-    if (notification.weeklySummary) tags.push("Weekly Summary");
-    if (notification.dailySummary) tags.push("Daily Summary");
+    if (notification["Breaking News"]) tags.push("Breaking News");
+    if (notification["Weekly Summary"]) tags.push("Weekly Summary");
+    if (notification["Daily Summary"]) tags.push("Daily Summary");
     return tags.join(', ');
   };
 
@@ -42,6 +42,7 @@ const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }
             <th className="py-2 px-4 border-b">Time</th>
             <th className="py-2 px-4 border-b">Title</th>
             <th className="py-2 px-4 border-b">Body</th>
+            <th className="py-2 px-4 border-b">Slug</th>
             <th className="py-2 px-4 border-b">Tags</th>
             <th className="py-2 px-4 border-b">Status</th>
             <th className="py-2 px-4 border-b">Actions</th>
@@ -53,6 +54,7 @@ const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }
               <td className="py-2 px-4 border-b">{notification.time}</td>
               <td className="py-2 px-4 border-b">{notification.title}</td>
               <td className="py-2 px-4 border-b">{notification.body}</td>
+              <td className="py-2 px-4 border-b">{notification.slug}</td>
               <td className="py-2 px-4 border-b">{formatTags(notification)}</td>
               <td className="py-2 px-4 border-b">{notification.status}</td>
               <td className="py-2 px-4 border-b">

@@ -12,7 +12,8 @@ export type Notification = {
 
 export type Device = {
   deviceType: string;
-  breakingNewsAlerts: boolean;
-  weeklySummaryAlerts: boolean;
+  "Breaking News": boolean;
+  "Weekly Summary": boolean;
+  "Daily Summary": boolean;
   expoPushToken: string;
 };
