@@ -3,6 +3,7 @@ export type ResponseData = {
 };
 
 export type Notification = {
+  jobId: number;
   time: string;
   title: string;
   body: string;

@@ -3,7 +3,6 @@ import React from 'react';
 const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }) => {
   const onDeleteNotification = async (notification) => {
     try {
-      // Implement the logic to call the deleteNotification API
       console.log('Deleting notification:', notification);
       const response = await fetch('/api/notifications/delete', {
         method: 'DELETE',
@@ -15,15 +14,23 @@ const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }
 
       if (response.ok) {
         console.log('Notification deleted successfully.');
-        // TODO: uncomment this once the API sends the updated list of notifications
-        // const data = await response.json();
-        // setScheduledNotifications(data);
+        const data = await response.json() as any[];
+        console.log('data', data);
+        setScheduledNotifications(data);
       } else {
         console.error('Error deleting notification');
       }
     } catch (error) {
       console.error('Error:', error);
     }
+  };
+
+  const formatTags = (notification) => {
+    const tags: string[] = [];
+    if (notification.breakingNews) tags.push("Breaking News");
+    if (notification.weeklySummary) tags.push("Weekly Summary");
+    if (notification.dailySummary) tags.push("Daily Summary");
+    return tags.join(', ');
   };
 
   return (
@@ -35,6 +42,8 @@ const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }
             <th className="py-2 px-4 border-b">Time</th>
             <th className="py-2 px-4 border-b">Title</th>
             <th className="py-2 px-4 border-b">Body</th>
+            <th className="py-2 px-4 border-b">Tags</th>
+            <th className="py-2 px-4 border-b">Status</th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
@@ -44,6 +53,8 @@ const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }
               <td className="py-2 px-4 border-b">{notification.time}</td>
               <td className="py-2 px-4 border-b">{notification.title}</td>
               <td className="py-2 px-4 border-b">{notification.body}</td>
+              <td className="py-2 px-4 border-b">{formatTags(notification)}</td>
+              <td className="py-2 px-4 border-b">{notification.status}</td>
               <td className="py-2 px-4 border-b">
                 <button
                   onClick={() => onDeleteNotification(notification)}

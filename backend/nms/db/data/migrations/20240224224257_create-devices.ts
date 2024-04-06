@@ -21,6 +21,10 @@ export async function up(knex: Knex): Promise<void> {
           table.string("time").notNullable();
           table.string("title").notNullable();
           table.string("body").notNullable();
+          table.boolean("breakingNews").notNullable();
+          table.boolean("weeklySummary").notNullable();
+          table.boolean("dailySummary").notNullable();
+          table.string("status").notNullable();
         })
       );
 }
