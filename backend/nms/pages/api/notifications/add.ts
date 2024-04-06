@@ -4,8 +4,9 @@ import notificationQueue from "../../queue/queue";
 import { Notification } from "../../types/types";
 
 type ResponseData = {
-  message: string;
+  message?: string;
   jobId?: number;
+  notifications?: Notification[];
 };
 
 export default async function addNotification(
@@ -15,6 +16,7 @@ export default async function addNotification(
   try {
     // Assuming the request body contains the notification data
     const { time, title, body, tags } = req.body as Notification;
+
 
     // Validate required fields
     if (!time || !title || !body || !tags) {
@@ -28,14 +30,16 @@ export default async function addNotification(
     const dailySummary = tags.includes("Daily Summary");
 
     // Insert the notification data into the "notifications" table
+    const slug = req.body.data.slug;
     const insertedRows = await db("notifications")
       .insert({
         "time": time,
         "title": title,
         "body": body,
-        "breakingNews": breakingNews,
-        "weeklySummary": weeklySummary,
-        "dailySummary": dailySummary,
+        "slug": slug,
+        "Breaking News": breakingNews,
+        "Weekly Summary": weeklySummary,
+        "Daily Summary": dailySummary,
         "status": "pending",
       })
       .returning("id");
@@ -55,17 +59,20 @@ export default async function addNotification(
 
     // Add the notification to the queue
     const job = await notificationQueue.add(
-      { jobId, time, title, body, tags },
+      { jobId, time, title, body, tags, slug },
       { delay: milliseconds, jobId: jobId.toString() }
     );
-    console.log("job", job);
+    // console.log("job", job);
 
-    const notifications = await db("notifications").select("*");
+    const notifications = await db("notifications").select("*") as Notification[];
     // const scheduledNotifications = await notificationQueue.getDelayed();
     // console.log(scheduledNotifications);
+    console.log(notifications);
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error adding notification to the database:", error);
     res.status(500).json({ message: "Internal server error." });
   }
+
+  
 }
