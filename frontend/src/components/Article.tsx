@@ -1,7 +1,25 @@
-import { View } from "react-native";
+import { Alert, Share, View } from "react-native";
 import { WebView, WebViewNavigation } from "react-native-webview";
-import { ArticleProps } from "../types";
+import { ArticleProps, ShareProps } from "../types/types";
 import { baseStyles } from "../styles/styles";
+import CustomButton from "./CustomButton";
+
+const ShareFeature = ({ uri }: ShareProps) => {
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: "Check out this article! " + uri,
+      });
+    } catch (error: any) {
+      Alert.alert(error.message);
+    }
+  };
+  return (
+    <View>
+      <CustomButton text={"Share this article!"} onPress={onShare} />
+    </View>
+  );
+};
 
 /**
  * Native component for articles. When click on article, will redirect to
@@ -38,6 +56,7 @@ function Article({ route, navigation }: ArticleProps) {
         style={baseStyles.webview}
         onShouldStartLoadWithRequest={shouldStartLoadWithRequest}
       />
+      <ShareFeature uri={articleUrl} />
     </View>
   );
 }

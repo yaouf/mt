@@ -13,6 +13,7 @@ const limiter = slowDown({
 
 
 export const updateSettings = onRequest(async (request, response) => {
+<<<<<<< HEAD
   // Apply the speed limiter to the function
   limiter(request, response, async () => {
     // Get the API key from the environment variables
@@ -29,6 +30,22 @@ export const updateSettings = onRequest(async (request, response) => {
     
     try {
       logger.info("Updating user settings", { structuredData: true });
+=======
+  // Get the API key from the environment variables
+  const API_KEY = defineString("API_KEY").value();
+
+  // Get the apiKey from the request headers
+  const apiKey = request.get("X-API-KEY");
+
+  // Check if the API key is correct
+  if (!apiKey || apiKey !== API_KEY) {
+    response.status(401).send("Unauthorized");
+    return;
+  }
+
+  try {
+    logger.info("Updating user settings", { structuredData: true });
+>>>>>>> caf3b37ef9e71b4baf22a464be97e14b1d0e5693
 
       // Destructure potential fields from request body
       const { breakingNewsAlerts, weeklySummaryAlerts } = request.body;

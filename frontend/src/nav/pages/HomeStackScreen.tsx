@@ -1,7 +1,7 @@
 import ArticleScreen from "../../components/Article";
 import HomeScreen from "./HomeScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ComponentParams } from "../../types";
+import { ComponentParams } from "../../types/types";
 
 const HomeStack = createStackNavigator<ComponentParams>();
 
