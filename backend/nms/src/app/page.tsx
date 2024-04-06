@@ -5,7 +5,7 @@ import NotificationForm from './NotificationForm';
 import NotificationTable from './NotificationTable';
 
 export default function Home() {
-  const [scheduledNotifications, setScheduledNotifications] = useState([]);
+  const [scheduledNotifications, setScheduledNotifications] = useState([] as any[]);
 
   useEffect(() => {
     // Fetch notifications from the API
@@ -13,7 +13,7 @@ export default function Home() {
       try {
         const response = await fetch('/api/notifications/');
         const data = await response.json();
-        setScheduledNotifications(data);
+        setScheduledNotifications(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error fetching notifications:', error);
       }

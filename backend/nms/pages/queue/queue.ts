@@ -8,12 +8,10 @@ const notificationQueue = new Bull(
   "redis://127.0.0.1:6379"
 );
 
-
-
-// send notifications to corresponding devices
+// Send notifications to corresponding devices
 notificationQueue.process(async (job) => {
   // This is the job data that was passed to `notificationQueue.add()`
-  const { title, body, tags } = job.data as Notification;
+  const { jobId, time, title, body, tags } = job.data as Notification;
 
   // Fetch all devices that have subscribed to the tags
   let devices: Device[] = [];
@@ -122,9 +120,13 @@ notificationQueue.process(async (job) => {
     })();
   }
 
-
-
-
+  // Update notification status to "sent" in the database
+  try {
+    await db("notifications").where({ id: jobId }).update({ status: "sent" });
+    console.log(`Notification with ID ${jobId} at time ${time} successfully updated to status "sent"`);
+  } catch (error) {
+    console.error("Error updating notification status:", error);
+  }
 });
 
 export default notificationQueue;
