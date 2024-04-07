@@ -1,6 +1,8 @@
 import knex from 'knex';
 import config from '../knexfile'
-const db = knex(config.development);
-
-export default db;
+function outerDb(params: Record<string, string>) {
+    const { environment, stagingDbUrl } = params;
+    return knex(config(stagingDbUrl)[environment || "development"]);
+}
+export default outerDb;
 

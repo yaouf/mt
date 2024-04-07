@@ -2,17 +2,18 @@ import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 import { v4 as uuidv4 } from "uuid";
-import { defineString } from "firebase-functions/params";
-
+import envars from "../envars";
 export const createDevice = onRequest(async (request, response) => {
-  // Get the API key from the environment variables
-  const API_KEY = defineString("API_KEY").value();
-
+  
   // Get the apiKey from the request headers
-  const apiKey = request.get("X-API-KEY");
-  console.log(apiKey, API_KEY);
+  const untrustedApiKey = request.get("X-API-KEY");
+
+  const { environment, stagingDbUrl, trustedApiKey } = envars;
+  const dbParams = { environment, stagingDbUrl };
+  console.log("dbParams: ", dbParams);
+  console.log(untrustedApiKey, trustedApiKey);
   // Check if the API key is correct
-  if (!apiKey || apiKey !== API_KEY) {
+  if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
     response.status(401).send("Unauthorized")
     return;
   } 
@@ -31,7 +32,7 @@ export const createDevice = onRequest(async (request, response) => {
     }
     // TODO: make this expoPushToken required
     // Insert the device into the devices table, and return the id of the inserted row
-    const insertedRows = await db("devices").insert({
+    const insertedRows = await db(dbParams)("devices").insert({
       id: uuidv4(), // Generate a new UUID for the device
       deviceType: deviceType, 
       breakingNewsAlerts: breakingNewsAlerts,
@@ -42,13 +43,14 @@ export const createDevice = onRequest(async (request, response) => {
     console.log(insertedRows);
 
     // Select all from devices table and log result
-    const allDevices = await db("devices").select();
+    const allDevices = await db(dbParams)("devices").select();
     console.log(allDevices);
 
     response.send({
       deviceId: insertedRows[0].id,
     });
   } catch (error) {
+    console.error("Error creating device:", error);
     response.status(500).send("Error: " + error);
   }
 

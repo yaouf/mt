@@ -5,11 +5,9 @@ Functions are in `functions` folder, and organized in subfolders according to th
 ## Instructions for Local Development
 
 1. Download Visual Studio Code and recommended workspace extensions.
-2. Create a .env file under `serverless/functions` and add the API_KEY environment variable. 
-2. Open command prompt using `Ctrl + ~` and navigate to the `serverless/db` folder.
-2. Run `npm run build`
-3. Run `npm run update`
-4. Navigate the the `serverless/functions` folder.
+2. Create a .env file under `serverless/functions` and add the environment variables from the `.env.example` file. Can use `cp .env.example .env` to copy the file. 
+3. Open command prompt using `Ctrl + ~` and navigate to the `serverless/functions folder. 
+4. Run `npm run update:db`. Run this command whenever there are changes to the database schema or sample data or db folder or the database environment (development, staging, production) is changed.
 5. Run `npm run dev`
 6. Send a POST request to corresponding endpoint shown from CLI. 
 
@@ -23,7 +21,7 @@ var raw = JSON.stringify({
   "deviceType": "iOS",
   "breakingNewsAlerts": true,
   "weeklySummaryAlerts": false,
-  "expoPushToken": "ExpoPushToken[12345]"
+  "expoPushToken": "ExpoPushToken[1001]"
 });
 
 var requestOptions = {
@@ -33,29 +31,8 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-fetch("http://localhost:5000/bdh-mobileapp-dev/us-central1/createDevice", requestOptions)
+fetch("YOUR_CREATE_DEVICE_ENDPOINT", requestOptions)
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
 ```
-
-There are two tables in the database: `users` and `devices`. Here is the schema for the tables:
-
-```sql
-CREATE TABLE devices (
-    id SERIAL PRIMARY KEY,
-    deviceType VARCHAR(255) NOT NULL,
-    breakingNewsAlerts BOOLEAN NOT NULL,
-    weeklySummaryAlerts BOOLEAN NOT NULL,
-    expoPushToken VARCHAR(255) UNIQUE
-);
-
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    name VARCHAR(255) NOT NULL
-);
-```
-
-
-
