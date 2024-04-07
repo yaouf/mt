@@ -19,10 +19,12 @@ export const updateSettings = onRequest(async (request, response) => {
     logger.info("Updating user settings", { structuredData: true });
 
     // Destructure potential fields from request body
-    const { breakingNewsAlerts, weeklySummaryAlerts } = request.body;
+    const breakingNews = request.body["Breaking News"];
+    const weeklySummary = request.body["Weekly Summary"];
+    const dailySummary = request.body["Daily Summary"];
 
     // Validate request body
-    if (breakingNewsAlerts === undefined && weeklySummaryAlerts === undefined) {
+    if (breakingNews === undefined && weeklySummary === undefined && dailySummary === undefined) {
       response
         .status(400)
         .send(
@@ -33,14 +35,18 @@ export const updateSettings = onRequest(async (request, response) => {
 
     // Construct update object based on what's provided in the request body
     const updateData = {
-      breakingNewsAlerts: false,
-      weeklySummaryAlerts: false,
+      "Breaking News": false,
+      "Weekly Summary": false,
+      "Daily Summary": false,
     };
-    if (breakingNewsAlerts !== undefined) {
-      updateData.breakingNewsAlerts = breakingNewsAlerts;
+    if (breakingNews !== undefined) {
+      updateData["Breaking News"] = breakingNews;
     }
-    if (weeklySummaryAlerts !== undefined) {
-      updateData.weeklySummaryAlerts = weeklySummaryAlerts;
+    if (weeklySummary !== undefined) {
+      updateData["Weekly Summary"] = weeklySummary;
+    }
+    if (dailySummary !== undefined) {
+      updateData["Daily Summary"] = dailySummary;
     }
 
     // Assuming there's a way to identify the device/user to update, for example, a deviceId in the request

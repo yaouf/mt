@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
       table.boolean("Breaking News").notNullable();
       table.boolean("Weekly Summary").notNullable();
       table.boolean("Daily Summary").notNullable();
-      table.string("expoPushToken").unique();
+      table.string("expoPushToken").unique().notNullable();
     })
     .then(() =>
       knex.schema.createTable("users", table => {

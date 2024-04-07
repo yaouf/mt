@@ -1,6 +1,7 @@
 // Update with your config settings.
 
-import knex, { Knex } from "knex";
+import { Knex } from "knex";
+import "dotenv/config";
 const rootDir = process.cwd(); // Get the absolute path of the root directory
 console.log(rootDir);
 // import { defineString } from "firebase-functions/params";
@@ -11,6 +12,11 @@ console.log(rootDir);
 const startPath = rootDir.endsWith("db") ? "" : "../db/";
 console.log("full path: ", startPath + "dist/dev.sqlite3");
 function configFunc(stagingDbUrl: string) {
+  // console.log("stagingDbUrl: ", stagingDbUrl);
+  let dbUrl: string = stagingDbUrl;
+  if(!dbUrl) {
+    dbUrl = process.env.DB_URL || "";
+  }
 const config: { [key: string]: Knex.Config<string> } = {
   development: {
     client: "sqlite3",
@@ -28,7 +34,7 @@ const config: { [key: string]: Knex.Config<string> } = {
 
   staging: {
     client: "pg",
-    connection: stagingDbUrl,
+    connection: dbUrl,
     pool: {
       min: 2,
       max: 10,
