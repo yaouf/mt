@@ -4,7 +4,8 @@ import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 export const updateSettings = onRequest(async (request, response) => {
   // Get the API key from the environment variables
-  const { trustedApiKey } = envars;
+  const { trustedApiKey, environment, stagingDbUrl } = envars;
+  const dbParams = { environment, stagingDbUrl };
 
   // Get the apiKey from the request headers
   const untrustedApiKey = request.get("X-API-KEY");
@@ -59,7 +60,7 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // First, check if the device exists
-    const deviceExists = await db("devices").where("id", deviceId).first();
+    const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
       response.status(404).send("Device ID not found.");
@@ -67,7 +68,7 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Update device settings in device table
-    const res = await db("devices").where("id", deviceId).update(updateData);
+    const res = await db(dbParams)("devices").where("id", deviceId).update(updateData);
     // log the result of the update
     console.log(res);
     // Log the result of update - For logging purposes, might query again or just log the update was successful
