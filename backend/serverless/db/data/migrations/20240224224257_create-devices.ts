@@ -5,8 +5,9 @@ export async function up(knex: Knex): Promise<void> {
       .createTable("devices", table => {
         table.uuid("id").primary();
         table.string("deviceType").notNullable();
-        table.boolean("breakingNewsAlerts").notNullable();
-        table.boolean("weeklySummaryAlerts").notNullable();
+        table.boolean("Breaking News").notNullable();
+        table.boolean("Weekly Summary").notNullable();
+        table.boolean("Daily Summary").notNullable();
         table.string("expoPushToken").unique();
       })
       .then(() =>

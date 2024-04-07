@@ -7,6 +7,10 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     time: '',
     title: '',
     body: '',
+    data: {
+      slug: ''
+    },
+    tags: [] as string[],
   });
 
   const handleInputChange = (e) => {
@@ -17,8 +21,34 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
+  const handleSlugChange = (e) => {
+    const { value } = e.target;
+    setNewNotification((prevNotification) => ({
+      ...prevNotification,
+      data: {
+          slug: value,
+      },
+    }));
+  }
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setNewNotification((prevNotification) => ({
+        ...prevNotification,
+        tags: [...prevNotification.tags, value],
+      }));
+    } else {
+      setNewNotification((prevNotification) => ({
+        ...prevNotification,
+        tags: prevNotification.tags.filter((tag) => tag !== value),
+      }));
+    }
+  };
+
   const handleScheduleNotification = async () => {
     try {
+      console.log("newNotification", newNotification)
       const response = await fetch('/api/notifications/add', {
         method: 'POST',
         headers: {
@@ -29,13 +59,18 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
       if (response.ok) {
         console.log('Scheduled Notification:', newNotification);
-        // Reset the form after scheduling
-        const data = await response.json();
+        const data = await response.json() as any[];
         setScheduledNotifications(data);
+
+        // Reset the form after scheduling
         setNewNotification({
           time: '',
           title: '',
           body: '',
+          data: {
+            slug: ''
+          },
+          tags: [],
         });
       } else {
         console.error('Error scheduling notification');
@@ -51,23 +86,28 @@ const NotificationForm = ({ setScheduledNotifications }) => {
       <form>
         {/* Input for time */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="time">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="time"
+          >
             Time
           </label>
           <input
-            type="text"
+            type="datetime-local"
             id="time"
             name="time"
             value={newNotification.time}
             onChange={handleInputChange}
             className="border rounded-md px-3 py-2 w-full"
-            placeholder="e.g., 3:00 PM"
           />
         </div>
 
         {/* Input for title */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="title"
+          >
             Title
           </label>
           <input
@@ -83,7 +123,10 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
         {/* Input for body */}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="body">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="body"
+          >
             Body
           </label>
           <textarea
@@ -94,6 +137,67 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             className="border rounded-md px-3 py-2 w-full"
             placeholder="Notification body"
           />
+        </div>
+
+        {/* Input for slug */}
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="slug"
+          >
+            Slug
+          </label>
+          <input
+          type='text'
+            id="slug"
+            name="slug"
+            value={newNotification.data.slug}
+            onChange={handleSlugChange}
+            className="border rounded-md px-3 py-2 w-full"
+            placeholder="Notification slug"
+          />
+        </div>
+
+        {/* Checkboxes for tags */}
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Tags
+          </label>
+          <div>
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                name="tags"
+                value="Breaking News"
+                checked={newNotification.tags.includes("Breaking News")}
+                onChange={handleCheckboxChange}
+                className="form-checkbox"
+              />
+              <span className="ml-2">Breaking News</span>
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="checkbox"
+                name="tags"
+                value="Weekly Summary"
+                checked={newNotification.tags.includes("Weekly Summary")}
+                onChange={handleCheckboxChange}
+                className="form-checkbox"
+              />
+              <span className="ml-2">Weekly Summary</span>
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="checkbox"
+                name="tags"
+                value="Daily Summary"
+                checked={newNotification.tags.includes("Daily Summary")}
+                onChange={handleCheckboxChange}
+                className="form-checkbox"
+              />
+              <span className="ml-2">Daily Summary</span>
+            </label>
+          </div>
         </div>
 
         {/* Button to schedule notification */}

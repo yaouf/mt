@@ -1,15 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 
-
 type ResponseData = {
   message: string;
-};
-
-type Notification = {
-  time: string;
-  title: string;
-  body: string;
 };
 
 export default async function getNotifications(

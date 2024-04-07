@@ -10,9 +10,18 @@ export async function seed(knex: Knex): Promise<void> {
     {
       id: uuidv4(),
       deviceType: "iOS",
-      breakingNewsAlerts: true,
-      weeklySummaryAlerts: false,
+      "Breaking News": true,
+      "Weekly Summary": false,
+      "Daily Summary": false,
       expoPushToken: "ExponentPushToken[98FnGADJ4AOEqyomeGRsRR]",
     },
+    {
+      id: uuidv4(),
+      deviceType: "iOS",
+      "Breaking News": true,
+      "Weekly Summary": false,
+      "Daily Summary": false,
+      expoPushToken: "ExponentPushToken[mGGu2cGvMo9QjWr2QlsH9a]",
+    }
   ]);
 }
