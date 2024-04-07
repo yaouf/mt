@@ -12,6 +12,7 @@ export const createDevice = onRequest(async (request, response) => {
   console.log("dbParams: ", dbParams);
   console.log(untrustedApiKey, trustedApiKey);
   // Check if the API key is correct
+  // TODO: use crypto safe comparison
   if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
     response.status(401).send("Unauthorized");
     return;
