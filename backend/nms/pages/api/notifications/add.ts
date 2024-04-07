@@ -16,10 +16,10 @@ export default async function addNotification(
   try {
     // Assuming the request body contains the notification data
     const { time, title, body, tags } = req.body as Notification;
-
+    const slug = req.body.data.slug;
 
     // Validate required fields
-    if (!time || !title || !body || !tags) {
+    if (!time || !title || !tags) {
       return res.status(400).json({ message: "Invalid notification data." });
     }
 
@@ -30,7 +30,6 @@ export default async function addNotification(
     const dailySummary = tags.includes("Daily Summary");
 
     // Insert the notification data into the "notifications" table
-    const slug = req.body.data.slug;
     const insertedRows = await db("notifications")
       .insert({
         "time": time,

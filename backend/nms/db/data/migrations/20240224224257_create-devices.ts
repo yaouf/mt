@@ -21,8 +21,8 @@ export async function up(knex: Knex): Promise<void> {
           table.increments("id").primary();
           table.string("time").notNullable();
           table.string("title").notNullable();
-          table.string("body").notNullable();
-          table.string("slug").notNullable();
+          table.string("body").nullable();
+          table.string("slug").nullable();
           table.boolean("Breaking News").notNullable();
           table.boolean("Weekly Summary").notNullable();
           table.boolean("Daily Summary").notNullable();
