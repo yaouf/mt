@@ -1,17 +1,16 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
-import { defineString } from "firebase-functions/params";
-
+import envars from "../envars";
 export const updateSettings = onRequest(async (request, response) => {
   // Get the API key from the environment variables
-  const API_KEY = defineString("API_KEY").value();
+  const { trustedApiKey } = envars;
 
   // Get the apiKey from the request headers
-  const apiKey = request.get("X-API-KEY");
+  const untrustedApiKey = request.get("X-API-KEY");
 
   // Check if the API key is correct
-  if (!apiKey || apiKey !== API_KEY) {
+  if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
     response.status(401).send("Unauthorized");
     return;
   }

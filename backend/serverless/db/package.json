@@ -7,14 +7,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm i && tsc",
     "knex": "npm i && npx ts-node node_modules/.bin/knex",
-    "update": "npm i && npm run knex -- migrate:rollback && npm run knex -- migrate:latest && npm run knex -- seed:run && tsc",
-    "new": "npm i && npx knex migrate:make $1"
+    "update": "npm i && tsc && npm run knex -- migrate:rollback && npm run knex -- migrate:latest && npm run knex -- seed:run",
+    "new": "npm i && tsc && npx knex migrate:make $1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "knex": "^3.1.0",
+    "pg": "^8.11.5",
     "sqlite3": "^5.1.7",
     "uuid": "^9.0.1"
   },
