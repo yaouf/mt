@@ -37,7 +37,7 @@ export default async function deleteNotification(
     if (deletedCount > 0) {
       const notifications = await db("notifications").select("*");
       console.log(notifications);
-      res.status(200).json({ message: "Notification successfully deleted." });
+      res.status(200).json(notifications);
     } else {
       res.status(404).json({
         message: "Notification not found in database.",
