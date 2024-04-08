@@ -3,6 +3,7 @@ import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 import { defineString } from "firebase-functions/params";
 import envars from "../envars";
+
 export const viewSettings = onRequest(async (request, response) => {
   // Get the API key from the environment variables
   const API_KEY = defineString("API_KEY").value();
@@ -13,8 +14,11 @@ export const viewSettings = onRequest(async (request, response) => {
     response.status(401).send("Unauthorized");
     return;
   }
+
   try {
+
     logger.info("Getting user settings", { structuredData: true });
+    
     // Destructure potential fields from request body
     const { deviceId } = request.body;
     // Validate request body
@@ -26,23 +30,27 @@ export const viewSettings = onRequest(async (request, response) => {
         );
       return;
     }
+
     // Get the device settings in device table (Is the first necessary?  @Jakobi Haskell\)
-      const { environment, stagingDbUrl } = envars;
-      const dbParams = { environment, stagingDbUrl };
+    const { environment, stagingDbUrl } = envars;
+    const dbParams = { environment, stagingDbUrl };
     const settings = await db(dbParams)("devices")
-      .where("id", deviceId)
-      .select("Weekly Summary", "Daily Summary", "Breaking News")
-      .first();
-    // Check if the device's settings exist. If not, assume the device doesn't exist (Is this okay?  @Jakobi Haskell)
+    .where("id", deviceId)
+    .select("Weekly Summary", "Daily Summary", "Breaking News")
+    .first();
+
+    // Check if the device's settings exist. If not, assume the device doesn't exist
     if (!settings) {
       // If the device doesn't exist, return an error response
       response.status(404).send("Device ID not found.");
       return;
     }
-    // Log the settings again (@Jakobi Haskell help pls)
+
+    // Log and send the settings
     logger.info("Device settings sent", { deviceId, settings });
     response.send(settings);
     return;
+    
   } catch (error) {
     logger.error("Error viewing settings", error);
     response.status(500).send("Error viewing settings");
