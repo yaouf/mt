@@ -26,20 +26,20 @@ export const viewSettings = onRequest(async (request, response) => {
         );
       return;
     }
-    // Get the device settings in device table (Is the first necessary?  @Jakobi Haskell\)
+    // Get the device settings in device table
       const { environment, stagingDbUrl } = envars;
       const dbParams = { environment, stagingDbUrl };
     const settings = await db(dbParams)("devices")
       .where("id", deviceId)
       .select("Weekly Summary", "Daily Summary", "Breaking News")
       .first();
-    // Check if the device's settings exist. If not, assume the device doesn't exist (Is this okay?  @Jakobi Haskell)
+    // Check if the device's settings exist. If not, assume the device doesn't exist
     if (!settings) {
       // If the device doesn't exist, return an error response
       response.status(404).send("Device ID not found.");
       return;
     }
-    // Log the settings again (@Jakobi Haskell help pls)
+    // Log the settings again
     logger.info("Device settings sent", { deviceId, settings });
     response.send(settings);
     return;
