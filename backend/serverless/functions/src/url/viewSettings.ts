@@ -31,7 +31,7 @@ export const viewSettings = onRequest(async (request, response) => {
       return;
     }
 
-    // Get the device settings in device table (Is the first necessary?  @Jakobi Haskell\)
+    // Get the device settings in device tables
     const { environment, stagingDbUrl } = envars;
     const dbParams = { environment, stagingDbUrl };
     const settings = await db(dbParams)("devices")
