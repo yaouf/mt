@@ -14,5 +14,5 @@ import { helloWorld } from "./url/helloWorld";
 import { createDevice } from "./url/createDevice";
 import { updateSettings } from "./url/updateSettings";
 import { createUser } from "./auth/createUser";
-
-export { helloWorld, createDevice, updateSettings, createUser };
+import { viewSettings } from "./url/viewSettings";
+export { helloWorld, createDevice, updateSettings, createUser, viewSettings };
