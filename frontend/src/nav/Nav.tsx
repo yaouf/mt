@@ -13,9 +13,8 @@ const Tab = createBottomTabNavigator<NavProps>();
 /**
  * @returns Main app component
  */
-export default function Nav(userProps: UserProps) {
+export default function Nav() {
   console.log("Here in nav");
-  console.log(userProps);
 
   return (
     <NavigationContainer>

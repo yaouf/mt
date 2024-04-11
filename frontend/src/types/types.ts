@@ -18,6 +18,10 @@ export type UserProps = {
   setPushToken: Dispatch<SetStateAction<string>>;
 };
 
+export type OnboardProps = {
+  setHasOnboarded: Dispatch<SetStateAction<boolean>>;
+};
+
 // *** navigation, Home and article ***
 
 export type NavProps = {
@@ -47,22 +51,8 @@ export type ShareProps = {
 // for onboarding nav
 
 export type OnboardParams = {
-  Login: {
-    loggedIn: boolean;
-    setLoggedIn: Dispatch<SetStateAction<boolean>>;
-    username: string;
-    setUsername: Dispatch<SetStateAction<string>>;
-    community: string;
-    setCommunity: Dispatch<SetStateAction<string>>;
-  };
-  PushNotifs: {
-    breaking: boolean;
-    setBreaking: Dispatch<SetStateAction<boolean>>;
-    weekly: boolean;
-    setWeekly: Dispatch<SetStateAction<boolean>>;
-    pushToken: string;
-    setPushToken: Dispatch<SetStateAction<string>>;
-  };
+  Login: undefined;
+  PushNotifs: undefined;
   Done: { setHasOnboarded: Dispatch<SetStateAction<boolean>> };
 };
 
