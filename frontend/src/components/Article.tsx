@@ -1,8 +1,11 @@
+import React from "react";
 import { Alert, Share, View } from "react-native";
 import { WebView, WebViewNavigation } from "react-native-webview";
 import { ArticleProps, ShareProps } from "../types/types";
 import { baseStyles } from "../styles/styles";
 import CustomButton from "./CustomButton";
+import LargeCard from "./cards/LargeCard";
+import HorizontalCard from "./cards/HorizontalCard";
 
 const ShareFeature = ({ uri }: ShareProps) => {
   const onShare = async () => {
