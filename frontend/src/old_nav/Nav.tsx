@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { NavigationContainer, useScrollToTop } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
+import SectionsScreen from "./pages/SectionsScreen";
 import SettingsScreen from "./pages/SettingsScreen";
 
 import { NavProps, UserProps } from "../types/types";
 import HomeStackScreen from "./pages/HomeStackScreen";
-import ForYouSreen from "./pages/ForYouScreen";
 
 const Tab = createBottomTabNavigator<NavProps>();
 
@@ -20,8 +20,12 @@ export default function Nav(userProps: UserProps) {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="HomePage" component={HomeStackScreen} />
-        {/* <Tab.Screen name="ForYouPage" component={ForYouSreen} /> */}
+        <Tab.Screen
+          name="HomePage"
+          component={HomeStackScreen}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen name="Sections" component={SectionsScreen} />
         <Tab.Screen
           name="Settings"
           children={() => <SettingsScreen {...userProps} />}
