@@ -26,10 +26,12 @@ export type OnboardProps = {
 
 export type NavProps = {
   HomePage: undefined;
-  Sections: undefined;
-  Search: undefined;
-  Settings: UserProps;
-  Login: UserProps;
+  // Sections: undefined;
+  // Search: undefined;
+  // Settings: UserProps;
+  Settings: undefined;
+  // Login: UserProps;
+  ForYouPage: undefined;
 };
 
 export type HomeProps = {
