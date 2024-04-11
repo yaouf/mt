@@ -19,6 +19,7 @@ export default function Nav() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
+
         <Tab.Screen name="HomePage" component={HomeStackScreen} />
         {/* <Tab.Screen name="ForYouPage" component={ForYouSreen} /> */}
         <Tab.Screen
