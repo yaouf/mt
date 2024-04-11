@@ -3,17 +3,10 @@ import { useRef, useState } from "react";
 import {
   View,
   Button,
-  Pressable,
-  Text,
-  TextInput,
   Dimensions,
-  FlatList,
 } from "react-native";
-import Item from "../../components/Item";
 import { HomeProps } from "../../types/types";
 import { baseStyles } from "../../styles/styles";
-import { searchBarStyles } from "../../styles/searchbar";
-import CustomButton from "../../components/CustomButton";
 import SmallCard from "src/components/cards/SmallCard";
 import LargeCard from "src/components/cards/LargeCard";
 import HorizontalCard from "src/components/cards/HorizontalCard";

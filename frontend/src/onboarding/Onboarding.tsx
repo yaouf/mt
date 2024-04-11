@@ -1,5 +1,5 @@
 import LoginScreen from "./LoginScreen";
-import { UserProps, OnboardParams, OnboardProps } from "../types/types";
+import { OnboardParams, OnboardProps } from "../types/types";
 import { createStackNavigator } from "@react-navigation/stack";
 import PushNotifsScreen from "./PushNotifsScreen";
 import DoneScreen from "./DoneScreen";
@@ -14,12 +14,10 @@ function Onboarding(props: OnboardProps) {
         <onboardingStack.Screen
           name="Login"
           component={LoginScreen}
-          // initialParams={{ ...userProps }}
         />
         <onboardingStack.Screen
           name="PushNotifs"
           component={PushNotifsScreen}
-          // initialParams={{ ...userProps }}
         />
         <onboardingStack.Screen
           name="Done"

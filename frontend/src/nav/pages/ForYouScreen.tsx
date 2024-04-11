@@ -1,13 +1,16 @@
-import { View } from "react-native";
-import SmallCard from "src/components/cards/SmallCard";
-import { dummyData } from "src/dummyData";
+import { View, Text } from "react-native";
 
-function ForYouSreen() {
+/**
+ * for you page!!
+ *
+ * @returns for you screen
+ */
+function ForYouScreen() {
   return (
-    <View>
-      <SmallCard article={dummyData[0]} />
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>for you 🫵</Text>
     </View>
   );
 }
 
-export default ForYouSreen;
+export default ForYouScreen;
