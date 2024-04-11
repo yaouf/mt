@@ -1,36 +1,33 @@
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { showContextMenu } from "./ShowContextMenu";
+import { Article, Author } from "src/types/types";
 
-interface CardProps {
-  title: string;
-  author: string;
-  section: string;
-  published: string;
-  imageuri: string;
-  uri: string;
-}
+function SmallCard({ article }: Article) {
+  const uri = "https://www.browndailyherald.com/" + article.uuid;
 
-function SmallCard({
-  title,
-  author,
-  section,
-  published,
-  imageuri,
-  uri,
-}: CardProps) {
   return (
     <View style={styles.card}>
-      <Image source={{ uri: imageuri }} style={styles.image} />
+      <Image
+        source={{
+          uri:
+            "http://snworksceo.imgix.net/bdh/" +
+            article.dominantMedia.attachment_uuid +
+            ".sized-1000x1000.jpg",
+        }}
+        style={styles.image}
+      />
       <View style={styles.text}>
-        <Text style={styles.section}>{section}</Text>
+        <Text style={styles.section}>{article.tags[0].name}</Text>
         <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-          {title}
+          {article.headline}
         </Text>
-        <Text style={styles.author}>{author}</Text>
+        <Text style={styles.author}>
+          {article.authors.map((a: Author) => a.name).join(", ")}
+        </Text>
         <View style={styles.bottom}>
           <View style={styles.publishedSection}>
-            <Text style={styles.published}>{published}</Text>
+            <Text style={styles.published}>{article.published_at}</Text>
           </View>
           <TouchableWithoutFeedback
             onPress={() => showContextMenu(uri)}

@@ -3,6 +3,7 @@ import { UserProps } from "./types/types";
 import Onboarding from "./onboarding/Onboarding";
 import Nav from "./nav/Nav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import SmallCard from "./components/cards/SmallCard";
 
 function BdhApp() {
   const [hasOnboarded, setHasOnboarded] = useState<boolean>(false);

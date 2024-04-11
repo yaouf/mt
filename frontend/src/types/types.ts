@@ -69,3 +69,57 @@ export type OnboardParams = {
 export type LoginProps = StackScreenProps<OnboardParams, "Login">;
 export type PushNotifProps = StackScreenProps<OnboardParams, "PushNotifs">;
 export type DoneProps = StackScreenProps<OnboardParams, "Done">;
+
+export type SearchProps = {
+  scrollPositionText: number;
+  screenHeight: number;
+  scrollPositionButton: number;
+};
+
+/**
+ * For cards and articles and media
+ */
+
+export interface Article {
+  article: {
+    headline: string;
+    subhead: string;
+    uuid: string;
+    slug: string;
+    content: string;
+    published_at: string;
+    tags: Tag[];
+    authors: Author[];
+    dominantMedia: Media;
+  };
+}
+
+export interface Author {
+  uuid: string;
+  name: string;
+  slug: string;
+  bio: string;
+  tagline: string;
+  metadata: string;
+  ceo_id: string;
+}
+
+export interface Media {
+  uuid: string;
+  attachment_uuid: string;
+  base_name: string;
+  extension: string;
+  title: string;
+  content: string;
+  type: string;
+  published_at: string;
+  ceo_id: string;
+  authors: Author[];
+}
+
+export interface Tag {
+  uuid: string;
+  name: string;
+  slug: string;
+  ceo_id: string;
+}

@@ -1,42 +1,45 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { showContextMenu } from "./ShowContextMenu";
+import { Article, Author, Tag } from "src/types/types";
 
-interface CardProps {
-  title: string;
-  author: string;
-  section: string;
-  published: string;
-  imageuri: string;
-  uri: string;
-  breaking: boolean;
-}
+function LargeCard({ article }: Article) {
+  const uri = "https://www.browndailyherald.com/" + article.uuid;
+  const all_tags = article.tags.map((t: Tag) => t.name);
+  let breaking = false;
 
-function LargeCard({
-  title,
-  author,
-  section,
-  published,
-  imageuri,
-  uri,
-  breaking,
-}: CardProps) {
+  for (let i = 0; i < all_tags.length; i++) {
+    if (all_tags[i] == "breaking") {
+      breaking = true;
+    }
+  }
+
   return (
     <View style={styles.card}>
-      <Image source={{ uri: imageuri }} style={styles.image} />
+      <Image
+        source={{
+          uri:
+            "http://snworksceo.imgix.net/bdh/" +
+            article.dominantMedia.attachment_uuid +
+            ".sized-1000x1000.jpg",
+        }}
+        style={styles.image}
+      />
       <View style={styles.text}>
         {breaking ? (
           <View style={styles.breakingBox}>
             <Text style={styles.breaking}>Breaking News</Text>
           </View>
         ) : (
-          <Text style={styles.section}>{section}</Text>
+          <Text style={styles.section}>{all_tags[0]}</Text>
         )}
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.author}>{author}</Text>
+        <Text style={styles.title}>{article.headline}</Text>
+        <Text style={styles.author}>
+          {article.authors.map((a: Author) => a.name).join(", ")}
+        </Text>
         <View style={styles.bottom}>
           <View style={styles.publishedSection}>
-            <Text style={styles.published}>{published}</Text>
+            <Text style={styles.published}>{article.published_at}</Text>
           </View>
           <TouchableWithoutFeedback
             onPress={() => showContextMenu(uri)}

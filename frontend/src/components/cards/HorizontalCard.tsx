@@ -2,36 +2,32 @@ import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { showContextMenu } from "./ShowContextMenu";
+import { Article, Author } from "src/types/types";
 
-interface CardProps {
-  title: string;
-  author: string;
-  section: string;
-  published: string;
-  imageuri: string;
-  uri: string;
-}
-
-function HorizontalCard({
-  title,
-  author,
-  section,
-  published,
-  imageuri,
-  uri,
-}: CardProps) {
+function HorizontalCard({ article }: Article) {
+  console.log("**", article);
+  const uri = "https://www.browndailyherald.com/" + article.uuid;
   return (
     <View style={styles.card}>
       <View style={styles.content}>
-        <Image source={{ uri: imageuri }} style={styles.image} />
+        <Image
+          source={{
+            uri:
+              "http://snworksceo.imgix.net/" +
+              article.dominantMedia.attachment_uuid,
+          }}
+          style={styles.image}
+        />
         <View style={styles.text}>
           <View style={styles.innerText}>
-            <Text style={styles.section}>{section}</Text>
+            <Text style={styles.section}>{article.tags[0].name}</Text>
             <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-              {title}
+              {article.headline}
             </Text>
-            <Text style={styles.author}>{author}</Text>
-            <Text style={styles.published}>{published}</Text>
+            <Text style={styles.author}>
+              {article.authors.map((a: Author) => a.name).join(", ")}
+            </Text>
+            <Text style={styles.published}>{article.published_at}</Text>
           </View>
           <TouchableWithoutFeedback
             onPress={() => showContextMenu(uri)}
