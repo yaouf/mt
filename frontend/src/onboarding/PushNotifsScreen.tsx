@@ -6,17 +6,19 @@ import { setAsync } from "../code/helpers";
 import { getPushToken } from "../code/pushNotifs";
 import { notifToggle } from "../styles/styles";
 import { API_KEY, API_URL } from "@env";
+import { useState } from "react";
 
 function PushNotifsScreen(props: PushNotifProps) {
-  const userProps = props.route.params;
-  console.log(userProps);
+  const [breakingNotifs, setBreakingNotifs] = useState<boolean>(true); // default to true, user can change
+  const [weeklyNotifs, setWeeklyNotifs] = useState<boolean>(true);
+  const [pushToken, setPushToken] = useState("");
 
   const createDevice = async () => {
     const body = JSON.stringify({
       deviceType: Platform.OS,
-      breakingNewsAlerts: userProps.breaking,
-      weeklySummaryAlerts: userProps.weekly,
-      expoPushToken: userProps.pushToken,
+      breakingNewsAlerts: breakingNotifs,
+      weeklySummaryAlerts: weeklyNotifs,
+      expoPushToken: pushToken,
     });
 
     const requestOptions = {
@@ -36,14 +38,11 @@ function PushNotifsScreen(props: PushNotifProps) {
   };
 
   const saveNotifPreferences = async () => {
-    setAsync("breakingNotifs", JSON.stringify(userProps.breaking));
-    setAsync("weeklyNotifs", JSON.stringify(userProps.weekly));
+    setAsync("breakingNotifs", JSON.stringify(breakingNotifs));
+    setAsync("weeklyNotifs", JSON.stringify(weeklyNotifs));
 
-    await getPushToken(userProps.setPushToken);
-    console.log("token", userProps.pushToken);
-    // TODO: call to backend with the push token and user settings for notifs
-    console.log("breaking", userProps.breaking);
-    console.log("weekly", userProps.weekly);
+    await getPushToken(setPushToken);
+    console.log("token", pushToken);
 
     await createDevice();
 
@@ -60,18 +59,18 @@ function PushNotifsScreen(props: PushNotifProps) {
       <View style={notifToggle.toggleRow}>
         <Text>Breaking News Alerts</Text>
         <Switch
-          value={userProps.breaking}
+          value={breakingNotifs}
           onValueChange={() =>
-            userProps.setBreaking((previousState: boolean) => !previousState)
+            setBreakingNotifs((previousState: boolean) => !previousState)
           }
         />
       </View>
       <View style={notifToggle.toggleRow}>
         <Text>Weekly Summary </Text>
         <Switch
-          value={userProps.weekly}
+          value={weeklyNotifs}
           onValueChange={() =>
-            userProps.setWeekly((previousState: boolean) => !previousState)
+            setWeeklyNotifs((previousState: boolean) => !previousState)
           }
         />
       </View>

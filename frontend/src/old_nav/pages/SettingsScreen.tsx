@@ -3,8 +3,6 @@ import { UserProps } from "../../types/types";
 import CustomButton from "../../components/CustomButton";
 import { removeAsync, setAsync } from "../../code/helpers";
 import { notifToggle } from "../../styles/styles";
-import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 /**
  * Page for settings
@@ -17,65 +15,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
  *
  * @returns Settings screen
  */
-function SettingsScreen() {
-  const [username, setUsername] = useState<string>("");
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [community, setCommunity] = useState<string>("");
-
-  const [breakingNotifs, setBreakingNotifs] = useState<boolean>(true); // default to true, user can change
-  const [weeklyNotifs, setWeeklyNotifs] = useState<boolean>(true);
-
-  /**
-   * load the state variables from async storage if they exist and update their values
-   * (on first load of settings page only)
-   */
-  const load = async () => {
-    try {
-      const username = await AsyncStorage.getItem("username");
-      if (username) {
-        setUsername(username);
-      }
-
-      const loggedIn = await AsyncStorage.getItem("loggedIn");
-      if (loggedIn === "true") {
-        setLoggedIn(true);
-      }
-
-      const community = await AsyncStorage.getItem("community");
-      if (community) {
-        setCommunity(community);
-      }
-
-      const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
-      if (breakingNotifs === "false") {
-        // since default is true
-        setBreakingNotifs(false);
-      }
-
-      const weeklyNotifs = await AsyncStorage.getItem("weeklyNotifs");
-      if (weeklyNotifs === "false") {
-        setWeeklyNotifs(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
-
+function SettingsScreen(userProps: UserProps) {
   /**
    * login in user and update async storage
    */
   function handleLogin() {
+    userProps.setLoggedIn(true);
     const username = "X"; //TODO: get username from auth
+    userProps.setUsername(username);
 
-    setAsync("username", username);
     setAsync("loggedIn", "true");
-
-    setUsername(username);
-    setLoggedIn(true);
+    setAsync("username", username);
 
     console.log("Logged in.");
   }
@@ -84,13 +34,13 @@ function SettingsScreen() {
    * logout user and clear async storage
    */
   async function handleLogout() {
+    userProps.setLoggedIn(false);
+    userProps.setUsername("");
+    userProps.setCommunity("");
+
     setAsync("loggedIn", "false");
     removeAsync("username");
     removeAsync("community");
-
-    setLoggedIn(false);
-    setUsername("");
-    setCommunity("");
 
     console.log("Logged Out");
   }
@@ -113,8 +63,8 @@ function SettingsScreen() {
    * update settings in async storage, call backend update
    */
   const updateSettings = () => {
-    setAsync("breakingNotifs", JSON.stringify(breakingNotifs));
-    setAsync("weeklyNotifs", JSON.stringify(weeklyNotifs));
+    setAsync("breakingNotifs", JSON.stringify(userProps.breaking));
+    setAsync("weeklyNotifs", JSON.stringify(userProps.weekly));
 
     // TODO: do i need to request push token again?
     // is there a way to know if the backend already has it?
@@ -128,9 +78,9 @@ function SettingsScreen() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {loggedIn ? (
+      {userProps.loggedIn ? (
         <>
-          <Text>{username}</Text>
+          <Text>{userProps.username}</Text>
           <CustomButton text={"Logout"} onPress={handleLogout} />
           <CustomButton text={"Delete account"} onPress={deleteUser} />
         </>
@@ -142,18 +92,18 @@ function SettingsScreen() {
         <View style={notifToggle.toggleRow}>
           <Text>Breaking News Alerts</Text>
           <Switch
-            value={breakingNotifs}
+            value={userProps.breaking}
             onValueChange={() =>
-              setBreakingNotifs((previousState: boolean) => !previousState)
+              userProps.setBreaking((previousState: boolean) => !previousState)
             }
           />
         </View>
         <View style={notifToggle.toggleRow}>
           <Text>Weekly Summary </Text>
           <Switch
-            value={weeklyNotifs}
+            value={userProps.weekly}
             onValueChange={() =>
-              setWeeklyNotifs((previousState: boolean) => !previousState)
+              userProps.setWeekly((previousState: boolean) => !previousState)
             }
           />
         </View>

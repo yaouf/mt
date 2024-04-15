@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, ViewStyle, TouchableOpacity, StyleSheet } from "react-native";
 
 interface CustomButtonProps {
