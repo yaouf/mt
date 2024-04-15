@@ -14,6 +14,8 @@ import { HomeProps } from "../../types/types";
 import { baseStyles } from "../../styles/styles";
 import { searchBarStyles } from "../../styles/searchbar";
 import CustomButton from "../../components/CustomButton";
+import { ScrollView } from "react-native-gesture-handler";
+import HorizontalScrollMenu from "../../components/MenuCard";
 
 /**
  * Home screen with embedded web view
@@ -134,10 +136,6 @@ function HomeScreen({ navigation }: HomeProps) {
     textInputRef.current?.blur();
   };
 
-  // const handleLinkPress = () => {
-  //   navigation.push('Article', { articleUrl: url })
-  // }
-
   return (
     <View style={baseStyles.container}>
       {searchActivated && searchSubmitted && (
@@ -194,6 +192,7 @@ function HomeScreen({ navigation }: HomeProps) {
           <CustomButton text="Search" onPress={handleSearch} />
         </View>
       )}
+      <HorizontalScrollMenu />
       <WebView
         // originWhitelist={[
         //   "https://www.browndailyherald.com*",
