@@ -1,8 +1,14 @@
-import { Image, Platform, StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
-import React from "react";
+import { formatDates, shortFormatDates } from "./FormatDates";
 
 function SmallCard({ article }: Article) {
   console.log("this is the uuid", article.uuid);
@@ -21,7 +27,7 @@ function SmallCard({ article }: Article) {
       />
       <View style={styles.text}>
         <Text style={styles.section}>{article.tags[0].name}</Text>
-        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
           {article.headline}
         </Text>
         <Text style={styles.author}>
@@ -29,7 +35,9 @@ function SmallCard({ article }: Article) {
         </Text>
         <View style={styles.bottom}>
           <View style={styles.publishedSection}>
-            <Text style={styles.published}>{article.published_at}</Text>
+            <Text style={styles.published}>
+              {shortFormatDates(article.published_at)}
+            </Text>
           </View>
           <TouchableWithoutFeedback
             onPress={() => showContextMenu(uri)}

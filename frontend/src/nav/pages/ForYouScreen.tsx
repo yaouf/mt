@@ -1,3 +1,4 @@
+
 import React from "react";
 import { View } from "react-native";
 import {
@@ -18,6 +19,7 @@ import HorizontalCard from "../../components/cards/HorizontalCard";
 import { dummyData } from "../../dummyData";
 import { StyleSheet } from "react-native";
 import SectionHeader from "../../components/SectionHeader";
+
 
 /**
  * for you page!!

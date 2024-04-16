@@ -1,18 +1,9 @@
 import { ActionSheetIOS, Alert, Clipboard, Share } from "react-native";
 import { ArticleProps, ShareProps } from "src/types/types";
-import React from "react";
+import { shareArticle } from "./ShareArticle";
+
 
 export const showContextMenu = (uri: string) => {
-  const onShare = async (uri: string) => {
-    try {
-      const result = await Share.share({
-        message: "Check out this article! " + uri,
-      });
-    } catch (error: any) {
-      Alert.alert(error.message);
-    }
-  };
-
   // deprecated, but works
   const onCopy = async (uri: string) => {
     Clipboard.setString(uri);
@@ -29,7 +20,7 @@ export const showContextMenu = (uri: string) => {
       if (buttonIndex === 0) {
         console.log("Save selected");
       } else if (buttonIndex === 1) {
-        onShare(uri);
+        shareArticle(uri);
       } else if (buttonIndex === 2) {
         onCopy(uri);
       } else if (buttonIndex === 3) {
