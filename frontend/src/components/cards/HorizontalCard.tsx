@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
-import { formatDates } from "./FormatDates";
+import { formatDates } from "../../code/formatDates";
 
 function HorizontalCard({ article }: Article) {
   console.log("**", article);

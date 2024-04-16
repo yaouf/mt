@@ -1,4 +1,3 @@
-
 import {
   Image,
   StyleSheet,
@@ -8,8 +7,7 @@ import {
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author, Tag } from "src/types/types";
-import { formatDates } from "./FormatDates";
-
+import { formatDates } from "../../code/formatDates";
 
 // function LargeCard({ route, navigation }: CardProps) {
 function LargeCard({ article }: Article) {
@@ -25,10 +23,10 @@ function LargeCard({ article }: Article) {
   }
 
   return (
-  //   <TouchableWithoutFeedback
-  //     onPress={() => navigation.navigate("Article", {articleUrl: uri})}
-  //     onLongPress={() => navigation.navigate("Article", {articleUrl: uri})}
-  // >
+    //   <TouchableWithoutFeedback
+    //     onPress={() => navigation.navigate("Article", {articleUrl: uri})}
+    //     onLongPress={() => navigation.navigate("Article", {articleUrl: uri})}
+    // >
     <View style={styles.card}>
       <Image
         source={{

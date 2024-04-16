@@ -6,10 +6,10 @@ import React from "react";
 import SettingsScreen from "./pages/SettingsScreen";
 
 import { NavProps, UserProps } from "../types/types";
-import HomeStackScreen from "./pages/HomeStackScreen";
+import HomeStackScreen from "./pages/home/HomeStackScreen";
 import ForYouSreen from "./pages/ForYouScreen";
-import ArticleScreen from "./pages/ArticleScreen";
-import TestArticleScreen from "./pages/TestArticle";
+import ArticleScreen from "../components/article/ArticleScreen";
+import TestArticleScreen from "../components/article/TestArticle";
 
 const Tab = createBottomTabNavigator<NavProps>();
 

@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 import { View, Pressable, Text, TextInput, FlatList } from "react-native";
 import Item from "./Item";
-import { baseStyles } from "../styles/styles";
-import { searchBarStyles } from "../styles/searchbar";
-import CustomButton from "./CustomButton";
+import { baseStyles } from "../../styles/styles";
+import { searchBarStyles } from "../../styles/searchbar";
+import CustomButton from "../CustomButton";
 import { SearchProps } from "src/types/types";
 
 function Search(props: SearchProps) {
