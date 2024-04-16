@@ -1,4 +1,3 @@
-
 import React from "react";
 import { View } from "react-native";
 import {
@@ -19,7 +18,6 @@ import HorizontalCard from "../../components/cards/HorizontalCard";
 import { dummyData } from "../../dummyData";
 import { StyleSheet } from "react-native";
 import SectionHeader from "../../components/SectionHeader";
-
 
 /**
  * for you page!!
@@ -147,7 +145,7 @@ function ForYouScreen() {
                 <HorizontalCard article={dummyData[1]}></HorizontalCard>
               </Container>
               <Container>
-                <HorizontalCard article={dummyData[]}></HorizontalCard>
+                <HorizontalCard article={dummyData[0]}></HorizontalCard>
               </Container>
             </VStack>
           </View>
@@ -177,9 +175,9 @@ function ForYouScreen() {
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
-              style={{ marginLeft: 16}}
+              style={{ marginLeft: 16 }}
             >
-              <HStack space={3} style={{paddingBottom:36.37}}>
+              <HStack space={3} style={{ paddingBottom: 36.37 }}>
                 {dummyData.map((article, index) => (
                   <ImageCard key={index} article={article} /> // Ensure SmallCard expects a prop named 'article'
                 ))}
