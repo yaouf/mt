@@ -1,3 +1,4 @@
+
 import {
   Image,
   StyleSheet,
@@ -10,7 +11,9 @@ import { Article, Author, Tag } from "src/types/types";
 import { formatDates } from "./FormatDates";
 
 
+// function LargeCard({ route, navigation }: CardProps) {
 function LargeCard({ article }: Article) {
+  // const { article } = route.params;
   const uri = "https://www.browndailyherald.com/" + article.uuid;
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
@@ -22,6 +25,10 @@ function LargeCard({ article }: Article) {
   }
 
   return (
+  //   <TouchableWithoutFeedback
+  //     onPress={() => navigation.navigate("Article", {articleUrl: uri})}
+  //     onLongPress={() => navigation.navigate("Article", {articleUrl: uri})}
+  // >
     <View style={styles.card}>
       <Image
         source={{
@@ -62,6 +69,7 @@ function LargeCard({ article }: Article) {
         </View>
       </View>
     </View>
+    // </TouchableWithoutFeedback>
   );
 }
 
