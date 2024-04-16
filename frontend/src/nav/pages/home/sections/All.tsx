@@ -4,7 +4,7 @@ import SmallCard from "src/components/cards/SmallCard";
 import LargeCard from "../../../../components/cards/LargeCard";
 import type { PropsWithChildren } from "react";
 import { Article } from "src/types/types";
-import { fetchSectionHome } from "src/code/fetch_content";
+import { fetchSectionHome } from "src/code/fetchContent";
 
 const All = () => {
   const [topStories, setTopStories] = useState<Article[]>();

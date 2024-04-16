@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from "react-native";
 import type { PropsWithChildren } from "react";
 import { dummyData } from "src/dummyData";
 import { Article } from "src/types/types";
-import { fetchSectionHome } from "src/code/fetch_content";
+import { fetchSectionHome } from "src/code/fetchContent";
 
 const Sports = () => {
   const [sports, setSports] = useState<Article[]>();

@@ -12,8 +12,8 @@ import { dummyData } from "../../dummyData";
 import SmallCard from "src/components/cards/SmallCard";
 import SmallCardArticle from "src/components/cards/SmallCardArticle";
 import SmallCardArticle2 from "src/components/cards/SmallCardArticle2";
-import { shareArticle } from "src/components/cards/ShareArticle";
-import { formatDates } from "src/components/cards/FormatDates";
+import { shareArticle } from "src/components/article/ShareArticle";
+import { formatDates } from "src/code/formatDates";
 import React from "react";
 import { RenderHTML } from "react-native-render-html";
 

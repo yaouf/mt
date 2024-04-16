@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
-import { formatDates, shortFormatDates } from "./FormatDates";
+import { formatDates, shortFormatDates } from "../../code/formatDates";
 
 function SmallCard({ article }: Article) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
