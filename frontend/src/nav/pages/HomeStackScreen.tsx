@@ -1,4 +1,5 @@
 import ArticleScreen from "../../components/Article";
+import LargeCard from "src/components/cards/LargeCard";
 import HomeScreen from "./HomeScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ComponentParams } from "../../types/types";
@@ -27,6 +28,11 @@ function HomeStackScreen() {
         component={ArticleScreen}
         options={{ cardStyleInterpolator: horizontalTransition }}
       />
+      {/* <HomeStack.Screen
+        name="LargeCard"
+        component={LargeCard}
+        options={{ cardStyleInterpolator: horizontalTransition }}
+      /> */}
     </HomeStack.Navigator>
   );
 }

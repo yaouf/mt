@@ -1,3 +1,4 @@
+
 import {
   Image,
   Platform,
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   },
   card: {
     display: "flex",
-    width: 192,
+    width: 170,
     flexDirection: "column",
     alignItems: "flex-start",
     borderRadius: 8,

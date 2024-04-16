@@ -43,9 +43,14 @@ export type HomeProps = {
 export type ComponentParams = {
   Home: undefined; // No additional parameters for the Home screen
   Article: { articleUrl: string }; // Parameter for the Article screen
+  // LargeCard: {article: Article}; // Parameter for LargeCard
 };
 
 export type ArticleProps = StackScreenProps<ComponentParams, "Article">;
+
+
+// for card
+// export type CardProps = StackScreenProps<ComponentParams, "LargeCard">;
 
 export type ShareProps = {
   uri: string;

@@ -30,7 +30,7 @@ const ShareFeature = ({ uri }: ShareProps) => {
  *
  * @returns native Article component
  */
-function Article({ route, navigation }: ArticleProps) {
+function Show_article({ route, navigation }: ArticleProps) {
   const { articleUrl } = route.params;
 
   // Define the function to determine whether to load the request or not
@@ -64,4 +64,4 @@ function Article({ route, navigation }: ArticleProps) {
   );
 }
 
-export default Article;
+export default Show_article;
