@@ -1,25 +1,17 @@
 import {
   Image,
+  Platform,
   StyleSheet,
   Text,
   View,
   TouchableWithoutFeedback,
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
-import { Article, Author, Tag } from "src/types/types";
-import { formatDates } from "./FormatDates";
+import { Article, Author } from "src/types/types";
+import { formatDates, shortFormatDates } from "./FormatDates";
 
-
-function LargeCard({ article }: Article) {
+function SmallCard({ article }: Article) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
-  const all_tags = article.tags.map((t: Tag) => t.name);
-  let breaking = false;
-
-  for (let i = 0; i < all_tags.length; i++) {
-    if (all_tags[i] == "breaking") {
-      breaking = true;
-    }
-  }
 
   return (
     <View style={styles.card}>
@@ -33,21 +25,17 @@ function LargeCard({ article }: Article) {
         style={styles.image}
       />
       <View style={styles.text}>
-        {breaking ? (
-          <View style={styles.breakingBox}>
-            <Text style={styles.breaking}>Breaking News</Text>
-          </View>
-        ) : (
-          <Text style={styles.section}>{all_tags[0]}</Text>
-        )}
-        <Text style={styles.title}>{article.headline}</Text>
+        <Text style={styles.section}>{article.tags[0].name}</Text>
+        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+          {article.headline}
+        </Text>
         <Text style={styles.author}>
           {article.authors.map((a: Author) => a.name).join(", ")}
         </Text>
         <View style={styles.bottom}>
           <View style={styles.publishedSection}>
             <Text style={styles.published}>
-              {formatDates(article.published_at)}
+              {shortFormatDates(article.published_at)}
             </Text>
           </View>
           <TouchableWithoutFeedback
@@ -65,31 +53,32 @@ function LargeCard({ article }: Article) {
   );
 }
 
-export default LargeCard;
+export default SmallCard;
 
 const styles = StyleSheet.create({
   title: {
-    height: 93,
+    height: 40,
     alignSelf: "stretch",
     color: "#000",
     fontFamily: "Georgia",
-    fontSize: 20,
+    fontSize: 14,
     fontStyle: "normal",
     fontWeight: "700",
-    lineHeight: 28,
+    lineHeight: 20,
+    overflow: "hidden",
+    flexWrap: "nowrap",
   },
   author: {
     color: "#000",
     fontFamily: "Roboto Flex",
-    fontSize: 16,
+    fontSize: 10,
     fontStyle: "normal",
     fontWeight: "500",
-    lineHeight: 20,
+    lineHeight: 14,
   },
   card: {
     display: "flex",
-    width: 358,
-    paddingBottom: 8,
+    width: 171,
     flexDirection: "column",
     alignItems: "flex-start",
     borderRadius: 8,
@@ -102,12 +91,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
     elevation: 3,
-    marginVertical: 12,
   },
   section: {
     color: "#9E9E9E",
     fontFamily: "RobotoCondensed-Regular",
-    fontSize: 16,
+    fontSize: 10,
     fontStyle: "normal",
     // fontWeight: "500",
     /* lineHeight: 'normal',*/
@@ -115,18 +103,18 @@ const styles = StyleSheet.create({
   published: {
     color: "#9E9E9E",
     fontFamily: "RobotoCondensed-Regular",
-    fontSize: 14,
+    fontSize: 10,
     fontStyle: "normal",
-    fontWeight: "500",
+    // fontWeight: "500",
     /* line-height: normal; */
   },
   image: {
     backgroundColor: "#C9C9C9",
     display: "flex",
-    height: 167.435,
+    height: 111.815,
     width: "100%",
-    paddingTop: 59.893,
-    paddingBottom: 58.055,
+    paddingTop: 39.997,
+    paddingBottom: 38.769,
     paddingHorizontal: 0,
     justifyContent: "center",
     alignItems: "center",
@@ -137,7 +125,7 @@ const styles = StyleSheet.create({
   text: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: 12,
+    paddingTop: 8,
     paddingBottom: 8,
     paddingHorizontal: 12,
     alignItems: "flex-start",
@@ -151,33 +139,46 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     alignSelf: "stretch",
   },
+  contextMenu: {
+    display: "flex",
+    width: 254,
+    flexDirection: "column",
+    alignItems: "flex-start",
+    position: "absolute",
+    right: 3,
+    top: -42,
+    borderRadius: 12,
+    elevation: Platform.OS === "android" ? 8 : 0,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 64,
+  },
+  option: {
+    backgroundColor: "rgba(237, 237, 237, 0.80)",
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    alignSelf: "stretch",
+    paddingVertical: 11,
+    paddingHorizontal: 16,
+    padding: 8,
+    fontSize: 16,
+    borderBottomColor: "rgba(60, 60, 67, 0.36)",
+    borderBottomWidth: 0.5,
+  },
   publishedSection: {
     display: "flex",
     alignItems: "center",
     gap: 4,
   },
   options: {
-    width: 23.959,
-    height: 23.959,
+    width: 16,
+    height: 16,
   },
-  breaking: {
-    color: "#FFF",
-    fontFamily: "Roboto Flex",
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "600",
-    // line-height: normal;
-    textTransform: "uppercase",
-  },
-  breakingBox: {
-    display: "flex",
-    paddingVertical: 6,
-    paddingHorizontal: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 0.661,
-    borderStyle: "solid",
-    borderColor: "#ED1C24",
-    backgroundColor: "#ED1C24",
+  line: {
+    width: 254,
+    height: 0.5,
+    backgroundColor: "rgba(60, 60, 67, 0.36)",
   },
 });

@@ -32,6 +32,7 @@ export type NavProps = {
   Settings: undefined;
   // Login: UserProps;
   ForYouPage: undefined;
+  ArticleScreen: undefined;
 };
 
 export type HomeProps = {

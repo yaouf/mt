@@ -1,8 +1,14 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
+import { formatDates } from "./FormatDates";
 
 function HorizontalCard({ article }: Article) {
   console.log("**", article);
@@ -27,7 +33,9 @@ function HorizontalCard({ article }: Article) {
             <Text style={styles.author}>
               {article.authors.map((a: Author) => a.name).join(", ")}
             </Text>
-            <Text style={styles.published}>{article.published_at}</Text>
+            <Text style={styles.published}>
+              {formatDates(article.published_at)}
+            </Text>
           </View>
           <TouchableWithoutFeedback
             onPress={() => showContextMenu(uri)}

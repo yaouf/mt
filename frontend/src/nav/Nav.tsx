@@ -8,6 +8,8 @@ import SettingsScreen from "./pages/SettingsScreen";
 import { NavProps, UserProps } from "../types/types";
 import HomeStackScreen from "./pages/HomeStackScreen";
 import ForYouSreen from "./pages/ForYouScreen";
+import ArticleScreen from "./pages/ArticleScreen";
+import TestArticleScreen from "./pages/TestArticle";
 
 const Tab = createBottomTabNavigator<NavProps>();
 
@@ -18,14 +20,14 @@ export default function Nav() {
   console.log("Here in nav");
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="HomePage" component={HomeStackScreen} />
-          <Tab.Screen name="ForYouPage" component={ForYouSreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="HomePage" component={HomeStackScreen} />
+        <Tab.Screen name="ForYouPage" component={ForYouSreen} />
+        <Tab.Screen name="ArticleScreen" component={TestArticleScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
+
   );
 }
