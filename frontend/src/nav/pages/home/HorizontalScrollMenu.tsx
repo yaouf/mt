@@ -6,6 +6,10 @@ interface MenuItem {
   title: string;
 }
 
+interface HorizontalScrollMenuProps {
+  onItemClick: (item: MenuItem) => void; // Function to handle item clicks
+}
+
 const menuItems: MenuItem[] = [
   { id: 1, title: 'ALL' },
   { id: 2, title: 'NEWS' },
@@ -18,9 +22,16 @@ const menuItems: MenuItem[] = [
   { id: 9, title: 'MULTIMEDIA' },
 ];
 
-const HorizontalScrollMenu = () => {
+
+// const HorizontalScrollMenu = () => {
+//   const handleMenuItemPress = (item: MenuItem) => {
+//     console.log('Selected item:', item);
+//   };
+// }
+
+const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({ onItemClick }) => {
   const handleMenuItemPress = (item: MenuItem) => {
-    console.log('Selected item:', item);
+    onItemClick(item); // Call the prop function with the clicked item index
   };
 
   return (
@@ -40,7 +51,9 @@ const HorizontalScrollMenu = () => {
   );
 };
 
+
 const screenHeight = Dimensions.get('window').height;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -49,7 +62,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
-    top: 75,
+    top: 0,
     zIndex: 1
   },
   menuItem: {
@@ -63,5 +76,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
 
 export default HorizontalScrollMenu;

@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -30,6 +32,9 @@
       }
     },
     "owner": "jahaskell53",
-    "plugins": ["expo-build-properties"]
+    "plugins": [
+      "expo-build-properties",
+      "expo-font"
+    ]
   }
 }

@@ -1,14 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 
+// TODO: is this something old?? and horizontalscrollmenu is the new one??
 
 interface MenuItem {
   id: number;
   title: string;
-}
-
-interface HorizontalScrollMenuProps {
-  onItemClick: (item: MenuItem) => void; // Function to handle item clicks
 }
 
 const menuItems: MenuItem[] = [
@@ -23,16 +20,9 @@ const menuItems: MenuItem[] = [
   { id: 9, title: 'MULTIMEDIA' },
 ];
 
-
-// const HorizontalScrollMenu = () => {
-//   const handleMenuItemPress = (item: MenuItem) => {
-//     console.log('Selected item:', item);
-//   };
-// }
-
-const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({ onItemClick }) => {
+const HorizontalScrollMenu = () => {
   const handleMenuItemPress = (item: MenuItem) => {
-    onItemClick(item); // Call the prop function with the clicked item index
+    console.log('Selected item:', item);
   };
 
   return (
@@ -52,9 +42,7 @@ const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({ onItemClick
   );
 };
 
-
 const screenHeight = Dimensions.get('window').height;
-
 
 const styles = StyleSheet.create({
   container: {
@@ -63,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',
-    top: 0,
+    top: 75,
     zIndex: 1
   },
   menuItem: {
@@ -77,6 +65,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
 
 export default HorizontalScrollMenu;

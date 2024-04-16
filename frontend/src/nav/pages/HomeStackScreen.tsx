@@ -1,6 +1,6 @@
 import ArticleScreen from "../../components/Article";
 import LargeCard from "src/components/cards/LargeCard";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./home/HomeScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ComponentParams } from "../../types/types";
 

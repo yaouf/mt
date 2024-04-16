@@ -28,6 +28,5 @@ export default function Nav() {
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
-
   );
 }
