@@ -1,6 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import React from "react";
 import SettingsScreen from "./pages/SettingsScreen";
 
 import { NavProps, UserProps } from "../types/types";
@@ -16,12 +18,14 @@ export default function Nav() {
   console.log("Here in nav");
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="HomePage" component={HomeStackScreen} />
-        <Tab.Screen name="ForYouPage" component={ForYouSreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen name="HomePage" component={HomeStackScreen} />
+          <Tab.Screen name="ForYouPage" component={ForYouSreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }

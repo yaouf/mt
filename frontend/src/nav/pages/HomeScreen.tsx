@@ -1,10 +1,6 @@
 import { WebView, WebViewNavigation } from "react-native-webview";
 import { useRef, useState } from "react";
-import {
-  View,
-  Button,
-  Dimensions,
-} from "react-native";
+import { View, Button, Dimensions } from "react-native";
 import { HomeProps } from "../../types/types";
 import { baseStyles } from "../../styles/styles";
 import SmallCard from "src/components/cards/SmallCard";
@@ -12,6 +8,7 @@ import LargeCard from "src/components/cards/LargeCard";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import { dummyData } from "../../dummyData";
 import Search from "src/components/Search";
+import React from "react";
 
 /**
  * Home screen with embedded web view
@@ -96,7 +93,6 @@ function HomeScreen({ navigation }: HomeProps) {
   return (
     <View>
       <SmallCard article={dummyData[0]} />
-
       <Search
         scrollPositionText={scrollPositionText}
         screenHeight={screenHeight}

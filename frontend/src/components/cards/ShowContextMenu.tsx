@@ -1,5 +1,6 @@
 import { ActionSheetIOS, Alert, Clipboard, Share } from "react-native";
 import { ArticleProps, ShareProps } from "src/types/types";
+import React from "react";
 
 export const showContextMenu = (uri: string) => {
   const onShare = async (uri: string) => {
