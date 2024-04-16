@@ -2,8 +2,10 @@ import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
+import React from "react";
 
 function SmallCard({ article }: Article) {
+  console.log("this is the uuid", article.uuid);
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
   return (

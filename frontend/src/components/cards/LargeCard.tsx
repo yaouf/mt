@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author, Tag } from "src/types/types";
+import React from "react";
 
 function LargeCard({ article }: Article) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;

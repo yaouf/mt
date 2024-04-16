@@ -74,6 +74,7 @@ export type SearchProps = {
 
 export interface Article {
   article: {
+    id: string;
     headline: string;
     subhead: string;
     uuid: string;
@@ -87,6 +88,7 @@ export interface Article {
 }
 
 export interface Author {
+  id: string;
   uuid: string;
   name: string;
   slug: string;
@@ -97,6 +99,7 @@ export interface Author {
 }
 
 export interface Media {
+  id: string;
   uuid: string;
   attachment_uuid: string;
   base_name: string;
@@ -110,6 +113,7 @@ export interface Media {
 }
 
 export interface Tag {
+  id: string;
   uuid: string;
   name: string;
   slug: string;
