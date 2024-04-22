@@ -1,5 +1,6 @@
-import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Dimensions, Button } from 'react-native';
+import Draggable from './SectionPref'
 
 interface MenuItem {
   id: number;
@@ -11,48 +12,61 @@ interface HorizontalScrollMenuProps {
 }
 
 const menuItems: MenuItem[] = [
-  { id: 1, title: 'ALL' },
-  { id: 2, title: 'NEWS' },
-  { id: 3, title: 'SPORTS' },
-  { id: 4, title: 'ARTS & CULTURE' },
-  { id: 5, title: 'SCIENCE & RESEARCH' },
-  { id: 6, title: 'OPINIONS' },
-  { id: 7, title: 'PROJECTS' },
-  { id: 8, title: 'POST-MAGAZINE' },
-  { id: 9, title: 'MULTIMEDIA' },
+  { id: 1, title: 'FILTER' },
+  { id: 2, title: 'ALL' },
+  { id: 3, title: 'NEWS' },
+  { id: 4, title: 'SPORTS' },
+  { id: 5, title: 'ARTS & CULTURE' },
+  { id: 6, title: 'SCIENCE & RESEARCH' },
+  { id: 7, title: 'OPINIONS' },
+  { id: 8, title: 'PROJECTS' },
+  { id: 9, title: 'POST-MAGAZINE' },
+  { id: 10, title: 'MULTIMEDIA' }
 ];
 
-
-// const HorizontalScrollMenu = () => {
-//   const handleMenuItemPress = (item: MenuItem) => {
-//     console.log('Selected item:', item);
-//   };
-// }
-
 const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({ onItemClick }) => {
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [data, setData] = useState(menuItems);
+
+
   const handleMenuItemPress = (item: MenuItem) => {
-    onItemClick(item); // Call the prop function with the clicked item index
+    if (item.id === 1) {
+      setIsDrawerOpen(true);
+      console.log(isDrawerOpen)
+    } else {
+      onItemClick(item); // Call the prop function with the clicked item index
+    }
   };
 
   return (
     <View style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-        {menuItems.map(item => (
+        {menuItems.map(menuItem => (
           <TouchableOpacity
-            key={item.id}
+            key={menuItem.id}
             style={styles.menuItem}
-            onPress={() => handleMenuItemPress(item)}
+            onPress={() => handleMenuItemPress(menuItem)}
           >
-            <Text style={styles.menuItemText}>{item.title}</Text>
+            <Text style={styles.menuItemText}>{menuItem.title}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
+      {isDrawerOpen && <View style={styles.drawer}>
+      <TouchableOpacity style={styles.button} onPress={() => setIsDrawerOpen(false)}>
+            <Text>Done</Text>
+          </TouchableOpacity>
+        <Text style={styles.heading}>FAVORITE SECTIONS</Text>
+      <Text style={styles.subheading}>Add and reorder topics to customize the menu on your Top Stories page.</Text>
+      <Draggable />
+      </View>}
     </View>
   );
 };
 
 
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 
 const styles = StyleSheet.create({
@@ -74,6 +88,49 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 16,
+  },
+  drawer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: screenHeight,
+    width: screenWidth, 
+    backgroundColor: '#F3F3F3', 
+    zIndex: 999,
+    padding: 20,
+  },
+  heading: {
+    fontFamily: "Roboto Flex",
+    fontSize: 16,
+    marginBottom: 20,
+    fontStyle: "normal",
+    fontWeight: "800",
+  },
+  subheading: {
+    fontFamily: "Roboto Flex",
+    fontSize: 16,
+    marginBottom: 20,
+    fontStyle: "normal",
+    fontWeight: "500",
+  },
+  button: {
+    fontFamily: "Roboto Flex",
+    fontSize: 16,
+    color: "black",
+    marginBottom: 20,
+    fontStyle: "normal",
+    fontWeight: "500",
+    textTransform: "capitalize",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 999,
+  },
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
   },
 });
 
