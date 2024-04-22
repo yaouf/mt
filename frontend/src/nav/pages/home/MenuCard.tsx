@@ -9,15 +9,16 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { id: 1, title: 'ALL' },
-  { id: 2, title: 'NEWS' },
-  { id: 3, title: 'SPORTS' },
-  { id: 4, title: 'ARTS & CULTURE' },
-  { id: 5, title: 'SCIENCE & RESEARCH' },
-  { id: 6, title: 'OPINIONS' },
-  { id: 7, title: 'PROJECTS' },
-  { id: 8, title: 'POST-MAGAZINE' },
-  { id: 9, title: 'MULTIMEDIA' },
+  { id: 1, title: 'FILTER' },
+  { id: 2, title: 'ALL' },
+  { id: 3, title: 'NEWS' },
+  { id: 4, title: 'SPORTS' },
+  { id: 5, title: 'ARTS & CULTURE' },
+  { id: 6, title: 'SCIENCE & RESEARCH' },
+  { id: 7, title: 'OPINIONS' },
+  { id: 8, title: 'PROJECTS' },
+  { id: 9, title: 'POST-MAGAZINE' },
+  { id: 10, title: 'MULTIMEDIA' }
 ];
 
 const HorizontalScrollMenu = () => {
