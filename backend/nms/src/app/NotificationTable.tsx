@@ -1,4 +1,4 @@
-import from 'react';
+import React from 'react';
 
 const NotificationTable = ({ scheduledNotifications, setScheduledNotifications }) => {
   const onDeleteNotification = async (notification) => {

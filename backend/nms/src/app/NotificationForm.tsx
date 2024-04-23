@@ -1,14 +1,14 @@
-'use client'
+"use client";
 
-import { useState } from 'react';
+import React, { useState } from "react";
 
 const NotificationForm = ({ setScheduledNotifications }) => {
   const [newNotification, setNewNotification] = useState({
-    time: '',
-    title: '',
-    body: '',
+    time: "",
+    title: "",
+    body: "",
     data: {
-      slug: ''
+      slug: "",
     },
     tags: [] as string[],
   });
@@ -26,10 +26,10 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     setNewNotification((prevNotification) => ({
       ...prevNotification,
       data: {
-          slug: value,
+        slug: value,
       },
     }));
-  }
+  };
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
@@ -48,35 +48,35 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   const handleScheduleNotification = async () => {
     try {
-      console.log("newNotification", newNotification)
-      const response = await fetch('/api/notifications/add', {
-        method: 'POST',
+      console.log("newNotification", newNotification);
+      const response = await fetch("/api/notifications/add", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(newNotification),
       });
 
       if (response.ok) {
-        console.log('Scheduled Notification:', newNotification);
-        const data = await response.json() as any[];
+        console.log("Scheduled Notification:", newNotification);
+        const data = (await response.json()) as any[];
         setScheduledNotifications(data);
 
         // Reset the form after scheduling
         setNewNotification({
-          time: '',
-          title: '',
-          body: '',
+          time: "",
+          title: "",
+          body: "",
           data: {
-            slug: ''
+            slug: "",
           },
           tags: [],
         });
       } else {
-        console.error('Error scheduling notification');
+        console.error("Error scheduling notification");
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -148,7 +148,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             Slug
           </label>
           <input
-          type='text'
+            type="text"
             id="slug"
             name="slug"
             value={newNotification.data.slug}
