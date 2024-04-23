@@ -11,9 +11,7 @@ import { Article, Author } from "src/types/types";
 import { formatDates, shortFormatDates } from "../../code/formatDates";
 import { font1, font2, font3 } from "../../styles/styles";
 
-
 function SmallCard({ article }: Article) {
-  console.log("this is the uuid", article.uuid);
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
   return (
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
   },
   card: {
     display: "flex",
-    width: 170,
+    width: 171,
     flexDirection: "column",
     alignItems: "flex-start",
     borderRadius: 8,

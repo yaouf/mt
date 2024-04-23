@@ -1,42 +1,61 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
+import { Article, Author, Tag } from "src/types/types";
+import { formatDates } from "../../code/formatDates";
+import { font1, font2, font3 } from "../../styles/styles";
 
-interface CardProps {
-  title: string;
-  author: string;
-  section: string;
-  published: string;
-  imageuri: string;
-  uri: string;
-  breaking: boolean;
-}
 
-function LargeCard({
-  title,
-  author,
-  section,
-  published,
-  imageuri,
-  uri,
-  breaking,
-}: CardProps) {
+// function LargeCard({ route, navigation }: CardProps) {
+function LargeCard({ article }: Article) {
+  // const { article } = route.params;
+  const uri = "https://www.browndailyherald.com/" + article.uuid;
+  const all_tags = article.tags.map((t: Tag) => t.name);
+  let breaking = false;
+
+  for (let i = 0; i < all_tags.length; i++) {
+    if (all_tags[i] == "breaking") {
+      breaking = true;
+    }
+  }
+
   return (
+    //   <TouchableWithoutFeedback
+    //     onPress={() => navigation.navigate("Article", {articleUrl: uri})}
+    //     onLongPress={() => navigation.navigate("Article", {articleUrl: uri})}
+    // >
     <View style={styles.card}>
-      <Image source={{ uri: imageuri }} style={styles.image} />
+      <Image
+        source={{
+          uri:
+            "http://snworksceo.imgix.net/bdh/" +
+            article.dominantMedia.attachment_uuid +
+            ".sized-1000x1000.jpg",
+        }}
+        style={styles.image}
+      />
       <View style={styles.text}>
         {breaking ? (
           <View style={styles.breakingBox}>
             <Text style={styles.breaking}>Breaking News</Text>
           </View>
         ) : (
-          <Text style={styles.section}>{section}</Text>
+          <Text style={styles.section}>{all_tags[0]}</Text>
         )}
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.author}>{author}</Text>
+        <Text style={styles.title}>{article.headline}</Text>
+        <Text style={styles.author}>
+          {article.authors.map((a: Author) => a.name).join(", ")}
+        </Text>
         <View style={styles.bottom}>
           <View style={styles.publishedSection}>
-            <Text style={styles.published}>{published}</Text>
+            <Text style={styles.published}>
+              {formatDates(article.published_at)}
+            </Text>
           </View>
           <TouchableWithoutFeedback
             onPress={() => showContextMenu(uri)}
@@ -50,6 +69,7 @@ function LargeCard({
         </View>
       </View>
     </View>
+    // </TouchableWithoutFeedback>
   );
 }
 
@@ -60,7 +80,7 @@ const styles = StyleSheet.create({
     height: 93,
     alignSelf: "stretch",
     color: "#000",
-    fontFamily: "Georgia",
+    fontFamily: font1,
     fontSize: 20,
     fontStyle: "normal",
     fontWeight: "700",
@@ -68,7 +88,7 @@ const styles = StyleSheet.create({
   },
   author: {
     color: "#000",
-    fontFamily: "Roboto Flex",
+    fontFamily: font2,
     fontSize: 16,
     fontStyle: "normal",
     fontWeight: "500",
@@ -94,7 +114,7 @@ const styles = StyleSheet.create({
   },
   section: {
     color: "#9E9E9E",
-    fontFamily: "RobotoCondensed-Regular",
+    fontFamily: font3,
     fontSize: 16,
     fontStyle: "normal",
     // fontWeight: "500",
@@ -102,7 +122,7 @@ const styles = StyleSheet.create({
   },
   published: {
     color: "#9E9E9E",
-    fontFamily: "RobotoCondensed-Regular",
+    fontFamily: font3,
     fontSize: 14,
     fontStyle: "normal",
     fontWeight: "500",
@@ -150,7 +170,7 @@ const styles = StyleSheet.create({
   },
   breaking: {
     color: "#FFF",
-    fontFamily: "Roboto Flex",
+    fontFamily: font2,
     fontSize: 14,
     fontStyle: "normal",
     fontWeight: "600",
