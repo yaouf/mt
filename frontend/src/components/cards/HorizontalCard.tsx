@@ -1,37 +1,41 @@
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
+import { Article, Author } from "src/types/types";
+import { formatDates } from "../../code/formatDates";
+import { font1, font2, font3 } from "../../styles/styles";
 
-interface CardProps {
-  title: string;
-  author: string;
-  section: string;
-  published: string;
-  imageuri: string;
-  uri: string;
-}
-
-function HorizontalCard({
-  title,
-  author,
-  section,
-  published,
-  imageuri,
-  uri,
-}: CardProps) {
+function HorizontalCard({ article }: Article) {
+  console.log("**", article);
+  const uri = "https://www.browndailyherald.com/" + article.uuid;
   return (
     <View style={styles.card}>
       <View style={styles.content}>
-        <Image source={{ uri: imageuri }} style={styles.image} />
+        <Image
+          source={{
+            uri:
+              "http://snworksceo.imgix.net/" +
+              article.dominantMedia.attachment_uuid,
+          }}
+          style={styles.image}
+        />
         <View style={styles.text}>
           <View style={styles.innerText}>
-            <Text style={styles.section}>{section}</Text>
+            <Text style={styles.section}>{article.tags[0].name}</Text>
             <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-              {title}
+              {article.headline}
             </Text>
-            <Text style={styles.author}>{author}</Text>
-            <Text style={styles.published}>{published}</Text>
+            <Text style={styles.author}>
+              {article.authors.map((a: Author) => a.name).join(", ")}
+            </Text>
+            <Text style={styles.published}>
+              {formatDates(article.published_at)}
+            </Text>
           </View>
           <TouchableWithoutFeedback
             onPress={() => showContextMenu(uri)}
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
   },
   section: {
     color: "#9E9E9E",
-    fontFamily: "Roboto Condensed",
+    fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",
     fontWeight: "500",
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     overflow: "hidden",
     flexWrap: "nowrap",
-    fontFamily: "Georgia",
+    fontFamily: font1,
     fontSize: 14,
     fontStyle: "normal",
     fontWeight: "700",
@@ -134,7 +138,7 @@ const styles = StyleSheet.create({
   },
   author: {
     color: "#000",
-    fontFamily: "Roboto Flex",
+    fontFamily: font2,
     fontSize: 10,
     fontStyle: "normal",
     fontWeight: "500",
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
   },
   published: {
     color: "#9E9E9E",
-    fontFamily: "Roboto Condensed",
+    fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",
     fontWeight: "500",

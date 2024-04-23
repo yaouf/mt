@@ -21,15 +21,18 @@ export const getPushToken = async (
 
   if (Device.isDevice) {
     try {
+      // Gets current noification permissions status
       const { status: existingStatus } =
         await Notifications.getPermissionsAsync();
 
       let finalStatus = existingStatus;
+      // If current permision status is not granted, then prompt the user to grant permission
       if (existingStatus !== "granted") {
         const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
       }
 
+      // If permission is granted, then prompt the user to grant permission
       if (finalStatus === "granted") {
         const token = (await Notifications.getExpoPushTokenAsync()).data;
         setToken(token);

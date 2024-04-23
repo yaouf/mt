@@ -1,19 +1,11 @@
-import {
-  Image,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { Image, Platform, StyleSheet, Text, View } from "react-native";
+import { TouchableWithoutFeedback } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
-import { formatDates, shortFormatDates } from "../../code/formatDates";
 import { font1, font2, font3 } from "../../styles/styles";
 
 
-function SmallCard({ article }: Article) {
-  console.log("this is the uuid", article.uuid);
+function ImageCard({ article }: Article) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
   return (
@@ -28,64 +20,42 @@ function SmallCard({ article }: Article) {
         style={styles.image}
       />
       <View style={styles.text}>
-        <Text style={styles.section}>{article.tags[0].name}</Text>
-        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
           {article.headline}
         </Text>
-        <Text style={styles.author}>
-          {article.authors.map((a: Author) => a.name).join(", ")}
-        </Text>
-        <View style={styles.bottom}>
-          <View style={styles.publishedSection}>
-            <Text style={styles.published}>
-              {shortFormatDates(article.published_at)}
-            </Text>
-          </View>
-          <TouchableWithoutFeedback
-            onPress={() => showContextMenu(uri)}
-            onLongPress={() => showContextMenu(uri)}
-          >
-            <Image
-              source={require("../../../assets/options.png")}
-              style={styles.options}
-            />
-          </TouchableWithoutFeedback>
-        </View>
+        <TouchableWithoutFeedback
+          onPress={() => showContextMenu(uri)}
+          onLongPress={() => showContextMenu(uri)}
+        >
+          <Image
+            source={require("../../../assets/options.png")}
+            style={styles.options}
+          />
+        </TouchableWithoutFeedback>
       </View>
     </View>
   );
 }
 
-export default SmallCard;
+export default ImageCard;
 
 const styles = StyleSheet.create({
   title: {
-    height: 40,
+    width: 96,
+    height: 38,
     alignSelf: "stretch",
     color: "#000",
     fontFamily: font1,
-    fontSize: 14,
+    fontSize: 12,
     fontStyle: "normal",
     fontWeight: "700",
     lineHeight: 20,
-    overflow: "hidden",
-    flexWrap: "nowrap",
-  },
-  author: {
-    color: "#000",
-    fontFamily: font2,
-    fontSize: 10,
-    fontStyle: "normal",
-    fontWeight: "500",
-    lineHeight: 14,
   },
   card: {
     display: "flex",
-    width: 170,
+    width: 96,
     flexDirection: "column",
     alignItems: "flex-start",
-    borderRadius: 8,
-    backgroundColor: "#FFF",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -95,45 +65,26 @@ const styles = StyleSheet.create({
     shadowRadius: 29.949,
     elevation: 3,
   },
-  section: {
-    color: "#9E9E9E",
-    fontFamily: font3,
-    fontSize: 10,
-    fontStyle: "normal",
-    // fontWeight: "500",
-    /* lineHeight: 'normal',*/
-  },
-  published: {
-    color: "#9E9E9E",
-    fontFamily: font3,
-    fontSize: 10,
-    fontStyle: "normal",
-    // fontWeight: "500",
-    /* line-height: normal; */
-  },
   image: {
     backgroundColor: "#C9C9C9",
     display: "flex",
-    height: 111.815,
-    width: "100%",
+    height: 100,
+    width: 96,
     paddingTop: 39.997,
     paddingBottom: 38.769,
     paddingHorizontal: 0,
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "stretch",
-    borderTopLeftRadius: 7.487,
-    borderTopRightRadius: 7.487,
   },
   text: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: 8,
-    paddingBottom: 8,
-    paddingHorizontal: 12,
+    paddingTop: 16,
     alignItems: "flex-start",
     alignSelf: "stretch",
     gap: 4,
+    height: 38,
   },
   bottom: {
     display: "flex",

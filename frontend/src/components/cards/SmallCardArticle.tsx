@@ -13,7 +13,6 @@ import { font1, font2, font3 } from "../../styles/styles";
 
 
 function SmallCard({ article }: Article) {
-  console.log("this is the uuid", article.uuid);
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
   return (
@@ -64,24 +63,24 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     color: "#000",
     fontFamily: font1,
-    fontSize: 14,
+    fontSize: 16,
     fontStyle: "normal",
     fontWeight: "700",
-    lineHeight: 20,
+    lineHeight: 18,
     overflow: "hidden",
     flexWrap: "nowrap",
   },
   author: {
     color: "#000",
     fontFamily: font2,
-    fontSize: 10,
+    fontSize: 12,
     fontStyle: "normal",
     fontWeight: "500",
     lineHeight: 14,
   },
   card: {
     display: "flex",
-    width: 170,
+    width: 171,
     flexDirection: "column",
     alignItems: "flex-start",
     borderRadius: 8,
@@ -98,17 +97,17 @@ const styles = StyleSheet.create({
   section: {
     color: "#9E9E9E",
     fontFamily: font3,
-    fontSize: 10,
+    fontSize: 12,
     fontStyle: "normal",
-    // fontWeight: "500",
+    fontWeight: "500",
     /* lineHeight: 'normal',*/
   },
   published: {
     color: "#9E9E9E",
     fontFamily: font3,
-    fontSize: 10,
+    fontSize: 12,
     fontStyle: "normal",
-    // fontWeight: "500",
+    fontWeight: "500",
     /* line-height: normal; */
   },
   image: {
@@ -128,8 +127,7 @@ const styles = StyleSheet.create({
   text: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingVertical: 8,
     paddingHorizontal: 12,
     alignItems: "flex-start",
     alignSelf: "stretch",
