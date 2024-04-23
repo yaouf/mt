@@ -2,6 +2,7 @@ import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
+import React from "react";
 
 function ImageCard({ article }: Article) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
