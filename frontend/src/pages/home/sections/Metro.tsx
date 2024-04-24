@@ -4,8 +4,8 @@ import { View, Text } from "react-native";
 import { Article, NavProp } from "src/types/types";
 import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
-import { homeStyles } from "src/styles/home";
 import Divider from "src/components/Divider";
+import { layout } from "src/styles/styles";
 
 function Metro({ navigation }: NavProp) {
   const [metro, setMetro] = useState<Article[]>();
@@ -26,9 +26,13 @@ function Metro({ navigation }: NavProp) {
         <Text>Loading!!</Text> // for first load when undefined, eventually will replace with a nice loading sign
       ) : (
         <View>
-          <View style={homeStyles.grid}>
-            {metro.map((article: Article) => (
-              <SmallCard article={article} navigation={navigation}/>
+          <View style={layout.grid}>
+            {metro.map((article: Article, i) => (
+              <SmallCard
+                article={article}
+                navigation={navigation}
+                key={`metro-home-${i}`}
+              />
             ))}
           </View>
         </View>

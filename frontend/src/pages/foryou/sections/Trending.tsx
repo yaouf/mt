@@ -1,26 +1,27 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import { ScrollView, Text, View } from "react-native";
 import HorizontalCard from "src/components/cards/HorizontalCard";
-import { FYstyles } from "src/styles/foryou";
-import { Article } from "src/types/types";
+import { layout, text } from "src/styles/styles";
+import { Article, NavProp } from "src/types/types";
 
 type TrendingProps = {
   data: Article[];
+  navigation: StackNavigationProp<any, any>;
 };
 
-function Trending({ data }: TrendingProps) {
-  const handleSeeMorePress = () => {
-    // Navigation that is to be performed on 'See more' press button
-    console.log("See more pressed!");
-  };
-
+function Trending({ data, navigation }: TrendingProps) {
   return (
     <View>
       <View>
-        <Text style={FYstyles.header}>TRENDING</Text>
+        <Text style={text.sectionHeader3}>TRENDING</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={FYstyles.vStack}>
+          <View style={layout.vStack}>
             {data.map((article, index) => (
-              <HorizontalCard key={index} article={article} /> // Ensure SmallCard expects a prop named 'article'
+              <HorizontalCard
+                key={index}
+                article={article}
+                navigation={navigation}
+              /> // Ensure SmallCard expects a prop named 'article'
             ))}
           </View>
         </ScrollView>

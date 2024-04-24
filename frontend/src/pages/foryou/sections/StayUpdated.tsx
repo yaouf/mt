@@ -1,11 +1,11 @@
 import { View, Text, Switch } from "react-native";
-import { FYstyles } from "src/styles/foryou";
 import Notif from "./Notif";
+import { text } from "src/styles/styles";
 
 function StayUpdated() {
   return (
     <View>
-      <Text style={FYstyles.header}>STAY UPDATED</Text>
+      <Text style={text.sectionHeader3}>STAY UPDATED</Text>
       <View style={{ rowGap: 16 }}>
         <Notif
           title="Author Name"

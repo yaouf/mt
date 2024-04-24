@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { View, FlatList, ScrollView } from "react-native";
-import { baseStyles } from "../../styles/styles";
 import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
 import News from "./sections/News";
 import Sports from "./sections/Sports";

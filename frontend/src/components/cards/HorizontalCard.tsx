@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
-import { Article, Author, CardProps } from "src/types/types";
+import { Author, CardProps } from "src/types/types";
 import { formatDates } from "../../code/formatDates";
 import { font1, font2, font3 } from "../../styles/styles";
 
@@ -60,7 +60,8 @@ export default HorizontalCard;
 const styles = StyleSheet.create({
   card: {
     display: "flex",
-    width: 358,
+    // width: 358,
+    width: "100%",
     height: 120,
     flexDirection: "column",
     alignItems: "flex-end",

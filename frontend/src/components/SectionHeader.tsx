@@ -1,6 +1,7 @@
 // import { NativeBaseProvider } from "native-base";
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { text } from "src/styles/styles";
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -10,24 +11,14 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     paddingTop: 8,
   },
-  headerTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  seeMoreButton: {
-    fontWeight: "bold",
-    color: "#ED1C24",
-    fontSize: 12,
-    marginRight: 16,
-  },
 });
 
 function SectionHeader({ title, onSeeMorePress }) {
   return (
     <View style={styles.headerContainer}>
-      <Text style={styles.headerTitle}>{title}</Text>
+      <Text style={text.sectionHeader1}>{title}</Text>
       <TouchableOpacity onPress={onSeeMorePress}>
-        <Text style={styles.seeMoreButton}>See more</Text>
+        <Text style={text.seeMore}>See more</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,10 +1,10 @@
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
-import { Article, Author } from "src/types/types";
-import { font1, font2, font3 } from "../../styles/styles";
+import { CardProps } from "src/types/types";
+import { font1 } from "../../styles/styles";
 
-function ImageCard({ article }: Article) {
+function ImageCard({ article, navigation }: CardProps) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
   return (
