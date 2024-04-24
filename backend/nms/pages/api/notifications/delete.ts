@@ -16,13 +16,14 @@ export default async function deleteNotification(
 ) {
   try {
     // Assuming the request body contains the notification data
-    console.log(req.body);
     const { jobId } = req.body as RequestData;
+
     // Validate required fields
     if (!jobId) {
       return res.status(400).json({ message: "Invalid notification data." });
     }
 
+    // Delete the notification from the job queue
     const job = await notificationQueue.getJob(jobId.toString());
     if (!job) {
       return res

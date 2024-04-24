@@ -13,7 +13,7 @@ export async function seed(knex: Knex): Promise<void> {
       "Breaking News": true,
       "Weekly Summary": false,
       "Daily Summary": false,
-      expoPushToken: "ExponentPushToken[98FnGADJ4AOEqyomeGRsRR]",
+      expoPushToken: "ExponentPushToken[psEoIvGQmUy-WCOX2LVqq5]",
     },
     {
       id: uuidv4(),

@@ -2,6 +2,7 @@ import Bull from "bull";
 import db from "../../dist/data/db-config";
 import { Device, Notification } from "../types/types";
 import Expo, { ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
+
 // Connect to a local Redis instance. For production, configure the connection accordingly.
 const notificationQueue = new Bull(
   "notificationQueue",
@@ -9,17 +10,19 @@ const notificationQueue = new Bull(
 );
 
 // Send notifications to corresponding devices
-notificationQueue.process(async (job) => {
+notificationQueue.process(async job => {
   // This is the job data that was passed to `notificationQueue.add()`
-  const { jobId, time, title, body, tags } = job.data as Notification;
+  const { jobId, time, title, body, tags, pathname } = job.data;
   console.log("tags", tags);
   // Fetch all devices that have subscribed to the tags
   let devices: Set<Device> = new Set<Device>();
   for (let tag of tags) {
-    console.log("tag",tag);
-    const oneDevice = await db("devices").select("expoPushToken").where(tag, true) as Device[];
-    console.log("oneDevice",oneDevice);
-    for (var device of oneDevice){
+    console.log("tag", tag);
+    const oneDevice = (await db("devices")
+      .select("expoPushToken")
+      .where(tag, true)) as Device[];
+    console.log("oneDevice", oneDevice);
+    for (var device of oneDevice) {
       devices.add(device);
     }
   }
@@ -28,7 +31,7 @@ notificationQueue.process(async (job) => {
   //   // Fetch all devices that have subscribed to breaking news alerts
   //   const breakingDevices = await db("devices").select("expoPushToken").where("breakingNewsAlerts", true) as Device[];
   //   devices = devices.concat(breakingDevices);
-  // } 
+  // }
   // if (tags.includes("weekly-summary")) {
   //   // Fetch all devices that have subscribed to weekly summary alerts
   //   const weeklyDevices = await db("devices").select("expoPushToken").where("weeklySummaryAlerts", true) as Device[];
@@ -41,7 +44,8 @@ notificationQueue.process(async (job) => {
   // }
 
   // Send notifications to all devices
-  devices.forEach(device => {// Send the notification to the device
+  devices.forEach(device => {
+    // Send the notification to the device
     console.log(`Sending notification to ${device.expoPushToken}`);
 
     // Notifcation sending
@@ -61,15 +65,15 @@ notificationQueue.process(async (job) => {
     }
 
     // Construct a push notification message for each valid push token
-    
+
     const messages: ExpoPushMessage[] = [];
     messages.push({
       to: pushToken,
       sound: "default",
       title: title,
       body: body,
+      data: { pathname },
     });
-    
 
     // The Expo push notification service accepts batches of notifications so
     // we use `chunkPushNotifications` to divide the array of messages into chunks
@@ -123,7 +127,8 @@ notificationQueue.process(async (job) => {
           console.error(error);
         }
       }
-    })();} )
+    })();
+  });
   // for (const device of devices) {
   //   // Send the notification to the device
   //   console.log(`Sending notification to ${device.expoPushToken}`);
@@ -214,7 +219,9 @@ notificationQueue.process(async (job) => {
   // Update notification status to "sent" in the database
   try {
     await db("notifications").where({ id: jobId }).update({ status: "sent" });
-    console.log(`Notification with ID ${jobId} at time ${time} successfully updated to status "sent"`);
+    console.log(
+      `Notification with ID ${jobId} at time ${time} successfully updated to status "sent"`
+    );
   } catch (error) {
     console.error("Error updating notification status:", error);
   }
@@ -222,7 +229,9 @@ notificationQueue.process(async (job) => {
   // Update notification status to "sent" in the database
   try {
     await db("notifications").where({ id: jobId }).update({ status: "sent" });
-    console.log(`Notification with ID ${jobId} at time ${time} successfully updated to status "sent"`);
+    console.log(
+      `Notification with ID ${jobId} at time ${time} successfully updated to status "sent"`
+    );
   } catch (error) {
     console.error("Error updating notification status:", error);
   }
