@@ -17,7 +17,7 @@ function SmallCard({ article, navigation }: CardProps) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("Article", { data: article })}
+      onPress={() => navigation.push("Article", { data: article })}
     >
       <View style={styles.card}>
         <Image

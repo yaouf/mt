@@ -14,7 +14,7 @@ function HorizontalCard({ article, navigation }: CardProps) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("Article", { data: article })}
+      onPress={() => navigation.push("Article", { data: article })}
     >
       <View style={styles.card}>
         <View style={styles.content}>

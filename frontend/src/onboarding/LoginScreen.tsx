@@ -23,7 +23,7 @@ function LoginScreen(props: LoginProps) {
     setAsync("community", community);
 
     // then continue to push notifs
-    props.navigation.navigate("PushNotifs");
+    props.navigation.push("PushNotifs");
   }
 
   return (

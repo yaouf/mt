@@ -9,7 +9,7 @@ function ImageCard({ article }: Article) {
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("Article", { data: article })}
+      onPress={() => navigation.push("Article", { data: article })}
     >
       <View style={styles.card}>
         <Image
