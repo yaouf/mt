@@ -16,7 +16,7 @@ export default async function getNotification(
   res: NextApiResponse<Notification[] | ResponseData>
 ) {
   try {
-    // get path param
+    // Get the jobId from the query string
     const jobId = parseInt(req.query.jobId as string);
 
     if (jobId) {
