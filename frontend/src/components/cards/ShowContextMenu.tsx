@@ -1,5 +1,5 @@
 import { ActionSheetIOS, Alert, Clipboard, Share } from "react-native";
-import { shareArticle } from "../article/ShareArticle";
+import { shareArticle } from "../../pages/article/ShareArticle";
 
 export const showContextMenu = (uri: string) => {
   // deprecated, but works

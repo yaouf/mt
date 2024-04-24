@@ -7,51 +7,54 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
-import { Article, Author } from "src/types/types";
+import { Article, Author, CardProps } from "src/types/types";
 import { formatDates, shortFormatDates } from "../../code/formatDates";
 import { font1, font2, font3 } from "../../styles/styles";
 
-
-function SmallCard({ article }: Article) {
+function SmallCard({ article, navigation }: CardProps) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
   return (
-    <View style={styles.card}>
-      <Image
-        source={{
-          uri:
-            "http://snworksceo.imgix.net/bdh/" +
-            article.dominantMedia.attachment_uuid +
-            ".sized-1000x1000.jpg",
-        }}
-        style={styles.image}
-      />
-      <View style={styles.text}>
-        <Text style={styles.section}>{article.tags[0].name}</Text>
-        <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-          {article.headline}
-        </Text>
-        <Text style={styles.author}>
-          {article.authors.map((a: Author) => a.name).join(", ")}
-        </Text>
-        <View style={styles.bottom}>
-          <View style={styles.publishedSection}>
-            <Text style={styles.published}>
-              {shortFormatDates(article.published_at)}
-            </Text>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("Article", { data: article })}
+    >
+      <View style={styles.card}>
+        <Image
+          source={{
+            uri:
+              "http://snworksceo.imgix.net/bdh/" +
+              article.dominantMedia.attachment_uuid +
+              ".sized-1000x1000.jpg",
+          }}
+          style={styles.image}
+        />
+        <View style={styles.text}>
+          <Text style={styles.section}>{article.tags[0].name}</Text>
+          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+            {article.headline}
+          </Text>
+          <Text style={styles.author}>
+            {article.authors.map((a: Author) => a.name).join(", ")}
+          </Text>
+          <View style={styles.bottom}>
+            <View style={styles.publishedSection}>
+              <Text style={styles.published}>
+                {shortFormatDates(article.published_at)}
+              </Text>
+            </View>
+            <TouchableWithoutFeedback
+              onPress={() => showContextMenu(uri)}
+              onLongPress={() => showContextMenu(uri)}
+            >
+              <Image
+                source={require("../../../assets/options.png")}
+                style={styles.options}
+              />
+            </TouchableWithoutFeedback>
           </View>
-          <TouchableWithoutFeedback
-            onPress={() => showContextMenu(uri)}
-            onLongPress={() => showContextMenu(uri)}
-          >
-            <Image
-              source={require("../../../assets/options.png")}
-              style={styles.options}
-            />
-          </TouchableWithoutFeedback>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

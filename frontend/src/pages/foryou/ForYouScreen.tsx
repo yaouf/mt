@@ -1,17 +1,17 @@
 import React from "react";
 import { View, Text } from "react-native";
-import FaveSections from "./FavSections";
+import FaveSections from "./sections/FavSections";
 import { dummyData } from "src/dummyData";
 import { FYstyles } from "src/styles/foryou";
-import Archive from "./Archive";
+import Archive from "./sections/Archive";
 import {
   GestureHandlerRootView,
   ScrollView,
 } from "react-native-gesture-handler";
-import StayUpdated from "./StayUpdated";
-import Trending from "./Trending";
-import Recommended from "./Recommended";
-import TodaysPicks from "./TodaysPicks";
+import StayUpdated from "./sections/StayUpdated";
+import Trending from "./sections/Trending";
+import Recommended from "./sections/Recommended";
+import TodaysPicks from "./sections/TodaysPicks";
 import Divider from "src/components/Divider";
 import { useScrollToTop } from "@react-navigation/native";
 

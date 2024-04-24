@@ -23,14 +23,13 @@ interface HorizontalScrollMenuProps {
 const menuItems: MenuItem[] = [
   { id: 1, title: "FILTER" },
   { id: 2, title: "ALL" },
-  { id: 3, title: "NEWS" },
-  { id: 4, title: "SPORTS" },
+  { id: 3, title: "OPINIONS" },
+  { id: 4, title: "NEWS" },
   { id: 5, title: "ARTS & CULTURE" },
-  { id: 6, title: "SCIENCE & RESEARCH" },
-  { id: 7, title: "OPINIONS" },
-  { id: 8, title: "PROJECTS" },
-  { id: 9, title: "POST-MAGAZINE" },
-  { id: 10, title: "MULTIMEDIA" },
+  { id: 6, title: "METRO" },
+  { id: 7, title: "SPORTS" },
+  { id: 8, title: "SCIENCE & RESEARCH" },
+  { id: 9, title: "PODCASTS" },
 ];
 
 function HorizontalScrollMenu({ onItemClick }: HorizontalScrollMenuProps) {

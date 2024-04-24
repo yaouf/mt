@@ -6,49 +6,52 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
-import { Article, Author } from "src/types/types";
+import { Article, Author, CardProps } from "src/types/types";
 import { formatDates } from "../../code/formatDates";
 import { font1, font2, font3 } from "../../styles/styles";
 
-function HorizontalCard({ article }: Article) {
-  console.log("**", article);
+function HorizontalCard({ article, navigation }: CardProps) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
   return (
-    <View style={styles.card}>
-      <View style={styles.content}>
-        <Image
-          source={{
-            uri:
-              "http://snworksceo.imgix.net/" +
-              article.dominantMedia.attachment_uuid,
-          }}
-          style={styles.image}
-        />
-        <View style={styles.text}>
-          <View style={styles.innerText}>
-            <Text style={styles.section}>{article.tags[0].name}</Text>
-            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-              {article.headline}
-            </Text>
-            <Text style={styles.author}>
-              {article.authors.map((a: Author) => a.name).join(", ")}
-            </Text>
-            <Text style={styles.published}>
-              {formatDates(article.published_at)}
-            </Text>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("Article", { data: article })}
+    >
+      <View style={styles.card}>
+        <View style={styles.content}>
+          <Image
+            source={{
+              uri:
+                "http://snworksceo.imgix.net/" +
+                article.dominantMedia.attachment_uuid,
+            }}
+            style={styles.image}
+          />
+          <View style={styles.text}>
+            <View style={styles.innerText}>
+              <Text style={styles.section}>{article.tags[0].name}</Text>
+              <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+                {article.headline}
+              </Text>
+              <Text style={styles.author}>
+                {article.authors.map((a: Author) => a.name).join(", ")}
+              </Text>
+              <Text style={styles.published}>
+                {formatDates(article.published_at)}
+              </Text>
+            </View>
+            <TouchableWithoutFeedback
+              onPress={() => showContextMenu(uri)}
+              onLongPress={() => showContextMenu(uri)}
+            >
+              <Image
+                source={require("../../../assets/options.png")}
+                style={styles.options}
+              />
+            </TouchableWithoutFeedback>
           </View>
-          <TouchableWithoutFeedback
-            onPress={() => showContextMenu(uri)}
-            onLongPress={() => showContextMenu(uri)}
-          >
-            <Image
-              source={require("../../../assets/options.png")}
-              style={styles.options}
-            />
-          </TouchableWithoutFeedback>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
