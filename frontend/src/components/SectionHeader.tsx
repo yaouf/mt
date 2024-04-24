@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 8,
     paddingTop: 8,
-    paddingRight: 16,
-    paddingLeft: 16,
   },
   headerTitle: {
     fontWeight: "bold",
