@@ -1,9 +1,14 @@
 import { Platform, StyleSheet } from "react-native";
 
+/**
+ * file for base styles, fonts, layouts, text, etc
+ */
+
 export const font1 = "Georgia";
 // export const font2 = "Roboto Flex";
 // export const font3 = "Roboto Condensed";
 
+// for now until load fonts:
 export const font2 = Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif";
 export const font3 =
   Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif-condensed";
@@ -40,12 +45,14 @@ export const layout = StyleSheet.create({
  */
 export const text = StyleSheet.create({
   sectionHeader1: {
+    // main section headers
     color: "#000",
     fontWeight: "600",
     fontSize: 16,
     fontFamily: font2,
-  }, // sections
+  },
   seeMore: {
+    // see more header for section
     fontWeight: "600",
     color: "#ED1C24",
     fontSize: 12,
@@ -53,6 +60,7 @@ export const text = StyleSheet.create({
     fontFamily: font2,
   },
   topStories: {
+    // top stories is a slightly larger title
     color: "#000",
     fontWeight: "600",
     fontSize: 24,
@@ -60,6 +68,7 @@ export const text = StyleSheet.create({
     marginBottom: 4,
   },
   sectionHeader2: {
+    // like recommended text, featured story on fyp
     color: "#000",
     fontFamily: font2,
     fontStyle: "normal",
@@ -67,8 +76,9 @@ export const text = StyleSheet.create({
     fontSize: 14,
     marginBottom: 8,
     marginTop: 8,
-  }, // fyp header
+  },
   sectionHeader3: {
+    // like back from archive, stay updated on fyp
     color: "#000",
     fontFamily: font2,
     fontStyle: "normal",
@@ -76,7 +86,7 @@ export const text = StyleSheet.create({
     fontSize: 12,
     marginBottom: 8,
     marginTop: 8,
-  }, // fyp header
+  },
   text: {
     color: "#000",
     fontFamily: font2,
@@ -85,54 +95,5 @@ export const text = StyleSheet.create({
     fontSize: 12,
     overflow: "hidden",
     maxWidth: "85%",
-  },
-});
-
-/**
- *
- * small card
- * - section RC 12, 500, 16
- * - title G 16, 700, 22
- * - author RF, 12, 500, 14
- * - date RC 12, 500, normal
- *
- * large card
- * - section RC 16, 500, normal
- * - title G 20, 700, 28
- * - author RF, 16, 500, 20
- * - date RC 14, 500, normal
- *
- * horz card
- * - section RC 12, 500, normal
- * - title G, 16, 700, 20
- * - author RF 12, 500, 14
- * - date RC 12, 500, normal
- *
- * menu bar
- * - RF 14, 500, normal
- * - selected is weight 600
- *
- * header with see more
- * - header RF 16, 600, normal
- * - see more RF 12, 600, normal (RED)
- *
- * top stories
- * - RF 24, 600, normal
- *
- * FY PAGE
- *
- * recommended text, featured story
- * - RF 14, 600, normal
- *
- * back from archive, stay updated, author name, trending, rec, todays pciks
- * - RF, 12, 600, normal
- *
- * text
- * - RF, 12 400 normal
- */
-
-export const notifToggle = StyleSheet.create({
-  toggleRow: {
-    flexDirection: "row",
   },
 });

@@ -14,8 +14,12 @@ function Recommended({ data, navigation }: RecommendedProps) {
     <View>
       <Text style={text.sectionHeader3}>RECOMMENDED</Text>
       <View style={layout.grid}>
-        {data.map((article, index) => (
-          <SmallCard key={index} article={article} navigation={navigation} />
+        {data.map((article, i) => (
+          <SmallCard
+            key={`fyp-rec-${i}`}
+            article={article}
+            navigation={navigation}
+          />
         ))}
       </View>
     </View>
