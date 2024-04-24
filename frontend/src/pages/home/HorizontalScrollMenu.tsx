@@ -33,9 +33,7 @@ const menuItems: MenuItem[] = [
   { id: 10, title: "MULTIMEDIA" },
 ];
 
-const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({
-  onItemClick,
-}) => {
+function HorizontalScrollMenu({ onItemClick }: HorizontalScrollMenuProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [data, setData] = useState(menuItems);
 
@@ -79,7 +77,7 @@ const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({
       )}
     </View>
   );
-};
+}
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   menuItemText: {
-    fontSize: 16,
+    fontSize: 14,
   },
   drawer: {
     position: "absolute",

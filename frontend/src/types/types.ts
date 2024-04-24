@@ -18,16 +18,6 @@ export type UserProps = {
   setPushToken: Dispatch<SetStateAction<string>>;
 };
 
-// *** navigation, Home and article ***
-
-export type NavProps = {
-  HomePage: undefined;
-  Sections: undefined;
-  Search: undefined;
-  Settings: UserProps;
-  Login: UserProps;
-};
-
 export type ShareProps = {
   uri: string;
 };
