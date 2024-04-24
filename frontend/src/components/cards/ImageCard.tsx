@@ -4,36 +4,39 @@ import { showContextMenu } from "./ShowContextMenu";
 import { Article, Author } from "src/types/types";
 import { font1, font2, font3 } from "../../styles/styles";
 
-
 function ImageCard({ article }: Article) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
   return (
-    <View style={styles.card}>
-      <Image
-        source={{
-          uri:
-            "http://snworksceo.imgix.net/bdh/" +
-            article.dominantMedia.attachment_uuid +
-            ".sized-1000x1000.jpg",
-        }}
-        style={styles.image}
-      />
-      <View style={styles.text}>
-        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
-          {article.headline}
-        </Text>
-        <TouchableWithoutFeedback
-          onPress={() => showContextMenu(uri)}
-          onLongPress={() => showContextMenu(uri)}
-        >
-          <Image
-            source={require("../../../assets/options.png")}
-            style={styles.options}
-          />
-        </TouchableWithoutFeedback>
+    <TouchableWithoutFeedback
+      onPress={() => navigation.navigate("Article", { data: article })}
+    >
+      <View style={styles.card}>
+        <Image
+          source={{
+            uri:
+              "http://snworksceo.imgix.net/bdh/" +
+              article.dominantMedia.attachment_uuid +
+              ".sized-1000x1000.jpg",
+          }}
+          style={styles.image}
+        />
+        <View style={styles.text}>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+            {article.headline}
+          </Text>
+          <TouchableWithoutFeedback
+            onPress={() => showContextMenu(uri)}
+            onLongPress={() => showContextMenu(uri)}
+          >
+            <Image
+              source={require("../../../assets/options.png")}
+              style={styles.options}
+            />
+          </TouchableWithoutFeedback>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 

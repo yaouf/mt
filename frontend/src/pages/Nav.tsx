@@ -11,6 +11,7 @@ import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { font2 } from "src/styles/styles";
 import Header from "src/components/Header";
+import HomeStackScreen from "./home/HomeStackScreen";
 
 const Tab = createBottomTabNavigator();
 const MyTheme = {
@@ -25,8 +26,6 @@ const MyTheme = {
  * @returns Main app component
  */
 export default function Nav() {
-  console.log("Here in nav");
-
   return (
     <NavigationContainer theme={MyTheme}>
       <Tab.Navigator
@@ -64,7 +63,7 @@ export default function Nav() {
       >
         <Tab.Screen
           name="Home"
-          component={HomeScreen}
+          component={HomeStackScreen}
           options={{
             headerTitle: () => <Header />,
             headerStyle: {

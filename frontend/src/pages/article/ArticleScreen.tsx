@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { Article } from "../../types/types";
+import { Article, ArticleProps } from "../../types/types";
 import { baseStyles, font1, font2, font3 } from "../../styles/styles";
 import { dummyData } from "../../dummyData";
 import SmallCard from "src/components/cards/SmallCard";
@@ -20,10 +20,12 @@ import {
   RenderHTML,
 } from "react-native-render-html";
 
-function ArticleComponent({ article }: Article) {
+function ArticleScreen({ route, navigation }: ArticleProps) {
   function handleShare() {
     // shareArticle(uri);
   }
+
+  const article: Article = route.params.data;
 
   function handleBookmark() {}
 
@@ -195,9 +197,10 @@ function ArticleComponent({ article }: Article) {
               {article.dominantMedia.content}
             </Text>
             <Text style={styles.mediaAuthor}>
-              {article.dominantMedia.authors.map(
-                (mediaAuthor) => mediaAuthor.name
-              )}
+              {article.dominantMedia.authors > 0 &&
+                article.dominantMedia.authors.map(
+                  (mediaAuthor) => mediaAuthor.name
+                )}
             </Text>
           </View>
 
@@ -263,7 +266,7 @@ function ArticleComponent({ article }: Article) {
   );
 }
 
-export default ArticleComponent;
+export default ArticleScreen;
 
 const styles = StyleSheet.create({
   container: {

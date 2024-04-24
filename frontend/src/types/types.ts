@@ -95,3 +95,27 @@ export interface Tag {
   slug: string;
   ceo_id: string;
 }
+
+/**
+ * for navigation stacks
+ */
+
+// used in HomeStackScreen
+export type HomeStackProps = {
+  HomeScreen: undefined; // No additional parameters for the Home screen
+  Article: { data: Article }; // Parameter for the Article screen
+};
+
+// used in ArticleScreen
+export type ArticleProps = StackScreenProps<HomeStackProps, "Article">;
+
+// used in HomeScreen and all the section screens
+export type NavProp = {
+  navigation: StackNavigationProp<any, any>;
+};
+
+// for article cards
+export type CardProps = {
+  article: Article;
+  navigation: StackNavigationProp<any, any>;
+};

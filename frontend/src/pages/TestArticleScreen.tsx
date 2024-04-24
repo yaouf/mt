@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import { dummyData } from "src/dummyData";
-import ArticleComponent from "src/components/article/ArticleComponent";
+import ArticleComponent from "src/pages/article/ArticleScreen";
 
 /**
  * example article screen just for testing

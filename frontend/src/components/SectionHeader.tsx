@@ -22,13 +22,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const SectionHeader = ({ title, onSeeMorePress }) => (
-  <View style={styles.headerContainer}>
-    <Text style={styles.headerTitle}>{title}</Text>
-    <TouchableOpacity onPress={onSeeMorePress}>
-      <Text style={styles.seeMoreButton}>See more</Text>
-    </TouchableOpacity>
-  </View>
-);
+function SectionHeader({ title, onSeeMorePress }) {
+  return (
+    <View style={styles.headerContainer}>
+      <Text style={styles.headerTitle}>{title}</Text>
+      <TouchableOpacity onPress={onSeeMorePress}>
+        <Text style={styles.seeMoreButton}>See more</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
 export default SectionHeader;

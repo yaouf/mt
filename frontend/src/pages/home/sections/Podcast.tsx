@@ -5,47 +5,37 @@ import { Article, NavProp } from "src/types/types";
 import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
 import { homeStyles } from "src/styles/home";
-import HorizontalCard from "src/components/cards/HorizontalCard";
 import Divider from "src/components/Divider";
 
-function Sports({ navigation }: NavProp) {
-  const [sports, setSports] = useState<Article[]>();
+function Podcast({ navigation }: NavProp) {
+  const [podcast, setPodcast] = useState<Article[]>();
   const viewMore = () => {
-    console.log(`view sports section`);
+    console.log(`view podcast section`);
   };
 
   useEffect(() => {
-    fetchSectionHome("sports", 5, setSports).then(() =>
+    fetchSectionHome("podcasts", 4, setPodcast).then(() =>
       console.log("loaded content")
     );
   }, []);
+
   return (
     <View>
-      <SectionHeader title="Sports" onSeeMorePress={viewMore} />
-      {!sports ? (
+      <SectionHeader title="Podcast" onSeeMorePress={viewMore} />
+      {!podcast ? (
         <Text>Loading!!</Text> // for first load when undefined, eventually will replace with a nice loading sign
       ) : (
         <View>
           <View style={homeStyles.grid}>
-            {/* // first two as small cards TODO: can we always assume at least 2?? */}
-            {sports.slice(0, 2).map((article: Article) => (
+            {podcast.map((article: Article) => (
               <SmallCard article={article} navigation={navigation}/>
             ))}
           </View>
-          <View style={homeStyles.vstack}>
-            {sports.slice(2).map(
-              (
-                article: Article // rest as horizontal
-              ) => (
-                <HorizontalCard article={article} navigation={navigation}/>
-              )
-            )}
-          </View>
         </View>
       )}
-       <Divider />
+      <Divider />
     </View>
   );
 }
 
-export default Sports;
+export default Podcast;
