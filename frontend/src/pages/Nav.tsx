@@ -1,13 +1,7 @@
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import HomeScreen from "./home/HomeScreen";
-import ForYouScreen from "./foryou/ForYouScreen";
 import SettingsScreen from "./settings/SettingsScreen";
-import TestArticleScreen from "./TestArticleScreen";
 import SearchScreen from "./search/SearchScreen";
-
-import { Feather } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { font2 } from "src/styles/styles";
 import Header from "src/components/Header";

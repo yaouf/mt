@@ -24,10 +24,9 @@ function FavSections({ title, data, navigation }: FavSectionsProps) {
       <View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={layout.hStack}>
-            {data.map((article, index) => (
-              <View style={fyp.horzScrollCard}>
+            {data.map((article, i) => (
+              <View style={fyp.horzScrollCard} key={`fyp-fav-${i}`}>
                 <SmallCard
-                  key={index}
                   article={article}
                   specialWidth="100%"
                   navigation={navigation}

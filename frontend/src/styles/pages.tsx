@@ -15,3 +15,13 @@ export const fyp = StyleSheet.create({
     maxWidth: windowWidth * 0.5,
   },
 });
+
+export const home = StyleSheet.create({});
+
+// add any more pages here
+
+export const settings = StyleSheet.create({
+  toggleRow: {
+    flexDirection: "row",
+  },
+});

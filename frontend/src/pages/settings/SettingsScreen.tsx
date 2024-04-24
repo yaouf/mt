@@ -2,7 +2,7 @@ import { View, Text, Switch, Pressable, StyleSheet } from "react-native";
 import { UserProps } from "../../types/types";
 import CustomButton from "../../components/CustomButton";
 import { removeAsync, setAsync } from "../../code/helpers";
-import { notifToggle } from "../../styles/styles";
+import { settings } from "src/styles/pages";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -139,7 +139,7 @@ function SettingsScreen() {
       )}
       <View style={{ margin: 30 }}>
         <Text>Push Notifications</Text>
-        <View style={notifToggle.toggleRow}>
+        <View style={settings.toggleRow}>
           <Text>Breaking News Alerts</Text>
           <Switch
             value={breakingNotifs}
@@ -148,7 +148,7 @@ function SettingsScreen() {
             }
           />
         </View>
-        <View style={notifToggle.toggleRow}>
+        <View style={settings.toggleRow}>
           <Text>Weekly Summary </Text>
           <Switch
             value={weeklyNotifs}

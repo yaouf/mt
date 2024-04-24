@@ -16,9 +16,9 @@ function Trending({ data, navigation }: TrendingProps) {
         <Text style={text.sectionHeader3}>TRENDING</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={layout.vStack}>
-            {data.map((article, index) => (
+            {data.map((article, i) => (
               <HorizontalCard
-                key={index}
+                key={`fyp-trending-${i}`}
                 article={article}
                 navigation={navigation}
               /> // Ensure SmallCard expects a prop named 'article'

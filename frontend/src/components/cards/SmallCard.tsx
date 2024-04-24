@@ -5,6 +5,8 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
+  StyleProp,
+  ViewStyle,
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { Author, CardProps } from "src/types/types";
@@ -14,8 +16,12 @@ import { font1, font2, font3 } from "../../styles/styles";
 function SmallCard({ article, navigation, specialWidth }: CardProps) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
 
-  let cardStyles = { ...styles.card, ...{ width: "48%" } };
+  let cardStyles: StyleProp<ViewStyle> = {
+    ...styles.card,
+    ...{ width: "48%" },
+  };
   if (specialWidth !== undefined) {
+    // @ts-ignore
     cardStyles = { ...styles.card, ...{ width: specialWidth } };
   }
 

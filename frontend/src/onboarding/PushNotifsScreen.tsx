@@ -12,7 +12,7 @@ import { PushNotifProps } from "../types/types";
 import CustomButton from "../components/CustomButton";
 import { setAsync } from "../code/helpers";
 import { getPushToken } from "../code/pushNotifs";
-import { notifToggle } from "../styles/styles";
+import { settings } from "src/styles/pages";
 import { API_KEY, API_URL } from "@env";
 import { useState, useEffect } from "react";
 import * as Device from "expo-device";
@@ -242,7 +242,7 @@ function PushNotifsScreen(props: PushNotifProps) {
         onPress={requestNotificationPermission}
       ></Button>
       <Text>Get the latest breaking news right to your phone!</Text>
-      <View style={notifToggle.toggleRow}>
+      <View style={settings.toggleRow}>
         <Text>Breaking News Alerts</Text>
         <Switch
           value={breakingNotifs}
@@ -251,7 +251,7 @@ function PushNotifsScreen(props: PushNotifProps) {
           }
         />
       </View>
-      <View style={notifToggle.toggleRow}>
+      <View style={settings.toggleRow}>
         <Text>Weekly Summary </Text>
         <Switch
           value={weeklyNotifs}
