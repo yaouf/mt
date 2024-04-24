@@ -192,7 +192,7 @@ function PushNotifsScreen(props: PushNotifProps) {
 
     await createDevice();
 
-    props.navigation.navigate("Done");
+    props.navigation.push("Done");
   };
 
   /**
