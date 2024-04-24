@@ -1,15 +1,18 @@
-import { ScrollView, Text, View } from "react-native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { ScrollView, View } from "react-native";
 import SectionHeader from "src/components/SectionHeader";
 import SmallCard from "src/components/cards/SmallCard";
-import { FYstyles } from "src/styles/foryou";
+import { fyp } from "src/styles/pages";
+import { layout } from "src/styles/styles";
 import { Article } from "src/types/types";
 
 type FavSectionsProps = {
   title: string;
   data: Article[];
+  navigation: StackNavigationProp<any, any>;
 };
 
-function FavSections({ title, data }: FavSectionsProps) {
+function FavSections({ title, data, navigation }: FavSectionsProps) {
   const handleSeeMorePress = () => {
     // Navigation that is to be performed on 'See more' press button
     console.log("See more pressed!");
@@ -17,14 +20,19 @@ function FavSections({ title, data }: FavSectionsProps) {
 
   return (
     <View>
-      {/* <Divider style={styles.divider} /> */}
-      {/*Arts and Section Header*/}
       <SectionHeader title={title} onSeeMorePress={handleSeeMorePress} />
       <View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={FYstyles.hStack}>
+          <View style={layout.hStack}>
             {data.map((article, index) => (
-              <SmallCard key={index} article={article} /> // Ensure SmallCard expects a prop named 'article'
+              <View style={fyp.horzScrollCard}>
+                <SmallCard
+                  key={index}
+                  article={article}
+                  specialWidth="100%"
+                  navigation={navigation}
+                />
+              </View>
             ))}
           </View>
         </ScrollView>

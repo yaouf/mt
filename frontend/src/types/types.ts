@@ -106,6 +106,11 @@ export type HomeStackProps = {
   Article: { data: Article }; // Parameter for the Article screen
 };
 
+export type FYStackProps = {
+  ForYouScreen: undefined; // No additional parameters for the FY screen
+  Article: { data: Article }; // Parameter for the Article screen
+};
+
 // used in ArticleScreen
 export type ArticleProps = StackScreenProps<HomeStackProps, "Article">;
 
@@ -118,4 +123,5 @@ export type NavProp = {
 export type CardProps = {
   article: Article;
   navigation: StackNavigationProp<any, any>;
+  specialWidth?: string;
 };

@@ -7,19 +7,23 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
-import { Article, Author, CardProps } from "src/types/types";
+import { Author, CardProps } from "src/types/types";
 import { formatDates, shortFormatDates } from "../../code/formatDates";
 import { font1, font2, font3 } from "../../styles/styles";
 
-function SmallCard({ article, navigation }: CardProps) {
-  console.log("this is the uuid", article.uuid);
+function SmallCard({ article, navigation, specialWidth }: CardProps) {
   const uri = "https://www.browndailyherald.com/" + article.uuid;
+
+  let cardStyles = { ...styles.card, ...{ width: "48%" } };
+  if (specialWidth !== undefined) {
+    cardStyles = { ...styles.card, ...{ width: specialWidth } };
+  }
 
   return (
     <TouchableWithoutFeedback
       onPress={() => navigation.push("Article", { data: article })}
     >
-      <View style={styles.card}>
+      <View style={cardStyles}>
         <Image
           source={{
             uri:
@@ -84,7 +88,8 @@ const styles = StyleSheet.create({
   },
   card: {
     display: "flex",
-    width: 170,
+    // width: 170,
+    // width: "48%",
     flexDirection: "column",
     alignItems: "flex-start",
     borderRadius: 8,

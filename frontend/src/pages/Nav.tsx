@@ -12,6 +12,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { font2 } from "src/styles/styles";
 import Header from "src/components/Header";
 import HomeStackScreen from "./home/HomeStackScreen";
+import ForYouStackScreen from "./foryou/ForYouStackScreen";
 
 const Tab = createBottomTabNavigator();
 const MyTheme = {
@@ -73,7 +74,7 @@ export default function Nav() {
         />
         <Tab.Screen
           name="For You"
-          component={ForYouScreen}
+          component={ForYouStackScreen}
           options={{ headerTitle: () => <Header /> }}
         />
         {/* <Tab.Screen name="ArticleScreen" component={TestArticleScreen} /> */}

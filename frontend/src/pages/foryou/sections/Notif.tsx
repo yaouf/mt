@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, Text, Switch } from "react-native";
-import { FYstyles } from "src/styles/foryou";
+import { fyp } from "src/styles/pages";
+import { text } from "src/styles/styles";
 
 type NotifProps = { title: string; description: string };
 
@@ -8,10 +9,10 @@ function Notif({ title, description }: NotifProps) {
   const [notif, setNotif] = useState(true);
 
   return (
-    <View style={FYstyles.toggleRow}>
+    <View style={fyp.toggleRow}>
       <View>
-        <Text style={FYstyles.header}>{title}</Text>
-        <Text style={FYstyles.text} numberOfLines={2} ellipsizeMode="tail">
+        <Text style={text.sectionHeader3}>{title}</Text>
+        <Text style={text.text} numberOfLines={2} ellipsizeMode="tail">
           {description}
         </Text>
       </View>

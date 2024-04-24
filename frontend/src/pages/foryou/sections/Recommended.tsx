@@ -1,19 +1,21 @@
 import { View, Text } from "react-native";
-import { FYstyles } from "src/styles/foryou";
 import { Article } from "src/types/types";
 import SmallCard from "src/components/cards/SmallCard";
+import { layout, text } from "src/styles/styles";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type RecommendedProps = {
   data: Article[];
+  navigation: StackNavigationProp<any, any>;
 };
 
-function Recommended({ data }: RecommendedProps) {
+function Recommended({ data, navigation }: RecommendedProps) {
   return (
     <View>
-      <Text style={FYstyles.header}>RECOMMENDED</Text>
-      <View style={FYstyles.grid}>
+      <Text style={text.sectionHeader3}>RECOMMENDED</Text>
+      <View style={layout.grid}>
         {data.map((article, index) => (
-          <SmallCard key={index} article={article} /> // Ensure SmallCard expects a prop named 'article'
+          <SmallCard key={index} article={article} navigation={navigation} />
         ))}
       </View>
     </View>

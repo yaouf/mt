@@ -1,4 +1,3 @@
-import { StyleSheet } from "react-native";
 import { View } from "react-native";
 
 type DividerProps = {

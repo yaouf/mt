@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
-import { Article, Author, CardProps, Tag } from "src/types/types";
+import { Author, CardProps, Tag } from "src/types/types";
 import { formatDates } from "../../code/formatDates";
 import { font1, font2, font3 } from "../../styles/styles";
 
@@ -20,8 +20,6 @@ function LargeCard({ article, navigation }: CardProps) {
       breaking = true;
     }
   }
-
-  console.log(navigation);
 
   return (
     <TouchableWithoutFeedback
@@ -45,7 +43,9 @@ function LargeCard({ article, navigation }: CardProps) {
           ) : (
             <Text style={styles.section}>{all_tags[0]}</Text>
           )}
-          <Text style={styles.title}>{article.headline}</Text>
+          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+            {article.headline}
+          </Text>
           <Text style={styles.author}>
             {article.authors.map((a: Author) => a.name).join(", ")}
           </Text>
@@ -94,7 +94,8 @@ const styles = StyleSheet.create({
   },
   card: {
     display: "flex",
-    width: 358,
+    // width: 358,
+    width: "100%",
     paddingBottom: 8,
     flexDirection: "column",
     alignItems: "flex-start",

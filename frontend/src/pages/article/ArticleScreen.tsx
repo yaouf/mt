@@ -7,11 +7,9 @@ import {
   StyleSheet,
 } from "react-native";
 import { Article, ArticleProps } from "../../types/types";
-import { baseStyles, font1, font2, font3 } from "../../styles/styles";
+import { baseStyles, font1, font2, font3, layout } from "../../styles/styles";
 import { dummyData } from "../../dummyData";
 import SmallCard from "src/components/cards/SmallCard";
-import SmallCardArticle from "src/components/cards/SmallCardArticle";
-import SmallCardArticle2 from "src/components/cards/SmallCardArticle2";
 import { shareArticle } from "./ShareArticle";
 import { formatDates } from "src/code/formatDates";
 import {
@@ -19,6 +17,7 @@ import {
   HTMLElementModel,
   RenderHTML,
 } from "react-native-render-html";
+import Divider from "src/components/Divider";
 
 function ArticleScreen({ route, navigation }: ArticleProps) {
   function handleShare() {
@@ -224,17 +223,13 @@ function ArticleScreen({ route, navigation }: ArticleProps) {
           {/* Article text */}
           {splitArticle()}
           {/* Read more section, with small cards */}
-          <View style={styles.readMore}>
-            <View style={styles.readMoreLine}></View>
-            <Text style={styles.readMoreHeading}>Another Category</Text>
-            <View style={styles.cardRow}>
-              <SmallCardArticle2 article={dummyData[0]} />
-              <SmallCardArticle2 article={dummyData[1]} />
-            </View>
-            <View style={styles.cardRow}>
-              <SmallCardArticle2 article={dummyData[2]} />
-              <SmallCardArticle2 article={dummyData[3]} />
-            </View>
+          <Divider />
+          <Text style={styles.readMoreHeading}>RELATED ARTICLES</Text>
+          <View style={layout.grid}>
+            <SmallCard article={dummyData[0]} navigation={navigation} />
+            <SmallCard article={dummyData[1]} navigation={navigation} />
+            <SmallCard article={dummyData[2]} navigation={navigation} />
+            <SmallCard article={dummyData[3]} navigation={navigation} />
           </View>
 
           {/* Actions -  share, save, notifications*/}
@@ -277,7 +272,7 @@ const styles = StyleSheet.create({
   },
   image: {
     display: "flex",
-    width: 390,
+    width: "100%",
     height: 253,
     flex: 1,
     paddingLeft: 162.282,
@@ -311,7 +306,7 @@ const styles = StyleSheet.create({
   },
   articleHeading: {
     display: "flex",
-    width: 358,
+    width: "100%",
     flexDirection: "column",
     alignItems: "flex-start",
     gap: 7.422,
@@ -372,7 +367,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   articleBody: {
-    width: 358,
+    width: "100%",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -404,7 +399,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   advert: {
-    width: 390,
+    width: "auto",
     height: 280,
     flexShrink: 0,
     backgroundColor: "#F3F3F3",
@@ -434,16 +429,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     // lineHeight: "normal",
   },
-  readMore: {
-    width: 358,
-    height: 551.388,
-  },
-  readMoreLine: {
-    width: 352,
-    height: 1,
-    backgroundColor: "#1C1B1F",
-    marginBottom: 7.76,
-  },
   readMoreHeading: {
     color: "#000",
     fontFamily: font2,
@@ -453,13 +438,6 @@ const styles = StyleSheet.create({
     // lineHeight: "normal",
     textTransform: "uppercase",
     marginBottom: 16,
-  },
-  cardRow: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 16,
-    marginBottom: 12,
   },
   actionBar: {
     position: "absolute",
@@ -487,23 +465,3 @@ const styles = StyleSheet.create({
     height: 24,
   },
 });
-
-const tagsStyles = {
-  body: {
-    color: "#000",
-    fontFamily: font1,
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-    lineHeight: 24,
-  },
-  a: {
-    color: "#000",
-    fontFamily: font1,
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "400",
-    lineHeight: 24,
-    textDecorationLine: "underline",
-  },
-};
