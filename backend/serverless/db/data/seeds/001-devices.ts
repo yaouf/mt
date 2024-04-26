@@ -14,6 +14,7 @@ export async function seed(knex: Knex): Promise<void> {
       "Weekly Summary": false,
       "Daily Summary": false,
       expoPushToken: "ExponentPushToken[98FnGADJ4AOEqyomeGRsRR]",
+      isPushEnabled: true,
     },
     {
       id: uuidv4(),
@@ -22,6 +23,7 @@ export async function seed(knex: Knex): Promise<void> {
       "Weekly Summary": false,
       "Daily Summary": false,
       expoPushToken: "ExponentPushToken[mGGu2cGvMo9QjWr2QlsH9a]",
+      isPushEnabled: true,
     },
   ]);
 }
