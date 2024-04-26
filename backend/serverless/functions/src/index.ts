@@ -15,4 +15,5 @@ import { createDevice } from "./url/createDevice";
 import { updateSettings } from "./url/updateSettings";
 import { createUser } from "./auth/createUser";
 import { viewSettings } from "./url/viewSettings";
-export { helloWorld, createDevice, updateSettings, createUser, viewSettings };
+import { updateNotificationStatus } from "./url/updateNotificationStatus";
+export { helloWorld, createDevice, updateSettings, createUser, viewSettings, updateNotificationStatus };

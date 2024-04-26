@@ -6,8 +6,8 @@ import notificationQueue from "../../queue/queue";
 type ResponseData = {
   message?: string;
   jobId?: number;
-  notifications?: [];
-};
+  notifications?: Notification[];
+} | Notification[];
 
 export default async function addNotification(
   req: NextApiRequest,
