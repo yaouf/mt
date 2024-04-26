@@ -7,7 +7,7 @@ type ResponseData = {
   message?: string;
   jobId?: number;
   notifications?: Notification[];
-};
+} | Notification[];
 
 export default async function addNotification(
   req: NextApiRequest,
