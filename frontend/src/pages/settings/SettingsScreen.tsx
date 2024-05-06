@@ -1,11 +1,23 @@
-import { View, Text, Switch, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Switch,
+  Pressable,
+  StyleSheet,
+  Alert,
+  Linking,
+  AppState,
+  Platform,
+} from "react-native";
 import { UserProps } from "../../types/types";
 import CustomButton from "../../components/CustomButton";
 import { removeAsync, setAsync } from "../../code/helpers";
 import { settings } from "src/styles/pages";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { getPushToken } from "../../code/pushNotifs"; // import the function
+import * as Notifications from "expo-notifications";
+import { useNotification } from "./NotificationProvider";
 /**
  * Page for settings
  *   - show login button if not already logged in
@@ -21,12 +33,18 @@ function SettingsScreen() {
   const [username, setUsername] = useState<string>("");
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [community, setCommunity] = useState<string>("");
-
   const [breakingNotifs, setBreakingNotifs] = useState<boolean>(true); // default to true, user can change
   const [weeklyNotifs, setWeeklyNotifs] = useState<boolean>(true);
 
+  const {
+    appNotificationEnabled,
+    setAppNotificationEnabled,
+    toggleNotifications,
+    checkPermissions,
+  } = useNotification();
+
   /**
-   * load the state variables from async storage if they exist and update their values
+   * Load the state variables from async storage if they exist and update their values
    * (on first load of settings page only)
    */
   const load = async () => {
@@ -61,12 +79,18 @@ function SettingsScreen() {
     }
   };
 
-  useEffect(() => {
+  // Load settings (including other unrelated settings if they exist)
+  const loadSettings = async () => {
     load();
+    await checkPermissions(); // Check system permissions everytime app loads
+  };
+
+  useEffect(() => {
+    loadSettings();
   }, []);
 
   /**
-   * login in user and update async storage
+   * Login in user and update async storage
    */
   function handleLogin() {
     const username = "X"; //TODO: get username from auth
@@ -81,7 +105,7 @@ function SettingsScreen() {
   }
 
   /**
-   * logout user and clear async storage
+   * Logout user and clear async storage
    */
   async function handleLogout() {
     setAsync("loggedIn", "false");
@@ -96,8 +120,8 @@ function SettingsScreen() {
   }
 
   /**
-   * delete account
-   * clear async storage
+   * Delete account
+   * Clear async storage
    */
   async function deleteUser() {
     // call backend to delete, logout for now
@@ -105,26 +129,25 @@ function SettingsScreen() {
     console.log("deleted account");
   }
 
-  // function handlePushNotifs() {
-  //   setPushNotifs((previousState) => !previousState);
-  // }
-
   /**
-   * update settings in async storage, call backend update
+   * Update settings in async storage, call backend update
    */
   const updateSettings = () => {
     setAsync("breakingNotifs", JSON.stringify(breakingNotifs));
     setAsync("weeklyNotifs", JSON.stringify(weeklyNotifs));
 
-    // TODO: do i need to request push token again?
-    // is there a way to know if the backend already has it?
-    // or just do this everytime a setting is changed - update settings doesn't take a push token though
     console.log("update settings!!");
   };
 
   function handleContact() {
     console.log("Contact!");
   }
+
+  // Handle the switch toggle
+  const handleToggle = (newState) => {
+    // Call the context function to handle the actual toggle logic
+    toggleNotifications(newState);
+  };
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -138,7 +161,8 @@ function SettingsScreen() {
         <CustomButton text={"Login"} onPress={handleLogin} />
       )}
       <View style={{ margin: 30 }}>
-        <Text>Push Notifications</Text>
+        <Text>Enable Push Notifications</Text>
+        <Switch value={appNotificationEnabled} onValueChange={handleToggle} />
         <View style={settings.toggleRow}>
           <Text>Breaking News Alerts</Text>
           <Switch
