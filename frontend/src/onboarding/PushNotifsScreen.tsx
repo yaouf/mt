@@ -41,25 +41,12 @@ function PushNotifsScreen(props: PushNotifProps) {
     checkNotificationPermission();
   }, []);
 
-  // useEffect(() => {
-  //   if (!hasRegistered) {
-  //     checkNotificationPermission();
-  //   }
-  //   console.log("Registering for push notifs...");
-  //   registerForPushNotificationsAsync()
-  //     .then((token) => {
-  //       console.log("token: ", token);
-  //       setExpoPushToken(token);
-  //     })
-  //     .catch((err) => console.log(err));
-  // });
-
   const checkNotificationPermission = async () => {
     const { status } = await Notifications.getPermissionsAsync();
     console.log("Notification Permission:", status);
     setNotifPermission(status);
+    setAsync("notifPermission", status); // Store the permission status in AsyncStorage
 
-    // If permission is not determined, show a pop-up to ask for permission
     if (status === "undetermined" && !hasRegistered) {
       Alert.alert(
         "Allow Notifications",
@@ -67,10 +54,13 @@ function PushNotifsScreen(props: PushNotifProps) {
         [
           {
             text: "Don't Allow",
-            onPress: () => console.log("Permission denied"),
+            onPress: () => {
+              console.log("Permission denied");
+              setAsync("notifPermission", "denied"); // Update AsyncStorage immediately upon denial
+            },
             style: "cancel",
           },
-          { text: "Allow", onPress: () => requestNotificationPermission() },
+          { text: "Allow", onPress: requestNotificationPermission },
         ],
         { cancelable: false }
       );
@@ -80,20 +70,11 @@ function PushNotifsScreen(props: PushNotifProps) {
     }
   };
 
-  // const requestNotificationPermission = async () => {
-  //   if (notifPermission !== "granted") {
-  //     Alert.alert(
-  //       "Notification Permission Required",
-  //       "Please grant permission to receive push notifications in your device settings.",
-  //       [
-  //         { text: "Cancel", style: "cancel" },
-  //         { text: "Settings", onPress: () => openAppSettings() },
-  //       ]
-  //     );
-  //   }
-  // };
   const requestNotificationPermission = async () => {
     const { status } = await Notifications.requestPermissionsAsync();
+    setNotifPermission(status);
+    setAsync("notifPermission", status); // Update AsyncStorage with the new status
+
     if (status === "granted") {
       console.log("Notification permission granted.");
       await registerForPushNotificationsAsync();
@@ -101,7 +82,6 @@ function PushNotifsScreen(props: PushNotifProps) {
     } else {
       console.log("Notification permission denied.");
     }
-    setNotifPermission(status);
   };
 
   const openAppSettings = () => {
@@ -109,8 +89,7 @@ function PushNotifsScreen(props: PushNotifProps) {
   };
 
   /**
-   *
-   * @returns Requests permission to send push notifications
+   * Requests permission to send push notifications
    */
   async function registerForPushNotificationsAsync() {
     let token;
@@ -124,10 +103,13 @@ function PushNotifsScreen(props: PushNotifProps) {
       });
     }
 
+    // Makes sure the code is running on an actual device
     if (Device.isDevice) {
+      // Gets the current device's permission status in its settings
       const { status: existingStatus } =
         await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
+      // Request for permission if it hasn't been granted
       if (existingStatus !== "granted") {
         const { status } = await Notifications.requestPermissionsAsync();
         finalStatus = status;
@@ -160,7 +142,7 @@ function PushNotifsScreen(props: PushNotifProps) {
       deviceType: Platform.OS,
       breakingNewsAlerts: breakingNotifs,
       weeklySummaryAlerts: weeklyNotifs,
-      expoPushToken: pushToken,
+      expoPushToken: expoPushToken,
     });
 
     const requestOptions = {
