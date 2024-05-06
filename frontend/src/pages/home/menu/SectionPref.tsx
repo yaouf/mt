@@ -1,129 +1,93 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import DraggableFlatList, {
-  RenderItemParams,
+    RenderItemParams,
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { font2 } from "src/styles/styles";
+import { MaterialCommunityIcons} from '@expo/vector-icons';
+
+// ScaleDecorator enlarges item past horizontal borders when dragged, loses rounded corners
+
+const NUM_ITEMS = 7;
 
 type Item = {
   key: string;
   label: string;
   height: number;
-  width: number;
+  width: string;
   backgroundColor: string;
 };
 
-const menuItems = [
-  "NEWS",
-  "SPORTS",
-  "ARTS & CULTURE",
-  "SCIENCE & RESEARCH",
-  "OPINIONS",
-  "PROJECTS",
-  "POST-MAGAZINE",
-  "MULTIMEDIA",
-];
+const menuItems = ['NEWS', 'SPORTS', 'ARTS & CULTURE', 'SCIENCE & RESEARCH', 'OPINIONS', 'PROJECTS', 'POST-MAGAZINE',  'MULTIMEDIA']
 
-const initialData: Item[] = menuItems.map((menuItem, index) => {
-  return {
-    key: `item-${index}`,
-    label: menuItem,
-    height: 100,
-    width: 60,
-    backgroundColor: "#FFFFFF",
-  };
-});
+const initialData: Item[] = Array.from({ length: NUM_ITEMS }, (_, index) => ({
+  key: `${index}`,
+  label: String(menuItems[index + 1]),
+  height: 100,
+  width: "99%",
+  backgroundColor: "white", // set first item to black, rest to white
+}));
 
-export default function Draggable() {
+export default function App() {
   const [data, setData] = useState(initialData);
 
   const renderItem = ({ item, drag, isActive }: RenderItemParams<Item>) => {
     return (
-      <ScaleDecorator>
         <TouchableOpacity
-          onPress={drag}
+          onLongPress={drag}
           disabled={isActive}
           style={[
             styles.rowItem,
-            { backgroundColor: isActive ? "red" : item.backgroundColor },
+            { backgroundColor: "white" ,
+            marginVertical: 10,
+            borderRadius: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingHorizontal: 10, 
+            },
           ]}
         >
           <Text style={styles.text}>{item.label}</Text>
+          <MaterialCommunityIcons name="drag-horizontal-variant" size={30} color="black" style={styles.icon}/>
         </TouchableOpacity>
-      </ScaleDecorator>
     );
   };
 
   return (
     <GestureHandlerRootView>
-      <DraggableFlatList
-        data={data}
-        onDragEnd={({ data }) => setData(data)}
-        keyExtractor={(item) => item.key}
-        renderItem={renderItem}
-      />
+    <DraggableFlatList
+      data={data}
+      onDragEnd={({ data }) => setData(data)}
+      keyExtractor={(item) => item.key}
+      renderItem={renderItem}
+    />
     </GestureHandlerRootView>
   );
 }
 
+const screenHeight = Dimensions.get("window").height;
+const screenWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
   rowItem: {
-    height: 100,
-    width: 100,
-    alignItems: "center",
+    height: 40,
+    width: "99%",
+    alignItems: "flex-start",
     justifyContent: "center",
   },
   text: {
     color: "black",
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "left",
+    fontFamily: font2,
+    fontSize: 16,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 38,
+    marginLeft: 50
+  },
+  icon: {
+    marginTop: 5, 
   },
 });
-
-// import {useState} from 'react';
-// import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-// import DragList, {DragListRenderItemInfo} from 'react-native-draglist';
-
-// const menuItems = ['NEWS', 'SPORTS', 'ARTS & CULTURE', 'SCIENCE & RESEARCH', 'OPINIONS', 'PROJECTS', 'POST-MAGAZINE',  'MULTIMEDIA']
-
-// export default function Draggable() {
-//   const [data, setData] = useState(menuItems);
-
-//   function keyExtractor(str: string) {
-//     return str;
-//   }
-
-//   function renderItem(info: DragListRenderItemInfo<string>) {
-//     const {item, onDragStart, onDragEnd, isActive} = info;
-
-//     return (
-//       <TouchableOpacity
-//         key={item}
-//         onPressIn={onDragStart}
-//         onPressOut={onDragEnd}>
-//         <Text>{item}</Text>
-//       </TouchableOpacity>
-//     );
-//   }
-
-//   async function onReordered(fromIndex: number, toIndex: number) {
-//     const copy = [...data]; // Don't modify react data in-place
-//     const removed = copy.splice(fromIndex, 1);
-
-//     copy.splice(toIndex, 0, removed[0]); // Now insert at the new pos
-//     setData(copy);
-//   }
-
-//   return (
-//     <View>
-//       <DragList
-//         data={data}
-//         keyExtractor={keyExtractor}
-//         onReordered={onReordered}
-//         renderItem={renderItem}
-//       />
-//     </View>
-//   );
-// }
