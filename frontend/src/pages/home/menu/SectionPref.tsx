@@ -1,12 +1,20 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Button,
+} from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DraggableFlatList, {
-    RenderItemParams,
+  RenderItemParams,
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
 import { font2 } from "src/styles/styles";
-import { MaterialCommunityIcons} from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { Foundation } from "@expo/vector-icons";
 
 // ScaleDecorator enlarges item past horizontal borders when dragged, loses rounded corners
 
@@ -20,7 +28,16 @@ type Item = {
   backgroundColor: string;
 };
 
-const menuItems = ['NEWS', 'SPORTS', 'ARTS & CULTURE', 'SCIENCE & RESEARCH', 'OPINIONS', 'PROJECTS', 'POST-MAGAZINE',  'MULTIMEDIA']
+const menuItems = [
+  "NEWS",
+  "SPORTS",
+  "ARTS & CULTURE",
+  "SCIENCE & RESEARCH",
+  "OPINIONS",
+  "PROJECTS",
+  "POST-MAGAZINE",
+  "MULTIMEDIA",
+];
 
 const initialData: Item[] = Array.from({ length: NUM_ITEMS }, (_, index) => ({
   key: `${index}`,
@@ -35,34 +52,68 @@ export default function App() {
 
   const renderItem = ({ item, drag, isActive }: RenderItemParams<Item>) => {
     return (
-        <TouchableOpacity
-          onLongPress={drag}
-          disabled={isActive}
-          style={[
-            styles.rowItem,
-            { backgroundColor: "white" ,
-            marginVertical: 10,
+      <TouchableOpacity
+        onLongPress={drag}
+        disabled={isActive}
+        style={[
+          styles.rowItem,
+          {
+            height: 40,
+            backgroundColor: "white",
+            marginVertical: 6,
             borderRadius: 10,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 10, 
-            },
-          ]}
-        >
+            flexDirection: "row",
+            paddingHorizontal: 10,
+            paddingLeft: 16,
+          },
+        ]}
+      >
+        <Foundation
+          name="minus-circle"
+          size={24}
+          color="#ED1C24"
+          style={styles.minusIcon}
+        />
+        <View>
           <Text style={styles.text}>{item.label}</Text>
-          <MaterialCommunityIcons name="drag-horizontal-variant" size={30} color="black" style={styles.icon}/>
-        </TouchableOpacity>
+        </View>
+        <MaterialCommunityIcons
+          name="drag-horizontal-variant"
+          size={24}
+          color="#1C1B1F"
+          style={styles.dragIcon}
+        />
+      </TouchableOpacity>
     );
   };
 
   return (
     <GestureHandlerRootView>
-    <DraggableFlatList
-      data={data}
-      onDragEnd={({ data }) => setData(data)}
-      keyExtractor={(item) => item.key}
-      renderItem={renderItem}
-    />
+      <View style={styles.rectangle}>
+        <MaterialIcons
+          name="lock-outline"
+          size={24}
+          color="#9E9E9E"
+          style={styles.lockIcon}
+        />
+        <Text style={styles.grayText}>TOP STORIES</Text>
+      </View>
+      <View style={styles.rectangle}>
+        <MaterialIcons
+          name="lock-outline"
+          size={24}
+          color="#9E9E9E"
+          style={styles.lockIcon}
+        />
+        <Text style={styles.grayText}>ALL</Text>
+      </View>
+      <DraggableFlatList
+        data={data}
+        onDragEnd={({ data }) => setData(data)}
+        keyExtractor={(item) => item.key}
+        renderItem={renderItem}
+        scrollEnabled={false}
+      />
     </GestureHandlerRootView>
   );
 }
@@ -73,21 +124,50 @@ const screenWidth = Dimensions.get("window").width;
 const styles = StyleSheet.create({
   rowItem: {
     height: 40,
-    width: "99%",
+    width: "100%",
     alignItems: "flex-start",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+  },
+  rectangle: {
+    width: "100%",
+    height: 40,
+    backgroundColor: "white",
+    borderRadius: 10,
+    marginVertical: 6,
+    flexDirection: "row",
+    alignItems: "center",
   },
   text: {
     color: "black",
     textAlign: "left",
     fontFamily: font2,
     fontSize: 16,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
+    fontStyle: "normal",
+    fontWeight: "normal",
     lineHeight: 38,
-    marginLeft: 50
+    marginLeft: 16,
+    flex: 1,
   },
-  icon: {
-    marginTop: 5, 
+  grayText: {
+    color: "#9E9E9E",
+    textAlign: "left",
+    fontFamily: font2,
+    fontSize: 16,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    lineHeight: 38,
+    marginLeft: 16,
+    flex: 1,
+  },
+  dragIcon: {
+    marginTop: 8,
+    marginLeft: "auto",
+    marginRight: 8,
+  },
+  minusIcon: {
+    marginTop: 8,
+  },
+  lockIcon: {
+    marginLeft: 12,
   },
 });

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import Draggable from "./SectionPref";
 import { font2 } from "src/styles/styles";
+import { Ionicons } from "@expo/vector-icons";
 
 interface MenuItem {
   id: number;
@@ -23,16 +24,19 @@ interface HorizontalScrollMenuProps {
 const menuItems: MenuItem[] = [
   { id: 1, title: "FILTER" },
   { id: 2, title: "ALL" },
-  { id: 3, title: "OPINIONS" },
-  { id: 4, title: "NEWS" },
+  { id: 3, title: "NEWS" },
+  { id: 4, title: "SPORTS" },
   { id: 5, title: "ARTS & CULTURE" },
-  { id: 6, title: "METRO" },
-  { id: 7, title: "SPORTS" },
-  { id: 8, title: "SCIENCE & RESEARCH" },
-  { id: 9, title: "PODCASTS" },
+  { id: 6, title: "SCIENCE & RESEARCH" },
+  { id: 7, title: "OPINIONS" },
+  { id: 8, title: "PROJECTS" },
+  { id: 9, title: "POST-MAGAZINE" },
+  { id: 10, title: "MULTIMEDIA" },
 ];
 
-function HorizontalScrollMenu({ onItemClick }: HorizontalScrollMenuProps) {
+const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({
+  onItemClick,
+}) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [data, setData] = useState(menuItems);
 
@@ -54,7 +58,11 @@ function HorizontalScrollMenu({ onItemClick }: HorizontalScrollMenuProps) {
             style={styles.menuItem}
             onPress={() => handleMenuItemPress(menuItem)}
           >
-            <Text style={styles.menuItemText}>{menuItem.title}</Text>
+            {menuItem.id === 1 ? ( // if filter, render filter icon instead of text
+              <Ionicons name="filter-outline" size={24} color="black" />
+            ) : (
+              <Text style={styles.menuItemText}>{menuItem.title}</Text>
+            )}
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -72,11 +80,12 @@ function HorizontalScrollMenu({ onItemClick }: HorizontalScrollMenuProps) {
             page.
           </Text>
           <Draggable />
+          <Text style={styles.heading}>REMOVED SECTIONS</Text>
         </View>
       )}
     </View>
   );
-}
+};
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
@@ -99,7 +108,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
   },
   menuItemText: {
-    fontSize: 14,
+    fontSize: 16,
   },
   drawer: {
     position: "absolute",
@@ -114,7 +123,8 @@ const styles = StyleSheet.create({
   heading: {
     fontFamily: font2,
     fontSize: 16,
-    marginBottom: 20,
+    marginBottom: 16,
+    marginTop: 12,
     fontStyle: "normal",
     fontWeight: "800",
   },
