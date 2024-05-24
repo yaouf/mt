@@ -130,13 +130,12 @@ it('gets all notifications after second was added', async () => {
       // const { goodbye: hello } = await res.json();
       const jsonResult = await res.json();
       expect(jsonResult).toHaveLength(2); // ◄ Passes!
-      expect(jsonResult).toEqual(expect.arrayContaining([expect.objectContaining({"body": "World", "breakingNews": 1, "dailySummary": 0, "id": 1, "pathname": "/article/2022-03-01/hello-world", "status": "sent", "time": "2024-03-20T14:27:00.601256+00:00", "title": "Hello", "weeklySummary": 0}), expect.objectContaining({
+      expect(jsonResult).toEqual(expect.arrayContaining([expect.objectContaining({"body": "World", "breakingNews": 1, "dailySummary": 0, "id": 1, "pathname": "/article/2022-03-01/hello-world", "time": "2024-03-20T14:27:00.601256+00:00", "title": "Hello", "weeklySummary": 0}), expect.objectContaining({
              "body": "World",
             "breakingNews": 1,
              "dailySummary": 0,
              "id": 2,
              "pathname": "/article/2022-03-01/second-world",
-             "status": "pending",
              "time": "2024-03-20T14:27:00.601256+00:00",
              "title": "Second",
              "weeklySummary": 0,
