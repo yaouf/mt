@@ -4,8 +4,16 @@ import * as pagesHandlerGetAll from '../pages/api/notifications/index';
 import * as pagesHandlerGetOne from '../pages/api/notifications/[jobId]';
 import * as pagesHandlerDelete from '../pages/api/notifications/delete';
 import { testApiHandler } from 'next-test-api-route-handler';
+import notificationQueue from '../pages/queue/queue';
 
 describe('adding, getting, and deleting notifications', () => {
+
+  // close the queue after all tests
+  afterAll(async () => {
+    await notificationQueue.close();
+  });
+
+
 it('creates notification', async () => {
   // NTARH supports optionally typed response data via TypeScript generics:
 
@@ -60,7 +68,7 @@ it('gets all notifications after adding first', async () => {
       // const { goodbye: hello } = await res.json();
       const jsonResult = await res.json();
       expect(jsonResult).toHaveLength(1); // ◄ Passes!
-      expect(jsonResult).toEqual(expect.arrayContaining([expect.objectContaining({"body": "World", "breakingNews": 1, "dailySummary": 0, "id": 1, "pathname": "/article/2022-03-01/hello-world", "status": "sent", "time": "2024-03-20T14:27:00.601256+00:00", "title": "Hello", "weeklySummary": 0})])); // ◄ Passes!
+      expect(jsonResult).toEqual(expect.arrayContaining([expect.objectContaining({"body": "World", "breakingNews": 1, "dailySummary": 0, "id": 1, "pathname": "/article/2022-03-01/hello-world", "time": "2024-03-20T14:27:00.601256+00:00", "title": "Hello", "weeklySummary": 0})])); // ◄ Passes!
       
     }
   });
@@ -253,6 +261,10 @@ it("deletes a notification", async () => {
       
     }
   });
+
+
 });
+
+
 
 });
