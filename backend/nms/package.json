@@ -7,8 +7,10 @@
     "build": "next build",
     "start": "redis-server & next start",
     "lint": "next lint",
-    "test": "cd db && npm run update && cd .. && (redis-server & jest)",
-    "test:pw": "cd db && npm run update && cd .. && npx playwright test"
+    "update:db": "cd db && npm run update",
+    "test": "cd db && npm run update && cd .. && (redis-server & jest --verbose --detectOpenHandles)",
+    "test:pw": "cd db && npm run update && cd .. && npx playwright test",
+    "test:all": "npm run test:pw && npm run test"
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.5",
