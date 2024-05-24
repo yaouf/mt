@@ -7,6 +7,8 @@ First, install redis with
 `sudo apt-get install redis-server` on ubuntu
 `choco install redis-64` on windows
 
+Is intended to run on node 21.6.2 and npm 10.2.4
+
 Then, run the development server:
 
 ```bash
