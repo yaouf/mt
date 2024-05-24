@@ -15,8 +15,16 @@ export default async function addNotification(
 ) {
   try {
     // Assuming the request body contains the notification data
-    const data = req.body;
-
+    // if a string, parse it
+    let data: any;
+    if (typeof req.body === "string") {
+      data = JSON.parse(req.body);
+    } else {
+      data = req.body;
+    }
+    // const data = req.body;
+    // console.log("data", JSON.parse(data));
+    // TODO: validate this automatically
     // Extract the notification data
     const time = data.time;
     const title = data.title;
@@ -28,7 +36,9 @@ export default async function addNotification(
 
     // Validate required fields
     if (!time || !title || !tags || !slug || !mediaType || !publicationDate) {
-      return res.status(400).json({ message: "Invalid notification data." });
+      // find which field is missing
+      console.log(time)
+      return res.status(400).json({ message: "Missing fields." });
     }
 
     // Create boolean variables for tags
@@ -39,7 +49,7 @@ export default async function addNotification(
 
     // Create pathname from slug, mediaType, and publicationDate
     const pathname = `/${mediaType}/${publicationDate}/${slug}`;
-
+    console.log("pathname", pathname);
     // Insert the notification data into the "notifications" table
     const insertedRows = await db("notifications")
       .insert({
@@ -53,7 +63,7 @@ export default async function addNotification(
         status: "pending",
       })
       .returning("id");
-
+      console.log("insertedRows", insertedRows);
     // Get the ID of the inserted notification
     const jobId = insertedRows[0].id as number;
 
