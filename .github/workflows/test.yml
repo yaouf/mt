@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Run Jest tests
-        run: npm testm
+        run: npm test
 
       - name: Run Playwright tests
         run: npm run test:pw
