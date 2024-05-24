@@ -30,6 +30,9 @@ jobs:
         run: npm test
         working-directory: ./backend/nms
 
+      - name: Install Playwright
+        run: npx playwright install
+
       - name: Run Playwright tests
         run: npm run test:pw
         working-directory: ./backend/nms
