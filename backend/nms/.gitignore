@@ -9,6 +9,7 @@ dist/
 *.rdb
 # testing
 /coverage
+/test-results
 
 # next.js
 /.next/

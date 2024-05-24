@@ -24,7 +24,6 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "./dist"
-  ],
+    "./dist"  ],
   "exclude": ["node_modules", "./db"]
 }

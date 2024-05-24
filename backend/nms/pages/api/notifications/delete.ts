@@ -16,7 +16,14 @@ export default async function deleteNotification(
 ) {
   try {
     // Assuming the request body contains the notification data
-    const { jobId } = req.body as RequestData;
+    // if a string, parse it
+    let data: any;
+    if (typeof req.body === "string") {
+      data = JSON.parse(req.body);
+    } else {
+      data = req.body;
+    }
+    const { jobId } = data as RequestData;
 
     // Validate required fields
     if (!jobId) {
