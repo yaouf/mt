@@ -1,6 +1,7 @@
 // Update with your config settings.
 
 import { Knex } from "knex";
+import env from "./data/env";
 
 const rootDir = process.cwd(); // Get the absolute path of the root directory
 console.log(rootDir);
@@ -26,18 +27,17 @@ const config: { [key: string]: Knex.Config } = {
   },
 
   staging: {
-    client: "postgresql",
-    connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
-    },
+    client: "pg",
+    connection: env.DB_URL,
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      directory: "./data/migrations",
+    },
+    seeds: {
+      directory: "./data/seeds",
     },
   },
 

@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 test('Test Notification Form Elements', async ({ page }) => {
   // Navigate to the page
   await page.goto('http://localhost:3000/');
+  // wait 1 second for buttons to load
+  await page.waitForTimeout(1000);
  // before all, delete all notifications by clicking all delete buttons
   const deleteButtons = await page.$$('button:text("Delete")');
   for (const button of deleteButtons) {
