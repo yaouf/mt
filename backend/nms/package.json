@@ -7,16 +7,20 @@
     "build": "next build",
     "start": "redis-server & next start",
     "lint": "next lint",
+    "build:db": "cd db && npm run update",
     "update:db": "cd db && npm run update",
-    "test": "cd db && npm run update && cd .. && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
-    "test:pw": "cd db && npm run update && cd .. && npx playwright test",
-    "test:all": "npm run test:pw && npm run test"
+    "test": "npm run update:db && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
+    "test:pw": "npm run update:db && npx playwright test",
+    "test:all": "npm run test:pw && npm run test",
+    "test:all:debug": "npm run test:pw -- --debug && npm run test"
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-react": "^7.24.1",
     "@playwright/test": "^1.43.1",
     "bull": "^4.12.2",
+    "dotenv": "^16.4.5",
+    "envalid": "^8.0.0",
     "expo-server-sdk": "^3.7.0",
     "knex": "^3.1.0",
     "next": "^14.1.0",
@@ -27,7 +31,6 @@
     "react-aria-components": "^1.1.1",
     "react-datepicker": "^6.8.0",
     "react-dom": "^18",
-    "sqlite3": "^5.1.7",
     "test-listen": "^1.1.0"
   },
   "devDependencies": {

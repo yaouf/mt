@@ -5,7 +5,9 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    env:
+      DB_URL: ${{ secrets.DB_URL }}
+      ENV: development
     strategy:
       matrix:
         node-version: [18, 21]
