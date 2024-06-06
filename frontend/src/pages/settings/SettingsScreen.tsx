@@ -8,16 +8,23 @@ import {
   Linking,
   AppState,
   Platform,
+  FlatList,
 } from "react-native";
 import { UserProps } from "../../types/types";
 import CustomButton from "../../components/CustomButton";
 import { removeAsync, setAsync } from "../../code/helpers";
 import { settings } from "src/styles/pages";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getPushToken } from "../../code/pushNotifs"; // import the function
 import * as Notifications from "expo-notifications";
 import { useNotification } from "./NotificationProvider";
+import SavedArticles from "./SavedArticles";
+import SettingsLink from "./SettingsLink";
+import { text } from "src/styles/styles";
+import Notif from "src/components/Notif";
+import Divider from "src/components/Divider";
+
 /**
  * Page for settings
  *   - show login button if not already logged in
@@ -90,68 +97,49 @@ function SettingsScreen() {
   }, []);
 
   /**
-   * Login in user and update async storage
-   */
-  function handleLogin() {
-    const username = "X"; //TODO: get username from auth
-
-    setAsync("username", username);
-    setAsync("loggedIn", "true");
-
-    setUsername(username);
-    setLoggedIn(true);
-
-    console.log("Logged in.");
-  }
-
-  /**
-   * Logout user and clear async storage
-   */
-  async function handleLogout() {
-    setAsync("loggedIn", "false");
-    removeAsync("username");
-    removeAsync("community");
-
-    setLoggedIn(false);
-    setUsername("");
-    setCommunity("");
-
-    console.log("Logged Out");
-  }
-
-  /**
-   * Delete account
-   * Clear async storage
-   */
-  async function deleteUser() {
-    // call backend to delete, logout for now
-    handleLogout();
-    console.log("deleted account");
-  }
-
-  /**
    * Update settings in async storage, call backend update
    */
-  const updateSettings = () => {
-    setAsync("breakingNotifs", JSON.stringify(breakingNotifs));
-    setAsync("weeklyNotifs", JSON.stringify(weeklyNotifs));
+  // const updateSettings = () => {
+  //   setAsync("breakingNotifs", JSON.stringify(breakingNotifs));
+  //   setAsync("weeklyNotifs", JSON.stringify(weeklyNotifs));
 
-    console.log("update settings!!");
-  };
-
-  function handleContact() {
-    console.log("Contact!");
-  }
+  //   console.log("update settings!!");
+  // };
 
   // Handle the switch toggle
-  const handleToggle = (newState) => {
-    // Call the context function to handle the actual toggle logic
-    toggleNotifications(newState);
-  };
+  // const handleToggle = (newState) => {
+  //   // Call the context function to handle the actual toggle logic
+  //   toggleNotifications(newState);
+  // };
+
+  const supportRef = useRef<FlatList>(null);
+  const support = [
+    { id: 1, title: "Manage Account" },
+    { id: 2, title: "Report a Bug" },
+    { id: 3, title: "Contact Us" },
+  ];
+
+  const moreRef = useRef<FlatList>(null);
+  const more = [
+    { id: 1, title: "Website", link: "https://www.browndailyherald.com/" },
+    {
+      id: 2,
+      title: "Instagram",
+      link: "https://www.instagram.com/browndailyherald/",
+    },
+    { id: 3, title: "Twitter", link: "https://x.com/the_herald" },
+    {
+      id: 4,
+      title: "Facebook",
+      link: "https://www.facebook.com/browndailyherald",
+    },
+  ];
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      {loggedIn ? (
+      <SavedArticles />
+
+      {/* {loggedIn ? (
         <>
           <Text>{username}</Text>
           <CustomButton text={"Logout"} onPress={handleLogout} />
@@ -159,31 +147,32 @@ function SettingsScreen() {
         </>
       ) : (
         <CustomButton text={"Login"} onPress={handleLogin} />
-      )}
-      <View style={{ margin: 30 }}>
-        <Text>Enable Push Notifications</Text>
-        <Switch value={appNotificationEnabled} onValueChange={handleToggle} />
-        <View style={settings.toggleRow}>
-          <Text>Breaking News Alerts</Text>
-          <Switch
-            value={breakingNotifs}
-            onValueChange={() =>
-              setBreakingNotifs((previousState: boolean) => !previousState)
-            }
+      )} */}
+
+      <View>
+        <Text style={text.sectionHeader3}>Stay Updated</Text>
+        <View style={{ rowGap: 16 }}>
+          <Notif
+            title="Breaking News"
+            description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
+  faucibus"
+          />
+          <Notif
+            title="Weekly Summary"
+            description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
+  faucibus"
           />
         </View>
-        <View style={settings.toggleRow}>
-          <Text>Weekly Summary </Text>
-          <Switch
-            value={weeklyNotifs}
-            onValueChange={() =>
-              setWeeklyNotifs((previousState: boolean) => !previousState)
-            }
-          />
-        </View>
-        <CustomButton text={"Save changes"} onPress={updateSettings} />
       </View>
-      <CustomButton text={"Contact us"} onPress={handleContact} />
+
+      <FlatList
+        ref={moreRef}
+        data={more}
+        renderItem={({ item }) => (
+          <SettingsLink title={item.title} link={item.link} />
+        )}
+        ItemSeparatorComponent={Divider}
+      />
     </View>
   );
 }

@@ -37,7 +37,6 @@ function Metro({ navigation }: NavProp) {
           </View>
         </View>
       )}
-      <Divider />
     </View>
   );
 }

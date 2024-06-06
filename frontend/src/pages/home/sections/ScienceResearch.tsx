@@ -37,7 +37,6 @@ function ScienceResearch({ navigation }: NavProp) {
           </View>
         </View>
       )}
-      <Divider />
     </View>
   );
 }

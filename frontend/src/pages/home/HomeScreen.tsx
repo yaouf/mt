@@ -10,6 +10,8 @@ import Metro from "./sections/Metro";
 import Podcast from "./sections/Podcast";
 import Top from "./sections/Top";
 import { NavProp } from "src/types/types";
+import Divider from "src/components/Divider";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface MenuItem {
   id: number;
@@ -55,27 +57,20 @@ function HomeScreen({ navigation }: NavProp) {
     },
   ];
 
-  // scroll to section top
-  const handleMenuClick = (item: MenuItem) => {
-    // Logic to scroll to the corresponding section based on the index
-    const index = sections.findIndex((section) => section.id === item.id) - 1;
-    if (index !== -1 && flatListRef.current) {
-      flatListRef.current.scrollToIndex({ index, animated: true });
-    }
-  };
-
   return (
     <View>
-      <HorizontalScrollMenu onItemClick={handleMenuClick} />
-      <View style={{ marginLeft: 16, marginRight: 16 }}>
+      <HorizontalScrollMenu navigation={navigation} />
+      <SafeAreaView style={{ marginLeft: 16, marginRight: 16 }}>
         <FlatList
           ref={flatListRef}
           data={sections}
           renderItem={({ item }) => item.component}
           keyExtractor={(item) => item.id}
-          pagingEnabled={true}
+          pagingEnabled={false}
+          ItemSeparatorComponent={Divider}
+          // onRefresh={() => console.log("here")}
         />
-      </View>
+      </SafeAreaView>
     </View>
   );
 }

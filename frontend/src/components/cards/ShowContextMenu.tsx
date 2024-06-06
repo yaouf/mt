@@ -1,7 +1,22 @@
 import { ActionSheetIOS, Alert, Clipboard, Share } from "react-native";
 import { shareArticle } from "../../pages/article/ShareArticle";
+import { Dispatch, SetStateAction, useState } from "react";
+import { removeAsync, setAsync, updateAsync } from "src/code/helpers";
 
-export const showContextMenu = (uri: string) => {
+// TODO: issues connexting this to update the saved or not
+
+export const showContextMenu = (
+  uuid: string,
+  saved: boolean, // whether or not article is already saved
+  savedArticles: string[],
+  setSavedArticles: Dispatch<SetStateAction<string[]>>
+) => {
+  const uri = "https://www.browndailyherald.com/" + uuid;
+
+  console.log(saved);
+
+  const saveOption = !saved ? "Save" : "Unsave";
+
   // deprecated, but works
   const onCopy = async (uri: string) => {
     Clipboard.setString(uri);
@@ -10,13 +25,19 @@ export const showContextMenu = (uri: string) => {
   // temporary solution?
   ActionSheetIOS.showActionSheetWithOptions(
     {
-      options: ["Save", "Share", "Copy Link", "Report Issue", "Cancel"],
+      options: [saveOption, "Share", "Copy Link", "Report Issue", "Cancel"],
       cancelButtonIndex: 4,
       destructiveButtonIndex: 3,
     },
     (buttonIndex) => {
       if (buttonIndex === 0) {
-        console.log("Save selected");
+        updateAsync(
+          "SavedArticles",
+          savedArticles,
+          uuid,
+          saved,
+          setSavedArticles
+        );
       } else if (buttonIndex === 1) {
         shareArticle(uri);
       } else if (buttonIndex === 2) {

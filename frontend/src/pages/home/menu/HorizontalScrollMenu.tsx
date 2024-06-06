@@ -11,34 +11,40 @@ import {
 import Draggable from "./SectionPref";
 import { font2 } from "src/styles/styles";
 import { Ionicons } from "@expo/vector-icons";
+import { NavProp } from "src/types/types";
 
 interface MenuItem {
   id: number;
   title: string;
+  slug: string;
 }
 
-interface HorizontalScrollMenuProps {
-  onItemClick: (item: MenuItem) => void; // Function to handle item clicks
-}
+// interface HorizontalScrollMenuProps {
+//   sections: string[];
+//   // onItemClick: (s: string) => void; // Function to handle item clicks
+// }
 
 const menuItems: MenuItem[] = [
-  { id: 1, title: "FILTER" },
-  { id: 2, title: "ALL" },
-  { id: 3, title: "NEWS" },
-  { id: 4, title: "SPORTS" },
-  { id: 5, title: "ARTS & CULTURE" },
-  { id: 6, title: "SCIENCE & RESEARCH" },
-  { id: 7, title: "OPINIONS" },
-  { id: 8, title: "PROJECTS" },
-  { id: 9, title: "POST-MAGAZINE" },
-  { id: 10, title: "MULTIMEDIA" },
+  { id: 1, title: "FILTER", slug: "filter" },
+  { id: 2, title: "ALL", slug: "home" }, // no slug but go home
+  { id: 3, title: "NEWS", slug: "news" },
+  { id: 4, title: "SPORTS", slug: "sports" },
+  { id: 5, title: "ARTS & CULTURE", slug: "arts-culture" },
+  { id: 6, title: "SCIENCE & RESEARCH", slug: "science-research" },
+  { id: 7, title: "OPINIONS", slug: "opinions" },
+  { id: 8, title: "PROJECTS", slug: "projects" },
+  { id: 9, title: "POST-MAGAZINE", slug: "post-magazine" }, // might need to exlude for now
+  { id: 10, title: "MULTIMEDIA", slug: "multimedia" }, // do we want a podcast page or just podcasts under multimedia
 ];
 
-const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({
-  onItemClick,
-}) => {
+function HorizontalScrollMenu({ navigation }: NavProp) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [data, setData] = useState(menuItems);
+
+  const onItemClick = (item: MenuItem) => {
+    navigation.push("Section", { slug: item.slug });
+    console.log("open page for", item);
+  };
 
   const handleMenuItemPress = (item: MenuItem) => {
     if (item.id === 1) {
@@ -85,7 +91,7 @@ const HorizontalScrollMenu: React.FC<HorizontalScrollMenuProps> = ({
       )}
     </View>
   );
-};
+}
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
