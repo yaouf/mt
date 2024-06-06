@@ -15,6 +15,7 @@ import DraggableFlatList, {
 import { font2 } from "src/styles/styles";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 // ScaleDecorator enlarges item past horizontal borders when dragged, loses rounded corners
 
@@ -77,8 +78,15 @@ export default function App() {
         <View>
           <Text style={styles.text}>{item.label}</Text>
         </View>
-        <MaterialCommunityIcons
+        {/* <MaterialCommunityIcons
           name="drag-horizontal-variant"
+          size={24}
+          color="#1C1B1F"
+          style={styles.dragIcon}
+        /> */}
+
+        <Ionicons
+          name="reorder-three-outline"
           size={24}
           color="#1C1B1F"
           style={styles.dragIcon}

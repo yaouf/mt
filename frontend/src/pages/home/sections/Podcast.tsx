@@ -37,7 +37,6 @@ function Podcast({ navigation }: NavProp) {
           </View>
         </View>
       )}
-      <Divider />
     </View>
   );
 }

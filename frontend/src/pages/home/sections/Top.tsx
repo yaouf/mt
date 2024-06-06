@@ -39,7 +39,6 @@ function Top({ navigation }: NavProp) {
           </View>
         </View>
       )}
-      <Divider />
     </View>
   );
 }

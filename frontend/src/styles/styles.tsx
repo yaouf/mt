@@ -95,5 +95,5 @@ export const text = StyleSheet.create({
     fontSize: 12,
     overflow: "hidden",
     maxWidth: "85%",
-  },
+  }
 });

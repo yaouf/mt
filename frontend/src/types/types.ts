@@ -49,19 +49,26 @@ export type SearchProps = {
  */
 
 export interface Article {
-  article: {
-    id: string;
-    headline: string;
-    subhead: string;
-    uuid: string;
-    slug: string;
-    content: string;
-    published_at: string;
-    tags: Tag[];
-    authors: Author[];
-    dominantMedia: Media;
-  };
+  id: string;
+  headline: string;
+  subhead: string;
+  uuid: string;
+  slug: string;
+  content: string;
+  published_at: string;
+  tags: Tag[];
+  authors: Author[];
+  dominantMedia: Media;
 }
+
+// export interface ApiArticle {
+//   uuid: string;
+// }
+
+// export interface Article {
+//   cardArticle?: CardArticle;
+//   apiArticle?: ApiArticle;
+// }
 
 export interface Author {
   id: string;
@@ -103,7 +110,10 @@ export interface Tag {
 // used in HomeStackScreen
 export type HomeStackProps = {
   HomeScreen: undefined; // No additional parameters for the Home screen
-  Article: { data: Article }; // Parameter for the Article screen
+  Article: {
+    data: Article;
+  }; // Parameter for the Article screen
+  Section: { slug: string };
 };
 
 export type FYStackProps = {
@@ -113,6 +123,9 @@ export type FYStackProps = {
 
 // used in ArticleScreen
 export type ArticleProps = StackScreenProps<HomeStackProps, "Article">;
+
+// used in SectionScreen
+export type SectionProps = StackScreenProps<HomeStackProps, "Section">;
 
 // used in HomeScreen and all the section screens
 export type NavProp = {

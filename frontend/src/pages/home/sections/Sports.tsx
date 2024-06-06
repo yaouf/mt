@@ -52,7 +52,6 @@ function Sports({ navigation }: NavProp) {
           </View>
         </View>
       )}
-      <Divider />
     </View>
   );
 }

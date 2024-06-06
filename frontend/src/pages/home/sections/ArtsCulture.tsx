@@ -37,7 +37,6 @@ function ArtsCulture({ navigation }: NavProp) {
           </View>
         </View>
       )}
-      <Divider />
     </View>
   );
 }

@@ -53,7 +53,6 @@ function Opinions({ navigation }: NavProp) {
           </View>
         </View>
       )}
-      <Divider />
     </View>
   );
 }

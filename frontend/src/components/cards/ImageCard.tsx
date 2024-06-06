@@ -3,9 +3,28 @@ import { TouchableWithoutFeedback } from "react-native";
 import { showContextMenu } from "./ShowContextMenu";
 import { CardProps } from "src/types/types";
 import { font1 } from "../../styles/styles";
+import { useContext, useEffect, useState } from "react";
+import { SavedContext } from "src/pages/Nav";
 
 function ImageCard({ article, navigation }: CardProps) {
-  const uri = "https://www.browndailyherald.com/" + article.uuid;
+  const { savedArticles, setSavedArticles } = useContext(SavedContext);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    if (savedArticles.includes(article.uuid)) {
+      setSaved(true);
+    }
+  }, [savedArticles]);
+
+  let img_uri =
+    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+  if (article.dominantMedia.attachment_uuid) {
+    img_uri =
+      "http://snworksceo.imgix.net/bdh/" +
+      article.dominantMedia.attachment_uuid +
+      ".sized-1000x1000." +
+      article.dominantMedia.extension;
+  }
 
   return (
     <TouchableWithoutFeedback
@@ -14,10 +33,7 @@ function ImageCard({ article, navigation }: CardProps) {
       <View style={styles.card}>
         <Image
           source={{
-            uri:
-              "http://snworksceo.imgix.net/bdh/" +
-              article.dominantMedia.attachment_uuid +
-              ".sized-1000x1000.jpg",
+            uri: img_uri,
           }}
           style={styles.image}
         />
@@ -26,8 +42,22 @@ function ImageCard({ article, navigation }: CardProps) {
             {article.headline}
           </Text>
           <TouchableWithoutFeedback
-            onPress={() => showContextMenu(uri)}
-            onLongPress={() => showContextMenu(uri)}
+            onPress={() =>
+              showContextMenu(
+                article.uuid,
+                saved,
+                savedArticles,
+                setSavedArticles
+              )
+            }
+            onLongPress={() =>
+              showContextMenu(
+                article.uuid,
+                saved,
+                savedArticles,
+                setSavedArticles
+              )
+            }
           >
             <Image
               source={require("../../../assets/options.png")}
