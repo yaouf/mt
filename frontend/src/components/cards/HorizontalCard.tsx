@@ -17,7 +17,7 @@ function HorizontalCard({ article, navigation }: CardProps) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (savedArticles.includes(article.uuid)) {
+    if (article.uuid in savedArticles) {
       setSaved(true);
     }
   }, [savedArticles]);
@@ -63,7 +63,9 @@ function HorizontalCard({ article, navigation }: CardProps) {
                   article.uuid,
                   saved,
                   savedArticles,
-                  setSavedArticles
+                  setSavedArticles,
+                  article.slug,
+                  article.published_at
                 )
               }
               onLongPress={() =>
@@ -71,7 +73,9 @@ function HorizontalCard({ article, navigation }: CardProps) {
                   article.uuid,
                   saved,
                   savedArticles,
-                  setSavedArticles
+                  setSavedArticles,
+                  article.slug,
+                  article.published_at
                 )
               }
             >
@@ -107,6 +111,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
+    overflow: "hidden",
   },
   content: {
     display: "flex",

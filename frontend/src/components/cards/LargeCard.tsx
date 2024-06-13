@@ -17,7 +17,7 @@ function LargeCard({ article, navigation }: CardProps) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (savedArticles.includes(article.uuid)) {
+    if (article.uuid in savedArticles) {
       setSaved(true);
     }
   }, [savedArticles]);
@@ -78,7 +78,9 @@ function LargeCard({ article, navigation }: CardProps) {
                   article.uuid,
                   saved,
                   savedArticles,
-                  setSavedArticles
+                  setSavedArticles,
+                  article.slug,
+                  article.published_at
                 )
               }
               onLongPress={() =>
@@ -86,7 +88,9 @@ function LargeCard({ article, navigation }: CardProps) {
                   article.uuid,
                   saved,
                   savedArticles,
-                  setSavedArticles
+                  setSavedArticles,
+                  article.slug,
+                  article.published_at
                 )
               }
             >

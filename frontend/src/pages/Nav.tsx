@@ -16,6 +16,7 @@ import {
   useState,
 } from "react";
 import { getAsync, removeAsync } from "src/code/helpers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Tab = createBottomTabNavigator();
 const MyTheme = {
@@ -27,12 +28,12 @@ const MyTheme = {
 };
 
 export type SavedContextType = {
-  savedArticles: string[];
-  setSavedArticles: Dispatch<SetStateAction<string[]>>;
+  savedArticles: Object;
+  setSavedArticles: Dispatch<SetStateAction<Object>>;
 };
 
 export const SavedContext = createContext<SavedContextType>({
-  savedArticles: [],
+  savedArticles: {},
   setSavedArticles: () => {}, // Dummy function
 });
 
@@ -40,19 +41,17 @@ export const SavedContext = createContext<SavedContextType>({
  * @returns Main screens of the app
  */
 export default function Nav() {
-  const [savedArticles, setSavedArticles] = useState<string[]>([]);
+  const [savedArticles, setSavedArticles] = useState<Object>({});
 
   const load = async () => {
     try {
       const saved = await getAsync("savedArticles");
-      console.log("!!", saved);
       setSavedArticles(saved);
+      await AsyncStorage.getAllKeys().then((resp) => console.log("**!!", resp));
     } catch (err) {
       console.log(err);
     }
   };
-
-  console.log("**", savedArticles);
 
   useEffect(() => {
     load();

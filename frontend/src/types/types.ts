@@ -69,6 +69,11 @@ export interface Article {
 //   cardArticle?: CardArticle;
 //   apiArticle?: ApiArticle;
 // }
+interface AuthorMetadata {
+  id: string;
+  label: string;
+  value: string;
+}
 
 export interface Author {
   id: string;
@@ -77,7 +82,7 @@ export interface Author {
   slug: string;
   bio: string;
   tagline: string;
-  metadata: string;
+  metadata: AuthorMetadata;
   ceo_id: string;
 }
 
@@ -114,6 +119,7 @@ export type HomeStackProps = {
     data: Article;
   }; // Parameter for the Article screen
   Section: { slug: string };
+  Staff: { slug: string };
 };
 
 export type FYStackProps = {
@@ -132,9 +138,31 @@ export type NavProp = {
   navigation: StackNavigationProp<any, any>;
 };
 
+// used in SettingsStackScreen
+export type SettingsStackProps = {
+  SettingsScreen: undefined; // No additional parameters for the Home screen
+  Article: {
+    data: Article;
+  }; // Parameter for the Article screen
+  Staff: {
+    slug: string;
+  };
+};
+
+export type StaffProps = StackScreenProps<SettingsStackProps, "Staff">;
+
 // for article cards
 export type CardProps = {
   article: Article;
   navigation: StackNavigationProp<any, any>;
   specialWidth?: string;
+};
+
+// for sections (like on home page)
+export type SectionGroupProps = {
+  navigation: StackNavigationProp<any, any>;
+  slug: string;
+  count: number;
+  title: string;
+  top: string[];
 };

@@ -43,19 +43,20 @@ export async function removeAsync(key: string) {
 
 export async function updateAsync(
   key: string,
-  previousData: any,
-  item: any,
+  dict: Object,
+  uuid: string,
   save: boolean,
-  setFunction: Dispatch<SetStateAction<any>>
+  setFunction: Dispatch<SetStateAction<any>>,
+  slug: string,
+  date: string
 ) {
-  let updatedSaved;
   if (save) {
-    updatedSaved = [...previousData, item];
+    dict[uuid] = [slug, date];
   } else {
     // remove
-    updatedSaved = previousData.filter((e: any) => e !== item);
+    delete dict[uuid];
   }
 
-  setFunction(updatedSaved);
-  await setAsync(key, JSON.stringify(updatedSaved));
+  setFunction(dict);
+  await setAsync(key, JSON.stringify(dict));
 }

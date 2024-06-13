@@ -19,10 +19,8 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState(false);
 
-  console.log(savedArticles);
-
   useEffect(() => {
-    if (savedArticles.includes(article.uuid)) {
+    if (article.uuid in savedArticles) {
       setSaved(true);
     }
   }, [savedArticles]);
@@ -77,7 +75,9 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
                   article.uuid,
                   saved,
                   savedArticles,
-                  setSavedArticles
+                  setSavedArticles,
+                  article.slug,
+                  article.published_at
                 )
               }
               onLongPress={() =>
@@ -85,7 +85,9 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
                   article.uuid,
                   saved,
                   savedArticles,
-                  setSavedArticles
+                  setSavedArticles,
+                  article.slug,
+                  article.published_at
                 )
               }
             >
