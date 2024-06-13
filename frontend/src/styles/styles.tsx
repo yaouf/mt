@@ -59,7 +59,7 @@ export const text = StyleSheet.create({
     marginRight: 16,
     fontFamily: font2,
   },
-  topStories: {
+  bigTitle: {
     // top stories is a slightly larger title
     color: "#000",
     fontWeight: "600",

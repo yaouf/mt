@@ -8,8 +8,10 @@ import { removeAsync, setAsync, updateAsync } from "src/code/helpers";
 export const showContextMenu = (
   uuid: string,
   saved: boolean, // whether or not article is already saved
-  savedArticles: string[],
-  setSavedArticles: Dispatch<SetStateAction<string[]>>
+  savedArticles: Object,
+  setSavedArticles: Dispatch<SetStateAction<Object>>,
+  slug: string,
+  published_at: string
 ) => {
   const uri = "https://www.browndailyherald.com/" + uuid;
 
@@ -32,11 +34,13 @@ export const showContextMenu = (
     (buttonIndex) => {
       if (buttonIndex === 0) {
         updateAsync(
-          "SavedArticles",
+          "savedArticles",
           savedArticles,
           uuid,
-          saved,
-          setSavedArticles
+          !saved,
+          setSavedArticles,
+          slug,
+          published_at
         );
       } else if (buttonIndex === 1) {
         shareArticle(uri);

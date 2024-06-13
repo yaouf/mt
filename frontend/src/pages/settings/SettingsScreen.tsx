@@ -1,29 +1,14 @@
-import {
-  View,
-  Text,
-  Switch,
-  Pressable,
-  StyleSheet,
-  Alert,
-  Linking,
-  AppState,
-  Platform,
-  FlatList,
-} from "react-native";
-import { UserProps } from "../../types/types";
-import CustomButton from "../../components/CustomButton";
-import { removeAsync, setAsync } from "../../code/helpers";
-import { settings } from "src/styles/pages";
-import { createContext, useEffect, useRef, useState } from "react";
+import { View, ScrollView, Text, FlatList } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getPushToken } from "../../code/pushNotifs"; // import the function
-import * as Notifications from "expo-notifications";
 import { useNotification } from "./NotificationProvider";
 import SavedArticles from "./SavedArticles";
 import SettingsLink from "./SettingsLink";
-import { text } from "src/styles/styles";
+import { layout, text } from "src/styles/styles";
 import Notif from "src/components/Notif";
 import Divider from "src/components/Divider";
+import { NavProp } from "src/types/types";
+import Staff from "../staff/Staff";
 
 /**
  * Page for settings
@@ -36,7 +21,7 @@ import Divider from "src/components/Divider";
  *
  * @returns Settings screen
  */
-function SettingsScreen() {
+function SettingsScreen({ navigation }: NavProp) {
   const [username, setUsername] = useState<string>("");
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [community, setCommunity] = useState<string>("");
@@ -112,15 +97,13 @@ function SettingsScreen() {
   //   toggleNotifications(newState);
   // };
 
-  const supportRef = useRef<FlatList>(null);
   const support = [
-    { id: 1, title: "Manage Account" },
-    { id: 2, title: "Report a Bug" },
-    { id: 3, title: "Contact Us" },
+    { id: 1, title: "Manage Account", link: "" },
+    { id: 2, title: "Report a Bug", link: "" },
+    { id: 3, title: "Contact Us", link: "" },
   ];
 
-  const moreRef = useRef<FlatList>(null);
-  const more = [
+  const links = [
     { id: 1, title: "Website", link: "https://www.browndailyherald.com/" },
     {
       id: 2,
@@ -136,18 +119,10 @@ function SettingsScreen() {
   ];
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <SavedArticles />
-
-      {/* {loggedIn ? (
-        <>
-          <Text>{username}</Text>
-          <CustomButton text={"Logout"} onPress={handleLogout} />
-          <CustomButton text={"Delete account"} onPress={deleteUser} />
-        </>
-      ) : (
-        <CustomButton text={"Login"} onPress={handleLogin} />
-      )} */}
+    // <GestureHandlerRootView>
+    //   <ScrollView>
+    <ScrollView style={{ marginLeft: 16, marginRight: 16 }}>
+      <SavedArticles navigation={navigation} />
 
       <View>
         <Text style={text.sectionHeader3}>Stay Updated</Text>
@@ -164,16 +139,25 @@ function SettingsScreen() {
           />
         </View>
       </View>
-
-      <FlatList
-        ref={moreRef}
-        data={more}
-        renderItem={({ item }) => (
-          <SettingsLink title={item.title} link={item.link} />
-        )}
-        ItemSeparatorComponent={Divider}
-      />
-    </View>
+      <View style={layout.vStack}>
+        <Text style={text.sectionHeader3}>Support</Text>
+        {support.map((link, i) => (
+          <View>
+            <SettingsLink title={link.title} link={link.link} />
+            {i < links.length - 1 ? <Divider /> : ""}
+          </View>
+        ))}
+      </View>
+      <View style={layout.vStack}>
+        <Text style={text.sectionHeader3}>More BDH</Text>
+        {links.map((link, i) => (
+          <View>
+            <SettingsLink title={link.title} link={link.link} />
+            {i < links.length - 1 ? <Divider /> : ""}
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 

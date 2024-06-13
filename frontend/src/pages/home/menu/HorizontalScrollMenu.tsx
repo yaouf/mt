@@ -26,15 +26,15 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   { id: 1, title: "FILTER", slug: "filter" },
-  { id: 2, title: "ALL", slug: "home" }, // no slug but go home
-  { id: 3, title: "NEWS", slug: "news" },
-  { id: 4, title: "SPORTS", slug: "sports" },
-  { id: 5, title: "ARTS & CULTURE", slug: "arts-culture" },
-  { id: 6, title: "SCIENCE & RESEARCH", slug: "science-research" },
-  { id: 7, title: "OPINIONS", slug: "opinions" },
-  { id: 8, title: "PROJECTS", slug: "projects" },
-  { id: 9, title: "POST-MAGAZINE", slug: "post-magazine" }, // might need to exlude for now
-  { id: 10, title: "MULTIMEDIA", slug: "multimedia" }, // do we want a podcast page or just podcasts under multimedia
+  { id: 2, title: "all", slug: "home" }, // no slug but go home
+  { id: 3, title: "opinions", slug: "opinions" }, // no slug but go home
+  { id: 4, title: "university news", slug: "university-news" },
+  { id: 5, title: "arts & culture", slug: "arts-culture" },
+  { id: 6, title: "metro", slug: "metro" },
+  { id: 7, title: "sports", slug: "sports" },
+  { id: 8, title: "science & research", slug: "science-research" },
+  { id: 9, title: "podcast", slug: "podcast" },
+  // TODO: are we including post, multimedia, special projects ... and what order
 ];
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
@@ -43,13 +43,14 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
   const onItemClick = (item: MenuItem) => {
     navigation.push("Section", { slug: item.slug });
-    console.log("open page for", item);
   };
 
   const handleMenuItemPress = (item: MenuItem) => {
     if (item.id === 1) {
       setIsDrawerOpen(true);
       console.log(isDrawerOpen);
+    } else if (item.id === 2) {
+      navigation.popToTop();
     } else {
       onItemClick(item); // Call the prop function with the clicked item index
     }
@@ -110,11 +111,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 0,
-    backgroundColor: "white",
     marginHorizontal: 0,
   },
   menuItemText: {
     fontSize: 16,
+    textTransform: "uppercase",
   },
   drawer: {
     position: "absolute",
@@ -153,12 +154,6 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     zIndex: 999,
-  },
-  item: {
-    backgroundColor: "#f9c2ff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
   },
 });
 

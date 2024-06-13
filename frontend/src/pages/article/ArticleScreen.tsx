@@ -10,56 +10,23 @@ import { Article, ArticleProps } from "../../types/types";
 import { baseStyles, font1, font2, font3, layout } from "../../styles/styles";
 import { dummyData } from "../../dummyData";
 import SmallCard from "src/components/cards/SmallCard";
-import { shareArticle } from "./ShareArticle";
 import { formatDates } from "src/code/formatDates";
 
 import Divider from "src/components/Divider";
-import { getAsync, removeAsync, setAsync, updateAsync } from "src/code/helpers";
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useContext, useEffect, useState } from "react";
 import { SavedContext } from "../Nav";
-import { Ionicons } from "@expo/vector-icons";
 import SplitArticle from "./SplitContent";
 import { articleStyles } from "src/styles/article";
+import BottomBar from "./BottomBar";
+
+// TODO: dummy content still as the recommended stories
 
 function ArticleScreen({ route, navigation }: ArticleProps) {
   const article: Article = route.params.data;
 
-  const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (article.uuid in savedArticles) {
-      setSaved(true);
-    }
-  }, [savedArticles]);
-
-  function handleShare() {
-    shareArticle(`https://browndailyherald.com/${article.uuid}`);
-  }
-
-  function handleBookmark() {
-    updateAsync(
-      "SavedArticles",
-      savedArticles,
-      article.uuid,
-      !saved,
-      setSavedArticles
-    ).then(() => setSaved((prev) => !prev));
-  }
-
-  // not doing individual article/section notifs for now
-  // function handleNotification() {}
-
   return (
-    <ScrollView>
-      {/* Overall container */}
-      <View style={baseStyles.container}>
+    <View>
+      <ScrollView>
         {/* Header image */}
         <Image
           source={{
@@ -91,7 +58,15 @@ function ArticleScreen({ route, navigation }: ArticleProps) {
             <Text style={articleStyles.title}>{article.headline}</Text>
             <Text style={articleStyles.lead}>{article.subhead}</Text>
             <Text style={articleStyles.author}>
-              {article.authors.map((author) => author.name)}
+              {article.authors.map((author) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.push("Staff", { slug: author.slug })
+                  }
+                >
+                  <Text style={articleStyles.author}>{author.name}</Text>
+                </TouchableOpacity>
+              ))}
             </Text>
 
             {/* Published date, section */}
@@ -114,38 +89,14 @@ function ArticleScreen({ route, navigation }: ArticleProps) {
             <SmallCard article={dummyData[2]} navigation={navigation} />
             <SmallCard article={dummyData[3]} navigation={navigation} />
           </View>
-
-          {/* Actions -  share, save, notifications*/}
-          <View style={articleStyles.actionBar}>
-            <View style={articleStyles.actions}>
-              {/* <TouchableOpacity onPress={() => handleNotification()}>
-                <Image
-                  source={require("../../../assets/icons/notifications.png")}
-                  style={styles.icon}
-                />
-              </TouchableOpacity> */}
-              <TouchableOpacity onPress={() => handleBookmark()}>
-                {/* <Image
-                  source={require("../../../assets/icons/bookmarks.png")}
-                  style={styles.icon}
-                /> */}
-                {saved ? (
-                  <Ionicons name="bookmark" size={24} color="#1C1B1F" />
-                ) : (
-                  <Ionicons name="bookmark-outline" size={24} color="#1C1B1F" />
-                )}
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleShare()}>
-                <Image
-                  source={require("../../../assets/icons/share.png")}
-                  style={articleStyles.icon}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+      <BottomBar
+        published_at={article.published_at}
+        slug={article.slug}
+        uuid={article.uuid}
+      />
+    </View>
   );
 }
 

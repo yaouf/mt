@@ -14,7 +14,7 @@ function DoneScreen(props: DoneProps) {
     }
     userProps.setHasOnboarded(true);
     setAsync("hasOnboarded", "true");
-    setAsync("savedArticles", JSON.stringify([]));
+    setAsync("savedArticles", JSON.stringify({}));
   }
 
   useEffect(() => {
