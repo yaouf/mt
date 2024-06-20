@@ -9,6 +9,7 @@ import SmallHorzGroup from "./sections/SmallHorzGroup";
 import AllSmallGroup from "./sections/AllSmallGroup";
 import * as SplashScreen from "expo-splash-screen";
 import { fetchSectionHome } from "src/code/fetchContent";
+import { baseStyles } from "src/styles/styles";
 
 interface Section_Type {
   id: number;
@@ -150,8 +151,8 @@ function HomeScreen({ navigation }: NavProp) {
   ];
 
   return (
-    <View onLayout={onLayoutRootView}>
-      <SafeAreaView style={{ marginLeft: 16, marginRight: 16 }}>
+    <View onLayout={onLayoutRootView} style={baseStyles.container}>
+      <SafeAreaView>
         <FlatList
           ref={flatListRef}
           data={sections}

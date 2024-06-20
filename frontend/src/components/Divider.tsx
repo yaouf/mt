@@ -11,8 +11,8 @@ function Divider({ small }: DividerProps) {
         width: "100%",
         height: 1.3,
         backgroundColor: "#1C1B1F",
-        marginTop: small ? 8 : 28,
-        marginBottom: 8,
+        marginTop: small ? 8 : 32,
+        marginBottom: 4,
       }}
     />
   );

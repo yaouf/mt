@@ -1,45 +1,26 @@
 import { articleStyles } from "src/styles/article";
 import { View, Image, TouchableOpacity } from "react-native";
 import { shareArticle } from "./ShareArticle";
-import { updateAsync } from "src/code/helpers";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { SavedContext } from "../Nav";
-
-type BottomBarProps = {
-  published_at: string;
-  slug: string;
-  uuid: string;
-};
+import { handleBookmark } from "src/code/helpers";
+import { ArticleDetailProps } from "src/types/types";
 
 /**
  * action bar at the bottom of each article
  * share, save, (notifications for this section / author in a future version)
  */
-function BottomBar(props: BottomBarProps) {
+function BottomBar(props: ArticleDetailProps) {
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState(props.uuid in savedArticles);
+  const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
 
   useEffect(() => {
-    if (props.uuid in savedArticles) {
-      setSaved(true);
-    }
+    setSaved(props.uuid in savedArticles);
   }, [savedArticles, saved]);
 
   function handleShare() {
     shareArticle(`https://browndailyherald.com/${props.uuid}`);
-  }
-
-  function handleBookmark() {
-    updateAsync(
-      "savedArticles",
-      savedArticles,
-      props.uuid,
-      !saved,
-      setSavedArticles,
-      props.slug,
-      props.published_at
-    ).then(() => setSaved((prev) => !prev));
   }
 
   // not doing individual article/section notifs for now
@@ -54,7 +35,19 @@ function BottomBar(props: BottomBarProps) {
             style={styles.icon}
           />
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={() => handleBookmark()}>
+        <TouchableOpacity
+          onPress={() =>
+            handleBookmark(
+              saved,
+              props.slug,
+              props.published_at,
+              props.uuid,
+              savedArticles,
+              setSavedArticles,
+              setSaved
+            )
+          }
+        >
           {saved ? (
             <Ionicons name="bookmark" size={24} color="#1C1B1F" />
           ) : (

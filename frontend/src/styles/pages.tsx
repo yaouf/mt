@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
+import { varGray1 } from "./styles";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -23,5 +24,17 @@ export const home = StyleSheet.create({});
 export const settings = StyleSheet.create({
   toggleRow: {
     flexDirection: "row",
+  },
+  continueButton: {
+    height: 45,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: varGray1,
+    marginVertical: 4,
   },
 });

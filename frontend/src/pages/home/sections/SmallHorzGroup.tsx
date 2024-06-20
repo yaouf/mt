@@ -1,10 +1,10 @@
 import SmallCard from "src/components/cards/SmallCard";
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { Article, SectionGroupProps } from "src/types/types";
 import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
-import { layout } from "src/styles/styles";
+import { layout, varGray1 } from "src/styles/styles";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 
 /**
@@ -39,9 +39,13 @@ function SmallHorzGroup(props: SectionGroupProps) {
 
   return (
     <View>
-      <SectionHeader title={props.title} onSeeMorePress={viewMore} />
+      <SectionHeader
+        title={props.title}
+        slug={props.slug}
+        navigation={props.navigation}
+      />
       {loading ? (
-        <Text>Loading!!</Text> // for first load when undefined, TODO: eventually replace with a nice loading sign
+        <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
       ) : (
         <View>
           <View style={layout.grid}>

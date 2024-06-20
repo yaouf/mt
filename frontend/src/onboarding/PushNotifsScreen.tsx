@@ -6,6 +6,7 @@ import {
   Switch,
   Platform,
   Button,
+  TouchableOpacity,
 } from "react-native";
 import { PushNotifProps } from "../types/types";
 
@@ -17,6 +18,8 @@ import { API_KEY, API_URL } from "@env";
 import { useState, useEffect } from "react";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import { baseStyles, text } from "src/styles/styles";
+import Notif from "src/components/Notif";
 
 /**
  * Defines how notifications should behave when received by the app
@@ -37,9 +40,11 @@ function PushNotifsScreen(props: PushNotifProps) {
   const [notifPermission, setNotifPermission] = useState<string | null>(null);
   const [hasRegistered, setHasRegistered] = useState(false);
 
-  useEffect(() => {
-    checkNotificationPermission();
-  }, []);
+  // useEffect(() => {
+  //   checkNotificationPermission();
+  // }, []);
+
+  console.log("push notif screen");
 
   const checkNotificationPermission = async () => {
     const { status } = await Notifications.getPermissionsAsync();
@@ -173,6 +178,7 @@ function PushNotifsScreen(props: PushNotifProps) {
     console.log("token", pushToken);
 
     await createDevice();
+    await checkNotificationPermission();
 
     props.navigation.push("Done");
   };
@@ -213,36 +219,42 @@ function PushNotifsScreen(props: PushNotifProps) {
       console.error("Error sending push notification:", error.message);
     }
   };
-  // TODO: can i always send push tokeN??? or only if one of those is false
-  // and if so do we have to remove push token from db if opt out later?
-  // or is this like just registering the device?
 
   return (
-    <View>
+    <View style={baseStyles.container}>
       <Button
         title="Request Notification Permission"
         onPress={requestNotificationPermission}
       ></Button>
-      <Text>Get the latest breaking news right to your phone!</Text>
-      <View style={settings.toggleRow}>
-        <Text>Breaking News Alerts</Text>
-        <Switch
-          value={breakingNotifs}
-          onValueChange={() =>
-            setBreakingNotifs((previousState: boolean) => !previousState)
-          }
+      <Text style={text.bigTitle}>Welcome.</Text>
+      <Text style={text.normal}>
+        Turn on alerts for the topics that interest you and we'll keep you
+        updated.
+      </Text>
+      <View style={{ rowGap: 16 }}>
+        <Notif
+          title="Breaking News"
+          description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
+  faucibus"
+        />
+        <Notif
+          title="Weekly Summary"
+          description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
+  faucibus"
         />
       </View>
-      <View style={settings.toggleRow}>
-        <Text>Weekly Summary </Text>
-        <Switch
-          value={weeklyNotifs}
-          onValueChange={() =>
-            setWeeklyNotifs((previousState: boolean) => !previousState)
-          }
-        />
-      </View>
-      <CustomButton text={"Save Changes"} onPress={saveNotifPreferences} />
+      <TouchableOpacity
+        style={settings.continueButton}
+        onPress={saveNotifPreferences}
+      >
+        <Text style={text.sectionHeader1}>Save and continue</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[settings.continueButton, { borderColor: "white" }]}
+        onPress={() => props.navigation.push("Done")}
+      >
+        <Text style={text.normal}>No, thanks</Text>
+      </TouchableOpacity>
     </View>
   );
 }

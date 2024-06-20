@@ -1,62 +1,59 @@
-import {
-  View,
-  ScrollView,
-  Image,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+import { View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
 import { Article, ArticleProps } from "../../types/types";
-import { baseStyles, font1, font2, font3, layout } from "../../styles/styles";
-import { dummyData } from "../../dummyData";
-import SmallCard from "src/components/cards/SmallCard";
+import { baseStyles } from "../../styles/styles";
 import { formatDates } from "src/code/formatDates";
-
-import Divider from "src/components/Divider";
-import { useContext, useEffect, useState } from "react";
-import { SavedContext } from "../Nav";
 import SplitArticle from "./SplitContent";
 import { articleStyles } from "src/styles/article";
 import BottomBar from "./BottomBar";
 
-// TODO: dummy content still as the recommended stories
+// TODO: future - related articles
+// links to other articles
 
 function ArticleScreen({ route, navigation }: ArticleProps) {
   const article: Article = route.params.data;
 
+  console.log("lead", article.subhead);
+
   return (
     <View>
       <ScrollView>
-        {/* Header image */}
-        <Image
-          source={{
-            uri:
-              "https://snworksceo.imgix.net/bdh/" +
-              article.dominantMedia.attachment_uuid +
-              ".sized-1000x1000.jpg?w=1000",
-          }}
-          style={articleStyles.image}
-        />
-
-        {/* Container for text, rest of article */}
-        <View style={articleStyles.container}>
-          {/* Media caption, author */}
-          <View style={articleStyles.mediaDetails}>
-            <Text style={articleStyles.mediaCaption}>
-              {article.dominantMedia.content}
-            </Text>
-            <Text style={articleStyles.mediaAuthor}>
-              {article.dominantMedia.authors.length > 0 &&
-                article.dominantMedia.authors.map(
-                  (mediaAuthor) => mediaAuthor.name
-                )}
-            </Text>
+        {article.dominantMedia.authors && (
+          <View>
+            <Image
+              source={{
+                uri: `http://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
+              }}
+              style={articleStyles.image}
+            />
+            <View style={baseStyles.container}>
+              {(article.dominantMedia.content ||
+                article.dominantMedia.authors) && (
+                <Text style={articleStyles.mediaCaption}>
+                  {article.dominantMedia.content
+                    .replace("\n", " ") // some media captions have p tags, others don't
+                    .replace("<p>", "")
+                    .replace("<p>", "") // these actually are different idk how (ex: https://www.browndailyherald.com/027da5c6-560c-413a-84ba-0b74baf0b4d3%22)
+                    .replace("</p>", "")
+                    .replace(`<\/p>`, "")}
+                  {article.dominantMedia.authors.length > 0 &&
+                    " Media by: " +
+                      article.dominantMedia.authors.map(
+                        (mediaAuthor) => mediaAuthor.name // TODO: media author links??
+                      ) +
+                      "| The Brown Daily Herald"}
+                </Text>
+              )}
+            </View>
           </View>
+        )}
 
+        <View style={baseStyles.container}>
           {/* Article title, lead, author, published date, section */}
-          <View style={articleStyles.articleHeading}>
+          <View style={articleStyles.headingContainer}>
             <Text style={articleStyles.title}>{article.headline}</Text>
-            <Text style={articleStyles.lead}>{article.subhead}</Text>
+            {article.subhead && (
+              <Text style={articleStyles.lead}>{article.subhead}</Text>
+            )}
             <Text style={articleStyles.author}>
               {article.authors.map((author) => (
                 <TouchableOpacity
@@ -71,24 +68,26 @@ function ArticleScreen({ route, navigation }: ArticleProps) {
 
             {/* Published date, section */}
             <View style={articleStyles.publishedDetails}>
-              <Text style={articleStyles.publishedDate}>
-                {formatDates(article.published_at)}
+              <Text style={articleStyles.publishedDetailsText}>
+                {formatDates(article.published_at) +
+                  "  |  " +
+                  article.tags[0].name}
               </Text>
-              <Text style={articleStyles.section}>{article.tags[0].name}</Text>
             </View>
           </View>
 
           {/* Article text */}
           <SplitArticle content={article.content} />
           {/* Read more section, with small cards */}
-          <Divider />
+          {/* <Divider />
           <Text style={articleStyles.readMoreHeading}>RELATED ARTICLES</Text>
           <View style={layout.grid}>
             <SmallCard article={dummyData[0]} navigation={navigation} />
             <SmallCard article={dummyData[1]} navigation={navigation} />
             <SmallCard article={dummyData[2]} navigation={navigation} />
             <SmallCard article={dummyData[3]} navigation={navigation} />
-          </View>
+          </View> */}
+          {/* </View> */}
         </View>
       </ScrollView>
       <BottomBar

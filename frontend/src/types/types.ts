@@ -25,7 +25,7 @@ export type ShareProps = {
 // for onboarding nav
 
 export type OnboardParams = {
-  Login: undefined;
+  Screen1: undefined;
   PushNotifs: undefined;
   Done: { setHasOnboarded: Dispatch<SetStateAction<boolean>> };
 };
@@ -34,7 +34,7 @@ export type OnboardProps = {
   setHasOnboarded: Dispatch<SetStateAction<boolean>>;
 };
 
-export type LoginProps = StackScreenProps<OnboardParams, "Login">;
+// export type LoginProps = StackScreenProps<OnboardParams, "Login">;
 export type PushNotifProps = StackScreenProps<OnboardParams, "PushNotifs">;
 export type DoneProps = StackScreenProps<OnboardParams, "Done">;
 
@@ -108,6 +108,13 @@ export interface Tag {
   ceo_id: string;
 }
 
+// for horz menu
+export interface MenuItem {
+  id: number;
+  title: string;
+  slug: string;
+}
+
 /**
  * for navigation stacks
  */
@@ -120,6 +127,7 @@ export type HomeStackProps = {
   }; // Parameter for the Article screen
   Section: { slug: string };
   Staff: { slug: string };
+  SectionPref: {};
 };
 
 export type FYStackProps = {
@@ -165,4 +173,12 @@ export type SectionGroupProps = {
   count: number;
   title: string;
   top: string[];
+};
+
+// for bottom bar and share context menu
+export type ArticleDetailProps = {
+  published_at: string;
+  slug: string;
+  uuid: string;
+  large?: boolean
 };
