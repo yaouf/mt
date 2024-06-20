@@ -82,7 +82,7 @@ export interface Author {
   slug: string;
   bio: string;
   tagline: string;
-  metadata: AuthorMetadata;
+  metadata: AuthorMetadata[];
   ceo_id: string;
 }
 
@@ -92,6 +92,7 @@ export interface Media {
   attachment_uuid: string;
   base_name: string;
   extension: string;
+  preview_extension: string;
   title: string;
   content: string;
   type: string;
@@ -180,5 +181,5 @@ export type ArticleDetailProps = {
   published_at: string;
   slug: string;
   uuid: string;
-  large?: boolean
+  large?: boolean;
 };

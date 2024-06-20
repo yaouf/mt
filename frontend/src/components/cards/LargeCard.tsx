@@ -54,7 +54,9 @@ function LargeCard({ article, navigation }: CardProps) {
                 <Text style={styles.breaking}>Breaking News</Text>
               </View>
             ) : (
-              <Text style={styles.section}>{all_tags[0]}</Text>
+              <Text style={styles.section}>
+                {all_tags[0].replace("&;", "&")}
+              </Text>
             )}
             <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
               {article.headline}
@@ -105,7 +107,6 @@ const styles = StyleSheet.create({
   },
   card: {
     display: "flex",
-    // width: 358,
     width: "100%",
     paddingBottom: 8,
     flexDirection: "column",
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     shadowRadius: 29.949,
     elevation: 3,
     marginTop: 16,
+    overflow: "visible",
     // marginVertical: 12,
   },
   section: {

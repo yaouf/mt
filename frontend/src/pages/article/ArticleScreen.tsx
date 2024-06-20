@@ -71,7 +71,7 @@ function ArticleScreen({ route, navigation }: ArticleProps) {
               <Text style={articleStyles.publishedDetailsText}>
                 {formatDates(article.published_at) +
                   "  |  " +
-                  article.tags[0].name}
+                  article.tags[0].name.replace("&;", "&")}
               </Text>
             </View>
           </View>

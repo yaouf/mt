@@ -14,9 +14,9 @@ type TopProps = {
 
 function Top(props: TopProps) {
   return (
-    <View>
+    <View style={{ overflow: "visible" }}>
       <Text style={text.bigTitle}>Top Stories</Text>
-      <View>
+      <View style={{ overflow: "visible" }}>
         <LargeCard
           article={props.topStories[0]}
           navigation={props.navigation}

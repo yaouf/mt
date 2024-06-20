@@ -33,7 +33,7 @@ function ForYouScreen({ navigation }: NavProp) {
           <Text style={text.sectionHeader2}>
             Recommended stories, your favorite sections, and more.
           </Text>
-          <Divider small={true} />
+          <Divider marginTop={8} />
           <FaveSections
             title="Arts & Culture"
             data={dummyData}

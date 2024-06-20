@@ -38,7 +38,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
   }, []);
 
   return (
-    <View>
+    <View style={{ overflow: "visible" }}>
       <SectionHeader
         title={props.title}
         slug={props.slug}
@@ -47,7 +47,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
       {loading ? (
         <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
       ) : (
-        <View>
+        <View style={{ overflow: "visible" }}>
           <View style={layout.grid}>
             {/* // first two as small cards TODO: can we always assume at least 2?? */}
             {articles.slice(0, 2).map((article: Article, i) => (

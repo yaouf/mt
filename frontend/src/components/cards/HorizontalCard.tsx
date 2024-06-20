@@ -42,7 +42,9 @@ function HorizontalCard({ article, navigation }: CardProps) {
             />
             <View style={styles.text}>
               <View style={styles.innerText}>
-                <Text style={styles.section}>{article.tags[0].name}</Text>
+                <Text style={styles.section}>
+                  {article.tags[0].name.replace("&;", "&")}
+                </Text>
                 <Text
                   style={styles.title}
                   numberOfLines={2}
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
-    // overflow: "hidden",
+    overflow: "visible",
   },
   content: {
     display: "flex",

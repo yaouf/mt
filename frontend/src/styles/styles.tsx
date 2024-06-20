@@ -40,6 +40,7 @@ export const layout = StyleSheet.create({
   vStack: {
     rowGap: 16,
     marginTop: 16,
+    overflow: "visible",
   },
   grid: {
     flexDirection: "row",
@@ -48,6 +49,7 @@ export const layout = StyleSheet.create({
     justifyContent: "space-between",
     rowGap: 16,
     marginTop: 16,
+    overflow: "visible",
   },
 });
 
@@ -98,7 +100,7 @@ export const text = StyleSheet.create({
     marginBottom: 8,
     marginTop: 8,
   },
-  textSmall: {
+  notifSmall: {
     color: varTextColor,
     fontFamily: font2,
     fontStyle: "normal",
@@ -113,5 +115,12 @@ export const text = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 16,
+  },
+  textSmall: {
+    color: varTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 12,
   },
 });
