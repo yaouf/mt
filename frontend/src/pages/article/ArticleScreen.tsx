@@ -55,13 +55,16 @@ function ArticleScreen({ route, navigation }: ArticleProps) {
               <Text style={articleStyles.lead}>{article.subhead}</Text>
             )}
             <Text style={articleStyles.author}>
-              {article.authors.map((author) => (
+              {article.authors.map((author, i) => (
                 <TouchableOpacity
                   onPress={() =>
                     navigation.push("Staff", { slug: author.slug })
                   }
                 >
-                  <Text style={articleStyles.author}>{author.name}</Text>
+                  <Text style={articleStyles.author}>
+                    {author.name}
+                    {i < article.authors.length - 1 ? ", " : ""}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </Text>
