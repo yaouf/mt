@@ -1,8 +1,9 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
-import { Text } from "react-native";
+import { ActivityIndicator, Text } from "react-native";
 import { fetchArticle } from "src/code/fetchContent";
 import HorizontalCard from "src/components/cards/HorizontalCard";
+import { varGray1 } from "src/styles/styles";
 import { Article } from "src/types/types";
 
 type FavArticleProps = {
@@ -21,7 +22,7 @@ function FavArticle(props: FavArticleProps) {
   }, []);
 
   if (!article) {
-    return <Text>Loading!</Text>;
+    return <ActivityIndicator color={varGray1} style={{ flex: 1 }} />;
   }
 
   return (

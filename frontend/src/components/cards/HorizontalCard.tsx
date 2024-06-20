@@ -5,23 +5,18 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import { showContextMenu } from "./ShowContextMenu";
 import { Author, CardProps } from "src/types/types";
 import { formatDates } from "../../code/formatDates";
-import { font1, font2, font3 } from "../../styles/styles";
-import { useContext, useEffect, useState } from "react";
-import { SavedContext } from "src/pages/Nav";
+import {
+  font1,
+  font2,
+  font3,
+  varTextColor,
+  varGray1,
+} from "../../styles/styles";
+import ShowContextMenu from "./ShowContextMenu";
 
 function HorizontalCard({ article, navigation }: CardProps) {
-  const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (article.uuid in savedArticles) {
-      setSaved(true);
-    }
-  }, [savedArticles]);
-
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
   if (article.dominantMedia.attachment_uuid) {
@@ -33,61 +28,45 @@ function HorizontalCard({ article, navigation }: CardProps) {
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.push("Article", { data: article })}
-    >
-      <View style={styles.card}>
-        <View style={styles.content}>
-          <Image
-            source={{
-              uri: img_uri,
-            }}
-            style={styles.image}
-          />
-          <View style={styles.text}>
-            <View style={styles.innerText}>
-              <Text style={styles.section}>{article.tags[0].name}</Text>
-              <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-                {article.headline}
-              </Text>
-              <Text style={styles.author}>
-                {article.authors.map((a: Author) => a.name).join(", ")}
-              </Text>
-              <Text style={styles.published}>
-                {formatDates(article.published_at)}
-              </Text>
+    <View>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.push("Article", { data: article })}
+      >
+        <View style={styles.card}>
+          <View style={styles.content}>
+            <Image
+              source={{
+                uri: img_uri,
+              }}
+              style={styles.image}
+            />
+            <View style={styles.text}>
+              <View style={styles.innerText}>
+                <Text style={styles.section}>{article.tags[0].name}</Text>
+                <Text
+                  style={styles.title}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                >
+                  {article.headline}
+                </Text>
+                <Text style={styles.author}>
+                  {article.authors.map((a: Author) => a.name).join(", ")}
+                </Text>
+                <Text style={styles.published}>
+                  {formatDates(article.published_at)}
+                </Text>
+              </View>
             </View>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                showContextMenu(
-                  article.uuid,
-                  saved,
-                  savedArticles,
-                  setSavedArticles,
-                  article.slug,
-                  article.published_at
-                )
-              }
-              onLongPress={() =>
-                showContextMenu(
-                  article.uuid,
-                  saved,
-                  savedArticles,
-                  setSavedArticles,
-                  article.slug,
-                  article.published_at
-                )
-              }
-            >
-              <Image
-                source={require("../../../assets/options.png")}
-                style={styles.options}
-              />
-            </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+      <ShowContextMenu
+        published_at={article.published_at}
+        slug={article.slug}
+        uuid={article.uuid}
+      />
+    </View>
   );
 }
 
@@ -104,14 +83,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     borderRadius: 8,
     backgroundColor: "#FFF",
-    shadowColor: "#000",
+    shadowColor: varTextColor,
     shadowOffset: {
       width: 0,
       height: 1.497,
     },
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   content: {
     display: "flex",
@@ -138,6 +117,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#C9C9C9",
     width: 95,
     height: 120,
+    borderTopLeftRadius: 7.487,
+    borderBottomLeftRadius: 7.487,
   },
   text: {
     display: "flex",
@@ -159,7 +140,7 @@ const styles = StyleSheet.create({
     flexBasis: 0,
   },
   section: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",
@@ -178,7 +159,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   author: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontSize: 10,
     fontStyle: "normal",
@@ -186,7 +167,7 @@ const styles = StyleSheet.create({
     lineHeight: 14,
   },
   published: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",

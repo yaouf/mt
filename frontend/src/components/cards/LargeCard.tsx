@@ -5,23 +5,18 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import { showContextMenu } from "./ShowContextMenu";
+import ShowContextMenu from "./ShowContextMenu";
 import { Author, CardProps, Tag } from "src/types/types";
 import { formatDates } from "../../code/formatDates";
-import { font1, font2, font3 } from "../../styles/styles";
-import { useContext, useEffect, useState } from "react";
-import { SavedContext } from "src/pages/Nav";
+import {
+  font1,
+  font2,
+  font3,
+  varTextColor,
+  varGray1,
+} from "../../styles/styles";
 
 function LargeCard({ article, navigation }: CardProps) {
-  const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    if (article.uuid in savedArticles) {
-      setSaved(true);
-    }
-  }, [savedArticles]);
-
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
 
@@ -42,67 +37,48 @@ function LargeCard({ article, navigation }: CardProps) {
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.push("Article", { data: article })}
-    >
-      <View style={styles.card}>
-        <Image
-          source={{
-            uri: img_uri,
-          }}
-          style={styles.image}
-        />
-        <View style={styles.text}>
-          {breaking ? (
-            <View style={styles.breakingBox}>
-              <Text style={styles.breaking}>Breaking News</Text>
+    <View>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.push("Article", { data: article })}
+      >
+        <View style={styles.card}>
+          <Image
+            source={{
+              uri: img_uri,
+            }}
+            style={styles.image}
+          />
+          <View style={styles.text}>
+            {breaking ? (
+              <View style={styles.breakingBox}>
+                <Text style={styles.breaking}>Breaking News</Text>
+              </View>
+            ) : (
+              <Text style={styles.section}>{all_tags[0]}</Text>
+            )}
+            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+              {article.headline}
+            </Text>
+            <Text style={styles.author}>
+              {article.authors.map((a: Author) => a.name).join(", ")}
+            </Text>
+            <View style={styles.bottom}>
+              <View style={styles.publishedSection}>
+                <Text style={styles.published}>
+                  {formatDates(article.published_at)}
+                </Text>
+              </View>
             </View>
-          ) : (
-            <Text style={styles.section}>{all_tags[0]}</Text>
-          )}
-          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-            {article.headline}
-          </Text>
-          <Text style={styles.author}>
-            {article.authors.map((a: Author) => a.name).join(", ")}
-          </Text>
-          <View style={styles.bottom}>
-            <View style={styles.publishedSection}>
-              <Text style={styles.published}>
-                {formatDates(article.published_at)}
-              </Text>
-            </View>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                showContextMenu(
-                  article.uuid,
-                  saved,
-                  savedArticles,
-                  setSavedArticles,
-                  article.slug,
-                  article.published_at
-                )
-              }
-              onLongPress={() =>
-                showContextMenu(
-                  article.uuid,
-                  saved,
-                  savedArticles,
-                  setSavedArticles,
-                  article.slug,
-                  article.published_at
-                )
-              }
-            >
-              <Image
-                source={require("../../../assets/options.png")}
-                style={styles.options}
-              />
-            </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+      <ShowContextMenu
+        published_at={article.published_at}
+        slug={article.slug}
+        uuid={article.uuid}
+        large={true}
+      />
+    </View>
   );
 }
 
@@ -112,7 +88,7 @@ const styles = StyleSheet.create({
   title: {
     height: 93,
     alignSelf: "stretch",
-    color: "#000",
+    color: varTextColor,
     fontFamily: font1,
     fontSize: 20,
     fontStyle: "normal",
@@ -120,7 +96,7 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   author: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontSize: 16,
     fontStyle: "normal",
@@ -136,7 +112,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     borderRadius: 8,
     backgroundColor: "#FFF",
-    shadowColor: "#000",
+    shadowColor: varTextColor,
     shadowOffset: {
       width: 0,
       height: 1.497,
@@ -144,10 +120,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
     elevation: 3,
-    marginVertical: 12,
+    marginTop: 16,
+    // marginVertical: 12,
   },
   section: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 16,
     fontStyle: "normal",
@@ -155,7 +132,7 @@ const styles = StyleSheet.create({
     /* lineHeight: 'normal',*/
   },
   published: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 14,
     fontStyle: "normal",

@@ -29,7 +29,7 @@ function SettingsLink({ title, link }: SettingsLinkProps) {
         width: "100%",
       }}
     >
-      <Text style={{ ...text.text, fontSize: 14 }}>{title}</Text>
+      <Text style={{ ...text.textSmall, fontSize: 14 }}>{title}</Text>
       <Ionicons name="chevron-forward-outline" size={24} color="black" />
     </TouchableOpacity>
   );

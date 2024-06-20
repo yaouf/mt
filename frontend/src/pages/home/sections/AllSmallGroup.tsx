@@ -1,10 +1,10 @@
 import SmallCard from "src/components/cards/SmallCard";
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { Article, SectionGroupProps } from "src/types/types";
 import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
-import { layout } from "src/styles/styles";
+import { layout, varGray1 } from "src/styles/styles";
 
 /**
  * Section with all small cards
@@ -14,10 +14,6 @@ import { layout } from "src/styles/styles";
 function AllSmallGroup(props: SectionGroupProps) {
   const [articles, setArticles] = useState<Article[]>();
   const [loading, setLoading] = useState<boolean>(true);
-
-  const viewMore = () => {
-    props.navigation.push("Section", { slug: props.slug });
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -33,7 +29,7 @@ function AllSmallGroup(props: SectionGroupProps) {
     };
 
     fetchData();
-    console.log('fetched', props.slug)
+    console.log("fetched", props.slug);
     // fetchSectionHome(props.slug, props.count + 5, setArticles).then(() =>
     //   console.log(`loaded content for ${props.title}`)
     // );
@@ -41,9 +37,13 @@ function AllSmallGroup(props: SectionGroupProps) {
 
   return (
     <View>
-      <SectionHeader title={props.title} onSeeMorePress={viewMore} />
+      <SectionHeader
+        title={props.title}
+        slug={props.slug}
+        navigation={props.navigation}
+      />
       {loading ? (
-        <Text>Loading!!</Text> // for first load when undefined, TODO: eventually replace with a nice loading sign
+        <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
       ) : (
         <View>
           <View style={layout.grid}>

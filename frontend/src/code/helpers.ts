@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dispatch, SetStateAction } from "react";
+import { SavedArticleDict } from "src/pages/Nav";
 
 /**
  * sets an item in Async storage to the given value
@@ -41,22 +42,34 @@ export async function removeAsync(key: string) {
   }
 }
 
-export async function updateAsync(
-  key: string,
-  dict: Object,
-  uuid: string,
-  save: boolean,
-  setFunction: Dispatch<SetStateAction<any>>,
+/**
+ * for use in bottom bar of articles and show context menu of cards (...)
+ */
+export function handleBookmark(
+  saved: boolean,
   slug: string,
-  date: string
+  date: string,
+  uuid: string,
+  savedArticles: SavedArticleDict,
+  setSavedArticles: Dispatch<SetStateAction<SavedArticleDict>>,
+  setSaved: Dispatch<SetStateAction<boolean>>
 ) {
-  if (save) {
-    dict[uuid] = [slug, date];
+  // update in saved context
+  if (!saved) {
+    console.log("saving");
+    // not currently saved, so save now
+    const newSaved = { slug: slug, date: date };
+    savedArticles[uuid] = newSaved;
   } else {
-    // remove
-    delete dict[uuid];
+    console.log("removing");
+
+    delete savedArticles[uuid];
   }
 
-  setFunction(dict);
-  await setAsync(key, JSON.stringify(dict));
+  setSavedArticles({ ...savedArticles });
+
+  // update in async storage
+  setAsync("savedArticles", JSON.stringify(savedArticles)).then(() =>
+    setSaved((prev) => !prev)
+  );
 }

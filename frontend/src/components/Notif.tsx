@@ -12,7 +12,7 @@ function Notif({ title, description }: NotifProps) {
     <View style={fyp.toggleRow}>
       <View>
         <Text style={text.sectionHeader3}>{title}</Text>
-        <Text style={text.text} numberOfLines={2} ellipsizeMode="tail">
+        <Text style={text.textSmall} numberOfLines={2} ellipsizeMode="tail">
           {description}
         </Text>
       </View>

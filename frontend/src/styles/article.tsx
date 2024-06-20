@@ -1,103 +1,69 @@
 import { StyleSheet } from "react-native";
-import { font1, font2, font3 } from "./styles";
+import { font1, font2, font3, varTextColor, varGray1 } from "./styles";
+
+const fontsizeHeader = 12.456; // figma says 12.456??
+//spacing is also a little weird in the header with the fonts rn
 
 export const articleStyles = StyleSheet.create({
-  container: {
-    padding: 16,
-    width: 390,
-    backgroundColor: "#FFF",
-    // height: 5849,
-  },
   image: {
-    display: "flex",
     width: "100%",
     height: 253,
-    flex: 1,
-    paddingLeft: 162.282,
-    paddingRight: 166.393,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    flexGrow: 0,
-  },
-  mediaDetails: {
-    display: "flex",
-    flexDirection: "column", // had to change from row to column, wasn't fitting
-    alignItems: "flex-start",
-    // gap: 11.134,
-    marginBottom: 22,
   },
   mediaCaption: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font1,
-    fontSize: 12.456,
+    fontSize: fontsizeHeader,
     fontStyle: "normal",
     fontWeight: "400",
-    // lineHeight: "normal",
+    marginTop: 12,
+    marginBottom: 22,
   },
-  mediaAuthor: {
-    color: "#9E9E9E",
-    fontFamily: font1,
-    fontSize: 12.456,
-    fontStyle: "italic", // changed from normal to italic
-    fontWeight: "400",
-    // lineHeight: "normal",
-  },
-  articleHeading: {
+  headingContainer: {
     display: "flex",
-    width: "100%",
     flexDirection: "column",
     alignItems: "flex-start",
     gap: 7.422,
     marginBottom: 27,
   },
   title: {
-    alignSelf: "stretch",
-    color: "#000",
+    // alignSelf: "stretch",
+    color: varTextColor,
     fontFamily: font1,
     fontSize: 24,
-    fontStyle: "normal",
     fontWeight: "700",
-    // lineHeight: "normal",
   },
   lead: {
-    alignSelf: "stretch",
-    color: "#9E9E9E",
+    // alignSelf: "stretch",
+    color: varGray1,
     fontFamily: font1,
-    fontSize: 12,
+    fontSize: fontsizeHeader,
     fontStyle: "italic",
     fontWeight: "400",
-    // lineHeight: "normal",
   },
   author: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
-    fontSize: 12,
-    fontStyle: "normal",
+    fontSize: fontsizeHeader,
     fontWeight: "700",
-    // lineHeight: "normal",
   },
   publishedDetails: {
     display: "flex",
     alignItems: "flex-start",
     flexDirection: "row",
     gap: 14.845,
-    alignSelf: "stretch",
+    // alignSelf: "stretch",
   },
-  publishedDate: {
-    color: "#9E9E9E",
+  publishedDetailsText: {
+    color: varGray1,
     fontFamily: font3,
-    fontSize: 12.456,
-    fontStyle: "normal",
+    fontSize: fontsizeHeader,
     fontWeight: "400",
-    // lineHeight: "normal",
   },
   section: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
-    fontSize: 12.456,
-    fontStyle: "normal",
+    fontSize: fontsizeHeader,
     fontWeight: "400",
-    // lineHeight: "normal",
   },
   articleBodyWrapper: {
     display: "flex",
@@ -112,7 +78,7 @@ export const articleStyles = StyleSheet.create({
     gap: 36,
   },
   text: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font1,
     fontSize: 14,
     fontStyle: "normal",
@@ -120,7 +86,7 @@ export const articleStyles = StyleSheet.create({
     lineHeight: 24,
   },
   hyperlink: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font1,
     fontSize: 14,
     fontStyle: "normal",
@@ -129,7 +95,7 @@ export const articleStyles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   correction: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font1,
     fontSize: 14,
     fontStyle: "italic",
@@ -160,15 +126,15 @@ export const articleStyles = StyleSheet.create({
     backgroundColor: "#C9C9C9",
   },
   adAuthor: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font1,
-    fontSize: 12.456,
+    fontSize: fontsizeHeader,
     fontStyle: "normal",
     fontWeight: "400",
     // lineHeight: "normal",
   },
   readMoreHeading: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontSize: 12,
     fontStyle: "normal",

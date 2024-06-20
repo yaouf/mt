@@ -9,13 +9,15 @@ import { layout } from "src/styles/styles";
 
 function SavedArticles({ navigation }: NavProp) {
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState(savedArticles);
 
   console.log("*********", savedArticles);
+  console.log(Object.keys(savedArticles).length);
 
   return (
     <View>
       <Text>Saved Articles</Text>
+
+      {/* // TODO: this is just for me for now */}
       <CustomButton
         text="clear"
         onPress={() => {
@@ -26,15 +28,20 @@ function SavedArticles({ navigation }: NavProp) {
         }}
       />
 
-      <View style={layout.vStack}>
-        {Object.keys(saved).map((uuid) => (
-          <FavArticle
-            slug={saved[uuid][0]}
-            published_at={saved[uuid][1]}
-            navigation={navigation}
-          />
-        ))}
-      </View>
+      {Object.keys(savedArticles).length > 0 ? (
+        <View style={layout.vStack}>
+          {Object.keys(savedArticles).map((uuid, i) => (
+            <FavArticle
+              slug={savedArticles[uuid].slug}
+              published_at={savedArticles[uuid].date}
+              navigation={navigation}
+              key={`saved-article-card-${i}`}
+            />
+          ))}
+        </View>
+      ) : (
+        <Text>No Saved Articles</Text>
+      )}
     </View>
   );
 }

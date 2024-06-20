@@ -37,7 +37,7 @@ export function formatDates(publishedAt: string) {
     day +
     ", " +
     year +
-    " | " +
+    "  |  " +
     hour +
     ":" +
     minute +

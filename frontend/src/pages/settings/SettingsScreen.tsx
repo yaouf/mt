@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNotification } from "./NotificationProvider";
 import SavedArticles from "./SavedArticles";
 import SettingsLink from "./SettingsLink";
-import { layout, text } from "src/styles/styles";
+import { baseStyles, layout, text } from "src/styles/styles";
 import Notif from "src/components/Notif";
 import Divider from "src/components/Divider";
 import { NavProp } from "src/types/types";
@@ -121,7 +121,7 @@ function SettingsScreen({ navigation }: NavProp) {
   return (
     // <GestureHandlerRootView>
     //   <ScrollView>
-    <ScrollView style={{ marginLeft: 16, marginRight: 16 }}>
+    <ScrollView style={baseStyles.container}>
       <SavedArticles navigation={navigation} />
 
       <View>

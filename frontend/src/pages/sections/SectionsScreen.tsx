@@ -1,6 +1,6 @@
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import { Article, SectionProps } from "../../types/types";
-import { layout, text } from "../../styles/styles";
+import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
 import { useEffect, useState } from "react";
 import { fetchSection } from "src/code/fetchContent";
 import LargeCard from "src/components/cards/LargeCard";
@@ -26,7 +26,7 @@ function SectionsScreen({ route, navigation }: SectionProps) {
   }, []);
 
   if (!section) {
-    return <Text>Loading!!</Text>;
+    return <ActivityIndicator color={varGray1} style={{ flex: 1 }} />;
   }
 
   // switch every 4
@@ -78,7 +78,7 @@ function SectionsScreen({ route, navigation }: SectionProps) {
 
   return (
     <View>
-      <View style={{ marginLeft: 16, marginRight: 16 }}>
+      <View style={baseStyles.container}>
         <View>
           <FlatList
             data={section}

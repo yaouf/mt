@@ -8,30 +8,30 @@ import {
   StyleProp,
   ViewStyle,
 } from "react-native";
-import { showContextMenu } from "./ShowContextMenu";
 import { Author, CardProps } from "src/types/types";
-import { formatDates, shortFormatDates } from "../../code/formatDates";
-import { font1, font2, font3 } from "../../styles/styles";
-import { useContext, useEffect, useState } from "react";
-import { SavedContext } from "src/pages/Nav";
+import { shortFormatDates } from "../../code/formatDates";
+import {
+  font1,
+  font2,
+  font3,
+  varTextColor,
+  varGray1,
+} from "../../styles/styles";
+import ShowContextMenu from "./ShowContextMenu";
 
 function SmallCard({ article, navigation, specialWidth }: CardProps) {
-  const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState(false);
+  // let cardStyles: StyleProp<ViewStyle> = {
+  //   ...styles.card,
+  //   ...{ width: "48%" },
+  // };
+  // if (specialWidth !== undefined) {
+  //   // @ts-ignore
+  //   cardStyles = { ...styles.card, ...{ width: specialWidth } };
+  // }
 
-  useEffect(() => {
-    if (article.uuid in savedArticles) {
-      setSaved(true);
-    }
-  }, [savedArticles]);
-
-  let cardStyles: StyleProp<ViewStyle> = {
-    ...styles.card,
-    ...{ width: "48%" },
-  };
+  let cardSize: StyleProp<ViewStyle> = { width: "48%" };
   if (specialWidth !== undefined) {
-    // @ts-ignore
-    cardStyles = { ...styles.card, ...{ width: specialWidth } };
+    cardSize = { width: specialWidth };
   }
 
   let img_uri =
@@ -45,71 +45,75 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.push("Article", { data: article })}
-    >
-      <View style={cardStyles}>
-        <Image
-          source={{
-            uri: img_uri,
-          }}
-          style={styles.image}
-        />
-        <View style={styles.text}>
-          <Text style={styles.section}>{article.tags[0].name}</Text>
-          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-            {article.headline}
-          </Text>
-          <Text style={styles.author}>
-            {article.authors.map((a: Author) => a.name).join(", ")}
-          </Text>
-          <View style={styles.bottom}>
-            <View style={styles.publishedSection}>
-              <Text style={styles.published}>
-                {shortFormatDates(article.published_at)}
-              </Text>
+    <View style={cardSize}>
+      <TouchableWithoutFeedback
+        style={styles2.touchableItem}
+        onPress={() => navigation.push("Article", { data: article })}
+      >
+        <View style={styles.card}>
+          <Image
+            source={{
+              uri: img_uri,
+            }}
+            style={styles.image}
+          />
+          <View style={styles.text}>
+            <Text style={styles.section}>{article.tags[0].name}</Text>
+            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+              {article.headline}
+            </Text>
+            <Text style={styles.author}>
+              {article.authors.map((a: Author) => a.name).join(", ")}
+            </Text>
+            <View style={styles.bottom}>
+              <View style={styles.publishedSection}>
+                <Text style={styles.published}>
+                  {shortFormatDates(article.published_at)}
+                </Text>
+              </View>
             </View>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                showContextMenu(
-                  article.uuid,
-                  saved,
-                  savedArticles,
-                  setSavedArticles,
-                  article.slug,
-                  article.published_at
-                )
-              }
-              onLongPress={() =>
-                showContextMenu(
-                  article.uuid,
-                  saved,
-                  savedArticles,
-                  setSavedArticles,
-                  article.slug,
-                  article.published_at
-                )
-              }
-            >
-              <Image
-                source={require("../../../assets/options.png")}
-                style={styles.options}
-              />
-            </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+      <ShowContextMenu
+        published_at={article.published_at}
+        slug={article.slug}
+        uuid={article.uuid}
+      />
+    </View>
   );
 }
 
 export default SmallCard;
 
+const styles2 = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  touchableItem: {
+    width: 200,
+    height: 200,
+    backgroundColor: "lightblue",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  showContextButton: {
+    position: "absolute",
+    bottom: 10, // Adjust as per your requirement
+    right: 10, // Adjust as per your requirement
+    backgroundColor: "orange",
+    padding: 10,
+    borderRadius: 5,
+  },
+});
+
 const styles = StyleSheet.create({
   title: {
     height: 40,
     alignSelf: "stretch",
-    color: "#000",
+    color: varTextColor,
     fontFamily: font1,
     fontSize: 14,
     fontStyle: "normal",
@@ -119,7 +123,7 @@ const styles = StyleSheet.create({
     flexWrap: "nowrap",
   },
   author: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontSize: 10,
     fontStyle: "normal",
@@ -134,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     borderRadius: 8,
     backgroundColor: "#FFF",
-    shadowColor: "#000",
+    shadowColor: varTextColor,
     shadowOffset: {
       width: 0,
       height: 1.497,
@@ -144,7 +148,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   section: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",
@@ -152,7 +156,7 @@ const styles = StyleSheet.create({
     /* lineHeight: 'normal',*/
   },
   published: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",
@@ -200,7 +204,7 @@ const styles = StyleSheet.create({
     top: -42,
     borderRadius: 12,
     elevation: Platform.OS === "android" ? 8 : 0,
-    shadowColor: "#000",
+    shadowColor: varTextColor,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.1,
     shadowRadius: 64,
