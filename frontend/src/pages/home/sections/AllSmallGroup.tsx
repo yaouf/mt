@@ -36,7 +36,7 @@ function AllSmallGroup(props: SectionGroupProps) {
   }, []);
 
   return (
-    <View>
+    <View style={{ overflow: "visible" }}>
       <SectionHeader
         title={props.title}
         slug={props.slug}
@@ -45,16 +45,14 @@ function AllSmallGroup(props: SectionGroupProps) {
       {loading ? (
         <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
       ) : (
-        <View>
-          <View style={layout.grid}>
-            {articles.map((article: Article, i) => (
-              <SmallCard
-                article={article}
-                navigation={props.navigation}
-                key={`${props.slug}-home-${i}`}
-              />
-            ))}
-          </View>
+        <View style={layout.grid}>
+          {articles.map((article: Article, i) => (
+            <SmallCard
+              article={article}
+              navigation={props.navigation}
+              key={`${props.slug}-home-${i}`}
+            />
+          ))}
         </View>
       )}
     </View>

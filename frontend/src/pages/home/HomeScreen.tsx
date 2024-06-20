@@ -151,8 +151,11 @@ function HomeScreen({ navigation }: NavProp) {
   ];
 
   return (
-    <View onLayout={onLayoutRootView} style={baseStyles.container}>
-      <SafeAreaView>
+    <View
+      onLayout={onLayoutRootView}
+      style={{ ...baseStyles.container, overflow: "visible" }}
+    >
+      <SafeAreaView style={{ overflow: "visible" }}>
         <FlatList
           ref={flatListRef}
           data={sections}

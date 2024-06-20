@@ -58,7 +58,10 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
             style={styles.image}
           />
           <View style={styles.text}>
-            <Text style={styles.section}>{article.tags[0].name}</Text>
+            <Text style={styles.section}>
+              {" "}
+              {article.tags[0].name.replace("&;", "&")}
+            </Text>
             <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
               {article.headline}
             </Text>
@@ -146,6 +149,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
     elevation: 3,
+    overflow: "visible",
   },
   section: {
     color: varGray1,
