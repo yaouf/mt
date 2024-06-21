@@ -14,6 +14,7 @@ import {
   useState,
 } from "react";
 import { getAsync } from "src/code/helpers";
+import { menuItems } from "src/code/setup";
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -32,17 +33,6 @@ export const MenuContext = createContext<MenuContextType>({
   currSection: "",
   setCurrSection: () => {},
 });
-
-const menuItems: MenuItem[] = [
-  { id: 3, title: "opinions", slug: "opinions" },
-  { id: 4, title: "university news", slug: "university-news" },
-  { id: 5, title: "arts & culture", slug: "arts-culture" },
-  { id: 6, title: "metro", slug: "metro" },
-  { id: 7, title: "sports", slug: "sports" },
-  { id: 8, title: "science & research", slug: "science-research" },
-  { id: 9, title: "podcast", slug: "podcast" },
-  // TODO: are we including post, multimedia, special projects ... and what order
-];
 
 function HomeStackScreen() {
   const [sectionMenu, setSectionMenu] = useState<MenuItem[]>([]);

@@ -26,8 +26,7 @@ export type ShareProps = {
 
 export type OnboardParams = {
   Screen1: undefined;
-  PushNotifs: undefined;
-  Done: { setHasOnboarded: Dispatch<SetStateAction<boolean>> };
+  PushNotifs: { parentNav: StackNavigationProp<any, any> };
 };
 
 export type OnboardProps = {
@@ -36,7 +35,6 @@ export type OnboardProps = {
 
 // export type LoginProps = StackScreenProps<OnboardParams, "Login">;
 export type PushNotifProps = StackScreenProps<OnboardParams, "PushNotifs">;
-export type DoneProps = StackScreenProps<OnboardParams, "Done">;
 
 export type SearchProps = {
   scrollPositionText: number;

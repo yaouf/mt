@@ -1,14 +1,14 @@
-import { View, ScrollView, Text, FlatList } from "react-native";
-import { useEffect, useRef, useState } from "react";
+import { View, ScrollView, Text } from "react-native";
+import { useContext, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNotification } from "./NotificationProvider";
+import { NotificationContext, useNotification } from "./NotificationProvider";
 import SavedArticles from "./SavedArticles";
 import SettingsLink from "./SettingsLink";
 import { baseStyles, layout, text } from "src/styles/styles";
 import Notif from "src/components/Notif";
 import Divider from "src/components/Divider";
 import { NavProp } from "src/types/types";
-import Staff from "../staff/Staff";
+import * as Notifications from "expo-notifications";
 
 /**
  * Page for settings
@@ -22,64 +22,49 @@ import Staff from "../staff/Staff";
  * @returns Settings screen
  */
 function SettingsScreen({ navigation }: NavProp) {
-  const [username, setUsername] = useState<string>("");
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [community, setCommunity] = useState<string>("");
-  const [breakingNotifs, setBreakingNotifs] = useState<boolean>(true); // default to true, user can change
-  const [weeklyNotifs, setWeeklyNotifs] = useState<boolean>(true);
-
   const {
-    appNotificationEnabled,
-    setAppNotificationEnabled,
-    toggleNotifications,
+    breaking,
+    setBreaking,
+    weekly,
+    setWeekly,
+    daily,
+    setDaily,
+    deviceID,
+    setDeviceID,
     checkPermissions,
-  } = useNotification();
+    systemPermissionStatus,
+    setSystemPermissionStatus,
+  } = useContext(NotificationContext);
 
-  /**
-   * Load the state variables from async storage if they exist and update their values
-   * (on first load of settings page only)
-   */
-  const load = async () => {
-    try {
-      const username = await AsyncStorage.getItem("username");
-      if (username) {
-        setUsername(username);
-      }
-
-      const loggedIn = await AsyncStorage.getItem("loggedIn");
-      if (loggedIn === "true") {
-        setLoggedIn(true);
-      }
-
-      const community = await AsyncStorage.getItem("community");
-      if (community) {
-        setCommunity(community);
-      }
-
-      const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
-      if (breakingNotifs === "false") {
-        // since default is true
-        setBreakingNotifs(false);
-      }
-
-      const weeklyNotifs = await AsyncStorage.getItem("weeklyNotifs");
-      if (weeklyNotifs === "false") {
-        setWeeklyNotifs(false);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // Load settings (including other unrelated settings if they exist)
-  const loadSettings = async () => {
-    load();
-    await checkPermissions(); // Check system permissions everytime app loads
-  };
-
+  // on first load, get data from async storage
   useEffect(() => {
-    loadSettings();
+    const load = async () => {
+      try {
+        const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
+        setBreaking(breakingNotifs === "true");
+
+        const weeklyNotifs = await AsyncStorage.getItem("weeklyNotifs");
+        setWeekly(weeklyNotifs === "true");
+
+        const dailyNotifs = await AsyncStorage.getItem("dailyNotifs");
+        setDaily(dailyNotifs === "true");
+
+        const id = await AsyncStorage.getItem("deviceID");
+        if (id) {
+          setDeviceID(id);
+        }
+
+        await checkPermissions(); // Check system permissions everytime app loads
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    load();
   }, []);
+
+  console.log("statussss", systemPermissionStatus, breaking, weekly, daily);
+  console.log("Device ID:", deviceID);
 
   /**
    * Update settings in async storage, call backend update
@@ -119,8 +104,6 @@ function SettingsScreen({ navigation }: NavProp) {
   ];
 
   return (
-    // <GestureHandlerRootView>
-    //   <ScrollView>
     <ScrollView style={baseStyles.container}>
       <SavedArticles navigation={navigation} />
 
@@ -131,18 +114,32 @@ function SettingsScreen({ navigation }: NavProp) {
             title="Breaking News"
             description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
   faucibus"
+            value={breaking}
+            setValue={setBreaking}
+            asyncName="breakingNotifs"
           />
           <Notif
             title="Weekly Summary"
             description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
   faucibus"
+            value={weekly}
+            setValue={setWeekly}
+            asyncName="weeklyNotifs"
+          />
+          <Notif
+            title="Daily Summary"
+            description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
+  faucibus"
+            value={daily}
+            setValue={setDaily}
+            asyncName="dailyNotifs"
           />
         </View>
       </View>
       <View style={layout.vStack}>
         <Text style={text.sectionHeader3}>Support</Text>
         {support.map((link, i) => (
-          <View>
+          <View key={`support-${i}`}>
             <SettingsLink title={link.title} link={link.link} />
             {i < links.length - 1 ? <Divider /> : ""}
           </View>
@@ -151,7 +148,7 @@ function SettingsScreen({ navigation }: NavProp) {
       <View style={layout.vStack}>
         <Text style={text.sectionHeader3}>More BDH</Text>
         {links.map((link, i) => (
-          <View>
+          <View key={`more-bdh-${i}`}>
             <SettingsLink title={link.title} link={link.link} />
             {i < links.length - 1 ? <Divider /> : ""}
           </View>

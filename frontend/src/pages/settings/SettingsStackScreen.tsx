@@ -15,15 +15,20 @@ function SettingsStackScreen() {
         options={{ headerShown: false }}
       />
       <SettingsStack.Screen
-        name="Article" // for saved articles
+        name="Article" // to open saved articles
         component={ArticleScreen}
         options={{ headerShown: false }}
       />
-      <SettingsStack.Screen
+      {/* <SettingsStack.Screen
+        name="SavedArticles" // for all saved articles
+        component={ArticleScreen}
+        options={{ headerShown: false }}
+      /> */}
+      {/* <SettingsStack.Screen
         name="Staff" 
         component={Staff}
         options={{ headerShown: false }}
-      />
+      /> */}
     </SettingsStack.Navigator>
   );
 }

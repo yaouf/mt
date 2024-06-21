@@ -73,3 +73,41 @@ export function handleBookmark(
     setSaved((prev) => !prev)
   );
 }
+
+/**
+ * TODO: example for now
+ * Constructs push notif payload containing the taget expoPushToken/title/body, and sends it to
+ * Expo push notification service using fetch network request. This services uses the token we provide to deliver
+ * the notification to the specific device registered.
+ */
+const sendNotification = async () => {
+  console.log("Sending push notification...");
+  // notification message
+  const message = {
+    to: "expoPushToken",
+    sound: "default",
+    title: "My first push notif!",
+    body: "This is my first push notif",
+  };
+
+  try {
+    const response = await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        host: "exp.host",
+        accept: "application/json",
+        "accept-encoding": "gzip, deflate",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+
+    if (response.ok) {
+      console.log("Push notification sent successfully!");
+    } else {
+      console.error("Failed to send push notification:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error sending push notification:", error.message);
+  }
+};
