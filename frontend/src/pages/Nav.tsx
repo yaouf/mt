@@ -20,13 +20,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
 
 const Tab = createBottomTabNavigator();
-const MyTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: "#FFF",
-  },
-};
 
 export type SavedArticleDict = {
   [uuid: string]: { slug: string; date: string };
@@ -52,7 +45,12 @@ export default function Nav() {
     const load = async () => {
       try {
         const saved = await getAsync("savedArticles");
-        setSavedArticles(saved);
+        if (!saved) {
+          setSavedArticles({});
+        } else {
+          setSavedArticles(saved);
+        }
+
         await AsyncStorage.getAllKeys().then((resp) =>
           console.log("**!!", resp)
         );
@@ -67,64 +65,62 @@ export default function Nav() {
     <HoldMenuProvider safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}>
       <NotificationProvider>
         <SavedContext.Provider value={{ savedArticles, setSavedArticles }}>
-          <NavigationContainer theme={MyTheme}>
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarIcon: ({ color }) => {
-                  let iconName = "home-outline";
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color }) => {
+                let iconName = "home-outline";
 
-                  if (route.name === "Settings") {
-                    iconName = "settings-outline";
-                  } else if (route.name === "Search") {
-                    iconName = "search-outline";
-                  } else if (route.name === "For You") {
-                    iconName = "star-outline";
-                  }
+                if (route.name === "Settings") {
+                  iconName = "settings-outline";
+                } else if (route.name === "Search") {
+                  iconName = "search-outline";
+                } else if (route.name === "For You") {
+                  iconName = "star-outline";
+                }
 
-                  // You can return any component that you like here!
-                  return <Ionicons name={iconName} size={24} color={color} />;
+                // You can return any component that you like here!
+                return <Ionicons name={iconName} size={24} color={color} />;
+              },
+              tabBarActiveTintColor: "#ED1C24",
+              tabBarInactiveTintColor: "gray",
+              tabBarStyle: {
+                height: 65,
+                marginBottom: 30,
+                paddingTop: 8,
+                paddingBottom: 8,
+                paddingRight: 20,
+                paddingLeft: 20,
+              },
+              tabBarLabelStyle: {
+                // padding: 5,
+                fontFamily: font2,
+                fontSize: 10,
+              },
+            })}
+          >
+            <Tab.Screen
+              name="Home"
+              component={HomeStackScreen}
+              options={{
+                headerTitle: () => <Header />,
+                headerStyle: {
+                  // paddingBottom: 8,
                 },
-                tabBarActiveTintColor: "#ED1C24",
-                tabBarInactiveTintColor: "gray",
-                tabBarStyle: {
-                  height: 65,
-                  marginBottom: 30,
-                  paddingTop: 8,
-                  paddingBottom: 8,
-                  paddingRight: 20,
-                  paddingLeft: 20,
-                },
-                tabBarLabelStyle: {
-                  // padding: 5,
-                  fontFamily: font2,
-                  fontSize: 10,
-                },
-              })}
-            >
-              <Tab.Screen
-                name="Home"
-                component={HomeStackScreen}
-                options={{
-                  headerTitle: () => <Header />,
-                  headerStyle: {
-                    // paddingBottom: 8,
-                  },
-                }}
-              />
-              <Tab.Screen
-                name="For You"
-                component={ForYouStackScreen}
-                options={{ headerTitle: () => <Header /> }}
-              />
-              {/* <Tab.Screen name="ArticleScreen" component={TestArticleScreen} /> */}
-              <Tab.Screen name="Search" component={SearchScreen} />
-              <Tab.Screen
-                name="Settings"
-                component={SettingsScreen}
-                options={{ headerTitle: () => <Header /> }}
-              />
-            </Tab.Navigator>
-          </NavigationContainer>
+              }}
+            />
+            <Tab.Screen
+              name="For You"
+              component={ForYouStackScreen}
+              options={{ headerTitle: () => <Header /> }}
+            />
+            {/* <Tab.Screen name="ArticleScreen" component={TestArticleScreen} /> */}
+            <Tab.Screen name="Search" component={SearchScreen} />
+            <Tab.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{ headerTitle: () => <Header /> }}
+            />
+          </Tab.Navigator>
         </SavedContext.Provider>
       </NotificationProvider>
     </HoldMenuProvider>

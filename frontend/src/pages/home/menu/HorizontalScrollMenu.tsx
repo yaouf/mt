@@ -4,11 +4,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { NavProp } from "src/types/types";
 import { menuStyles } from "src/styles/sectionMenu";
 import { MenuContext } from "../HomeStackScreen";
+import { menuItems } from "src/code/setup";
+import { setAsync } from "src/code/helpers";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
-  const { sectionMenu, currSection, setCurrSection } = useContext(MenuContext);
+  const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
+    useContext(MenuContext);
 
-  console.log("curr section", currSection);
+  if (!sectionMenu) {
+    setSectionMenu(menuItems);
+    setAsync("sectionMenu", JSON.stringify(menuItems));
+  }
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>

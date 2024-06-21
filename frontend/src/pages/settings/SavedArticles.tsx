@@ -10,9 +10,6 @@ import { layout } from "src/styles/styles";
 function SavedArticles({ navigation }: NavProp) {
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
 
-  console.log("*********", savedArticles);
-  console.log(Object.keys(savedArticles).length);
-
   return (
     <View>
       <Text>Saved Articles</Text>

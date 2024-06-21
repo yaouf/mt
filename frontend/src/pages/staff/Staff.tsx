@@ -113,7 +113,7 @@ function Staff({ route, navigation }: StaffProps) {
                   console.log(
                     "Image load error:",
                     media.attachment_uuid,
-                    media.extension
+                    media.preview_extension
                   )
                 }
               />

@@ -83,7 +83,7 @@ function ShowContextMenu(props: ArticleDetailProps) {
             icon: () => <Feather name="alert-octagon" size={24} color="red" />,
             isDestructive: true,
             onPress: () => {
-              console.log("Report Issue selected");
+              console.log("Report Issue selected"); // TODO: add link to report issue
             },
           },
         ]}

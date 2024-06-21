@@ -3,6 +3,9 @@
 // import { setAsync } from "../code/helpers";
 // import { LoginProps } from "src/types/types";
 
+// TODO: login and auth in future version
+
+
 // function LoginScreen(props: LoginProps) {
 //   console.log("onboarding - login");
 

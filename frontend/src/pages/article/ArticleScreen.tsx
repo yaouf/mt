@@ -12,8 +12,6 @@ import BottomBar from "./BottomBar";
 function ArticleScreen({ route, navigation }: ArticleProps) {
   const article: Article = route.params.data;
 
-  console.log("lead", article.subhead);
-
   return (
     <View>
       <ScrollView>
