@@ -6,7 +6,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import ShowContextMenu from "./ShowContextMenu";
-import { Author, CardProps, Tag } from "src/types/types";
+import { CardProps } from "src/types/navStacks";
+import { Author, Tag} from "src/types/data";
 import { formatDates } from "../../code/formatDates";
 import {
   font1,

@@ -1,11 +1,12 @@
-import { View, Text } from "react-native";
-import { styles } from "../../styles/search";
+import { View } from "react-native";
 import { baseStyles } from "src/styles/styles";
+import Search from "./Search";
+import { NavProp } from "src/types/navStacks";
 
-function SearchScreen() {
+function SearchScreen({ navigation }: NavProp) {
   return (
     <View style={baseStyles.container}>
-      <Text style={styles.titleText}>Search</Text>
+      <Search navigation={navigation} />
     </View>
   );
 }

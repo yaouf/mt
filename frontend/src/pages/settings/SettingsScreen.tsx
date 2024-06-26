@@ -1,14 +1,13 @@
 import { View, ScrollView, Text } from "react-native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NotificationContext, useNotification } from "./NotificationProvider";
+import { NotificationContext } from "./NotificationProvider";
 import SavedArticles from "./SavedArticles";
 import SettingsLink from "./SettingsLink";
 import { baseStyles, layout, text } from "src/styles/styles";
 import Notif from "src/components/Notif";
 import Divider from "src/components/Divider";
-import { NavProp } from "src/types/types";
-import * as Notifications from "expo-notifications";
+import { NavProp } from "src/types/navStacks";
 
 /**
  * Page for settings

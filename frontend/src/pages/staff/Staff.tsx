@@ -1,3 +1,4 @@
+import { StackScreenProps } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -5,9 +6,13 @@ import { fetchAuthor } from "src/code/fetchContent";
 import Divider from "src/components/Divider";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
-import { Article, Author, Media, StaffProps } from "src/types/types";
+import { Article, Author, Media } from "src/types/data";
+import { SettingsStackProps } from "src/types/navStacks";
 
-function Staff({ route, navigation }: StaffProps) {
+function Staff({
+  route,
+  navigation,
+}: StackScreenProps<SettingsStackProps, "Staff">) {
   const [author, setAuthor] = useState<Author | undefined>();
   const [articles, setArticles] = useState<Article[] | undefined>();
   const [media, setMedia] = useState<Media[] | undefined>();

@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { View, FlatList } from "react-native";
 import Top from "./sections/Top";
-import { Article, NavProp } from "src/types/types";
+import { NavProp } from "src/types/navStacks";
+import { Article } from "src/types/data";
 import Divider from "src/components/Divider";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useScrollToTop } from "@react-navigation/native";
@@ -153,7 +154,10 @@ function HomeScreen({ navigation }: NavProp) {
   return (
     <View
       onLayout={onLayoutRootView}
-      style={{ ...baseStyles.container, overflow: "visible" }}
+      style={{
+        ...baseStyles.container,
+        overflow: "visible",
+      }}
     >
       <SafeAreaView style={{ overflow: "visible" }}>
         <FlatList

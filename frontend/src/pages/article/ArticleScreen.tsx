@@ -1,15 +1,20 @@
 import { View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
-import { Article, ArticleProps } from "../../types/types";
 import { baseStyles } from "../../styles/styles";
 import { formatDates } from "src/code/formatDates";
 import SplitArticle from "./SplitContent";
 import { articleStyles } from "src/styles/article";
 import BottomBar from "./BottomBar";
+import { Article } from "src/types/data";
+import { HomeStackProps } from "src/types/navStacks";
+import { StackScreenProps } from "@react-navigation/stack";
 
 // TODO: future - related articles
 // links to other articles
 
-function ArticleScreen({ route, navigation }: ArticleProps) {
+function ArticleScreen({
+  route,
+  navigation,
+}: StackScreenProps<HomeStackProps, "Article">) {
   const article: Article = route.params.data;
 
   return (

@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from "react-native";
-import { Article } from "src/types/types";
+import { Article } from "src/types/data";
 import ImageCard from "src/components/cards/ImageCard";
 import { layout, text } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";

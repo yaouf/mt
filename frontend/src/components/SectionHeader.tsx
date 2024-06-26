@@ -1,4 +1,3 @@
-// import { NativeBaseProvider } from "native-base";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useContext } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";

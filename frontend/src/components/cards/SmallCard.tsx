@@ -8,7 +8,8 @@ import {
   StyleProp,
   ViewStyle,
 } from "react-native";
-import { Author, CardProps } from "src/types/types";
+import { CardProps } from "src/types/navStacks";
+import { Author } from "src/types/data";
 import { shortFormatDates } from "../../code/formatDates";
 import {
   font1,

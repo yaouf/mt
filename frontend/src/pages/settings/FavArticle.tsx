@@ -4,7 +4,7 @@ import { ActivityIndicator, Text } from "react-native";
 import { fetchArticle } from "src/code/fetchContent";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import { varGray1 } from "src/styles/styles";
-import { Article } from "src/types/types";
+import { Article } from "src/types/data";
 
 type FavArticleProps = {
   slug: string;

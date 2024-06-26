@@ -1,12 +1,10 @@
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SettingsScreen from "./settings/SettingsScreen";
 import SearchScreen from "./search/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { font2 } from "src/styles/styles";
 import Header from "src/components/Header";
 import HomeStackScreen from "./home/HomeStackScreen";
-import ForYouStackScreen from "./foryou/ForYouStackScreen";
+// import ForYouStackScreen from "./foryou/ForYouStackScreen";
 import { NotificationProvider } from "./settings/NotificationProvider";
 import {
   Dispatch,
@@ -18,6 +16,7 @@ import {
 import { getAsync } from "src/code/helpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
+import SettingsStackScreen from "./settings/SettingsStackScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -108,16 +107,15 @@ export default function Nav() {
                 },
               }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
               name="For You"
               component={ForYouStackScreen}
               options={{ headerTitle: () => <Header /> }}
-            />
-            {/* <Tab.Screen name="ArticleScreen" component={TestArticleScreen} /> */}
+            /> */}
             <Tab.Screen name="Search" component={SearchScreen} />
             <Tab.Screen
               name="Settings"
-              component={SettingsScreen}
+              component={SettingsStackScreen}
               options={{ headerTitle: () => <Header /> }}
             />
           </Tab.Navigator>

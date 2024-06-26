@@ -1,7 +1,7 @@
 import { Image, Platform, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import ShowContextMenu from "./ShowContextMenu";
-import { CardProps } from "src/types/types";
+import { CardProps } from "src/types/navStacks";
 import { font1, varTextColor } from "../../styles/styles";
 
 function ImageCard({ article, navigation }: CardProps) {

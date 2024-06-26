@@ -14,7 +14,7 @@ import TodaysPicks from "./sections/TodaysPicks";
 import Divider from "src/components/Divider";
 import { useScrollToTop } from "@react-navigation/native";
 import { text } from "src/styles/styles";
-import { NavProp } from "src/types/types";
+import { NavProp } from "src/types/navStacks";
 
 /**
  * for you page!!

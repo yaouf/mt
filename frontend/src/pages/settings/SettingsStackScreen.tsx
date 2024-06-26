@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { SettingsStackProps } from "src/types/types";
+import { SettingsStackProps } from "src/types/navStacks";
 import ArticleScreen from "../article/ArticleScreen";
 import SettingsScreen from "./SettingsScreen";
 import Staff from "../staff/Staff";
@@ -19,11 +19,6 @@ function SettingsStackScreen() {
         component={ArticleScreen}
         options={{ headerShown: false }}
       />
-      {/* <SettingsStack.Screen
-        name="SavedArticles" // for all saved articles
-        component={ArticleScreen}
-        options={{ headerShown: false }}
-      /> */}
       {/* <SettingsStack.Screen
         name="Staff" 
         component={Staff}

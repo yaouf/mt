@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
-import { font2, text, varGray1, varTextColor } from "src/styles/styles";
-import { NavProp } from "src/types/types";
+import { font2 } from "src/styles/styles";
+import { NavProp } from "src/types/navStacks";
 
 SplashScreen.preventAutoHideAsync();
 
-function Screen1({ navigation }: NavProp) {
+function WelcomeScreen({ navigation }: NavProp) {
   const [splashScreen, setSplashScreen] = useState(false); // splash screen prop
   const [showButton, setShowButton] = useState(false); // state to control the visibility of the button
 
@@ -51,7 +51,7 @@ function Screen1({ navigation }: NavProp) {
   );
 }
 
-export default Screen1;
+export default WelcomeScreen;
 
 export const styles = StyleSheet.create({
   container: {

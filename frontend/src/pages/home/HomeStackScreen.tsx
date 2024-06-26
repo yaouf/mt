@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./HomeScreen";
-import { HomeStackProps, MenuItem } from "src/types/types";
+import { HomeStackProps } from "src/types/navStacks";
 import ArticleScreen from "../article/ArticleScreen";
 import SectionsScreen from "../sections/SectionsScreen";
 import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
@@ -15,6 +15,7 @@ import {
 } from "react";
 import { getAsync } from "src/code/helpers";
 import { menuItems } from "src/code/setup";
+import { MenuItem } from "src/types/other";
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 

@@ -1,17 +1,22 @@
 import { View, Text, ActivityIndicator } from "react-native";
-import { Article, SectionProps } from "../../types/types";
 import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
 import { useEffect, useState } from "react";
 import { fetchSection } from "src/code/fetchContent";
 import LargeCard from "src/components/cards/LargeCard";
 import SmallCard from "src/components/cards/SmallCard";
-import { FlatList, ScrollView } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 import HorizontalCard from "src/components/cards/HorizontalCard";
+import { StackScreenProps } from "@react-navigation/stack";
+import { HomeStackProps } from "src/types/navStacks";
+import { Article } from "src/types/data";
 
 // TODO: if reach the end of the list, load the next page of content
 // (another api call but with page= page+ 1 unless page=last page)
 
-function SectionsScreen({ route, navigation }: SectionProps) {
+function SectionsScreen({
+  route,
+  navigation,
+}: StackScreenProps<HomeStackProps, "Section">) {
   const slug = route.params.slug;
   const [section, setSection] = useState<Article[]>();
   const [title, setTitle] = useState();
