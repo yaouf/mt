@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import Onboarding from "./onboarding/Onboarding";
 import Nav from "./pages/Nav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setAsync } from "./code/helpers";
+import { sendNotification, setAsync } from "./code/helpers";
 import { NotificationProvider } from "./pages/settings/NotificationProvider";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { menuItems } from "./code/setup";
+import { createDevice } from "./code/serverlessAPIs";
+import * as Notifications from "expo-notifications";
+import { Linking } from "react-native";
 
 const fullStack = createStackNavigator();
 
@@ -24,8 +27,6 @@ function BdhApp() {
   useEffect(() => {
     const load = async () => {
       try {
-        setAsync("savedArticles", JSON.stringify({}));
-        setAsync("sectionMenu", JSON.stringify(menuItems));
         const onboarded = await AsyncStorage.getItem("hasOnboarded");
         if (onboarded === "true") {
           setHasOnboarded(true); // toggle to false for development
@@ -34,13 +35,66 @@ function BdhApp() {
         console.log(err);
       }
     };
-
     load();
   });
 
+  // TODO: notifications - https://docs.expo.dev/versions/latest/sdk/notifications/#notification
+
   return (
     <NotificationProvider>
-      <NavigationContainer theme={MyTheme}>
+      <NavigationContainer
+        theme={MyTheme}
+        // linking={{
+        //   config: {
+        //     // Configuration for linking
+        //   },
+        //   async getInitialURL() {
+        //     // First, you may want to do the default deep link handling
+        //     // Check if app was opened from a deep link
+        //     const url = await Linking.getInitialURL();
+
+        //     if (url != null) {
+        //       return url;
+        //     }
+
+        //     // Handle URL from expo push notifications
+        //     const response =
+        //       await Notifications.getLastNotificationResponseAsync();
+
+        //     return response?.notification.request.content.data.url;
+        //   },
+        //   subscribe(listener) {
+        //     const onReceiveURL = ({ url }: { url: string }) => listener(url);
+
+        //     // Listen to incoming links from deep linking
+        //     const eventListenerSubscription = Linking.addEventListener(
+        //       "url",
+        //       onReceiveURL
+        //     );
+
+        //     // Listen to expo push notifications
+        //     const subscription =
+        //       Notifications.addNotificationResponseReceivedListener(
+        //         (response) => {
+        //           const url = response.notification.request.content.data.url;
+
+        //           // Any custom logic to see whether the URL needs to be handled
+        //           //...
+        //           console.log("******", response);
+
+        //           // Let React Navigation handle the URL
+        //           listener(url);
+        //         }
+        //       );
+
+        //     return () => {
+        //       // Clean up the event listeners
+        //       eventListenerSubscription.remove();
+        //       subscription.remove();
+        //     };
+        //   },
+        // }}
+      >
         {hasOnboarded ? (
           <Nav />
         ) : (

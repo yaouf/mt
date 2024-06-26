@@ -10,6 +10,7 @@ export const search = StyleSheet.create({
     borderRadius: 4,
     height: 40,
     width: "100%",
+    marginTop: 16,
   },
   searchText: {
     fontSize: 15,

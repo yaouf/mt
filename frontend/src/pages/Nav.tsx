@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SearchScreen from "./search/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { font2 } from "src/styles/styles";
 import Header from "src/components/Header";
@@ -11,12 +10,15 @@ import {
   SetStateAction,
   createContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { getAsync } from "src/code/helpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
 import SettingsStackScreen from "./settings/SettingsStackScreen";
+import SearchStackScreen from "./search/SearchStackScreen";
+import * as Notifications from "expo-notifications";
 
 const Tab = createBottomTabNavigator();
 
@@ -35,10 +37,26 @@ export const SavedContext = createContext<SavedContextType>({
 });
 
 /**
+ * Defines how notifications should behave when received by the app
+ */
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
+/**
  * @returns Main screens of the app
  */
 export default function Nav() {
   const [savedArticles, setSavedArticles] = useState<Object>({});
+  const notificationListener = useRef<Notifications.Subscription>();
+  const responseListener = useRef<Notifications.Subscription>();
+  const [notification, setNotification] = useState<
+    Notifications.Notification | undefined
+  >(undefined);
 
   useEffect(() => {
     const load = async () => {
@@ -59,6 +77,36 @@ export default function Nav() {
     };
     load();
   }, []);
+
+  useEffect(() => {
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        setNotification(notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
+
+    return () => {
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
+
+  console.log(
+    "Title",
+    notification && notification.request.content.title,
+    "Body",
+    notification && notification.request.content.body,
+    "Data",
+    notification && JSON.stringify(notification.request.content.data)
+  );
 
   return (
     <HoldMenuProvider safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}>
@@ -112,7 +160,11 @@ export default function Nav() {
               component={ForYouStackScreen}
               options={{ headerTitle: () => <Header /> }}
             /> */}
-            <Tab.Screen name="Search" component={SearchScreen} />
+            <Tab.Screen
+              name="Search"
+              component={SearchStackScreen}
+              options={{ headerTitle: () => <Header /> }}
+            />
             <Tab.Screen
               name="Settings"
               component={SettingsStackScreen}
