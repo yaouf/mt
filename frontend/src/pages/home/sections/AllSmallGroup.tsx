@@ -5,7 +5,7 @@ import { SectionGroupProps } from "src/types/navStacks";
 import { Article } from "src/types/data";
 import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
-import { layout, varGray1 } from "src/styles/styles";
+import { baseStyles, layout, varGray1 } from "src/styles/styles";
 
 /**
  * Section with all small cards
@@ -37,7 +37,7 @@ function AllSmallGroup(props: SectionGroupProps) {
   }, []);
 
   return (
-    <View style={{ overflow: "visible" }}>
+    <View style={baseStyles.container}>
       <SectionHeader
         title={props.title}
         slug={props.slug}

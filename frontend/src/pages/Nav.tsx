@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SearchScreen from "./search/SearchScreen";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { font2 } from "src/styles/styles";
 import Header from "src/components/Header";
@@ -17,6 +16,7 @@ import { getAsync } from "src/code/helpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
 import SettingsStackScreen from "./settings/SettingsStackScreen";
+import SearchStackScreen from "./search/SearchStackScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -112,7 +112,11 @@ export default function Nav() {
               component={ForYouStackScreen}
               options={{ headerTitle: () => <Header /> }}
             /> */}
-            <Tab.Screen name="Search" component={SearchScreen} />
+            <Tab.Screen
+              name="Search"
+              component={SearchStackScreen}
+              options={{ headerTitle: () => <Header /> }}
+            />
             <Tab.Screen
               name="Settings"
               component={SettingsStackScreen}

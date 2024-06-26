@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
-import { varGray1 } from "./styles";
+import { font2, varGray1 } from "./styles";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -36,5 +36,12 @@ export const settings = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: varGray1,
     marginVertical: 4,
+  },
+  smallHeading: {
+    color: varGray1,
+    fontFamily: font2,
+    fontSize: 12,
+    fontWeight: "700",
+    textTransform: "uppercase",
   },
 });

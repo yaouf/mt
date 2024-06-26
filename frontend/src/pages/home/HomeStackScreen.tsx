@@ -44,7 +44,11 @@ function HomeStackScreen() {
     const loadSectionsAsync = async () => {
       try {
         const sections = await getAsync("sectionMenu");
-        setSectionMenu(sections);
+        if (sections !== undefined) {
+          setSectionMenu(sections);
+        } else {
+          setSectionMenu(menuItems); // first load
+        }
       } catch (err) {
         console.log(err);
       }
@@ -66,9 +70,9 @@ function HomeStackScreen() {
         initialRouteName="HomeScreen"
         screenOptions={{
           header: HorizontalScrollMenu,
-          // headerStyle: {
-          //   height: 20,
-          // },
+          headerStyle: {
+            height: 20,
+          },
         }}
       >
         <HomeStack.Screen

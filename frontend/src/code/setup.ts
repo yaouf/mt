@@ -34,12 +34,12 @@ export const setUpDevice = async (
   setAsync("hasOnboarded", "true");
   let deviceID: string = "";
 
-  const token = (
+  let token = (
     await Notifications.getExpoPushTokenAsync({
       projectId: "51f97ce3-1a0c-4159-abc3-4b04e2e1db8b",
     })
   ).data;
-
+  // token = token.replace("ExponentPushToken[", "").replace("]", "");
   console.log("PERMISSION", systemPermissionStatus);
 
   try {
@@ -64,5 +64,7 @@ export const setUpDevice = async (
   }
 
   setAsync("deviceID", deviceID);
+  setAsync("savedArticles", JSON.stringify({}));
+  setAsync("sectionMenu", JSON.stringify(menuItems));
   return deviceID;
 };

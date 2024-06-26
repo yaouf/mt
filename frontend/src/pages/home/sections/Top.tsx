@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import LargeCard from "../../../components/cards/LargeCard";
 import { Article } from "src/types/data";
 import SmallCard from "src/components/cards/SmallCard";
-import { layout, text } from "src/styles/styles";
+import { baseStyles, layout, text } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type TopProps = {
@@ -12,7 +12,7 @@ type TopProps = {
 
 function Top(props: TopProps) {
   return (
-    <View style={{ overflow: "visible" }}>
+    <View style={baseStyles.container}>
       <Text style={text.bigTitle}>Top Stories</Text>
       <View style={{ overflow: "visible" }}>
         <LargeCard
