@@ -2,7 +2,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { ScrollView, Text, View } from "react-native";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import { layout, text } from "src/styles/styles";
-import { Article, NavProp } from "src/types/types";
+import { Article } from "src/types/data";
 
 type TrendingProps = {
   data: Article[];

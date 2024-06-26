@@ -1,4 +1,4 @@
-import { MenuItem } from "../types/types";
+import { MenuItem } from "../types/other";
 import { setAsync } from "./helpers";
 import { Dispatch, SetStateAction } from "react";
 import * as Notifications from "expo-notifications";
@@ -31,8 +31,7 @@ export const setUpDevice = async (
   weekly?: boolean,
   daily?: boolean
 ): Promise<string> => {
-  
-  setAsync("hasOnboarded", "true");  
+  setAsync("hasOnboarded", "true");
   let deviceID: string = "";
 
   const token = (

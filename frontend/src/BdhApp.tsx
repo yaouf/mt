@@ -28,7 +28,7 @@ function BdhApp() {
         setAsync("sectionMenu", JSON.stringify(menuItems));
         const onboarded = await AsyncStorage.getItem("hasOnboarded");
         if (onboarded === "true") {
-          setHasOnboarded(false); // toggle to false for development
+          setHasOnboarded(true); // toggle to false for development
         }
       } catch (err) {
         console.log(err);

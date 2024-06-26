@@ -1,5 +1,4 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import { PushNotifProps } from "../types/types";
 import { settings } from "src/styles/pages";
 import { useContext } from "react";
 import * as Notifications from "expo-notifications";
@@ -7,6 +6,8 @@ import { baseStyles, text } from "src/styles/styles";
 import Notif from "src/components/Notif";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { setUpDevice } from "../code/setup";
+import { OnboardParams } from "src/types/navStacks";
+import { StackScreenProps } from "@react-navigation/stack";
 
 /**
  * Defines how notifications should behave when received by the app
@@ -19,7 +20,10 @@ Notifications.setNotificationHandler({
   }),
 });
 
-function PushNotifsScreen({ route, navigation }: PushNotifProps) {
+function PushNotifsScreen({
+  route,
+  navigation,
+}: StackScreenProps<OnboardParams, "PushNotifs">) {
   const {
     breaking,
     setBreaking,

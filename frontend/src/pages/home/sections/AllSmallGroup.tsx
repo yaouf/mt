@@ -1,7 +1,8 @@
 import SmallCard from "src/components/cards/SmallCard";
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import { Article, SectionGroupProps } from "src/types/types";
+import { View, ActivityIndicator } from "react-native";
+import { SectionGroupProps } from "src/types/navStacks";
+import { Article } from "src/types/data";
 import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
 import { layout, varGray1 } from "src/styles/styles";

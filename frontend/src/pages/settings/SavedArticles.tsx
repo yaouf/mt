@@ -1,9 +1,8 @@
 import { useContext, useRef, useState } from "react";
 import { SavedContext } from "../Nav";
 import { Text, View } from "react-native";
-import CustomButton from "src/components/CustomButton";
 import { setAsync } from "src/code/helpers";
-import { NavProp } from "src/types/types";
+import { NavProp } from "src/types/navStacks";
 import FavArticle from "./FavArticle";
 import { layout } from "src/styles/styles";
 
@@ -15,7 +14,7 @@ function SavedArticles({ navigation }: NavProp) {
       <Text>Saved Articles</Text>
 
       {/* // TODO: this is just for me for now */}
-      <CustomButton
+      {/* <CustomButton
         text="clear"
         onPress={() => {
           setAsync("savedArticles", JSON.stringify({})).then(() =>
@@ -23,7 +22,7 @@ function SavedArticles({ navigation }: NavProp) {
           );
           setSavedArticles({});
         }}
-      />
+      /> */}
 
       {Object.keys(savedArticles).length > 0 ? (
         <View style={layout.vStack}>

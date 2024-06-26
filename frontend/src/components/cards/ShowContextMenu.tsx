@@ -3,7 +3,7 @@ import { shareArticle } from "../../pages/article/ShareArticle";
 import { useContext, useEffect, useState } from "react";
 import { handleBookmark } from "src/code/helpers";
 import { SavedContext } from "src/pages/Nav";
-import { ArticleDetailProps } from "src/types/types";
+import { ArticleDetailProps } from "src/types/other";
 import { HoldItem } from "react-native-hold-menu";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { varTextColor } from "src/styles/styles";

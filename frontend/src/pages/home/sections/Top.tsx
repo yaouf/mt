@@ -1,8 +1,6 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import LargeCard from "../../../components/cards/LargeCard";
-import { Article } from "src/types/types";
-import { fetchSectionHome } from "src/code/fetchContent";
+import { Article } from "src/types/data";
 import SmallCard from "src/components/cards/SmallCard";
 import { layout, text } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";

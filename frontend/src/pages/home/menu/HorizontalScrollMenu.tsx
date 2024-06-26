@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { NavProp } from "src/types/types";
+import { NavProp } from "src/types/navStacks";
 import { menuStyles } from "src/styles/sectionMenu";
 import { MenuContext } from "../HomeStackScreen";
 import { menuItems } from "src/code/setup";

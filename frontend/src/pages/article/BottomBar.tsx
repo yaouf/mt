@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
 import { SavedContext } from "../Nav";
 import { handleBookmark } from "src/code/helpers";
-import { ArticleDetailProps } from "src/types/types";
+import { ArticleDetailProps } from "src/types/other";
 
 /**
  * action bar at the bottom of each article

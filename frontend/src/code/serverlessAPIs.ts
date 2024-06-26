@@ -24,13 +24,13 @@ export const createDevice = async (
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-API-KEY": process.env.API_KEY,
+      "X-API-KEY": process.env.EXPO_PUBLIC_API_KEY,
     },
     body: body,
     redirect: "follow",
   };
 
-  console.log(process.env.API_KEY);
+  console.log(process.env.EXPO_PUBLIC_API_KEY);
 
   const response = await fetch(
     "https://createdevice-h4fuv4ya3q-uc.a.run.app/",

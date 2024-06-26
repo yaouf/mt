@@ -7,11 +7,12 @@ import DraggableFlatList, {
 import { varRed, text, varGray1, baseStyles } from "src/styles/styles";
 import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { MenuItem, NavProp } from "src/types/types";
+import { NavProp } from "src/types/navStacks";
 import { Feather } from "@expo/vector-icons";
 import { menuStyles } from "src/styles/sectionMenu";
 import { MenuContext } from "../HomeStackScreen";
 import { setAsync } from "src/code/helpers";
+import { MenuItem } from "src/types/other";
 
 function SectionPrefScreen({ navigation }: NavProp) {
   const { original, sectionMenu, setSectionMenu } = useContext(MenuContext);

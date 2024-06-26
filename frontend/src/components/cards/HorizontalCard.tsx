@@ -5,7 +5,6 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Author, CardProps } from "src/types/types";
 import { formatDates } from "../../code/formatDates";
 import {
   font1,
@@ -15,6 +14,8 @@ import {
   varGray1,
 } from "../../styles/styles";
 import ShowContextMenu from "./ShowContextMenu";
+import { CardProps } from "src/types/navStacks";
+import { Author } from "src/types/data";
 
 function HorizontalCard({ article, navigation }: CardProps) {
   let img_uri =

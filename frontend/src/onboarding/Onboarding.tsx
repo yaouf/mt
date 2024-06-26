@@ -1,18 +1,18 @@
-import { NavProp, OnboardParams, OnboardProps } from "../types/types";
+import { NavProp, OnboardParams } from "../types/navStacks";
 import { createStackNavigator } from "@react-navigation/stack";
 import PushNotifsScreen from "./PushNotifsScreen";
 import { NavigationContainer } from "@react-navigation/native";
-import Screen1 from "./Screen1";
+import WelcomeScreen from "./WelcomeScreen";
 
 const onboardingStack = createStackNavigator<OnboardParams>();
 
-// no login for first version
+// add auth in future versions of app
 function Onboarding({ navigation }: NavProp) {
   return (
-    <onboardingStack.Navigator initialRouteName="Screen1">
+    <onboardingStack.Navigator initialRouteName="WelcomeScreen">
       <onboardingStack.Screen
-        name="Screen1"
-        component={Screen1}
+        name="WelcomeScreen"
+        component={WelcomeScreen}
         options={{ headerShown: false }}
       />
       <onboardingStack.Screen
