@@ -18,12 +18,13 @@ function Search({ navigation }: NavProp) {
 
   const [articles, setArticles] = useState<Article[]>([]);
 
+  // TODO: the ty tag is set to just return articles for now to avoid erroring since media and pages can be returned too
   const handleSearch = async () => {
     setSearchActivated(false);
     try {
       // Fetch a response using the Search.JSON URL Link (Currently restricted to basic searches)
       const response = await fetch(
-        `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}`
+        `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`
       );
       const jsonString = await response.text();
       const resultObject = JSON.parse(jsonString); // Parse string into an object
@@ -42,7 +43,6 @@ function Search({ navigation }: NavProp) {
     textInputRef.current?.blur();
   };
 
-  console.log(articles);
   return (
     <View>
       <View style={search.searchbar}>

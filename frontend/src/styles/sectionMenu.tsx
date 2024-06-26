@@ -55,4 +55,8 @@ export const menuStyles = StyleSheet.create({
     fontFamily: font2,
     color: varTextColor,
   },
+  menuItem: {
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+  },
 });

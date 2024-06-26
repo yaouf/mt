@@ -2,9 +2,10 @@ import SmallCard from "src/components/cards/SmallCard";
 import React, { useEffect, useState } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { SectionGroupProps } from "src/types/navStacks";
-import { Article } from "src/types/data";import { fetchSectionHome } from "src/code/fetchContent";
+import { Article } from "src/types/data";
+import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
-import { layout, varGray1 } from "src/styles/styles";
+import { baseStyles, layout, varGray1 } from "src/styles/styles";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 
 /**
@@ -15,10 +16,6 @@ import HorizontalCard from "src/components/cards/HorizontalCard";
 function SmallHorzGroup(props: SectionGroupProps) {
   const [articles, setArticles] = useState<Article[]>();
   const [loading, setLoading] = useState<boolean>(true);
-
-  const viewMore = () => {
-    props.navigation.push("Section", { slug: props.slug });
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +35,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
   }, []);
 
   return (
-    <View style={{ overflow: "visible" }}>
+    <View style={baseStyles.container}>
       <SectionHeader
         title={props.title}
         slug={props.slug}

@@ -1,5 +1,11 @@
 import { useContext } from "react";
-import { StyleSheet, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { NavProp } from "src/types/navStacks";
 import { menuStyles } from "src/styles/sectionMenu";
@@ -20,18 +26,20 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <TouchableOpacity
         key={1}
-        style={styles.menuItem}
+        style={menuStyles.menuItem}
         onPress={() => navigation.push("SectionPref")}
       >
         <Ionicons name="filter-outline" size={24} color="black" />
       </TouchableOpacity>
 
       {currSection === "all" ? (
-        <Text style={menuStyles.menuItemSelected}>all</Text>
+        <View style={menuStyles.menuItem}>
+          <Text style={menuStyles.menuItemSelected}>all</Text>
+        </View>
       ) : (
         <TouchableOpacity
           key={2}
-          style={styles.menuItem}
+          style={menuStyles.menuItem}
           onPress={() => {
             navigation.popToTop();
             setCurrSection("all");
@@ -43,11 +51,13 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
       {sectionMenu.map((menuItem) =>
         menuItem.slug === currSection ? (
-          <Text style={menuStyles.menuItemSelected}>{menuItem.title}</Text>
+          <View style={menuStyles.menuItem}>
+            <Text style={menuStyles.menuItemSelected}>{menuItem.title}</Text>
+          </View>
         ) : (
           <TouchableOpacity
             key={menuItem.id}
-            style={styles.menuItem}
+            style={menuStyles.menuItem}
             onPress={() => {
               navigation.push("Section", { slug: menuItem.slug });
               setCurrSection(menuItem.slug);
@@ -60,16 +70,5 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  menuItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 0,
-    backgroundColor: "white",
-    marginHorizontal: 0,
-  },
-  menuItemText: {},
-});
 
 export default HorizontalScrollMenu;

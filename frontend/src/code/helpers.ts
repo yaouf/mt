@@ -80,7 +80,7 @@ export function handleBookmark(
  * Expo push notification service using fetch network request. This services uses the token we provide to deliver
  * the notification to the specific device registered.
  */
-const sendNotification = async () => {
+export const sendNotification = async () => {
   console.log("Sending push notification...");
   // notification message
   const message = {
