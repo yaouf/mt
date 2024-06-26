@@ -5,6 +5,7 @@ import { fyp } from "src/styles/pages";
 import { text } from "src/styles/styles";
 import * as Notifications from "expo-notifications";
 import { setAsync } from "src/code/helpers";
+import { updateSettings } from "src/code/serverlessAPIs";
 
 type NotifProps = {
   title: string;
@@ -27,13 +28,30 @@ function Notif({
     systemPermissionStatus,
     setSystemPermissionStatus,
     requestPermission,
+    deviceID,
   } = useContext(NotificationContext);
+
+  const updateBackend = (newVal: boolean) => {
+    try {
+      if (asyncName === "breakingNotifs") {
+        updateSettings(deviceID, newVal, undefined, undefined);
+      } else if (asyncName === "weeklyNotifs") {
+        updateSettings(deviceID, undefined, newVal, undefined);
+      } else if (asyncName === "dailyNotifs") {
+        updateSettings(deviceID, undefined, undefined, newVal);
+      }
+    } catch (error) {
+      console.log("error updating settings", error);
+    }
+  };
 
   const toggle = async () => {
     if (onboarding) {
       setValue((previousState: boolean) => !previousState);
     } else {
+      // update system permission status (on device and in backend)
       if (systemPermissionStatus === "granted") {
+        updateBackend(!value); // TODO: is this the right value even if toggle quickly??
         setValue((previousState: boolean) => !previousState);
         setAsync(asyncName as string, JSON.stringify(!value));
       } else if (systemPermissionStatus === "denied") {
@@ -49,19 +67,21 @@ function Notif({
             { text: "Open Settings", onPress: () => Linking.openSettings() },
           ]
         );
-        // TODO: update backend  -- not sure if i want to do it here or where the settings are checked in notif provider
+        // don't update background here because system settings is disallowed
       } else {
-        console.log("if of undetermined");
-        // said maybe later in settings
+        console.log("if of undetermined"); // (said maybe later in settings)
         await requestPermission();
         const { status } = await Notifications.getPermissionsAsync();
         if (status === "granted") {
+          console.log("in true");
           setValue(true);
           setAsync(asyncName as string, "true");
-          // TODO: update backend (just for granted, bc undetermined and denied are both false)
+          updateBackend(!value);
         }
         setSystemPermissionStatus(status);
       }
+
+      // TODO: updateNotifStatus
     }
   };
 

@@ -3,6 +3,8 @@ import { SettingsStackProps } from "src/types/navStacks";
 import ArticleScreen from "../article/ArticleScreen";
 import SettingsScreen from "./SettingsScreen";
 import Staff from "../staff/Staff";
+import SavedArticles from "./SavedArticles";
+import DevTeam from "./DevTeam";
 
 const SettingsStack = createStackNavigator<SettingsStackProps>();
 
@@ -15,8 +17,18 @@ function SettingsStackScreen() {
         options={{ headerShown: false }}
       />
       <SettingsStack.Screen
-        name="Article" // to open saved articles
+        name="Article" // to open articles that were saved
         component={ArticleScreen}
+        options={{ headerShown: false }}
+      />
+      <SettingsStack.Screen
+        name="SavedArticles" // all saved articles page
+        component={SavedArticles}
+        options={{ headerShown: false }}
+      />
+      <SettingsStack.Screen
+        name="DevTeam" // to see team credits
+        component={DevTeam}
         options={{ headerShown: false }}
       />
       {/* <SettingsStack.Screen

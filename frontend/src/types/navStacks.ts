@@ -28,6 +28,8 @@ export type SettingsStackProps = {
   SettingsScreen: undefined;
   Article: { data: Article };
   Staff: { slug: string };
+  SavedArticles: undefined;
+  DevTeam: undefined;
 };
 
 export type OnboardParams = {

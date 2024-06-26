@@ -123,4 +123,11 @@ export const text = StyleSheet.create({
     fontWeight: "400",
     fontSize: 12,
   },
+  textMedium: {
+    color: varTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 14,
+  },
 });

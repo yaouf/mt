@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import Top from "./sections/Top";
 import { NavProp } from "src/types/navStacks";
 import { Article } from "src/types/data";
@@ -152,24 +152,20 @@ function HomeScreen({ navigation }: NavProp) {
   ];
 
   return (
-    <View
-      onLayout={onLayoutRootView}
-      style={{
-        ...baseStyles.container,
-        overflow: "visible",
-      }}
-    >
-      <SafeAreaView style={{ overflow: "visible" }}>
-        <FlatList
-          ref={flatListRef}
-          data={sections}
-          renderItem={({ item }) => item.component}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={Divider}
-          initialNumToRender={1}
-          // onRefresh={() => console.log("here")}
-        />
-      </SafeAreaView>
+    <View onLayout={onLayoutRootView}>
+      <FlatList
+        ref={flatListRef}
+        data={sections}
+        renderItem={({ item }) => item.component}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => (
+          <View style={{ marginHorizontal: 16 }}>
+            <Divider />
+          </View>
+        )}
+        initialNumToRender={1}
+        // onRefresh={() => console.log("here")}
+      />
     </View>
   );
 }

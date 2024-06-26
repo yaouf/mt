@@ -10,88 +10,91 @@ import { varTextColor } from "src/styles/styles";
 
 // https://enesozturk.github.io/react-native-hold-menu/docs
 function ShowContextMenu(props: ArticleDetailProps) {
-  const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState(props.uuid in savedArticles);
+  return <></>;
 
-  let size = 16;
-  if (props.large) {
-    size = 24;
-  }
+  // TODO: this is a bit buggy so leaving out for now
+  // const { savedArticles, setSavedArticles } = useContext(SavedContext);
+  // const [saved, setSaved] = useState(props.uuid in savedArticles);
 
-  useEffect(() => {
-    if (props.uuid in savedArticles) {
-      setSaved(true);
-    }
-  }, [savedArticles]);
+  // let size = 16;
+  // if (props.large) {
+  //   size = 24;
+  // }
 
-  const uri = "https://www.browndailyherald.com/" + props.uuid;
-  const saveOption = !saved ? "Save Story" : "Unsave Story";
+  // useEffect(() => {
+  //   if (props.uuid in savedArticles) {
+  //     setSaved(true);
+  //   }
+  // }, [savedArticles]);
 
-  return (
-    <View
-      style={{
-        position: "absolute",
-        bottom: 8,
-        right: 12,
-        zIndex: 9999,
-        // padding: 8,
-      }}
-    >
-      <HoldItem
-        activateOn="tap"
-        items={[
-          {
-            text: saveOption,
-            icon: () => (
-              <Ionicons
-                name="bookmark-outline"
-                size={24}
-                color={varTextColor}
-              />
-            ),
-            onPress: () => {
-              handleBookmark(
-                saved,
-                props.slug,
-                props.published_at,
-                props.uuid,
-                savedArticles,
-                setSavedArticles,
-                setSaved
-              );
-            },
-          },
-          {
-            text: "Share",
-            icon: () => (
-              <Ionicons name="share-outline" size={24} color={varTextColor} />
-            ),
-            onPress: () => {
-              shareArticle(uri);
-            },
-          },
-          {
-            text: "Copy Link",
-            icon: () => <Ionicons name="link" size={24} color={varTextColor} />,
-            withSeparator: true,
-            onPress: () => {
-              Clipboard.setString(uri);
-            },
-          },
-          {
-            text: "Report Issue",
-            icon: () => <Feather name="alert-octagon" size={24} color="red" />,
-            isDestructive: true,
-            onPress: () => {
-              console.log("Report Issue selected"); // TODO: add link to report issue
-            },
-          },
-        ]}
-      >
-        <Feather name="more-horizontal" size={size} color={varTextColor} />
-      </HoldItem>
-    </View>
-  );
+  // const uri = "https://www.browndailyherald.com/" + props.uuid;
+  // const saveOption = !saved ? "Save Story" : "Unsave Story";
+
+  // return (
+  //   <View
+  //     style={{
+  //       position: "absolute",
+  //       bottom: 8,
+  //       right: 12,
+  //       zIndex: 9999,
+  //       // padding: 8,
+  //     }}
+  //   >
+  //     <HoldItem
+  //       activateOn="tap"
+  //       items={[
+  //         {
+  //           text: saveOption,
+  //           icon: () => (
+  //             <Ionicons
+  //               name="bookmark-outline"
+  //               size={24}
+  //               color={varTextColor}
+  //             />
+  //           ),
+  //           onPress: () => {
+  //             handleBookmark(
+  //               saved,
+  //               props.slug,
+  //               props.published_at,
+  //               props.uuid,
+  //               savedArticles,
+  //               setSavedArticles,
+  //               setSaved
+  //             );
+  //           },
+  //         },
+  //         {
+  //           text: "Share",
+  //           icon: () => (
+  //             <Ionicons name="share-outline" size={24} color={varTextColor} />
+  //           ),
+  //           onPress: () => {
+  //             shareArticle(uri);
+  //           },
+  //         },
+  //         {
+  //           text: "Copy Link",
+  //           icon: () => <Ionicons name="link" size={24} color={varTextColor} />,
+  //           withSeparator: true,
+  //           onPress: () => {
+  //             Clipboard.setString(uri);
+  //           },
+  //         },
+  //         {
+  //           text: "Report Issue",
+  //           icon: () => <Feather name="alert-octagon" size={24} color="red" />,
+  //           isDestructive: true,
+  //           onPress: () => {
+  //             console.log("Report Issue selected"); // TODO: add link to report issue
+  //           },
+  //         },
+  //       ]}
+  //     >
+  //       <Feather name="more-horizontal" size={size} color={varTextColor} />
+  //     </HoldItem>
+  //   </View>
+  // );
 }
 
 export default ShowContextMenu;

@@ -2,12 +2,22 @@ import { View, ScrollView, Text } from "react-native";
 import { useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NotificationContext } from "./NotificationProvider";
-import SavedArticles from "./SavedArticles";
 import SettingsLink from "./SettingsLink";
-import { baseStyles, layout, text } from "src/styles/styles";
+import {
+  baseStyles,
+  font2,
+  layout,
+  text,
+  varGray1,
+  varTextColor,
+} from "src/styles/styles";
 import Notif from "src/components/Notif";
 import Divider from "src/components/Divider";
 import { NavProp } from "src/types/navStacks";
+import { settings } from "src/styles/pages";
+import SavedArticlesPreview from "./SavedArticlesPreview";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
 
 /**
  * Page for settings
@@ -63,28 +73,21 @@ function SettingsScreen({ navigation }: NavProp) {
   }, []);
 
   console.log("statussss", systemPermissionStatus, breaking, weekly, daily);
-  console.log("Device ID:", deviceID);
-
-  /**
-   * Update settings in async storage, call backend update
-   */
-  // const updateSettings = () => {
-  //   setAsync("breakingNotifs", JSON.stringify(breakingNotifs));
-  //   setAsync("weeklyNotifs", JSON.stringify(weeklyNotifs));
-
-  //   console.log("update settings!!");
-  // };
-
-  // Handle the switch toggle
-  // const handleToggle = (newState) => {
-  //   // Call the context function to handle the actual toggle logic
-  //   toggleNotifications(newState);
-  // };
+  console.log("Device ID in settings:", deviceID);
 
   const support = [
-    { id: 1, title: "Manage Account", link: "" },
-    { id: 2, title: "Report a Bug", link: "" },
-    { id: 3, title: "Contact Us", link: "" },
+    // { id: 1, title: "Manage Account", link: "" }, // TODO: once make accounts and stuff, addd this
+    { id: 2, title: "Report a Bug", link: "" }, // TODO: add link
+    {
+      id: 3,
+      title: "Contact Us",
+      link: "https://www.browndailyherald.com/page/contact", // TODO: might want to add a mobile team email here
+    },
+    {
+      id: 4,
+      title: "Privacy Policy",
+      link: "https://www.browndailyherald.com/page/privacy",
+    },
   ];
 
   const links = [
@@ -100,15 +103,26 @@ function SettingsScreen({ navigation }: NavProp) {
       title: "Facebook",
       link: "https://www.facebook.com/browndailyherald",
     },
+    {
+      id: 5,
+      title: "Submit a Tip",
+      link: "https://www.browndailyherald.com/page/submit",
+    },
+    {
+      id: 6,
+      title: "Donate",
+      link: "https://secure.lglforms.com/form_engine/s/s4ZSMYRtYV-9bAfVZglmWQ",
+    },
   ];
 
   return (
-    <ScrollView style={baseStyles.container}>
-      <SavedArticles navigation={navigation} />
+    <ScrollView>
+      <SavedArticlesPreview navigation={navigation} />
 
-      <View>
-        <Text style={text.sectionHeader3}>Stay Updated</Text>
-        <View style={{ rowGap: 16 }}>
+      <View style={baseStyles.container}>
+        <Divider marginBottom={12} />
+        <Text style={text.sectionHeader1}>Stay Updated</Text>
+        <View style={{ rowGap: 16, marginTop: 4 }}>
           <Notif
             title="Breaking News"
             description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
@@ -134,24 +148,76 @@ function SettingsScreen({ navigation }: NavProp) {
             asyncName="dailyNotifs"
           />
         </View>
+        <Divider marginTop={28} />
       </View>
-      <View style={layout.vStack}>
-        <Text style={text.sectionHeader3}>Support</Text>
+
+      <View>
+        <Text
+          style={{
+            ...settings.smallHeading,
+            marginBottom: 22,
+            marginTop: 32,
+            paddingHorizontal: 16,
+          }}
+        >
+          Support
+        </Text>
         {support.map((link, i) => (
-          <View key={`support-${i}`}>
+          <View key={`support-${i}`} style={{ paddingHorizontal: 4 }}>
             <SettingsLink title={link.title} link={link.link} />
-            {i < links.length - 1 ? <Divider /> : ""}
+            <Divider marginBottom={12} marginTop={12} color={varGray1} />
           </View>
         ))}
       </View>
-      <View style={layout.vStack}>
-        <Text style={text.sectionHeader3}>More BDH</Text>
+      <View>
+        <Text
+          style={{
+            ...settings.smallHeading,
+            marginBottom: 22,
+            marginTop: 32,
+            paddingHorizontal: 16,
+          }}
+        >
+          More BDH
+        </Text>
         {links.map((link, i) => (
-          <View key={`more-bdh-${i}`}>
+          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4 }}>
             <SettingsLink title={link.title} link={link.link} />
-            {i < links.length - 1 ? <Divider /> : ""}
+            <Divider marginBottom={12} marginTop={12} color={varGray1} />
           </View>
         ))}
+      </View>
+      <View>
+        <Text
+          style={{
+            ...settings.smallHeading,
+            marginBottom: 18,
+            marginTop: 32,
+            paddingHorizontal: 16,
+          }}
+        >
+          Credits
+        </Text>
+        <View style={{ paddingHorizontal: 4 }}>
+          <SettingsLink
+            title="Development Team"
+            link={"DevTeam"}
+            inApp={true}
+            navigation={navigation}
+          />
+          {/* <Divider marginBottom={12} marginTop={12} color={varGray1} /> */}
+        </View>
+        <Text
+          style={{
+            marginHorizontal: 16,
+            marginVertical: 20,
+            fontSize: 12,
+            color: varTextColor,
+            fontFamily: font2,
+          }}
+        >
+          All Content © 2024 The Brown Daily Herald, Inc.
+        </Text>
       </View>
     </ScrollView>
   );
