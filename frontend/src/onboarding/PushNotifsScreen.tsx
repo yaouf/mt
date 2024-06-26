@@ -9,17 +9,6 @@ import { setUpDevice } from "../code/setup";
 import { OnboardParams } from "src/types/navStacks";
 import { StackScreenProps } from "@react-navigation/stack";
 
-/**
- * Defines how notifications should behave when received by the app
- */
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
-
 function PushNotifsScreen({
   route,
   navigation,
