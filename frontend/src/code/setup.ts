@@ -47,7 +47,12 @@ export const setUpDevice = async (
       setAsync("breakingNotifs", JSON.stringify(breaking));
       setAsync("weeklyNotifs", JSON.stringify(weekly));
       setAsync("dailyNotifs", JSON.stringify(daily));
-      deviceID = await createDevice(false, false, false, token);
+      deviceID = await createDevice(
+        breaking as boolean,
+        weekly as boolean,
+        daily as boolean,
+        token
+      );
       console.log("push token", token);
     } else {
       setBreaking(false);
@@ -56,7 +61,7 @@ export const setUpDevice = async (
       setAsync("breakingNotifs", JSON.stringify(false));
       setAsync("weeklyNotifs", JSON.stringify(false));
       setAsync("dailyNotifs", JSON.stringify(false));
-      deviceID = await createDevice(breaking, weekly, daily, token);
+      deviceID = await createDevice(false, false, false, token);
       console.log("push token", token);
     }
   } catch (error) {
