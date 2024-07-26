@@ -60,7 +60,6 @@ export async function fetchArticle(
 
     const article: Article = resultObject.article;
     setArticle(article);
-
     return article;
   } catch (error) {
     console.log(error);
