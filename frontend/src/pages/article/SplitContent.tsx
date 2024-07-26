@@ -1,10 +1,15 @@
-import { View, Image, Text } from "react-native";
+import { View, Image, Text, Linking } from "react-native";
 import { articleStyles } from "src/styles/article";
 import {
   HTMLContentModel,
   HTMLElementModel,
   RenderHTML,
 } from "react-native-render-html";
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { Article } from "src/types/data";
+import { Dispatch, SetStateAction, useState } from "react";
+import { fetchArticle } from "src/code/fetchContent";
 
 type SplitArticleType = {
   content: string;
@@ -14,6 +19,10 @@ function SplitArticle({ content }: SplitArticleType) {
   const source = {
     html: content,
   };
+
+  const [article, setArticle] = useState<Article | undefined>();
+  
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const customHTMLElementModels = {
     a: HTMLElementModel.fromCustomModel({
@@ -57,6 +66,49 @@ function SplitArticle({ content }: SplitArticleType) {
         source3.html += val + char;
       }
     });
+
+    // navigates to new article screen in stack
+    const handleLinkPress = async (
+      event: any, 
+      href: string, 
+      setArticle: Dispatch<SetStateAction<Article | undefined>>) => {
+      // checks if url is article
+      const articleBaseURL = "https://www.browndailyherald.com/article/";
+      if (href.startsWith(articleBaseURL)) {
+        try {
+          // fetch article data
+          const seg = href.split('/') // splits href into slug and date
+
+          const slug = seg.pop(); // retrieves slug
+
+          const month = seg.pop() // retrieves date month
+          const year = seg.pop() //retrieves date year
+          const date = year + "-" + month
+
+          // check if slug, year, or month is invalid
+          if (!slug || !year || !month) {
+            throw new Error('Invalid URL format');
+          }
+          
+          const  fetchedArticle = await fetchArticle(slug, date, setArticle)
+          setArticle(article);
+          // navigate to Article screen with fetched article data
+          navigation.push('Article', { data: fetchedArticle });
+      }
+        // handle article error
+        catch (error) {
+          console.error('Error fetching article:', error);
+        }
+      }
+      // opens url in web browser if not article
+      else {
+        Linking.openURL(href).catch(err => 
+          console.error('Failed to open external link:', err)
+        );
+        return;
+      }
+      };
+
     return (
       <View style={articleStyles.articleBodyWrapper}>
         <View style={articleStyles.articleBody}>
@@ -64,6 +116,11 @@ function SplitArticle({ content }: SplitArticleType) {
             source={source1}
             baseStyle={articleStyles.text}
             customHTMLElementModels={customHTMLElementModels}
+            renderersProps={{
+              a: {
+                onPress: (event, href) => handleLinkPress(event, href, setArticle),
+              },
+            }}
           />
 
           {/* Advertisement block */}
@@ -82,6 +139,11 @@ function SplitArticle({ content }: SplitArticleType) {
             source={source2}
             baseStyle={articleStyles.text}
             customHTMLElementModels={customHTMLElementModels}
+            renderersProps={{
+              a: {
+                onPress: (event, href) => handleLinkPress(event, href, setArticle),
+              },
+            }}
           />
 
           {/* Advertisement block */}
@@ -100,6 +162,11 @@ function SplitArticle({ content }: SplitArticleType) {
             source={source3}
             baseStyle={articleStyles.text}
             customHTMLElementModels={customHTMLElementModels}
+            renderersProps={{
+              a: {
+                onPress: (event, href) => handleLinkPress(event, href, setArticle),
+              },
+            }}
           />
         </View>
       </View>
