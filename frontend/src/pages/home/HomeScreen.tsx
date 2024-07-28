@@ -1,81 +1,171 @@
-import { useRef } from "react";
-import { View, FlatList, ScrollView } from "react-native";
-import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
-import News from "./sections/News";
-import Sports from "./sections/Sports";
-import Opinions from "./sections/Opinions";
-import ArtsCulture from "./sections/ArtsCulture";
-import ScienceResearch from "./sections/ScienceResearch";
-import Metro from "./sections/Metro";
-import Podcast from "./sections/Podcast";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { View, FlatList, Text } from "react-native";
 import Top from "./sections/Top";
-import { NavProp } from "src/types/types";
-
-interface MenuItem {
-  id: number;
-  title: string;
-}
+import { NavProp } from "src/types/navStacks";
+import { Article } from "src/types/data";
+import Divider from "src/components/Divider";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useScrollToTop } from "@react-navigation/native";
+import SmallHorzGroup from "./sections/SmallHorzGroup";
+import AllSmallGroup from "./sections/AllSmallGroup";
+import * as SplashScreen from "expo-splash-screen";
+import { fetchSectionHome } from "src/code/fetchContent";
+import { baseStyles } from "src/styles/styles";
 
 interface Section_Type {
   id: number;
-  title: string;
   component: React.ReactNode;
 }
 
+SplashScreen.preventAutoHideAsync();
+
 /**
  * Home screen!!
+ * TODO: refresh content (look into flatlist refresh prop)
  */
 function HomeScreen({ navigation }: NavProp) {
   const flatListRef = useRef<FlatList>(null);
+  useScrollToTop(flatListRef);
 
+  const [top, setTop] = useState<string[]>([]); // list of top story uuids
+  const [topLoaded, setTopLoaded] = useState(false); // splash screen prop
+  const [topStories, setTopStories] = useState<Article[]>(); // list of top stories populated once loaded
+
+  // load the top content first so stories in the top are not also shown in each section
+  useEffect(() => {
+    async function fetchTop() {
+      try {
+        const data: Article[] = await fetchSectionHome("homepage", 5);
+        const top: string[] = data.map((a) => a.uuid);
+        setTop(top);
+        setTopStories(data);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render once top is fetched
+        setTopLoaded(true);
+      }
+    }
+    fetchTop();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (topLoaded) {
+      await SplashScreen.hideAsync();
+    }
+  }, [topLoaded]);
+
+  if (!topLoaded) {
+    return null;
+  }
+
+  // list of items to use in the flatlist
   const sections: Section_Type[] = [
-    { id: 1, title: "Top", component: <Top navigation={navigation} /> },
+    {
+      id: 1,
+      component: <Top topStories={topStories} navigation={navigation} />,
+    },
     {
       id: 2,
-      title: "Opinions",
-      component: <Opinions navigation={navigation} />,
+      component: (
+        <SmallHorzGroup
+          navigation={navigation}
+          slug="opinions"
+          count={5}
+          title="Opinions"
+          top={top}
+        />
+      ),
     },
-    { id: 3, title: "News", component: <News navigation={navigation} /> },
+    {
+      id: 3,
+      component: (
+        <SmallHorzGroup
+          navigation={navigation}
+          slug="news"
+          count={5}
+          title="News"
+          top={top}
+        />
+      ),
+    },
     {
       id: 4,
-      title: "Arts & Culture",
-      component: <ArtsCulture navigation={navigation} />,
+      component: (
+        <AllSmallGroup
+          navigation={navigation}
+          slug="arts-culture"
+          count={2}
+          title="Arts & Culture"
+          top={top}
+        />
+      ),
     },
-    { id: 5, title: "Metro", component: <Metro navigation={navigation} /> },
-    { id: 6, title: "Sports", component: <Sports navigation={navigation} /> },
+    {
+      id: 5,
+      component: (
+        <AllSmallGroup
+          navigation={navigation}
+          slug="metro"
+          count={4}
+          title="Metro"
+          top={top}
+        />
+      ),
+    },
+    {
+      id: 6,
+      component: (
+        <SmallHorzGroup
+          navigation={navigation}
+          slug="sports"
+          count={5}
+          title="Sports"
+          top={top}
+        />
+      ),
+    },
     {
       id: 7,
-      title: "Science & Research",
-      component: <ScienceResearch navigation={navigation} />,
+      component: (
+        <AllSmallGroup
+          navigation={navigation}
+          slug="science-research"
+          count={2}
+          title="Science & Research"
+          top={top}
+        />
+      ),
     },
     {
       id: 8,
-      title: "Podcasts",
-      component: <Podcast navigation={navigation} />,
+      component: (
+        <AllSmallGroup
+          navigation={navigation}
+          slug="podcast"
+          count={4}
+          title="Podcasts"
+          top={top}
+        />
+      ),
     },
   ];
 
-  // scroll to section top
-  const handleMenuClick = (item: MenuItem) => {
-    // Logic to scroll to the corresponding section based on the index
-    const index = sections.findIndex((section) => section.id === item.id) - 1;
-    if (index !== -1 && flatListRef.current) {
-      flatListRef.current.scrollToIndex({ index, animated: true });
-    }
-  };
-
   return (
-    <View>
-      <HorizontalScrollMenu onItemClick={handleMenuClick} />
-      <View style={{ marginLeft: 16, marginRight: 16 }}>
-        <FlatList
-          ref={flatListRef}
-          data={sections}
-          renderItem={({ item }) => item.component}
-          keyExtractor={(item) => item.id}
-          pagingEnabled={true}
-        />
-      </View>
+    <View onLayout={onLayoutRootView}>
+      <FlatList
+        ref={flatListRef}
+        data={sections}
+        renderItem={({ item }) => item.component}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => (
+          <View style={{ marginHorizontal: 16 }}>
+            <Divider />
+          </View>
+        )}
+        initialNumToRender={1}
+        // onRefresh={() => console.log("here")}
+      />
     </View>
   );
 }

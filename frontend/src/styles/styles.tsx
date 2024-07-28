@@ -13,13 +13,23 @@ export const font2 = Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif";
 export const font3 =
   Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif-condensed";
 
+// to use in place of black
+export const varTextColor = "#020202";
+export const varRed = "#ED1C24";
+export const varGray1 = "#9E9E9E";
+
 export const baseStyles = StyleSheet.create({
   container: {
-    flex: 1,
+    paddingHorizontal: 16,
+    backgroundColor: "#fff",
+    // flex: 1,
   },
-  webview: {
-    flex: 1,
-  },
+  // container: {
+  //   flex: 1,
+  // },
+  // webview: {
+  //   flex: 1,
+  // },
 });
 
 /**
@@ -28,8 +38,9 @@ export const baseStyles = StyleSheet.create({
 export const layout = StyleSheet.create({
   hStack: { flexDirection: "row", columnGap: 16 },
   vStack: {
+    rowGap: 16,
     marginTop: 16,
-    rowGap: 12,
+    overflow: "visible",
   },
   grid: {
     flexDirection: "row",
@@ -37,6 +48,8 @@ export const layout = StyleSheet.create({
     columnGap: 12,
     justifyContent: "space-between",
     rowGap: 16,
+    marginTop: 16,
+    overflow: "visible",
   },
 });
 
@@ -46,7 +59,7 @@ export const layout = StyleSheet.create({
 export const text = StyleSheet.create({
   sectionHeader1: {
     // main section headers
-    color: "#000",
+    color: varTextColor,
     fontWeight: "600",
     fontSize: 16,
     fontFamily: font2,
@@ -54,14 +67,14 @@ export const text = StyleSheet.create({
   seeMore: {
     // see more header for section
     fontWeight: "600",
-    color: "#ED1C24",
+    color: varRed,
     fontSize: 12,
     marginRight: 16,
     fontFamily: font2,
   },
-  topStories: {
+  bigTitle: {
     // top stories is a slightly larger title
-    color: "#000",
+    color: varTextColor,
     fontWeight: "600",
     fontSize: 24,
     fontFamily: font2,
@@ -69,7 +82,7 @@ export const text = StyleSheet.create({
   },
   sectionHeader2: {
     // like recommended text, featured story on fyp
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "600",
@@ -79,7 +92,7 @@ export const text = StyleSheet.create({
   },
   sectionHeader3: {
     // like back from archive, stay updated on fyp
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "600",
@@ -87,13 +100,34 @@ export const text = StyleSheet.create({
     marginBottom: 8,
     marginTop: 8,
   },
-  text: {
-    color: "#000",
+  notifSmall: {
+    color: varTextColor,
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 12,
     overflow: "hidden",
     maxWidth: "85%",
+  },
+  normal: {
+    color: varTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 16,
+  },
+  textSmall: {
+    color: varTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 12,
+  },
+  textMedium: {
+    color: varTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 14,
   },
 });

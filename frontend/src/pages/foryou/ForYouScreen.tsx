@@ -14,7 +14,7 @@ import TodaysPicks from "./sections/TodaysPicks";
 import Divider from "src/components/Divider";
 import { useScrollToTop } from "@react-navigation/native";
 import { text } from "src/styles/styles";
-import { NavProp } from "src/types/types";
+import { NavProp } from "src/types/navStacks";
 
 /**
  * for you page!!
@@ -33,7 +33,7 @@ function ForYouScreen({ navigation }: NavProp) {
           <Text style={text.sectionHeader2}>
             Recommended stories, your favorite sections, and more.
           </Text>
-          <Divider small={true} />
+          <Divider marginTop={8} />
           <FaveSections
             title="Arts & Culture"
             data={dummyData}

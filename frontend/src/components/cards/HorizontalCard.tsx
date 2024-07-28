@@ -5,53 +5,71 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import { showContextMenu } from "./ShowContextMenu";
-import { Author, CardProps } from "src/types/types";
 import { formatDates } from "../../code/formatDates";
-import { font1, font2, font3 } from "../../styles/styles";
+import {
+  font1,
+  font2,
+  font3,
+  varTextColor,
+  varGray1,
+} from "../../styles/styles";
+import ShowContextMenu from "./ShowContextMenu";
+import { CardProps } from "src/types/navStacks";
+import { Author } from "src/types/data";
 
 function HorizontalCard({ article, navigation }: CardProps) {
-  const uri = "https://www.browndailyherald.com/" + article.uuid;
+  let img_uri =
+    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+  if (article.dominantMedia.attachment_uuid) {
+    img_uri =
+      "http://snworksceo.imgix.net/bdh/" +
+      article.dominantMedia.attachment_uuid +
+      ".sized-1000x1000." +
+      article.dominantMedia.extension;
+  }
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.push("Article", { data: article })}
-    >
-      <View style={styles.card}>
-        <View style={styles.content}>
-          <Image
-            source={{
-              uri:
-                "http://snworksceo.imgix.net/" +
-                article.dominantMedia.attachment_uuid,
-            }}
-            style={styles.image}
-          />
-          <View style={styles.text}>
-            <View style={styles.innerText}>
-              <Text style={styles.section}>{article.tags[0].name}</Text>
-              <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-                {article.headline}
-              </Text>
-              <Text style={styles.author}>
-                {article.authors.map((a: Author) => a.name).join(", ")}
-              </Text>
-              <Text style={styles.published}>
-                {formatDates(article.published_at)}
-              </Text>
+    <View>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.push("Article", { data: article })}
+      >
+        <View style={styles.card}>
+          <View style={styles.content}>
+            <Image
+              source={{
+                uri: img_uri,
+              }}
+              style={styles.image}
+            />
+            <View style={styles.text}>
+              <View style={styles.innerText}>
+                <Text style={styles.section}>
+                  {article.tags[0].name.replace("&;", "&")}
+                </Text>
+                <Text
+                  style={styles.title}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                >
+                  {article.headline}
+                </Text>
+                <Text style={styles.author}>
+                  {article.authors.map((a: Author) => a.name).join(", ")}
+                </Text>
+                <Text style={styles.published}>
+                  {formatDates(article.published_at)}
+                </Text>
+              </View>
             </View>
-            <TouchableWithoutFeedback
-              onPress={() => showContextMenu(uri)}
-              onLongPress={() => showContextMenu(uri)}
-            >
-              <Image
-                source={require("../../../assets/options.png")}
-                style={styles.options}
-              />
-            </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+      <ShowContextMenu
+        published_at={article.published_at}
+        slug={article.slug}
+        uuid={article.uuid}
+      />
+    </View>
   );
 }
 
@@ -68,13 +86,14 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     borderRadius: 8,
     backgroundColor: "#FFF",
-    shadowColor: "#000",
+    shadowColor: varTextColor,
     shadowOffset: {
       width: 0,
       height: 1.497,
     },
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
+    overflow: "visible",
   },
   content: {
     display: "flex",
@@ -101,6 +120,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#C9C9C9",
     width: 95,
     height: 120,
+    borderTopLeftRadius: 7.487,
+    borderBottomLeftRadius: 7.487,
   },
   text: {
     display: "flex",
@@ -122,7 +143,7 @@ const styles = StyleSheet.create({
     flexBasis: 0,
   },
   section: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",
@@ -141,7 +162,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   author: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontSize: 10,
     fontStyle: "normal",
@@ -149,7 +170,7 @@ const styles = StyleSheet.create({
     lineHeight: 14,
   },
   published: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 10,
     fontStyle: "normal",

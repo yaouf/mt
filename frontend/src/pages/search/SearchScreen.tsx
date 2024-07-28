@@ -1,10 +1,13 @@
-import { View, Text } from "react-native";
-import { styles } from "../../styles/search";
+import { View } from "react-native";
+import { baseStyles } from "src/styles/styles";
+import Search from "./Search";
+import { NavProp } from "src/types/navStacks";
 
-function SearchScreen() {
+function SearchScreen({ navigation }: NavProp) {
+  console.log("___", navigation);
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={styles.titleText}>Search</Text>
+    <View style={baseStyles.container}>
+      <Search navigation={navigation} />
     </View>
   );
 }

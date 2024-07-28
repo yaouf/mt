@@ -2,7 +2,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { View, Text } from "react-native";
 import LargeCard from "src/components/cards/LargeCard";
 import { text } from "src/styles/styles";
-import { Article } from "src/types/types";
+import { Article } from "src/types/data";
 
 type ArchiveProps = {
   date: string;

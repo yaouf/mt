@@ -4,7 +4,7 @@ import SectionHeader from "src/components/SectionHeader";
 import SmallCard from "src/components/cards/SmallCard";
 import { fyp } from "src/styles/pages";
 import { layout } from "src/styles/styles";
-import { Article } from "src/types/types";
+import { Article } from "src/types/data";
 
 type FavSectionsProps = {
   title: string;

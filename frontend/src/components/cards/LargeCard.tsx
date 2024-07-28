@@ -5,13 +5,19 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import { showContextMenu } from "./ShowContextMenu";
-import { Author, CardProps, Tag } from "src/types/types";
+import ShowContextMenu from "./ShowContextMenu";
+import { CardProps } from "src/types/navStacks";
+import { Author, Tag} from "src/types/data";
 import { formatDates } from "../../code/formatDates";
-import { font1, font2, font3 } from "../../styles/styles";
+import {
+  font1,
+  font2,
+  font3,
+  varTextColor,
+  varGray1,
+} from "../../styles/styles";
 
 function LargeCard({ article, navigation }: CardProps) {
-  const uri = "https://www.browndailyherald.com/" + article.uuid;
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
 
@@ -21,53 +27,61 @@ function LargeCard({ article, navigation }: CardProps) {
     }
   }
 
+  let img_uri =
+    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+  if (article.dominantMedia.attachment_uuid) {
+    img_uri =
+      "http://snworksceo.imgix.net/bdh/" +
+      article.dominantMedia.attachment_uuid +
+      ".sized-1000x1000." +
+      article.dominantMedia.extension;
+  }
+
   return (
-    <TouchableWithoutFeedback
-      onPress={() => navigation.push("Article", { data: article })}
-    >
-      <View style={styles.card}>
-        <Image
-          source={{
-            uri:
-              "http://snworksceo.imgix.net/bdh/" +
-              article.dominantMedia.attachment_uuid +
-              ".sized-1000x1000.jpg",
-          }}
-          style={styles.image}
-        />
-        <View style={styles.text}>
-          {breaking ? (
-            <View style={styles.breakingBox}>
-              <Text style={styles.breaking}>Breaking News</Text>
-            </View>
-          ) : (
-            <Text style={styles.section}>{all_tags[0]}</Text>
-          )}
-          <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
-            {article.headline}
-          </Text>
-          <Text style={styles.author}>
-            {article.authors.map((a: Author) => a.name).join(", ")}
-          </Text>
-          <View style={styles.bottom}>
-            <View style={styles.publishedSection}>
-              <Text style={styles.published}>
-                {formatDates(article.published_at)}
+    <View>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.push("Article", { data: article })}
+      >
+        <View style={styles.card}>
+          <Image
+            source={{
+              uri: img_uri,
+            }}
+            style={styles.image}
+          />
+          <View style={styles.text}>
+            {breaking ? (
+              <View style={styles.breakingBox}>
+                <Text style={styles.breaking}>Breaking News</Text>
+              </View>
+            ) : (
+              <Text style={styles.section}>
+                {all_tags[0].replace("&;", "&")}
               </Text>
+            )}
+            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+              {article.headline}
+            </Text>
+            <Text style={styles.author}>
+              {article.authors.map((a: Author) => a.name).join(", ")}
+            </Text>
+            <View style={styles.bottom}>
+              <View style={styles.publishedSection}>
+                <Text style={styles.published}>
+                  {formatDates(article.published_at)}
+                </Text>
+              </View>
             </View>
-            <TouchableWithoutFeedback
-              onPress={() => showContextMenu(uri)}
-              onLongPress={() => showContextMenu(uri)}
-            >
-              <Image
-                source={require("../../../assets/options.png")}
-                style={styles.options}
-              />
-            </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+      <ShowContextMenu
+        published_at={article.published_at}
+        slug={article.slug}
+        uuid={article.uuid}
+        large={true}
+      />
+    </View>
   );
 }
 
@@ -77,7 +91,7 @@ const styles = StyleSheet.create({
   title: {
     height: 93,
     alignSelf: "stretch",
-    color: "#000",
+    color: varTextColor,
     fontFamily: font1,
     fontSize: 20,
     fontStyle: "normal",
@@ -85,7 +99,7 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
   author: {
-    color: "#000",
+    color: varTextColor,
     fontFamily: font2,
     fontSize: 16,
     fontStyle: "normal",
@@ -94,14 +108,13 @@ const styles = StyleSheet.create({
   },
   card: {
     display: "flex",
-    // width: 358,
     width: "100%",
     paddingBottom: 8,
     flexDirection: "column",
     alignItems: "flex-start",
     borderRadius: 8,
     backgroundColor: "#FFF",
-    shadowColor: "#000",
+    shadowColor: varTextColor,
     shadowOffset: {
       width: 0,
       height: 1.497,
@@ -109,10 +122,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 29.949,
     elevation: 3,
-    marginVertical: 12,
+    marginTop: 16,
+    overflow: "visible",
+    // marginVertical: 12,
   },
   section: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 16,
     fontStyle: "normal",
@@ -120,7 +135,7 @@ const styles = StyleSheet.create({
     /* lineHeight: 'normal',*/
   },
   published: {
-    color: "#9E9E9E",
+    color: varGray1,
     fontFamily: font3,
     fontSize: 14,
     fontStyle: "normal",
