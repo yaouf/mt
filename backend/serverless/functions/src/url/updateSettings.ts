@@ -77,7 +77,7 @@ export const updateSettings = onRequest(async (request, response) => {
     // Update device settings in device table
     const res = await db(dbParams)("devices").where("id", deviceId).update(updateData);
     // log the result of the update
-    console.log(res);
+    logger.info(res);
     // Log the result of update - For logging purposes, might query again or just log the update was successful
     logger.info("Device settings updated", { deviceId, updates: updateData });
 

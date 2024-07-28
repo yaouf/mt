@@ -9,8 +9,7 @@ export const createDevice = onRequest(async (request, response) => {
 
   const { environment, stagingDbUrl, trustedApiKey } = envars;
   const dbParams = { environment, stagingDbUrl };
-  console.log("dbParams: ", dbParams);
-  console.log(untrustedApiKey, trustedApiKey);
+  logger.info("dbParams: ", dbParams);
   // Check if the API key is correct
   // TODO: use crypto safe comparison
   if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
@@ -72,13 +71,13 @@ export const createDevice = onRequest(async (request, response) => {
       expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
     })
     .returning("id");
-  // TODO: change expo push token to required field
-  console.log(insertedRows);
+    // TODO: change expo push token to required field
+    logger.info("inserted row: ", insertedRows);
     deviceId = insertedRows[0].id;
     }
      // Select all from devices table and log result
      const allDevices = await db(dbParams)("devices").select();
-     console.log(allDevices);
+    logger.info(allDevices);
      // Send the device ID back to the client
    response.send({
      deviceId: deviceId,
