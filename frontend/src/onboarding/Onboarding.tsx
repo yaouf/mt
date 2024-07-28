@@ -1,31 +1,27 @@
-import LoginScreen from "./LoginScreen";
-import { OnboardParams, OnboardProps } from "../types/types";
+import { NavProp, OnboardParams } from "../types/navStacks";
 import { createStackNavigator } from "@react-navigation/stack";
 import PushNotifsScreen from "./PushNotifsScreen";
-import DoneScreen from "./DoneScreen";
 import { NavigationContainer } from "@react-navigation/native";
+import WelcomeScreen from "./WelcomeScreen";
 
 const onboardingStack = createStackNavigator<OnboardParams>();
 
-function Onboarding(props: OnboardProps) {
+// add auth in future versions of app
+function Onboarding({ navigation }: NavProp) {
   return (
-    <NavigationContainer>
-      <onboardingStack.Navigator initialRouteName="Login">
-        <onboardingStack.Screen
-          name="Login"
-          component={LoginScreen}
-        />
-        <onboardingStack.Screen
-          name="PushNotifs"
-          component={PushNotifsScreen}
-        />
-        <onboardingStack.Screen
-          name="Done"
-          component={DoneScreen}
-          initialParams={{ ...props }}
-        />
-      </onboardingStack.Navigator>
-    </NavigationContainer>
+    <onboardingStack.Navigator initialRouteName="WelcomeScreen">
+      <onboardingStack.Screen
+        name="WelcomeScreen"
+        component={WelcomeScreen}
+        options={{ headerShown: false }}
+      />
+      <onboardingStack.Screen
+        name="PushNotifs"
+        component={PushNotifsScreen}
+        initialParams={{ parentNav: navigation }}
+        options={{ headerShown: false }}
+      />
+    </onboardingStack.Navigator>
   );
 }
 

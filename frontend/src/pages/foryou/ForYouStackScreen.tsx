@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import ArticleComponent from "../article/ArticleScreen";
-import { FYStackProps } from "src/types/types";
+import { FYStackProps } from "src/types/navStacks";
 import ForYouScreen from "./ForYouScreen";
 
 const ForYouStack = createStackNavigator<FYStackProps>();

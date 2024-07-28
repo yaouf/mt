@@ -1,5 +1,5 @@
 import { View, Text, Switch } from "react-native";
-import Notif from "./Notif";
+import Notif from "src/components/Notif";
 import { text } from "src/styles/styles";
 
 function StayUpdated() {
