@@ -23,9 +23,10 @@ export const updateSettings = onRequest(async (request, response) => {
     const breakingNews = request.body["Breaking News"];
     const weeklySummary = request.body["Weekly Summary"];
     const dailySummary = request.body["Daily Summary"];
+    const isPushEnabled = request.body["isPushEnabled"];
 
     // Validate request body
-    if (breakingNews === undefined && weeklySummary === undefined && dailySummary === undefined) {
+    if (breakingNews === undefined && weeklySummary === undefined && dailySummary === undefined && isPushEnabled === undefined) {
       response
         .status(400)
         .send(
@@ -39,6 +40,7 @@ export const updateSettings = onRequest(async (request, response) => {
       "Breaking News"?: boolean;
       "Weekly Summary"?: boolean;
       "Daily Summary"?: boolean;
+      "isPushEnabled"?: boolean;
     };
     
     // Construct update object based on what's provided in the request body
@@ -51,6 +53,9 @@ export const updateSettings = onRequest(async (request, response) => {
     }
     if (dailySummary !== undefined) {
       updateData["Daily Summary"] = dailySummary;
+    }
+    if (isPushEnabled !== undefined) {
+      updateData["isPushEnabled"] = isPushEnabled;
     }
 
     // Get the device ID from the request body

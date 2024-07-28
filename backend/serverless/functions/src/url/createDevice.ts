@@ -29,11 +29,13 @@ export const createDevice = onRequest(async (request, response) => {
     const breakingNews = request.body["Breaking News"];
     const weeklySummary = request.body["Weekly Summary"];
     const dailySummary = request.body["Daily Summary"];
+    const isPushEnabled = request.body["isPushEnabled"];
     if (
       !deviceType || !expoPushToken ||
       typeof breakingNews !== "boolean" ||
       typeof weeklySummary !== "boolean" ||
-      typeof dailySummary !== "boolean"
+      typeof dailySummary !== "boolean" ||
+      typeof isPushEnabled !== "boolean"
     ) {
       response.status(400).send("Missing required fields in request body");
       return;
@@ -54,6 +56,7 @@ export const createDevice = onRequest(async (request, response) => {
           "Breaking News": breakingNews,
           "Weekly Summary": weeklySummary,
           "Daily Summary": dailySummary,
+          isPushEnabled: isPushEnabled,
         });
         deviceId = existingDevice.id;
     } else {
@@ -65,6 +68,7 @@ export const createDevice = onRequest(async (request, response) => {
       "Breaking News": breakingNews,
       "Weekly Summary": weeklySummary,
       "Daily Summary": dailySummary,
+      isPushEnabled: isPushEnabled,
       expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
     })
     .returning("id");
