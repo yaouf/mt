@@ -12,6 +12,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
 
   // Check if the API key is correct
   if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
+    // TODO: make this more descriptive
     response.status(401).send("Unauthorized");
     return;
   }
@@ -20,6 +21,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
   const { deviceId: id, isPushEnabled } = request.body;
 
   // Validate request body
+  // TODO: use a library for api body validation
   if (typeof id === "undefined" || typeof isPushEnabled === "undefined") {
     response
       .status(400)
@@ -31,7 +33,6 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
 
   try {
     // Check the current status in the database
-
     const device = await db(dbParams)("devices").where("id", id).first();
     if (!device) {
       response.status(404).send("Device not found.");

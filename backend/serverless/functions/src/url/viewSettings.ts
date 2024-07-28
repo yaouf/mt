@@ -18,9 +18,10 @@ export const viewSettings = onRequest(async (request, response) => {
   try {
 
     logger.info("Getting user settings", { structuredData: true });
-    
     // Destructure potential fields from request body
     const { deviceId } = request.body;
+    // TODO: use a library for api body validation
+    logger.info("Device ID received", { deviceId });
     // Validate request body
     if (deviceId === undefined) {
       response
@@ -30,6 +31,8 @@ export const viewSettings = onRequest(async (request, response) => {
         );
       return;
     }
+
+    logger.info("Device ID is valid", { deviceId });
 
     // Get the device settings in device tables
     const { environment, stagingDbUrl } = envars;
