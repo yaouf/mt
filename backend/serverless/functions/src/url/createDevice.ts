@@ -38,27 +38,47 @@ export const createDevice = onRequest(async (request, response) => {
       response.status(400).send("Missing required fields in request body");
       return;
     }
-    // Insert the device into the devices table, and return the id of the inserted row
+    // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
+    // Check if the device already exists in the devices table
+    const existingDevice = await db(dbParams)("devices")
+      .where("expoPushToken", expoPushToken)
+      .first();
+      // Initialize deviceId
+      let deviceId: string; 
+    if (existingDevice) {
+      // Update the device's settings
+      await db(dbParams)("devices")
+        .where("expoPushToken", expoPushToken)
+        .update({
+          deviceType: deviceType,
+          "Breaking News": breakingNews,
+          "Weekly Summary": weeklySummary,
+          "Daily Summary": dailySummary,
+        });
+        deviceId = existingDevice.id;
+    } else {
+      // Insert the device into the devices table, and return the id of the inserted row
     const insertedRows = await db(dbParams)("devices")
-      .insert({
-        id: uuidv4(), // Generate a new UUID for the device
-        deviceType: deviceType,
-        "Breaking News": breakingNews,
-        "Weekly Summary": weeklySummary,
-        "Daily Summary": dailySummary,
-        expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
-      })
-      .returning("id");
-    // Only return id to the client if the insert was successful
-    console.log(insertedRows);
-
-    // Select all from devices table and log result
-    const allDevices = await db(dbParams)("devices").select();
-    console.log(allDevices);
-
-    response.send({
-      deviceId: insertedRows[0].id,
-    });
+    .insert({
+      id: uuidv4(), // Generate a new UUID for the device
+      deviceType: deviceType,
+      "Breaking News": breakingNews,
+      "Weekly Summary": weeklySummary,
+      "Daily Summary": dailySummary,
+      expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
+    })
+    .returning("id");
+  // TODO: change expo push token to required field
+  console.log(insertedRows);
+    deviceId = insertedRows[0].id;
+    }
+     // Select all from devices table and log result
+     const allDevices = await db(dbParams)("devices").select();
+     console.log(allDevices);
+     // Send the device ID back to the client
+   response.send({
+     deviceId: deviceId,
+   });
   } catch (error) {
     console.error("Error creating device:", error);
     response.status(500).send("Error: " + error);
