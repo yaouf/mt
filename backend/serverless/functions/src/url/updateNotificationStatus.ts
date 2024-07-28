@@ -13,7 +13,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
   // Check if the API key is correct
   if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
     // TODO: make this more descriptive
-    response.status(401).send("Unauthorized");
+    response.status(401).send("API Key is invalid.");
     return;
   }
 
