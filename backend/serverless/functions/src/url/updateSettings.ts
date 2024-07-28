@@ -34,12 +34,15 @@ export const updateSettings = onRequest(async (request, response) => {
       return;
     }
 
-    // Construct update object based on what's provided in the request body
-    const updateData = {
-      "Breaking News": false,
-      "Weekly Summary": false,
-      "Daily Summary": false,
+    // Define the type of updateData
+    type UpdateData = {
+      "Breaking News"?: boolean;
+      "Weekly Summary"?: boolean;
+      "Daily Summary"?: boolean;
     };
+    
+    // Construct update object based on what's provided in the request body
+    const updateData: UpdateData = {};
     if (breakingNews !== undefined) {
       updateData["Breaking News"] = breakingNews;
     }
@@ -50,9 +53,8 @@ export const updateSettings = onRequest(async (request, response) => {
       updateData["Daily Summary"] = dailySummary;
     }
 
-    // Assuming there's a way to identify the device/user to update, for example, a deviceId in the request
-    // This part is missing in your provided code, so adding a placeholder
-    const deviceId = request.body.deviceId; // You would need to handle this part
+    // Get the device ID from the request body
+    const deviceId = request.body.deviceId; 
 
     if (!deviceId) {
       response.status(400).send("Device ID is required.");
