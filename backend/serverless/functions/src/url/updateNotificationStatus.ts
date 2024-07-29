@@ -38,8 +38,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
   }
 
   // Extract ID and currentNotificationStatus from request body
-  // TODO: change name to deviceId
-  const { deviceId: id, isPushEnabled } = validBody;
+  const { deviceId, isPushEnabled } = validBody;
 
   // // Validate request body
   // if (typeof id === "undefined" || typeof isPushEnabled === "undefined") {
@@ -53,7 +52,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
 
   try {
     // Check the current status in the database
-    const device = await db(dbParams)("devices").where("id", id).first();
+    const device = await db(dbParams)("devices").where("id", deviceId).first();
     if (!device) {
       response.status(404).send("Device not found. Are you sure \"deviceId\" is correct?");
       return;
@@ -62,11 +61,11 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     // Compare current status with the new status
     if (device.isPushEnabled !== isPushEnabled) {
       // Update the notification status in the database
-      await db(dbParams)("devices").where("id", id).update({
+      await db(dbParams)("devices").where("id", deviceId).update({
         isPushEnabled,
       });
       logger.info("Notification status updated", {
-        id: id,
+        id: deviceId,
         status: isPushEnabled,
       });
       response.send("Notification status updated.");
