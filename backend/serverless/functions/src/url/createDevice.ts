@@ -3,6 +3,8 @@ import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 import { v4 as uuidv4 } from "uuid";
 import envars from "../envars";
+import Joi from "joi";
+import validateUuidV4 from "../validateUuidV4";
 export const createDevice = onRequest(async (request, response) => {
   // Get the apiKey from the request headers
   const untrustedApiKey = request.get("X-API-KEY");
@@ -23,22 +25,37 @@ export const createDevice = onRequest(async (request, response) => {
 
   try {
     // Extract device information from the request body
-    // The "|| {}" portion at the end ensures that if there are any issues with request.body line 12 won't throw an error
-    const { deviceType, expoPushToken } = request.body || {};
-    const breakingNews = request.body["Breaking News"];
-    const weeklySummary = request.body["Weekly Summary"];
-    const dailySummary = request.body["Daily Summary"];
-    const isPushEnabled = request.body["isPushEnabled"];
-    if (
-      !deviceType || !expoPushToken ||
-      typeof breakingNews !== "boolean" ||
-      typeof weeklySummary !== "boolean" ||
-      typeof dailySummary !== "boolean" ||
-      typeof isPushEnabled !== "boolean"
-    ) {
-      response.status(400).send("Missing required fields in request body");
+
+    // Schema for request body validation
+    const schema = Joi.object({
+      deviceType: Joi.string().required(),
+      expoPushToken: Joi.string().required(),
+      "Breaking News": Joi.boolean().required(),
+      "Weekly Summary": Joi.boolean().required(),
+      "Daily Summary": Joi.boolean().required(),
+      isPushEnabled: Joi.boolean().required(),
+    });
+
+    // Validate request body
+    const { error, value: validBody } = schema.validate(request.body);
+    if (error) {
+      response.status(400).send("Request body validation error: " + error.message);
       return;
     }
+
+    // Validate expoPushToken, must be uuid v4
+    if (!validateUuidV4(validBody.expoPushToken)) {
+      response.status(400).send("Request body validation error: \"expoPushToken\" is not a valid UUID v4.");
+      return;
+    }
+    
+    const deviceType = validBody["deviceType"];
+    const expoPushToken = validBody["expoPushToken"];
+    const breakingNews = validBody["Breaking News"];
+    const weeklySummary = validBody["Weekly Summary"];
+    const dailySummary = validBody["Daily Summary"];
+    const isPushEnabled = validBody["isPushEnabled"];
+
     // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
     // Check if the device already exists in the devices table
     const existingDevice = await db(dbParams)("devices")

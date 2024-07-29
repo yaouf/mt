@@ -2,6 +2,8 @@ import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
+import Joi from "joi";
+import validateUuidV4 from "../validateUuidV4";
 export const updateSettings = onRequest(async (request, response) => {
   // Get the API key from the environment variables
   const { trustedApiKey, environment, stagingDbUrl } = envars;
@@ -19,21 +21,33 @@ export const updateSettings = onRequest(async (request, response) => {
   try {
     logger.info("Updating user settings", { structuredData: true });
 
-    // Destructure potential fields from request body
-    const breakingNews = request.body["Breaking News"];
-    const weeklySummary = request.body["Weekly Summary"];
-    const dailySummary = request.body["Daily Summary"];
-    const isPushEnabled = request.body["isPushEnabled"];
+    // Request body validation schema
+    const schema = Joi.object({
+      deviceId: Joi.string().required(),
+      "Breaking News": Joi.boolean(),
+      "Weekly Summary": Joi.boolean(),
+      "Daily Summary": Joi.boolean(),
+      isPushEnabled: Joi.boolean(),
+    });
 
     // Validate request body
-    if (breakingNews === undefined && weeklySummary === undefined && dailySummary === undefined && isPushEnabled === undefined) {
-      response
-        .status(400)
-        .send(
-          "Invalid request body. Must include at least one setting to update."
-        );
+    const { error, value: validBody } = schema.validate(request.body);
+    if (error) {
+      response.status(400).send("Request body validation error: " + error.message);
       return;
     }
+
+    // Validate deviceId, make sure its uuid v4
+    if (!validateUuidV4(validBody.deviceId)) {
+      response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
+      return;
+    }
+
+    // Destructure potential fields from request body
+    const breakingNews = validBody["Breaking News"];
+    const weeklySummary = validBody["Weekly Summary"];
+    const dailySummary = validBody["Daily Summary"];
+    const isPushEnabled = validBody["isPushEnabled"];
 
     // Define the type of updateData
     type UpdateData = {
@@ -44,6 +58,7 @@ export const updateSettings = onRequest(async (request, response) => {
     };
     
     // Construct update object based on what's provided in the request body
+    // TODO: make this cleaner
     const updateData: UpdateData = {};
     if (breakingNews !== undefined) {
       updateData["Breaking News"] = breakingNews;
@@ -59,18 +74,13 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Get the device ID from the request body
-    const deviceId = request.body.deviceId; 
-
-    if (!deviceId) {
-      response.status(400).send("Device ID is required.");
-      return;
-    }
+    const deviceId = validBody.deviceId; 
 
     // First, check if the device exists
     const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
-      response.status(404).send("Device ID not found.");
+      response.status(404).send("Device not found. Are you sure \"deviceId\" is correct?");
       return;
     }
 

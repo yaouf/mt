@@ -2,7 +2,8 @@ import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
-
+import Joi from "joi";
+import validateUuidV4 from "../validateUuidV4";
 export const updateNotificationStatus = onRequest(async (request, response) => {
   // Get the API key from the environment variables
   const { trustedApiKey, environment, stagingDbUrl } = envars;
@@ -17,17 +18,36 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     return;
   }
 
-  // Extract ID and currentNotificationStatus from request body
-  const { deviceId: id, isPushEnabled } = request.body;
+    // Request body validation schema
+  const schema = Joi.object({
+    deviceId: Joi.string().required(),
+    isPushEnabled: Joi.boolean().required(),
+  });
 
   // Validate request body
-  // TODO: use a library for api body validation
-  if (typeof id === "undefined" || typeof isPushEnabled === "undefined") {
-    response
-      .status(400)
-      .send("Both ID and current notification status are required.");
+  const { error, value: validBody } = schema.validate(request.body);
+  if (error) {
+    response.status(400).send("Request body validation error: " + error.message);
     return;
   }
+
+  // Validate deviceId, make sure its uuid v4
+  if (!validateUuidV4(validBody.deviceId)) {
+    response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
+    return;
+  }
+
+  // Extract ID and currentNotificationStatus from request body
+  // TODO: change name to deviceId
+  const { deviceId: id, isPushEnabled } = validBody;
+
+  // // Validate request body
+  // if (typeof id === "undefined" || typeof isPushEnabled === "undefined") {
+  //   response
+  //     .status(400)
+  //     .send("Both ID and current notification status are required.");
+  //   return;
+  // }
 
   const dbParams = { environment, stagingDbUrl };
 
@@ -35,7 +55,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     // Check the current status in the database
     const device = await db(dbParams)("devices").where("id", id).first();
     if (!device) {
-      response.status(404).send("Device not found.");
+      response.status(404).send("Device not found. Are you sure \"deviceId\" is correct?");
       return;
     }
 
