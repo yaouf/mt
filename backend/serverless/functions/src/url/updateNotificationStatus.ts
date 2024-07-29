@@ -40,14 +40,6 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
   // Extract ID and currentNotificationStatus from request body
   const { deviceId, isPushEnabled } = validBody;
 
-  // // Validate request body
-  // if (typeof id === "undefined" || typeof isPushEnabled === "undefined") {
-  //   response
-  //     .status(400)
-  //     .send("Both ID and current notification status are required.");
-  //   return;
-  // }
-
   const dbParams = { environment, stagingDbUrl };
 
   try {
