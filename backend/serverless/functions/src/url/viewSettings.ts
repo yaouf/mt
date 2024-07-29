@@ -3,6 +3,8 @@ import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 import { defineString } from "firebase-functions/params";
 import envars from "../envars";
+import Joi from "joi";
+import validateUuidV4 from "../validateUuidV4";
 
 export const viewSettings = onRequest(async (request, response) => {
   // Get the API key from the environment variables
@@ -19,21 +21,24 @@ export const viewSettings = onRequest(async (request, response) => {
 
     logger.info("Getting user settings", { structuredData: true });
     // Destructure potential fields from request body
-    const { deviceId } = request.body;
-    // TODO: use a library for api body validation
-    logger.info("Device ID received", { deviceId });
+    // Schema for request body validation
+    const schema = Joi.object({
+      deviceId: Joi.string().required()
+    });
     // Validate request body
-    if (deviceId === undefined) {
-      response
-        .status(400)
-        .send(
-          "Invalid request body. Must include a deviceID to view settings for."
-        );
+    const { error, value: validBody } = schema.validate(request.body);
+    if (error) {
+      response.status(400).send("Request body validation error: " + error.message);
       return;
     }
-
-    logger.info("Device ID is valid", { deviceId });
-
+    const { deviceId } = validBody;  
+    // TODO: how to use types with Joi
+    // Validate deviceId, make sure its uuid v4
+    if (!validateUuidV4(deviceId)) {
+      response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
+      return;
+    }  
+    logger.info("Device ID received", { deviceId });
     // Get the device settings in device tables
     const { environment, stagingDbUrl } = envars;
     const dbParams = { environment, stagingDbUrl };
