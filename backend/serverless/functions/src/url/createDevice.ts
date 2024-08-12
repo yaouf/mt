@@ -4,7 +4,6 @@ import db from "../../../db/dist/data/db-config";
 import { v4 as uuidv4 } from "uuid";
 import envars from "../envars";
 import Joi from "joi";
-import validateUuidV4 from "../validateUuidV4";
 export const createDevice = onRequest(async (request, response) => {
   // Get the apiKey from the request headers
   const untrustedApiKey = request.get("X-API-KEY");
@@ -43,12 +42,7 @@ export const createDevice = onRequest(async (request, response) => {
       return;
     }
 
-    // Validate expoPushToken, must be uuid v4
-    if (!validateUuidV4(validBody.expoPushToken)) {
-      response.status(400).send("Request body validation error: \"expoPushToken\" is not a valid UUID v4.");
-      return;
-    }
-    
+
     const deviceType = validBody["deviceType"];
     const expoPushToken = validBody["expoPushToken"];
     const breakingNews = validBody["Breaking News"];
