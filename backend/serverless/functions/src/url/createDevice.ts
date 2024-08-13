@@ -4,25 +4,14 @@ import db from "../../../db/dist/data/db-config";
 import { v4 as uuidv4 } from "uuid";
 import envars from "../envars";
 import Joi from "joi";
-import tsscmp from "tsscmp";
+import { validateApiKey } from "../utils";
 
 export const createDevice = onRequest(async (request, response) => {
-  const { environment, stagingDbUrl, trustedApiKey } = envars;
+  if (!validateApiKey(request, response)) return;
+  
+  const { environment, stagingDbUrl } = envars;
   const dbParams = { environment, stagingDbUrl };
   logger.info("dbParams: ", dbParams);
-  
-  // Get the apiKey from the request headers
-  const untrustedApiKey = request.get("X-API-KEY");
-  if (!untrustedApiKey) {
-    response.status(400).send("No API key provided");
-    return;
-  }
-
-  // Check if the API key is correct
-  if (!tsscmp(untrustedApiKey, trustedApiKey)) {
-    response.status(401).send("Unauthorized");
-    return;
-  }
 
   logger.info("Creating a new device", { structuredData: true });
   // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
