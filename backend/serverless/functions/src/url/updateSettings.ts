@@ -74,7 +74,7 @@ export const updateSettings = onRequest(async (request, response) => {
     const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
-      response.status(404).send("Device not found. Are you sure \"deviceId\" is correct?");
+      response.status(404).send("Device not found. Are you sure field \"deviceId\" is correct?");
       return;
     }
 
