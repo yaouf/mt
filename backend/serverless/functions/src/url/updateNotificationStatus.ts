@@ -1,9 +1,9 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
+import Joi from "joi";
 import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
-import Joi from "joi";
-import { validateApiKey, validateUuidV4} from "../utils";
+import { validateApiKey, validateUuidV4 } from "../utils";
 
 export const updateNotificationStatus = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;

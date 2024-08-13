@@ -1,9 +1,9 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
-import db from "../../../db/dist/data/db-config";
-import { v4 as uuidv4 } from "uuid";
-import envars from "../envars";
 import Joi from "joi";
+import { v4 as uuidv4 } from "uuid";
+import db from "../../../db/dist/data/db-config";
+import envars from "../envars";
 import { validateApiKey } from "../utils";
 
 export const createDevice = onRequest(async (request, response) => {
