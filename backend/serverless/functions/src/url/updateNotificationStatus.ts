@@ -3,24 +3,12 @@ import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 import Joi from "joi";
-import validateUuidV4 from "../validateUuidV4";
-import tsscmp from "tsscmp";
+import { validateApiKey, validateUuidV4} from "../utils";
+
 export const updateNotificationStatus = onRequest(async (request, response) => {
-  // Get the API key from the environment variables
-  const { trustedApiKey, environment, stagingDbUrl } = envars;
+  if (!validateApiKey(request, response)) return;
 
-  // Get the apiKey from the request headers
-  const untrustedApiKey = request.get("X-API-KEY");
-  if (!untrustedApiKey) {
-    response.status(400).send("No API key provided");
-    return;
-  }
-
-  // Check if the API key is correct
-  if (!tsscmp(untrustedApiKey, trustedApiKey)) {
-    response.status(401).send("Unauthorized");
-    return;
-  }
+  const { environment, stagingDbUrl } = envars;
 
     // Request body validation schema
   const schema = Joi.object({
