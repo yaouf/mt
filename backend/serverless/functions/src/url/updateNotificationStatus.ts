@@ -38,7 +38,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     // Check the current status in the database
     const device = await db(dbParams)("devices").where("id", deviceId).first();
     if (!device) {
-      response.status(404).send("Device not found. Are you sure \"deviceId\" is correct?");
+      response.status(404).send("Device not found. Are you sure field \"deviceId\" is correct?");
       return;
     }
 
