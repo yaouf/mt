@@ -1,11 +1,9 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
-import db from "../../../db/dist/data/db-config";
-import { defineString } from "firebase-functions/params";
-import envars from "../envars";
 import Joi from "joi";
-import {validateApiKey, validateUuidV4} from "../utils";
-import tsscmp from "tsscmp";
+import db from "../../../db/dist/data/db-config";
+import envars from "../envars";
+import { validateApiKey, validateUuidV4 } from "../utils";
 
 export const viewSettings = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
