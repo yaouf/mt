@@ -5,14 +5,19 @@ import { defineString } from "firebase-functions/params";
 import envars from "../envars";
 import Joi from "joi";
 import validateUuidV4 from "../validateUuidV4";
+import tsscmp from "tsscmp";
 
 export const viewSettings = onRequest(async (request, response) => {
-  // Get the API key from the environment variables
-  const API_KEY = defineString("API_KEY").value();
+  const { trustedApiKey } = envars;
   // Get the apiKey from the request headers
-  const apiKey = request.get("X-API-KEY");
+  const untrustedApiKey = request.get("X-API-KEY");
+  if (!untrustedApiKey) {
+    response.status(400).send("No API key provided");
+    return;
+  }
+
   // Check if the API key is correct
-  if (!apiKey || apiKey !== API_KEY) {
+  if (!tsscmp(untrustedApiKey, trustedApiKey)) {
     response.status(401).send("Unauthorized");
     return;
   }

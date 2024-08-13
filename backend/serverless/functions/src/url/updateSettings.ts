@@ -4,19 +4,24 @@ import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 import Joi from "joi";
 import validateUuidV4 from "../validateUuidV4";
+import tsscmp from "tsscmp";
 export const updateSettings = onRequest(async (request, response) => {
   // Get the API key from the environment variables
   const { trustedApiKey, environment, stagingDbUrl } = envars;
   const dbParams = { environment, stagingDbUrl };
 
-  // Get the apiKey from the request headers
-  const untrustedApiKey = request.get("X-API-KEY");
-
-  // Check if the API key is correct
-  if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
-    response.status(401).send("Unauthorized");
-    return;
-  }
+    // Get the apiKey from the request headers
+    const untrustedApiKey = request.get("X-API-KEY");
+    if (!untrustedApiKey) {
+      response.status(400).send("No API key provided");
+      return;
+    }
+  
+    // Check if the API key is correct
+    if (!tsscmp(untrustedApiKey, trustedApiKey)) {
+      response.status(401).send("Unauthorized");
+      return;
+    }
 
   try {
     logger.info("Updating user settings", { structuredData: true });

@@ -4,16 +4,22 @@ import db from "../../../db/dist/data/db-config";
 import { v4 as uuidv4 } from "uuid";
 import envars from "../envars";
 import Joi from "joi";
-export const createDevice = onRequest(async (request, response) => {
-  // Get the apiKey from the request headers
-  const untrustedApiKey = request.get("X-API-KEY");
+import tsscmp from "tsscmp";
 
+export const createDevice = onRequest(async (request, response) => {
   const { environment, stagingDbUrl, trustedApiKey } = envars;
   const dbParams = { environment, stagingDbUrl };
   logger.info("dbParams: ", dbParams);
+  
+  // Get the apiKey from the request headers
+  const untrustedApiKey = request.get("X-API-KEY");
+  if (!untrustedApiKey) {
+    response.status(400).send("No API key provided");
+    return;
+  }
+
   // Check if the API key is correct
-  // TODO: use crypto safe comparison
-  if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
+  if (!tsscmp(untrustedApiKey, trustedApiKey)) {
     response.status(401).send("Unauthorized");
     return;
   }
