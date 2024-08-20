@@ -4,6 +4,12 @@ const NotificationTable = ({
   scheduledNotifications,
   setScheduledNotifications,
 }) => {
+  /**
+   * Deletes a notification by sending a DELETE request to the server.
+   *
+   * @param {Object} notification - The notification object to be deleted.
+   * @param {number|string} notification.id - The unique identifier of the notification.
+   */
   const onDeleteNotification = async (notification) => {
     try {
       console.log("Deleting notification:", notification);
@@ -28,6 +34,12 @@ const NotificationTable = ({
     }
   };
 
+  /**
+   * Formats the tags for a notification into a comma-separated string.
+   *
+   * @param {Object} notification - The notification object containing tag information.
+   * @returns {string} A comma-separated string of tags.
+   */
   const formatTags = (notification) => {
     const tags: string[] = [];
     if (notification["breakingNews"]) tags.push("Breaking News");

@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const NotificationForm = ({ setScheduledNotifications }) => {
+  // State to store the form data
   const [newFormData, setNewFormData] = useState({
     time: "",
     title: "",
@@ -15,6 +16,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     publicationDate: "",
   });
 
+  /**
+   * Handles input change event for form elements.
+   *
+   * @param {Object} e - The event object from the input change event.
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewFormData((prevData) => ({
@@ -23,6 +29,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
+  /**
+   * Handles the change event for checkbox inputs.
+   *
+   * @param {Object} e - The event object from the checkbox change event.
+   */
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
     if (checked) {
@@ -38,6 +49,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }
   };
 
+  /**
+   * Handles the change event for the slug input.
+   *
+   * @param {Object} e - The event object from the input change event.
+   */
   const handleSlugChange = (e) => {
     const { value } = e.target;
     setNewFormData((prevData) => ({
@@ -46,6 +62,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
+  /**
+   * Handles the change event for the media type.
+   *
+   * @param {Object} e - The event object from the input change event.
+   */
   const handleMediaTypeChange = (e) => {
     const { value } = e.target;
     setNewFormData((prevData) => ({
@@ -54,6 +75,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
+  /**
+   * Handles the change event for the publication date.
+   *
+   * @param {Object} e - The event object from the input change event.
+   */
   const handlePublicationDateChange = (date) => {
     // Format the date as "YYYY/MM"
     const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1)
@@ -66,6 +92,13 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
+  /**
+   * Handles the scheduling of a new notification by sending the form data to
+   * the server. Sends a POST request to the `/api/notifications/add` endpoint
+   * with the current form data. If the request is successful, it updates the
+   * list of scheduled notifications and resets the form fields. In case of an
+   * error, it logs the error to the console.
+   */
   const handleScheduleNotification = async () => {
     try {
       console.log("newNotification", newFormData);
