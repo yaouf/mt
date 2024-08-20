@@ -59,8 +59,11 @@ function SettingsScreen({ navigation }: NavProp) {
         setDaily(dailyNotifs === "true");
 
         const id = await AsyncStorage.getItem("deviceID");
+        console.log("this is the device id in the settingsscreen", id);
         if (id) {
           setDeviceID(id);
+        } else {
+          console.log("Device ID is not being set in settings screen");
         }
 
         await checkPermissions(); // Check system permissions everytime app loads
