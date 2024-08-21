@@ -126,7 +126,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           publicationDate: "",
         });
       } else {
-        console.error("Error scheduling notification");
+        console.error("There was an error scheduling the notification.");
       }
     } catch (error) {
       console.error("Error:", error);

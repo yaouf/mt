@@ -7,7 +7,7 @@ type ResponseData = {
 
 export default async function getNotifications(
   req: NextApiRequest,
-  res: NextApiResponse<Notification[] | ResponseData>,
+  res: NextApiResponse<Notification[] | ResponseData>
 ) {
   try {
     const notifications = await db("notifications").select("*");

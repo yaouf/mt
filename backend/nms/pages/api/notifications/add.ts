@@ -3,11 +3,13 @@ import db from "../../../dist/data/db-config";
 import notificationQueue from "../../queue/queue";
 // import { Notification } from "../../types/types";
 
-type ResponseData = {
-  message?: string;
-  jobId?: number;
-  notifications?: Notification[];
-} | Notification[];
+type ResponseData =
+  | {
+      message?: string;
+      jobId?: number;
+      notifications?: Notification[];
+    }
+  | Notification[];
 
 export default async function addNotification(
   req: NextApiRequest,
@@ -22,6 +24,7 @@ export default async function addNotification(
     } else {
       data = req.body;
     }
+
     // const data = req.body;
     // console.log("data", JSON.parse(data));
     // TODO: validate this automatically
@@ -37,7 +40,7 @@ export default async function addNotification(
     // Validate required fields
     if (!time || !title || !tags || !slug || !mediaType || !publicationDate) {
       // find which field is missing
-      console.log(time)
+      console.log(time);
       return res.status(400).json({ message: "Missing fields." });
     }
 
@@ -50,6 +53,7 @@ export default async function addNotification(
     // Create pathname from slug, mediaType, and publicationDate
     const pathname = `/${mediaType}/${publicationDate}/${slug}`;
     console.log("pathname", pathname);
+
     // Insert the notification data into the "notifications" table
     const insertedRows = await db("notifications")
       .insert({
@@ -63,7 +67,8 @@ export default async function addNotification(
         status: "pending",
       })
       .returning("id");
-      console.log("insertedRows", insertedRows);
+    console.log("insertedRows", insertedRows);
+
     // Get the ID of the inserted notification
     const jobId = insertedRows[0].id as number;
 

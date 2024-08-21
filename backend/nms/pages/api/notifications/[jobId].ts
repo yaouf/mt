@@ -13,20 +13,18 @@ type Notification = {
 
 export default async function getNotification(
   req: NextApiRequest,
-  res: NextApiResponse<Notification[] | ResponseData>,
+  res: NextApiResponse<Notification[] | ResponseData>
 ) {
   try {
-    // get path param
     console.log("query", req.query);
-    // Get the jobId from the query string
+
+    // Extract the jobId from the query string and validate it
     const jobId = parseInt(req.query.jobId as string);
-    if(isNaN(jobId)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Invalid jobId. Please provide a valid jobId like so: /api/notifications/1",
-        });
+    if (isNaN(jobId)) {
+      return res.status(400).json({
+        message:
+          "Invalid jobId. Please provide a valid jobId like so: /api/notifications/1",
+      });
     }
 
     if (jobId) {
@@ -35,7 +33,7 @@ export default async function getNotification(
         .where({ id: jobId });
       if (notification.length === 0) {
         return res.status(404).json({ message: "Notification not found." });
-      } 
+      }
       res.status(200).json(notification[0]);
     } else {
       const notifications = await db("notifications").select("*");

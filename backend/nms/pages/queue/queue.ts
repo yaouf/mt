@@ -10,7 +10,7 @@ const notificationQueue = new Bull(
 );
 
 // Send notifications to corresponding devices
-notificationQueue.process(async job => {
+notificationQueue.process(async (job) => {
   // This is the job data that was passed to `notificationQueue.add()`
   const { jobId, time, title, body, tags, pathname } = job.data;
   console.log("tags", tags);
@@ -44,7 +44,7 @@ notificationQueue.process(async job => {
   // }
 
   // Send notifications to all devices
-  devices.forEach(device => {
+  devices.forEach((device) => {
     // Send the notification to the device
     console.log(`Sending notification to ${device.expoPushToken}`);
 

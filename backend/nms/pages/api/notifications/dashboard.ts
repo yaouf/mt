@@ -2,7 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { Expo, ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
 import db from "../../../dist/data/db-config";
 
-
 type ResponseData = {
   message: string;
 };
@@ -154,7 +153,7 @@ export async function breakingHandler(
 
   // Extract the Expo push tokens from the devices
   const somePushTokens: string[] = allDevices.map(
-    device => device.expoPushToken
+    (device) => device.expoPushToken
   );
 
   // Create the messages that you want to send to clients
