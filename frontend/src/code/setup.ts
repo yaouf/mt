@@ -62,6 +62,7 @@ export const setUpDevice = async (
       setAsync("weeklyNotifs", JSON.stringify(false));
       setAsync("dailyNotifs", JSON.stringify(false));
       deviceID = await createDevice(false, false, false, token);
+      console.log("deviceID being set in line 65 of setup.ts", deviceID);
       console.log("push token", token);
     }
   } catch (error) {
