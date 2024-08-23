@@ -32,7 +32,7 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Validate deviceId, make sure its uuid v4
-    if (!validateUuidV4(validBody.deviceId)) {
+    if (!validateUuidV4(validBody.deviceId)) { 
       response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
       return;
     }
