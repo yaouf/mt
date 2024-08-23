@@ -69,7 +69,7 @@ function SettingsScreen({ navigation }: NavProp) {
         await checkPermissions(); // Check system permissions everytime app loads
       } catch (err) {
         console.log(err);
-      }
+      } 
     };
 
     load();
