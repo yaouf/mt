@@ -5,6 +5,8 @@ export const menuStyles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginTop: 16,
+    marginBottom: 24
   },
   rowItem: {
     height: 40,
@@ -17,6 +19,7 @@ export const menuStyles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: varGray1,
     marginBottom: 12,
+    marginTop: 6
   },
   icon: {
     marginRight: 16,
@@ -25,10 +28,18 @@ export const menuStyles = StyleSheet.create({
   rowText: {
     flex: 1, // takes up remaining space
     color: varTextColor,
+    fontWeight: "500", // TODO: figma says 500 but this font is thicker
+    fontSize: 16,
+    fontFamily: font2,
+    textTransform: "uppercase"
+  },
+  descriptionText: {
+    flex: 1, // takes up remaining space
+    color: varTextColor,
     fontWeight: "400", // TODO: figma says 500 but this font is thicker
     fontSize: 16,
     fontFamily: font2,
-    textTransform: "uppercase",
+    marginBottom: 16
   },
   otherText: {
     color: varTextColor,
@@ -59,4 +70,7 @@ export const menuStyles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
+  contentContainer: {
+    marginBottom: 70
+  }
 });
