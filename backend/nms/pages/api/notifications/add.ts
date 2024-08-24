@@ -56,9 +56,9 @@ export default async function addNotification(
         time: time,
         title: title,
         body: body,
-        breakingNews: breakingNews,
-        universityNews: universityNews,
-        metro: metro,
+        "Breaking News": breakingNews,
+        "University News": universityNews,
+        "Metro": metro,
         pathname: pathname,
         status: "pending",
       })
