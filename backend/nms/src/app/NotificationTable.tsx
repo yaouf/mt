@@ -29,7 +29,7 @@ const NotificationTable = ({
 
   const formatTags = (notification) => {
     const tags: string[] = [];
-    if (notification["breakingNews"]) tags.push("Breaking News");
+    if (notification["Breaking News"]) tags.push("Breaking News");
     if (notification["University News"]) tags.push("University News");
     if (notification["Metro"]) tags.push("Metro");
     return tags.join(", ");
