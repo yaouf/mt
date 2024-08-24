@@ -44,8 +44,8 @@ export default async function addNotification(
     // Create boolean variables for tags
     console.log("tags in add.ts", tags);
     const breakingNews = tags.includes("Breaking News");
-    const weeklySummary = tags.includes("Weekly Summary");
-    const dailySummary = tags.includes("Daily Summary");
+    const universityNews = tags.includes("University News");
+    const metro = tags.includes("Metro");
 
     // Create pathname from slug, mediaType, and publicationDate
     const pathname = `/${mediaType}/${publicationDate}/${slug}`;
@@ -57,8 +57,8 @@ export default async function addNotification(
         title: title,
         body: body,
         breakingNews: breakingNews,
-        weeklySummary: weeklySummary,
-        dailySummary: dailySummary,
+        universityNews: universityNews,
+        metro: metro,
         pathname: pathname,
         status: "pending",
       })
