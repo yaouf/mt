@@ -1,4 +1,3 @@
-import React from "react";
 
 const NotificationTable = ({
   scheduledNotifications,
@@ -31,8 +30,8 @@ const NotificationTable = ({
   const formatTags = (notification) => {
     const tags: string[] = [];
     if (notification["breakingNews"]) tags.push("Breaking News");
-    if (notification["weeklySummary"]) tags.push("Weekly Summary");
-    if (notification["dailySummary"]) tags.push("Daily Summary");
+    if (notification["University News"]) tags.push("University News");
+    if (notification["Metro"]) tags.push("Metro");
     return tags.join(", ");
   };
 
