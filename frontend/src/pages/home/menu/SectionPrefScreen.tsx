@@ -79,12 +79,19 @@ function SectionPrefScreen({ navigation }: NavProp) {
 
       <ScrollView>
         <View>
-          <Text style={[menuStyles.rowText, { textTransform: "none" }]}>
+          <Text
+            style={[
+              menuStyles.rowText,
+              { textTransform: "none", marginVertical: 20 },
+            ]}
+          >
             Add and reorder topics to customize the menu on your Top Stories
             page.
           </Text>
 
-          <Text style={text.sectionHeader1}>FAVORITE SECTIONS</Text>
+          <Text style={[text.sectionHeader1, { marginBottom: 20 }]}>
+            FAVORITE SECTIONS
+          </Text>
           <View style={menuStyles.rowItem}>
             <MaterialIcons
               name="lock-outline"

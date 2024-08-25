@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { View, TextInput, FlatList } from "react-native";
+import { View, TextInput, FlatList, SafeAreaView } from "react-native";
 import { varGray1 } from "../../styles/styles";
 import { search } from "src/styles/search";
 import { MaterialIcons } from "@expo/vector-icons";
