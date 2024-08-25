@@ -80,7 +80,7 @@ export const articleStyles = StyleSheet.create({
   text: {
     color: varTextColor,
     fontFamily: font1,
-    fontSize: 14,
+    fontSize: 18,
     fontStyle: "normal",
     fontWeight: "400",
     lineHeight: 24,
@@ -88,7 +88,7 @@ export const articleStyles = StyleSheet.create({
   hyperlink: {
     color: varTextColor,
     fontFamily: font1,
-    fontSize: 14,
+    fontSize: 18,
     fontStyle: "normal",
     fontWeight: "400",
     lineHeight: 24,
@@ -97,7 +97,7 @@ export const articleStyles = StyleSheet.create({
   correction: {
     color: varTextColor,
     fontFamily: font1,
-    fontSize: 14,
+    fontSize: 18,
     fontStyle: "italic",
     fontWeight: "400",
     lineHeight: 24,
@@ -150,7 +150,7 @@ export const articleStyles = StyleSheet.create({
     right: 0,
     flexDirection: "row",
     backgroundColor: "#FFF",
-    width: 390,
+    width: '100%',
     padding: 16,
     justifyContent: "flex-end",
     alignItems: "flex-start",

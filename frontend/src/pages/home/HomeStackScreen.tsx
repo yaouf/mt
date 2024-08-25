@@ -88,9 +88,11 @@ function HomeStackScreen() {
         <HomeStack.Screen
           name="Section"
           component={SectionsScreen}
-          options={{ headerShown: true }}
+          options={{ headerShown: true, 
+                  gestureEnabled: false, 
+                  animationEnabled: false}}
         />
-        <HomeStack.Screen
+        <HomeStack.Screen 
           name="Staff"
           component={Staff}
           options={{ headerShown: false }}
