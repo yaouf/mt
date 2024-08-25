@@ -57,6 +57,7 @@ function ArticleScreen({
             {article.subhead && (
               <Text style={articleStyles.lead}>{article.subhead}</Text>
             )}
+            <View style={{ height: 1, backgroundColor: '#eee', width: '100%', marginBottom: 5}} />
             <Text style={articleStyles.author}>
               {article.authors.map((author, i) => (
                 <TouchableOpacity
