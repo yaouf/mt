@@ -1,22 +1,16 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
+import Joi from "joi";
 import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
-import Joi from "joi";
-import validateUuidV4 from "../validateUuidV4";
+import { validateApiKey, validateUuidV4 } from "../utils";
+
 export const updateSettings = onRequest(async (request, response) => {
-  // Get the API key from the environment variables
-  const { trustedApiKey, environment, stagingDbUrl } = envars;
+    if (!validateApiKey(request, response)) return;
+
+  const { environment, stagingDbUrl } = envars;
   const dbParams = { environment, stagingDbUrl };
 
-  // Get the apiKey from the request headers
-  const untrustedApiKey = request.get("X-API-KEY");
-
-  // Check if the API key is correct
-  if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
-    response.status(401).send("Unauthorized");
-    return;
-  }
 
   try {
     logger.info("Updating user settings", { structuredData: true });
@@ -38,7 +32,7 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Validate deviceId, make sure its uuid v4
-    if (!validateUuidV4(validBody.deviceId)) {
+    if (!validateUuidV4(validBody.deviceId)) { 
       response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
       return;
     }
@@ -80,7 +74,7 @@ export const updateSettings = onRequest(async (request, response) => {
     const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
-      response.status(404).send("Device not found. Are you sure \"deviceId\" is correct?");
+      response.status(404).send("Device not found. Are you sure field \"deviceId\" is correct?");
       return;
     }
 

@@ -92,25 +92,21 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  // Makes sure that when the user is sent to settings page, the permissions are properly reflected
-  // User may decide in their settings not to allow, so this app must also reflect that
   useEffect(() => {
     const handleAppStateChange = async (nextAppState) => {
       if (nextAppState === "active") {
-        // App has come to the foreground, check if the permissions have changed
         const { status } = await Notifications.getPermissionsAsync();
-        setSystemPermissionStatus(status); // Update the systemPermissionStatus state
-        console.log("hereeee");
+        setSystemPermissionStatus(status);
+        console.log("App has come to the foreground");
       }
     };
-
+  
     AppState.addEventListener("change", handleAppStateChange);
-
-    // Initial permission check
-    checkPermissions();
-
+  
+    checkPermissions(); // Initial permission check
+  
     return () => {
-      // AppState.removeEventListener("change", handleAppStateChange);
+      AppState.removeEventListener("change", handleAppStateChange);
     };
   }, []);
 

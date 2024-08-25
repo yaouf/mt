@@ -1,22 +1,14 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
+import Joi from "joi";
 import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
-import Joi from "joi";
-import validateUuidV4 from "../validateUuidV4";
+import { validateApiKey, validateUuidV4 } from "../utils";
+
 export const updateNotificationStatus = onRequest(async (request, response) => {
-  // Get the API key from the environment variables
-  const { trustedApiKey, environment, stagingDbUrl } = envars;
+  if (!validateApiKey(request, response)) return;
 
-  // Get the apiKey from the request headers
-  const untrustedApiKey = request.get("X-API-KEY");
-
-  // Check if the API key is correct
-  if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
-    // TODO: make this more descriptive
-    response.status(401).send("API Key is invalid.");
-    return;
-  }
+  const { environment, stagingDbUrl } = envars;
 
     // Request body validation schema
   const schema = Joi.object({
@@ -46,7 +38,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     // Check the current status in the database
     const device = await db(dbParams)("devices").where("id", deviceId).first();
     if (!device) {
-      response.status(404).send("Device not found. Are you sure \"deviceId\" is correct?");
+      response.status(404).send("Device not found. Are you sure field \"deviceId\" is correct?");
       return;
     }
 
