@@ -107,7 +107,7 @@ export const text = StyleSheet.create({
     fontWeight: "400",
     fontSize: 12,
     overflow: "hidden",
-    maxWidth: "85%",
+    maxWidth: "100%",
   },
   normal: {
     color: varTextColor,

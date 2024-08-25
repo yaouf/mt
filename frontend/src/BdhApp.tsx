@@ -11,6 +11,15 @@ import { createDevice } from "./code/serverlessAPIs";
 import * as Notifications from "expo-notifications";
 import { Linking } from "react-native";
 
+// Handle foreground notifications
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 const fullStack = createStackNavigator();
 
 const MyTheme = {
@@ -32,11 +41,29 @@ function BdhApp() {
           setHasOnboarded(true); // toggle to false for development
         }
       } catch (err) {
-        console.log(err);
+        console.log("err while setting up notifications", err);
       }
     };
     load();
-  });
+  }, []); // Added dependency array to ensure this only runs once on mount
+
+  useEffect(() => {
+    const notificationListener = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("Notification received:", notification);
+      }
+    );
+
+    const responseListener =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("Notification response received:", response);
+      });
+
+    return () => {
+      notificationListener.remove();
+      responseListener.remove();
+    };
+  }, []);
 
   // TODO: notifications - https://docs.expo.dev/versions/latest/sdk/notifications/#notification
 

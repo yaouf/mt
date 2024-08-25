@@ -1,23 +1,17 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
-import db from "../../../db/dist/data/db-config";
-import { v4 as uuidv4 } from "uuid";
-import envars from "../envars";
 import Joi from "joi";
-import validateUuidV4 from "../validateUuidV4";
-export const createDevice = onRequest(async (request, response) => {
-  // Get the apiKey from the request headers
-  const untrustedApiKey = request.get("X-API-KEY");
+import { v4 as uuidv4 } from "uuid";
+import db from "../../../db/dist/data/db-config";
+import envars from "../envars";
+import { validateApiKey } from "../utils";
 
-  const { environment, stagingDbUrl, trustedApiKey } = envars;
+export const createDevice = onRequest(async (request, response) => {
+  if (!validateApiKey(request, response)) return;
+  
+  const { environment, stagingDbUrl } = envars;
   const dbParams = { environment, stagingDbUrl };
   logger.info("dbParams: ", dbParams);
-  // Check if the API key is correct
-  // TODO: use crypto safe comparison
-  if (!untrustedApiKey || untrustedApiKey !== trustedApiKey) {
-    response.status(401).send("Unauthorized");
-    return;
-  }
 
   logger.info("Creating a new device", { structuredData: true });
   // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
@@ -43,12 +37,7 @@ export const createDevice = onRequest(async (request, response) => {
       return;
     }
 
-    // Validate expoPushToken, must be uuid v4
-    if (!validateUuidV4(validBody.expoPushToken)) {
-      response.status(400).send("Request body validation error: \"expoPushToken\" is not a valid UUID v4.");
-      return;
-    }
-    
+
     const deviceType = validBody["deviceType"];
     const expoPushToken = validBody["expoPushToken"];
     const breakingNews = validBody["Breaking News"];

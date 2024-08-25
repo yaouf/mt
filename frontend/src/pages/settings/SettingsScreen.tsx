@@ -59,14 +59,17 @@ function SettingsScreen({ navigation }: NavProp) {
         setDaily(dailyNotifs === "true");
 
         const id = await AsyncStorage.getItem("deviceID");
+        console.log("this is the device id in the settingsscreen", id);
         if (id) {
           setDeviceID(id);
+        } else {
+          console.log("Device ID is not being set in settings screen");
         }
 
         await checkPermissions(); // Check system permissions everytime app loads
       } catch (err) {
         console.log(err);
-      }
+      } 
     };
 
     load();
@@ -77,7 +80,11 @@ function SettingsScreen({ navigation }: NavProp) {
 
   const support = [
     // { id: 1, title: "Manage Account", link: "" }, // TODO: once make accounts and stuff, addd this
-    { id: 2, title: "Report a Bug", link: "" }, // TODO: add link
+    {
+      id: 2,
+      title: "Report a Bug",
+      link: "https://docs.google.com/forms/d/1elxuyYjd2ApaVcOmxDiCEvAkzURuOwMjVB_WeMfjyNg/edit",
+    }, // TODO: add link
     {
       id: 3,
       title: "Contact Us",
@@ -111,7 +118,7 @@ function SettingsScreen({ navigation }: NavProp) {
     {
       id: 6,
       title: "Donate",
-      link: "https://secure.lglforms.com/form_engine/s/s4ZSMYRtYV-9bAfVZglmWQ",
+      link: "https://secure.lglforms.com/form_engine/s/JydyLYLlWAfeK0wrZwuLgg",
     },
   ];
 
@@ -125,24 +132,21 @@ function SettingsScreen({ navigation }: NavProp) {
         <View style={{ rowGap: 16, marginTop: 4 }}>
           <Notif
             title="Breaking News"
-            description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
-  faucibus"
+            description="Urgent and developing coverage"
             value={breaking}
             setValue={setBreaking}
             asyncName="breakingNotifs"
           />
           <Notif
             title="Weekly Summary"
-            description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
-  faucibus"
+            description="The latest on Brown and the campus community"
             value={weekly}
             setValue={setWeekly}
             asyncName="weeklyNotifs"
           />
           <Notif
             title="Daily Summary"
-            description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
-  faucibus"
+            description="Updates from Providence and beyond"
             value={daily}
             setValue={setDaily}
             asyncName="dailyNotifs"

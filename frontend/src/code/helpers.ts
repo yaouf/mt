@@ -84,7 +84,7 @@ export const sendNotification = async () => {
   console.log("Sending push notification...");
   // notification message
   const message = {
-    to: "expoPushToken",
+    to: "ExponentPushToken[rhP2mkHhzPOAVEC9k9rWka]",
     sound: "default",
     title: "My first push notif!",
     body: "This is my first push notif",
