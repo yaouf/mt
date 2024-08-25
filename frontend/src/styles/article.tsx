@@ -150,7 +150,7 @@ export const articleStyles = StyleSheet.create({
     right: 0,
     flexDirection: "row",
     backgroundColor: "#FFF",
-    width: 390,
+    width: "100%",
     padding: 16,
     justifyContent: "flex-end",
     alignItems: "flex-start",

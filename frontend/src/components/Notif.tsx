@@ -97,7 +97,11 @@ function Notif({
           {description}
         </Text>
       </View>
-      <Switch value={toggleValue} onValueChange={() => toggle()} />
+      <Switch
+        trackColor={{ true: "#000000", false: "grey" }}
+        value={toggleValue}
+        onValueChange={() => toggle()}
+      />
     </View>
   );
 }
