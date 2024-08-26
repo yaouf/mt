@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.browndailyherald.thebrowndailyherald"
@@ -32,9 +30,7 @@
         "projectId": "2f15114e-2295-4fe6-bd82-606b41277acc"
       }
     },
-    "owner": "rachelchae",
-    "plugins": [
-      "expo-build-properties"
-    ]
+    "owner": "bdh-app",
+    "plugins": ["expo-build-properties"]
   }
 }

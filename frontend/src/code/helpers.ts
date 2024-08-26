@@ -95,7 +95,7 @@ export const sendNotification = async () => {
       method: "POST",
       headers: {
         host: "exp.host",
-        accept: "application/json",
+        accept: "application/json", 
         "accept-encoding": "gzip, deflate",
         "content-type": "application/json",
       },

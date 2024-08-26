@@ -9,7 +9,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { menuItems } from "./code/setup";
 import { createDevice } from "./code/serverlessAPIs";
 import * as Notifications from "expo-notifications";
-import { Linking } from "react-native";
+import { AppState, Linking } from "react-native";
 
 // Handle foreground notifications
 Notifications.setNotificationHandler({
@@ -48,6 +48,7 @@ function BdhApp() {
   }, []); // Added dependency array to ensure this only runs once on mount
 
   useEffect(() => {
+    console.log("goes in here");
     const notificationListener = Notifications.addNotificationReceivedListener(
       (notification) => {
         console.log("Notification received:", notification);
@@ -58,10 +59,29 @@ function BdhApp() {
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log("Notification response received:", response);
       });
+    const handleAppStateChange = async (nextAppState) => {
+      if (nextAppState === "active") {
+        console.log("App has come to the foreground");
+
+        // Check for any notifications received while the app was in the background
+        const lastNotificationResponse =
+          await Notifications.getLastNotificationResponseAsync();
+        if (lastNotificationResponse) {
+          console.log(
+            "Handled notification when app came to foreground:",
+            lastNotificationResponse
+          );
+          // Handle the last notification response here (e.g., navigate to a screen)
+        }
+      }
+    };
+
+    AppState.addEventListener("change", handleAppStateChange);
 
     return () => {
       notificationListener.remove();
       responseListener.remove();
+      AppState.removeEventListener("change", handleAppStateChange);
     };
   }, []);
 

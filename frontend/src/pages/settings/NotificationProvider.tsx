@@ -92,19 +92,45 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
+  // useEffect(() => {
+  //   const handleAppStateChange = async (nextAppState) => {
+  //     if (nextAppState === "active") {
+  //       const { status } = await Notifications.getPermissionsAsync();
+  //       setSystemPermissionStatus(status);
+  //       console.log("App has come to the foreground");
+  //     }
+  //   };
+
+  //   AppState.addEventListener("change", handleAppStateChange);
+
+  //   checkPermissions(); // Initial permission check
+
+  //   return () => {
+  //     AppState.removeEventListener("change", handleAppStateChange);
+  //   };
+  // }, []);
   useEffect(() => {
     const handleAppStateChange = async (nextAppState) => {
+      console.log(`AppState changed to: ${nextAppState}`);
+
       if (nextAppState === "active") {
-        const { status } = await Notifications.getPermissionsAsync();
-        setSystemPermissionStatus(status);
         console.log("App has come to the foreground");
+
+        // Check for any notifications received while the app was in the background
+        const lastNotificationResponse =
+          await Notifications.getLastNotificationResponseAsync();
+        if (lastNotificationResponse) {
+          console.log(
+            "Handled notification when app came to foreground:",
+            lastNotificationResponse
+          );
+          // Handle the last notification response here (e.g., navigate to a screen)
+        }
       }
     };
-  
+
     AppState.addEventListener("change", handleAppStateChange);
-  
-    checkPermissions(); // Initial permission check
-  
+
     return () => {
       AppState.removeEventListener("change", handleAppStateChange);
     };
