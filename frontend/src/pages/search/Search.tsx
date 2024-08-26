@@ -1,9 +1,5 @@
 import { useRef, useState } from "react";
-<<<<<<< HEAD
-import { View, TextInput, FlatList, SafeAreaView } from "react-native";
-=======
 import { View, TextInput, FlatList, Image, Text } from "react-native";
->>>>>>> 9704e39cfa71d6dec6b3740d5eb216215bf609be
 import { varGray1 } from "../../styles/styles";
 import { search } from "src/styles/search";
 import { MaterialIcons } from "@expo/vector-icons";
