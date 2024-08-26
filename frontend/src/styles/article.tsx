@@ -84,6 +84,7 @@ export const articleStyles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "400",
     lineHeight: 24,
+    width: "98%",
   },
   hyperlink: {
     color: varTextColor,
