@@ -69,6 +69,7 @@ export const articleStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 60,
   },
   articleBody: {
     width: "100%",
