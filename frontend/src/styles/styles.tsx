@@ -60,9 +60,9 @@ export const text = StyleSheet.create({
   sectionHeader1: {
     // main section headers
     color: varTextColor,
-    fontWeight: "600",
+    fontWeight: "800",
     fontSize: 16,
-    fontFamily: font2,
+    fontFamily: font2
   },
   seeMore: {
     // see more header for section
