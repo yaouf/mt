@@ -44,9 +44,19 @@ function WelcomeScreen({ navigation }: NavProp) {
         style={styles.img}
         resizeMode="contain"
       />
-      <TouchableOpacity onPress={() => navigation.push("PushNotifs")}>
-        <Text style={styles.text}>{showButton ? "Continue" : ""}</Text>
-      </TouchableOpacity>
+      {showButton && (
+        <TouchableOpacity
+          onPress={() => navigation.push("PushNotifs")}
+          style={styles.button} // Apply the button style here
+        >
+          <Text style={styles.buttonText}>Continue</Text>
+        </TouchableOpacity>
+      )}
+      {/* {showButton && (
+        <TouchableOpacity onPress={() => navigation.push("PushNotifs")}>
+          <Text style={styles.text}>{showButton ? "Continue" : ""}</Text>
+        </TouchableOpacity>
+      )} */}
     </View>
   );
 }
@@ -71,5 +81,21 @@ export const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 14,
     marginBottom: 20,
+  },
+  button: {
+    borderWidth: 1, // Outline width
+    borderColor: "#4d4d4d", // Outline color
+    borderRadius: 25, // Rounded corners
+    paddingVertical: 10, // Vertical padding for height
+    paddingHorizontal: 30, // Horizontal padding for width
+    alignItems: "center", // Center text horizontally
+    justifyContent: "center", // Center text vertically
+  },
+  buttonText: {
+    color: "#4d4d4d",
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 14,
   },
 });
