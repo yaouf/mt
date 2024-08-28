@@ -9,8 +9,9 @@ export const fyp = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginRight: 16,
-    marginLeft: 16,
+    marginRight: 0,
+    marginLeft: 0,
+    width: "100%",
   },
   horzScrollCard: {
     maxWidth: windowWidth * 0.5,
