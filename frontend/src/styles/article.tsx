@@ -77,6 +77,7 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: 36,
+    paddingBottom: 10,
   },
   text: {
     color: varTextColor,
@@ -153,10 +154,10 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#FFF",
     width: "100%",
-    padding: 16,
+    padding: 20,
     justifyContent: "flex-end",
     alignItems: "flex-start",
-    height: 58,
+    height: 80,
     gap: 235,
   },
   actions: {

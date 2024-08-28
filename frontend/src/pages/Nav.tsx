@@ -19,6 +19,7 @@ import { HoldMenuProvider } from "react-native-hold-menu";
 import SettingsStackScreen from "./settings/SettingsStackScreen";
 import SearchStackScreen from "./search/SearchStackScreen";
 import * as Notifications from "expo-notifications";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -113,53 +114,49 @@ export default function Nav() {
       <NotificationProvider>
         <SavedContext.Provider value={{ savedArticles, setSavedArticles }}>
           <Tab.Navigator
-            screenOptions={({ route }) => ({
-              tabBarIcon: ({ color }) => {
-                let iconName = "home-outline";
+            screenOptions={({ route }) => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
 
-                if (route.name === "Settings") {
-                  iconName = "settings-outline";
-                } else if (route.name === "Search") {
-                  iconName = "search-outline";
-                } else if (route.name === "For You") {
-                  iconName = "star-outline";
-                }
+              return {
+                tabBarIcon: ({ color }) => {
+                  let iconName = "home-outline";
 
-                // You can return any component that you like here!
-                return <Ionicons name={iconName} size={24} color={color} />;
-              },
-              tabBarActiveTintColor: "#ED1C24",
-              tabBarInactiveTintColor: "gray",
-              tabBarStyle: {
-                height: 65,
-                marginBottom: 30,
-                paddingTop: 8,
-                paddingBottom: 8,
-                paddingRight: 20,
-                paddingLeft: 20,
-              },
-              tabBarLabelStyle: {
-                // padding: 5,
-                fontFamily: font2,
-                fontSize: 10,
-              },
-            })}
+                  if (route.name === "Settings") {
+                    iconName = "settings-outline";
+                  } else if (route.name === "Search") {
+                    iconName = "search-outline";
+                  } else if (route.name === "For You") {
+                    iconName = "star-outline";
+                  }
+
+                  return <Ionicons name={iconName} size={24} color={color} />;
+                },
+                tabBarActiveTintColor: "#ED1C24",
+                tabBarInactiveTintColor: "gray",
+                tabBarStyle: {
+                  height: 65,
+                  marginBottom: 30,
+                  paddingTop: 8,
+                  paddingBottom: 8,
+                  paddingRight: 20,
+                  paddingLeft: 20,
+                  display: routeName === "Article" ? "none" : "flex",
+                },
+                tabBarLabelStyle: {
+                  fontFamily: font2,
+                  fontSize: 10,
+                },
+              };
+            }}
           >
             <Tab.Screen
               name="Home"
               component={HomeStackScreen}
               options={{
                 headerTitle: () => <Header />,
-                headerStyle: {
-                  // paddingBottom: 8,
-                },
+                headerStyle: {},
               }}
             />
-            {/* <Tab.Screen
-              name="For You"
-              component={ForYouStackScreen}
-              options={{ headerTitle: () => <Header /> }}
-            /> */}
             <Tab.Screen
               name="Search"
               component={SearchStackScreen}
