@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { font2 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 
 SplashScreen.preventAutoHideAsync();
 
+const { height: screenHeight } = Dimensions.get("window");
+
 function WelcomeScreen({ navigation }: NavProp) {
-  const [splashScreen, setSplashScreen] = useState(false); // splash screen prop
-  const [showButton, setShowButton] = useState(false); // state to control the visibility of the button
+  const [splashScreen, setSplashScreen] = useState(false);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     async function onboard() {
@@ -17,7 +19,6 @@ function WelcomeScreen({ navigation }: NavProp) {
       } catch (e) {
         console.warn(e);
       } finally {
-        // Tell the application to render once top is fetched
         setSplashScreen(true);
       }
     }
@@ -47,55 +48,47 @@ function WelcomeScreen({ navigation }: NavProp) {
       {showButton && (
         <TouchableOpacity
           onPress={() => navigation.push("PushNotifs")}
-          style={styles.button} // Apply the button style here
+          style={styles.button}
         >
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
       )}
-      {/* {showButton && (
-        <TouchableOpacity onPress={() => navigation.push("PushNotifs")}>
-          <Text style={styles.text}>{showButton ? "Continue" : ""}</Text>
-        </TouchableOpacity>
-      )} */}
     </View>
   );
 }
 
 export default WelcomeScreen;
-
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#fff",
+    paddingHorizontal: "5%", 
+
+    
   },
   img: {
-    width: "80%",
-    marginBottom: 80,
-  },
-  text: {
-    color: "#4d4d4d",
-    fontFamily: font2,
-    fontStyle: "normal",
-    fontWeight: "400",
-    fontSize: 14,
-    marginBottom: 20,
+    width: "90%",
+    height: "15%",
+    marginTop: screenHeight*.4, 
+    marginBottom: screenHeight*.25,
   },
   button: {
-    borderWidth: 1, // Outline width
-    borderColor: "#4d4d4d", // Outline color
-    borderRadius: 25, // Rounded corners
-    paddingVertical: 10, // Vertical padding for height
-    paddingHorizontal: 30, // Horizontal padding for width
-    alignItems: "center", // Center text horizontally
-    justifyContent: "center", // Center text vertically
+    width: "60%", 
+    backgroundColor: "#eee",
+    borderRadius: 30, 
+    borderWidth: 2,
+    borderColor: "#fff",
+    paddingVertical: "4%",
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
-    color: "#4d4d4d",
+    color: "#4d4d4d", 
     fontFamily: font2,
+    fontWeight: "600", 
+    fontSize: 18, 
     fontStyle: "normal",
-    fontWeight: "400",
-    fontSize: 14,
   },
 });

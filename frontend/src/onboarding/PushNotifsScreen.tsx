@@ -1,12 +1,14 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useContext } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, SafeAreaView, Dimensions, StyleSheet } from "react-native";
 import Notif from "src/components/Notif";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
-import { baseStyles, text } from "src/styles/styles";
+import { text } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
 import { setUpDevice } from "../code/setup";
+
+const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 
 function PushNotifsScreen({
   route,
@@ -24,10 +26,6 @@ function PushNotifsScreen({
     requestPermission,
   } = useContext(NotificationContext);
 
-  /**
-   * Saves user's notification preferences for breaking news and universityNews summary alerts.
-   * Also retrieves push token by using getPushToken and creates a device using createDevice
-   */
   const saveNotifPreferences = async () => {
     requestPermission().then((status) => {
       setUpDevice(
@@ -44,61 +42,84 @@ function PushNotifsScreen({
     route.params.parentNav.push("MainApp");
   };
 
-  console.log("breaking", breaking);
-  console.log("universityNews", universityNews);
-  console.log("daily", daily);
-
   return (
-    <View style={{ ...baseStyles.container, marginTop: 40 }}>
-      <Text style={text.bigTitle}>Welcome.</Text>
-      <Text style={text.normal}>
-        Turn on alerts for the topics that interest you and we'll keep you
-        updated.
-      </Text>
-      <View style={{ rowGap: 16 }}>
-        <Notif
-          title="Breaking News"
-          description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
-  faucibus"
-          value={breaking}
-          setValue={setBreaking}
-          onboarding={true}
-        />
-        <Notif
-          title="University News"
-          description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
-  faucibus"
-          value={universityNews}
-          setValue={setUniversityNews}
-          onboarding={true}
-        />
-        <Notif
-          title="Metro"
-          description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
-  faucibus"
-          value={daily}
-          setValue={setDaily}
-          onboarding={true}
-        />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View>
+              <Text style={text.bigTitle}>Welcome.</Text>
+              <Text style={text.normal}>
+              Turn on alerts for the topics that interest you and we'll keep you
+              updated.
+              </Text>
+          
+            <View style={styles.notifContainer}>
+              <Notif
+                title="Breaking News"
+                description="Urgent and developing coverage"
+                value={breaking}
+                setValue={setBreaking}
+                onboarding={true}
+              />
+              <Notif
+                title="University News"
+                description="The latest on Brown and the campus community"
+                value={universityNews}
+                setValue={setUniversityNews}
+                onboarding={true}
+              />
+              <Notif
+                title="Metro"
+                description="Updates from Providence and beyond"
+                value={daily}
+                setValue={setDaily}
+                onboarding={true}
+              />
+            </View>
+        </View> 
+        <View style={{width: "100%"}}>
+            <TouchableOpacity
+              style={settings.continueButton}
+              onPress={saveNotifPreferences}
+            >
+              <Text style={text.sectionHeader1}>Save and continue</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[settings.continueButton, styles.maybeLaterButton]}
+              onPress={() => {
+                setUpDevice(setBreaking, setUniversityNews, setDaily, systemPermissionStatus)
+                  .then((id) => setDeviceID(id))
+                  .then(() => route.params.parentNav.push("MainApp"));
+              }}
+            >
+              <Text style={text.normal}>Maybe Later</Text>
+            </TouchableOpacity>
+          </View>
       </View>
-      <TouchableOpacity
-        style={settings.continueButton}
-        onPress={saveNotifPreferences}
-      >
-        <Text style={text.sectionHeader1}>Save and continue</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[settings.continueButton, { borderColor: "white" }]}
-        onPress={() => {
-          setUpDevice(setBreaking, setUniversityNews, setDaily, systemPermissionStatus)
-            .then((id) => setDeviceID(id))
-            .then(() => route.params.parentNav.push("MainApp"));
-        }}
-      >
-        <Text style={text.normal}>Maybe Later</Text>
-      </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    padding: 0.05*screenHeight, 
+  },
+  notifContainer: {
+    marginTop: 20, // Add some margin to push the content down
+    rowGap: 16,
+    width: screenWidth*0.8, // The switches oveflow from their container so they need custom width 
+  },
+  maybeLaterButton: {
+    borderColor: "white",
+    marginTop: 0, // Adjust spacing if needed
+  },
+});
 
 export default PushNotifsScreen;
