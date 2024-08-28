@@ -1,13 +1,12 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { settings } from "src/styles/pages";
+import { StackScreenProps } from "@react-navigation/stack";
 import { useContext } from "react";
-import * as Notifications from "expo-notifications";
-import { baseStyles, text } from "src/styles/styles";
+import { Text, TouchableOpacity, View } from "react-native";
 import Notif from "src/components/Notif";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
-import { setUpDevice } from "../code/setup";
+import { settings } from "src/styles/pages";
+import { baseStyles, text } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
-import { StackScreenProps } from "@react-navigation/stack";
+import { setUpDevice } from "../code/setup";
 
 function PushNotifsScreen({
   route,
@@ -16,8 +15,8 @@ function PushNotifsScreen({
   const {
     breaking,
     setBreaking,
-    weekly,
-    setWeekly,
+    universityNews,
+    setUniversityNews,
     daily,
     setDaily,
     setDeviceID,
@@ -26,18 +25,18 @@ function PushNotifsScreen({
   } = useContext(NotificationContext);
 
   /**
-   * Saves user's notification preferences for breaking news and weekly summary alerts.
+   * Saves user's notification preferences for breaking news and universityNews summary alerts.
    * Also retrieves push token by using getPushToken and creates a device using createDevice
    */
   const saveNotifPreferences = async () => {
     requestPermission().then((status) => {
       setUpDevice(
         setBreaking,
-        setWeekly,
+        setUniversityNews,
         setDaily,
         status,
         breaking,
-        weekly,
+        universityNews,
         daily
       ).then((id) => setDeviceID(id));
     });
@@ -46,7 +45,7 @@ function PushNotifsScreen({
   };
 
   console.log("breaking", breaking);
-  console.log("weekly", weekly);
+  console.log("universityNews", universityNews);
   console.log("daily", daily);
 
   return (
@@ -66,15 +65,15 @@ function PushNotifsScreen({
           onboarding={true}
         />
         <Notif
-          title="Weekly Summary"
+          title="University News"
           description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
   faucibus"
-          value={weekly}
-          setValue={setWeekly}
+          value={universityNews}
+          setValue={setUniversityNews}
           onboarding={true}
         />
         <Notif
-          title="Daily Summary"
+          title="Metro"
           description="Lorem ipsum dolor sit amet consectetur eleifend enim elementum et at
   faucibus"
           value={daily}
@@ -91,7 +90,7 @@ function PushNotifsScreen({
       <TouchableOpacity
         style={[settings.continueButton, { borderColor: "white" }]}
         onPress={() => {
-          setUpDevice(setBreaking, setWeekly, setDaily, systemPermissionStatus)
+          setUpDevice(setBreaking, setUniversityNews, setDaily, systemPermissionStatus)
             .then((id) => setDeviceID(id))
             .then(() => route.params.parentNav.push("MainApp"));
         }}

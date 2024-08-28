@@ -1,7 +1,7 @@
 import Bull from "bull";
-import db from "../../dist/data/db-config";
-import { Device, Notification } from "../types/types";
 import Expo, { ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
+import db from "../../dist/data/db-config";
+import { Device } from "../types/types";
 
 // Connect to a local Redis instance. For production, configure the connection accordingly.
 const notificationQueue = new Bull(
@@ -32,14 +32,14 @@ notificationQueue.process(async job => {
   //   const breakingDevices = await db("devices").select("expoPushToken").where("breakingNewsAlerts", true) as Device[];
   //   devices = devices.concat(breakingDevices);
   // }
-  // if (tags.includes("weekly-summary")) {
-  //   // Fetch all devices that have subscribed to weekly summary alerts
-  //   const weeklyDevices = await db("devices").select("expoPushToken").where("weeklySummaryAlerts", true) as Device[];
-  //   devices = devices.concat(weeklyDevices);
+  // if (tags.includes("University News")) {
+  //   // Fetch all devices that have subscribed to universityNews summary alerts
+  //   const universityNewsDevices = await db("devices").select("expoPushToken").where("universityNewsAlerts", true) as Device[];
+  //   devices = devices.concat(universityNewsDevices);
   // }
-  // if (tags.includes("daily-summary")) {
+  // if (tags.includes("Metro")) {
   //   // Fetch all devices that have subscribed to daily summary alerts
-  //   const dailyDevices = await db("devices").select("expoPushToken").where("dailySummaryAlerts", true);
+  //   const dailyDevices = await db("devices").select("expoPushToken").where("metroAlerts", true);
   //   devices = devices.concat(dailyDevices) as Device[];
   // }
 

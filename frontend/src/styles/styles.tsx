@@ -60,9 +60,9 @@ export const text = StyleSheet.create({
   sectionHeader1: {
     // main section headers
     color: varTextColor,
-    fontWeight: "600",
+    fontWeight: "800",
     fontSize: 16,
-    fontFamily: font2,
+    fontFamily: font2
   },
   seeMore: {
     // see more header for section
@@ -107,7 +107,7 @@ export const text = StyleSheet.create({
     fontWeight: "400",
     fontSize: 12,
     overflow: "hidden",
-    maxWidth: "85%",
+    maxWidth: "100%",
   },
   normal: {
     color: varTextColor,

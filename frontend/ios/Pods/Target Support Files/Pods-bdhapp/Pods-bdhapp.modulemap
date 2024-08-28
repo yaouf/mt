@@ -1,0 +1,6 @@
+module Pods_bdhapp {
+  umbrella header "Pods-bdhapp-umbrella.h"
+
+  export *
+  module * { export * }
+}
