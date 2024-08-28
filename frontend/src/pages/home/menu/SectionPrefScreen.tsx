@@ -65,7 +65,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
 
   return (
     <GestureHandlerRootView style={baseStyles.container}>
-      <View style={menuStyles.header}>
+      <View style={[{marginTop: 12}, menuStyles.header]}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <MaterialIcons name="close" size={24} color="#1C1B1F" />
         </TouchableOpacity>
@@ -73,12 +73,17 @@ function SectionPrefScreen({ navigation }: NavProp) {
         <Text style={menuStyles.otherText}>Section Preferences</Text>
 
         <TouchableOpacity onPress={applyChanges}>
-          <Text style={[menuStyles.otherText, { fontWeight: 300 }]}>Apply</Text>
+          <Text style={[menuStyles.otherText, { fontWeight: 500 }]}>Done</Text>
         </TouchableOpacity>
       </View>
 
-      <ScrollView>
+      <ScrollView style={menuStyles.contentContainer}>
         <View>
+        <Text style={[{ marginBottom: 12}, text.sectionHeader1]}>FAVORITE SECTIONS</Text>
+          <Text style={[menuStyles.descriptionText]}>
+            Add and reorder topics to customize the menu on your Top Stories
+            page.
+          </Text>
           <Text
             style={[
               menuStyles.rowText,
@@ -106,13 +111,13 @@ function SectionPrefScreen({ navigation }: NavProp) {
             onDragEnd={({ data }) => setPreferences(data)}
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
-            scrollEnabled={false}
+            scrollEnabled={true}
           />
         </View>
 
         <View>
           {removed.length > 0 && (
-            <Text style={text.sectionHeader1}>REMOVED SECTIONS</Text>
+            <Text style={[{ marginBottom: 12, marginTop: 16}, text.sectionHeader1]}>REMOVED SECTIONS</Text>
           )}
           {removed.map((item) => (
             <TouchableOpacity
