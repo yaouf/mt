@@ -1,14 +1,14 @@
+import * as Device from "expo-device";
+import * as Notifications from "expo-notifications";
 import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
   Dispatch,
   SetStateAction,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
-import { Platform, AppState } from "react-native";
-import * as Notifications from "expo-notifications";
-import * as Device from "expo-device";
+import { AppState, Platform } from "react-native";
 import { setAsync } from "src/code/helpers";
 
 interface NotificationContextType {
@@ -18,8 +18,8 @@ interface NotificationContextType {
   requestPermission: () => Promise<string>;
   breaking: boolean;
   setBreaking: Dispatch<SetStateAction<boolean>>;
-  weekly: boolean;
-  setWeekly: Dispatch<SetStateAction<boolean>>;
+  universityNews: boolean;
+  setUniversityNews: Dispatch<SetStateAction<boolean>>;
   daily: boolean;
   setDaily: Dispatch<SetStateAction<boolean>>;
   deviceID: string;
@@ -41,8 +41,8 @@ export const NotificationContext = createContext<NotificationContextType>({
   },
   breaking: true,
   setBreaking: () => {},
-  weekly: true,
-  setWeekly: () => {},
+  universityNews: true,
+  setUniversityNews: () => {},
   daily: true,
   setDaily: () => {},
   deviceID: "",
@@ -55,7 +55,7 @@ export const NotificationProvider = ({ children }) => {
     useState("undetermined");
 
   // notifications
-  const [weekly, setWeekly] = useState(true);
+  const [universityNews, setUniversityNews] = useState(true);
   const [daily, setDaily] = useState(true);
   const [breaking, setBreaking] = useState(true);
 
@@ -125,8 +125,8 @@ export const NotificationProvider = ({ children }) => {
         requestPermission,
         breaking,
         setBreaking,
-        weekly,
-        setWeekly,
+        universityNews,
+        setUniversityNews,
         daily,
         setDaily,
         deviceID,

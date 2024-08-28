@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -180,23 +180,23 @@ const NotificationForm = ({ setScheduledNotifications }) => {
               <input
                 type="checkbox"
                 name="tags"
-                value="Weekly Summary"
-                checked={newFormData.tags.includes("Weekly Summary")}
+                value="University News"
+                checked={newFormData.tags.includes("University News")}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
-              <span className="ml-2">Weekly Summary</span>
+              <span className="ml-2">University News</span>
             </label>
             <label className="inline-flex items-center ml-4">
               <input
                 type="checkbox"
                 name="tags"
-                value="Daily Summary"
-                checked={newFormData.tags.includes("Daily Summary")}
+                value="Metro"
+                checked={newFormData.tags.includes("Metro")}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
-              <span className="ml-2">Daily Summary</span>
+              <span className="ml-2">Metro</span>
             </label>
           </div>
         </div>

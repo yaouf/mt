@@ -19,8 +19,8 @@ export const updateSettings = onRequest(async (request, response) => {
     const schema = Joi.object({
       deviceId: Joi.string().required(),
       "Breaking News": Joi.boolean(),
-      "Weekly Summary": Joi.boolean(),
-      "Daily Summary": Joi.boolean(),
+      "University News": Joi.boolean(),
+      "Metro": Joi.boolean(),
       isPushEnabled: Joi.boolean(),
     });
 
@@ -39,15 +39,15 @@ export const updateSettings = onRequest(async (request, response) => {
 
     // Destructure potential fields from request body
     const breakingNews = validBody["Breaking News"];
-    const weeklySummary = validBody["Weekly Summary"];
-    const dailySummary = validBody["Daily Summary"];
+    const universityNews = validBody["University News"];
+    const metro = validBody["Metro"];
     const isPushEnabled = validBody["isPushEnabled"];
 
     // Define the type of updateData
     type UpdateData = {
       "Breaking News"?: boolean;
-      "Weekly Summary"?: boolean;
-      "Daily Summary"?: boolean;
+      "University News"?: boolean;
+      "Metro"?: boolean;
       "isPushEnabled"?: boolean;
     };
     
@@ -57,11 +57,11 @@ export const updateSettings = onRequest(async (request, response) => {
     if (breakingNews !== undefined) {
       updateData["Breaking News"] = breakingNews;
     }
-    if (weeklySummary !== undefined) {
-      updateData["Weekly Summary"] = weeklySummary;
+    if (universityNews !== undefined) {
+      updateData["University News"] = universityNews;
     }
-    if (dailySummary !== undefined) {
-      updateData["Daily Summary"] = dailySummary;
+    if (metro !== undefined) {
+      updateData["Metro"] = metro;
     }
     if (isPushEnabled !== undefined) {
       updateData["isPushEnabled"] = isPushEnabled;

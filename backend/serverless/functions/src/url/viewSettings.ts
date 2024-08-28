@@ -35,7 +35,7 @@ export const viewSettings = onRequest(async (request, response) => {
     const dbParams = { environment, stagingDbUrl };
     const settings = await db(dbParams)("devices")
     .where("id", deviceId)
-    .select("Weekly Summary", "Daily Summary", "Breaking News")
+    .select("University News", "Metro", "Breaking News")
     .first();
 
     // Check if the device's settings exist. If not, assume the device doesn't exist
