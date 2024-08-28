@@ -14,7 +14,7 @@ export const createDevice = onRequest(async (request, response) => {
   logger.info("dbParams: ", dbParams);
 
   logger.info("Creating a new device", { structuredData: true });
-  // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, weeklySummaryAlerts, expoPushToken? (optional)
+  // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, universityNewsAlerts, expoPushToken? (optional)
   // Assume info above is in request body as json. If any required fields are missing, return an error status code
 
   try {
@@ -25,8 +25,8 @@ export const createDevice = onRequest(async (request, response) => {
       deviceType: Joi.string().required(),
       expoPushToken: Joi.string().required(),
       "Breaking News": Joi.boolean().required(),
-      "Weekly Summary": Joi.boolean().required(),
-      "Daily Summary": Joi.boolean().required(),
+      "University News": Joi.boolean().required(),
+      "Metro": Joi.boolean().required(),
       isPushEnabled: Joi.boolean().required(),
     });
 
@@ -41,8 +41,8 @@ export const createDevice = onRequest(async (request, response) => {
     const deviceType = validBody["deviceType"];
     const expoPushToken = validBody["expoPushToken"];
     const breakingNews = validBody["Breaking News"];
-    const weeklySummary = validBody["Weekly Summary"];
-    const dailySummary = validBody["Daily Summary"];
+    const universityNews = validBody["University News"];
+    const metro = validBody["Metro"];
     const isPushEnabled = validBody["isPushEnabled"];
 
     // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
@@ -59,8 +59,8 @@ export const createDevice = onRequest(async (request, response) => {
         .update({
           deviceType: deviceType,
           "Breaking News": breakingNews,
-          "Weekly Summary": weeklySummary,
-          "Daily Summary": dailySummary,
+          "University News": universityNews,
+          "Metro": metro,
           isPushEnabled: isPushEnabled,
         });
         deviceId = existingDevice.id;
@@ -71,8 +71,8 @@ export const createDevice = onRequest(async (request, response) => {
       id: uuidv4(), // Generate a new UUID for the device
       deviceType: deviceType,
       "Breaking News": breakingNews,
-      "Weekly Summary": weeklySummary,
-      "Daily Summary": dailySummary,
+      "University News": universityNews,
+      "Metro": metro,
       isPushEnabled: isPushEnabled,
       expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
     })

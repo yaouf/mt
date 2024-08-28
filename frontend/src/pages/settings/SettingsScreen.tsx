@@ -1,23 +1,20 @@
-import { View, ScrollView, Text } from "react-native";
-import { useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NotificationContext } from "./NotificationProvider";
-import SettingsLink from "./SettingsLink";
+import { useContext, useEffect } from "react";
+import { ScrollView, Text, View } from "react-native";
+import Divider from "src/components/Divider";
+import Notif from "src/components/Notif";
+import { settings } from "src/styles/pages";
 import {
   baseStyles,
   font2,
-  layout,
   text,
   varGray1,
-  varTextColor,
+  varTextColor
 } from "src/styles/styles";
-import Notif from "src/components/Notif";
-import Divider from "src/components/Divider";
 import { NavProp } from "src/types/navStacks";
-import { settings } from "src/styles/pages";
+import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Ionicons } from "@expo/vector-icons";
+import SettingsLink from "./SettingsLink";
 
 /**
  * Page for settings
@@ -34,8 +31,8 @@ function SettingsScreen({ navigation }: NavProp) {
   const {
     breaking,
     setBreaking,
-    weekly,
-    setWeekly,
+    universityNews,
+    setUniversityNews,
     daily,
     setDaily,
     deviceID,
@@ -52,8 +49,8 @@ function SettingsScreen({ navigation }: NavProp) {
         const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
         setBreaking(breakingNotifs === "true");
 
-        const weeklyNotifs = await AsyncStorage.getItem("weeklyNotifs");
-        setWeekly(weeklyNotifs === "true");
+        const universityNewsNotifs = await AsyncStorage.getItem("universityNewsNotifs");
+        setUniversityNews(universityNewsNotifs === "true");
 
         const dailyNotifs = await AsyncStorage.getItem("dailyNotifs");
         setDaily(dailyNotifs === "true");
@@ -75,7 +72,7 @@ function SettingsScreen({ navigation }: NavProp) {
     load();
   }, []);
 
-  console.log("statussss", systemPermissionStatus, breaking, weekly, daily);
+  console.log("statussss", systemPermissionStatus, breaking, universityNews, daily);
   console.log("Device ID in settings:", deviceID);
 
   const support = [
@@ -138,14 +135,14 @@ function SettingsScreen({ navigation }: NavProp) {
             asyncName="breakingNotifs"
           />
           <Notif
-            title="Weekly Summary"
+            title="University News"
             description="The latest on Brown and the campus community"
-            value={weekly}
-            setValue={setWeekly}
-            asyncName="weeklyNotifs"
+            value={universityNews}
+            setValue={setUniversityNews}
+            asyncName="universityNewsNotifs"
           />
           <Notif
-            title="Daily Summary"
+            title="Metro"
             description="Updates from Providence and beyond"
             value={daily}
             setValue={setDaily}
