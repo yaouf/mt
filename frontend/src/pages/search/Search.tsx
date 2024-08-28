@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { View, TextInput, FlatList } from "react-native";
+import { View, TextInput, FlatList, Image, Text } from "react-native";
 import { varGray1 } from "../../styles/styles";
 import { search } from "src/styles/search";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -15,32 +15,30 @@ function Search({ navigation }: NavProp) {
   const [searchActivated, setSearchActivated] = useState(false);
   const [text, onChangeText] = useState("");
   const [searchCompleted, setSearchCompleted] = useState(false);
-
   const [articles, setArticles] = useState<Article[]>([]);
 
-  // TODO: the ty tag is set to just return articles for now to avoid erroring since media and pages can be returned too
   const handleSearch = async () => {
     setSearchActivated(false);
     try {
-      // Fetch a response using the Search.JSON URL Link (Currently restricted to basic searches)
       const response = await fetch(
         `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`
       );
       const jsonString = await response.text();
-      const resultObject = JSON.parse(jsonString); // Parse string into an object
-      const articleList: Article[] = resultObject.items; // List of articles
+      const resultObject = JSON.parse(jsonString);
+      const articleList: Article[] = resultObject.items;
 
       setArticles(articleList);
+      setSearchCompleted(true); // Hide the logo when search is completed
     } catch (error) {
       console.error("Error" + error);
     }
-    setSearchCompleted(true);
   };
 
   const handleSearchCancel = () => {
     setSearchActivated(false);
     textInputRef.current?.clear();
     textInputRef.current?.blur();
+    setSearchCompleted(false); // Show the logo again if search is canceled
   };
 
   return (
@@ -60,7 +58,7 @@ function Search({ navigation }: NavProp) {
           autoFocus={true}
           style={search.searchText}
           onFocus={() => setSearchActivated(true)}
-          onSubmitEditing={handleSearch}
+          onSubmitEditing={handleSearch} // Handle search on submit
         />
         {searchActivated && (
           <TouchableOpacity
@@ -76,6 +74,28 @@ function Search({ navigation }: NavProp) {
           </TouchableOpacity>
         )}
       </View>
+
+      {!searchCompleted && (
+        // <Image
+        //   source={require("assets/images/splash.png")}
+        //   style={{
+        //     width: 500,
+        //     height: 400,
+        //     alignSelf: "center",
+        //     marginVertical: 100,
+        //   }}
+        //   resizeMode="contain"
+        // />
+        <Text
+          style={{
+            color: "gray",
+            marginVertical: 300,
+            alignSelf: "center",
+          }}
+        >
+          Search for an article to get started.
+        </Text>
+      )}
 
       <View>
         {searchCompleted && (

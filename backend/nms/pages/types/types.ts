@@ -13,7 +13,7 @@ export type Notification = {
 export type Device = {
   deviceType: string;
   "Breaking News": boolean;
-  "Weekly Summary": boolean;
-  "Daily Summary": boolean;
+  "University News": boolean;
+  "Metro": boolean;
   expoPushToken: string;
 };

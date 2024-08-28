@@ -6,8 +6,8 @@ export async function up(knex: Knex): Promise<void> {
       table.uuid("id").primary();
       table.string("deviceType").notNullable();
       table.boolean("Breaking News").notNullable();
-      table.boolean("Weekly Summary").notNullable();
-      table.boolean("Daily Summary").notNullable();
+      table.boolean("University News").notNullable();
+      table.boolean("Metro").notNullable();
       table.string("expoPushToken").unique();
     })
     .then(() =>
@@ -23,9 +23,9 @@ export async function up(knex: Knex): Promise<void> {
         table.string("time").notNullable();
         table.string("title").notNullable();
         table.string("body").nullable();
-        table.boolean("breakingNews").notNullable();
-        table.boolean("weeklySummary").notNullable();
-        table.boolean("dailySummary").notNullable();
+        table.boolean("Breaking News").notNullable();
+        table.boolean("University News").notNullable();
+        table.boolean("Metro").notNullable();
         table.string("pathname").nullable();
         table.string("status").notNullable();
       })

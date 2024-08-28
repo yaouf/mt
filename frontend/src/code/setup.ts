@@ -1,7 +1,7 @@
+import * as Notifications from "expo-notifications";
+import { Dispatch, SetStateAction } from "react";
 import { MenuItem } from "../types/other";
 import { setAsync } from "./helpers";
-import { Dispatch, SetStateAction } from "react";
-import * as Notifications from "expo-notifications";
 import { createDevice } from "./serverlessAPIs";
 
 // for the horizontal section menu
@@ -24,11 +24,11 @@ export const menuItems: MenuItem[] = [
  */
 export const setUpDevice = async (
   setBreaking: Dispatch<SetStateAction<boolean>>,
-  setWeekly: Dispatch<SetStateAction<boolean>>,
+  setUniversityNews: Dispatch<SetStateAction<boolean>>,
   setDaily: Dispatch<SetStateAction<boolean>>,
   systemPermissionStatus: string,
   breaking?: boolean,
-  weekly?: boolean,
+  universityNews?: boolean,
   daily?: boolean
 ): Promise<string> => {
   setAsync("hasOnboarded", "true");
@@ -45,18 +45,24 @@ export const setUpDevice = async (
   try {
     if (systemPermissionStatus === "granted") {
       setAsync("breakingNotifs", JSON.stringify(breaking));
-      setAsync("weeklyNotifs", JSON.stringify(weekly));
+      setAsync("universityNewsNotifs", JSON.stringify(universityNews));
       setAsync("dailyNotifs", JSON.stringify(daily));
-      deviceID = await createDevice(false, false, false, token);
+      deviceID = await createDevice(
+        breaking as boolean,
+        universityNews as boolean,
+        daily as boolean,
+        token
+      );
       console.log("push token", token);
     } else {
       setBreaking(false);
-      setWeekly(false);
+      setUniversityNews(false);
       setDaily(false);
       setAsync("breakingNotifs", JSON.stringify(false));
-      setAsync("weeklyNotifs", JSON.stringify(false));
+      setAsync("universityNewsNotifs", JSON.stringify(false));
       setAsync("dailyNotifs", JSON.stringify(false));
-      deviceID = await createDevice(breaking, weekly, daily, token);
+      deviceID = await createDevice(false, false, false, token);
+      console.log("deviceID being set in line 65 of setup.ts", deviceID);
       console.log("push token", token);
     }
   } catch (error) {

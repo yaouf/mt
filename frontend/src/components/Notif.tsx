@@ -1,11 +1,11 @@
+import * as Notifications from "expo-notifications";
 import { Dispatch, SetStateAction, useContext } from "react";
-import { View, Text, Switch, Alert, Linking } from "react-native";
+import { Alert, Linking, Switch, Text, View } from "react-native";
+import { setAsync } from "src/code/helpers";
+import { updateSettings } from "src/code/serverlessAPIs";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { fyp } from "src/styles/pages";
 import { text } from "src/styles/styles";
-import * as Notifications from "expo-notifications";
-import { setAsync } from "src/code/helpers";
-import { updateSettings } from "src/code/serverlessAPIs";
 
 type NotifProps = {
   title: string;
@@ -35,7 +35,7 @@ function Notif({
     try {
       if (asyncName === "breakingNotifs") {
         updateSettings(deviceID, newVal, undefined, undefined);
-      } else if (asyncName === "weeklyNotifs") {
+      } else if (asyncName === "universityNewsNotifs") {
         updateSettings(deviceID, undefined, newVal, undefined);
       } else if (asyncName === "dailyNotifs") {
         updateSettings(deviceID, undefined, undefined, newVal);
@@ -93,11 +93,15 @@ function Notif({
     <View style={fyp.toggleRow}>
       <View>
         <Text style={text.sectionHeader3}>{title}</Text>
-        <Text style={text.notifSmall} numberOfLines={2} ellipsizeMode="tail">
+        <Text style={text.notifSmall} numberOfLines={1} ellipsizeMode="tail">
           {description}
         </Text>
       </View>
-      <Switch value={toggleValue} onValueChange={() => toggle()} />
+      <Switch
+        trackColor={{ true: "#000000", false: "grey" }}
+        value={toggleValue}
+        onValueChange={() => toggle()}
+      />
     </View>
   );
 }

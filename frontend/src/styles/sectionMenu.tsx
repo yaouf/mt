@@ -5,8 +5,9 @@ export const menuStyles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 16,
-    marginBottom: 24
+    paddingVertical: 15,
+    borderBottomColor: "black",
+    borderBottomWidth: 5,
   },
   rowItem: {
     height: 40,
