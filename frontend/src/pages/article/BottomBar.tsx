@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
  * action bar at the bottom of each article
  * share, save, (notifications for this section / author in a future version)
  */
+
 function BottomBar(props: ArticleDetailProps) {
   const navigation = useNavigation();
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
@@ -33,7 +34,7 @@ function BottomBar(props: ArticleDetailProps) {
       <View style={articleStyles.actions}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          style={{ paddingRight: 290 }}
+          style={{  }}
         >
           <Ionicons name="arrow-back" size={24} color="#1C1B1F" />
         </TouchableOpacity>
@@ -43,7 +44,11 @@ function BottomBar(props: ArticleDetailProps) {
             style={styles.icon}
           />
         </TouchableOpacity> */}
+      </View>
+
+        <View style={articleStyles.actions}>
         <TouchableOpacity
+          style={{paddingRight: 10}}
           onPress={() =>
             handleBookmark(
               saved,

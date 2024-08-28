@@ -155,10 +155,9 @@ export const articleStyles = StyleSheet.create({
     backgroundColor: "#FFF",
     width: "100%",
     padding: 20,
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "flex-start",
     height: 80,
-    gap: 235,
   },
   actions: {
     display: "flex",
