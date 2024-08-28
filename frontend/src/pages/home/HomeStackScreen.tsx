@@ -16,6 +16,7 @@ import {
 import { getAsync } from "src/code/helpers";
 import { menuItems } from "src/code/setup";
 import { MenuItem } from "src/types/other";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -35,7 +36,18 @@ export const MenuContext = createContext<MenuContextType>({
   setCurrSection: () => {},
 });
 
-function HomeStackScreen() {
+function HomeStackScreen({ navigation, route }) {
+  useEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route);
+
+    if (routeName === "Article") {
+      console.log("route is in article");
+      navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" } });
+    } else {
+      navigation.getParent()?.setOptions({ tabBarStyle: { display: "flex" } });
+    }
+  }, [navigation, route]);
+
   const [sectionMenu, setSectionMenu] = useState<MenuItem[]>([]);
   const [currSection, setCurrSection] = useState<string>("all");
   const original = menuItems;
@@ -88,11 +100,13 @@ function HomeStackScreen() {
         <HomeStack.Screen
           name="Section"
           component={SectionsScreen}
-          options={{ headerShown: true, 
-                  gestureEnabled: false, 
-                  animationEnabled: false}}
+          options={{
+            headerShown: true,
+            gestureEnabled: false,
+            animationEnabled: false,
+          }}
         />
-        <HomeStack.Screen 
+        <HomeStack.Screen
           name="Staff"
           component={Staff}
           options={{ headerShown: false }}
