@@ -24,7 +24,7 @@ function ArticleScreen({
           <View>
             <Image
               source={{
-                uri: `http://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
+                uri: `https://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
               }}
               style={articleStyles.image}
             />

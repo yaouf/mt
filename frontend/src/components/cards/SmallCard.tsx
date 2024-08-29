@@ -39,7 +39,7 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
   if (article.dominantMedia.attachment_uuid) {
     img_uri =
-      "http://snworksceo.imgix.net/bdh/" +
+      "https://snworksceo.imgix.net/bdh/" +
       article.dominantMedia.attachment_uuid +
       ".sized-1000x1000." +
       article.dominantMedia.extension;
