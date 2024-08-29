@@ -53,11 +53,27 @@ function ArticleScreen({
         <View style={baseStyles.container}>
           {/* Article title, lead, author, published date, section */}
           <View style={articleStyles.headingContainer}>
-            <Text style={articleStyles.title}>{article.headline}</Text>
+            <Text
+              style={[
+                articleStyles.title,
+                article.dominantMedia.attachment_uuid
+                  ? null
+                  : { paddingTop: 30 },
+              ]}
+            >
+              {article.headline}
+            </Text>
             {article.subhead && (
               <Text style={articleStyles.lead}>{article.subhead}</Text>
             )}
-            <View style={{ height: 1, backgroundColor: '#eee', width: '100%', marginBottom: 5}} />
+            <View
+              style={{
+                height: 1,
+                backgroundColor: "#eee",
+                width: "100%",
+                marginBottom: 5,
+              }}
+            />
             <Text style={articleStyles.author}>
               {article.authors.map((author, i) => (
                 <TouchableOpacity

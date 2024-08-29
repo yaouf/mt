@@ -209,7 +209,7 @@ function SplitArticle({ content }: SplitArticleType) {
               }}
               style={articleStyles.adImage}
             />
-            <Text style={articleStyles.adAuthor}>Ad Author</Text>
+            <Text style={articleStyles.adAuthor}>Advertisement</Text>
           </View>
 
           {/* article continued */}

@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import ShowContextMenu from "./ShowContextMenu";
 import { CardProps } from "src/types/navStacks";
-import { Author, Tag} from "src/types/data";
+import { Author, Tag } from "src/types/data";
 import { formatDates } from "../../code/formatDates";
 import {
   font1,
@@ -59,7 +59,7 @@ function LargeCard({ article, navigation }: CardProps) {
                 {all_tags[0].replace("&;", "&")}
               </Text>
             )}
-            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+            <Text style={styles.title} numberOfLines={3} ellipsizeMode="tail">
               {article.headline}
             </Text>
             <Text style={styles.author}>

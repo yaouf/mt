@@ -63,7 +63,7 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
               {" "}
               {article.tags[0].name.replace("&;", "&")}
             </Text>
-            <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
+            <Text style={styles.title} numberOfLines={3} ellipsizeMode="tail">
               {article.headline}
             </Text>
             <Text style={styles.author}>
@@ -115,7 +115,7 @@ const styles2 = StyleSheet.create({
 
 const styles = StyleSheet.create({
   title: {
-    height: 40,
+    height: 60,
     alignSelf: "stretch",
     color: varTextColor,
     fontFamily: font1,
