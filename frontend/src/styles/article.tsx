@@ -134,6 +134,7 @@ export const articleStyles = StyleSheet.create({
     fontSize: fontsizeHeader,
     fontStyle: "normal",
     fontWeight: "400",
+    textAlign: "center",
     // lineHeight: "normal",
   },
   readMoreHeading: {
