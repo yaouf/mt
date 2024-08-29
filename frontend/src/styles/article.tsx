@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import { font1, font2, font3, varTextColor, varGray1 } from "./styles";
 
-const fontsizeHeader = 12.456; // figma says 12.456??
+const fontsizeHeader = 16; // figma says 12.456??
 //spacing is also a little weird in the header with the fonts rn
 
 export const articleStyles = StyleSheet.create({
