@@ -2,6 +2,16 @@ import { StyleSheet } from "react-native";
 import { varGray1 } from "./styles";
 
 export const search = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  img: {
+    width: "90%",
+    height: "90%"
+    },
+
   searchbar: {
     flexDirection: "row",
     alignItems: "center",
@@ -12,11 +22,13 @@ export const search = StyleSheet.create({
     width: "100%",
     marginTop: 16,
   },
+
   searchText: {
     fontSize: 15,
     color: varGray1,
     flex: 1,
   },
+
   searchButton: {
     flexDirection: "row",
     alignItems: "center",
