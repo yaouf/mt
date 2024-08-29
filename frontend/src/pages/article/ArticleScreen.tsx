@@ -1,4 +1,4 @@
-import { View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
+import { View, ScrollView, Image, Text, TouchableOpacity, SafeAreaView } from "react-native";
 import { baseStyles } from "../../styles/styles";
 import { formatDates } from "src/code/formatDates";
 import SplitArticle from "./SplitContent";
@@ -18,7 +18,7 @@ function ArticleScreen({
   const article: Article = route.params.data;
 
   return (
-    <View>
+    <SafeAreaView>
       <ScrollView>
         {article.dominantMedia.authors && (
           <View>
@@ -118,7 +118,7 @@ function ArticleScreen({
         slug={article.slug}
         uuid={article.uuid}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

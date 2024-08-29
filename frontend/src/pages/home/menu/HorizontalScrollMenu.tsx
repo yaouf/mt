@@ -24,13 +24,13 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         key={1}
         style={menuStyles.menuItem}
         onPress={() => navigation.push("SectionPref")}
       >
         <Ionicons name="filter-outline" size={24} color="black" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       {currSection === "all" ? (
         <View style={menuStyles.menuItem}>

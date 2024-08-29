@@ -3,7 +3,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { font2 } from "src/styles/styles";
 import Header from "src/components/Header";
 import HomeStackScreen from "./home/HomeStackScreen";
-// import ForYouStackScreen from "./foryou/ForYouStackScreen";
+import SettingsStackScreen from "./settings/SettingsStackScreen";
+import SearchStackScreen from "./search/SearchStackScreen";
 import { NotificationProvider } from "./settings/NotificationProvider";
 import {
   Dispatch,
@@ -16,8 +17,6 @@ import {
 import { getAsync } from "src/code/helpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
-import SettingsStackScreen from "./settings/SettingsStackScreen";
-import SearchStackScreen from "./search/SearchStackScreen";
 import * as Notifications from "expo-notifications";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
@@ -146,6 +145,7 @@ export default function Nav() {
                   fontFamily: font2,
                   fontSize: 10,
                 },
+                headerShown: routeName === "Article" ? false : true,
               };
             }}
           >
