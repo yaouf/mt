@@ -10,7 +10,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Article } from "src/types/data";
 import { Dispatch, SetStateAction, useState } from "react";
 import { fetchArticle } from "src/code/fetchContent";
-import * as WebBrowser from 'expo-web-browser';
+import * as WebBrowser from "expo-web-browser";
 
 type SplitArticleType = {
   content: string;
@@ -20,7 +20,7 @@ function SplitArticle({ content }: SplitArticleType) {
   const source = {
     html: content,
   };
-  
+
   const [article, setArticle] = useState<Article | undefined>();
 
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -91,16 +91,15 @@ function SplitArticle({ content }: SplitArticleType) {
           if (!slug || !year || !month) {
             throw new Error("Invalid URL format");
           }
-          
-          const  fetchedArticle = await fetchArticle(slug, date, setArticle)
+
+          const fetchedArticle = await fetchArticle(slug, date, setArticle);
           setArticle(fetchedArticle);
           // navigate to Article screen with fetched article data
-          console.log(slug)
-          navigation.push('Article', { data: fetchedArticle });
-      }
-        // handle article error
-        catch (error) {
-          console.error('Error fetching article:', error);
+          console.log(slug);
+          navigation.push("Article", { data: fetchedArticle });
+        } catch (error) {
+          // handle article error
+          console.error("Error fetching article:", error);
         }
       }
       // opens url in web browser if not article
@@ -132,7 +131,7 @@ function SplitArticle({ content }: SplitArticleType) {
               }}
               style={articleStyles.adImage}
             />
-            <Text style={articleStyles.adAuthor}>Ad Author</Text>
+            <Text style={articleStyles.adAuthor}>Advertisement</Text>
           </View>
 
           {/* article continued */}
@@ -156,7 +155,7 @@ function SplitArticle({ content }: SplitArticleType) {
               }}
               style={articleStyles.adImage}
             />
-            <Text style={articleStyles.adAuthor}>Ad Author</Text>
+            <Text style={articleStyles.adAuthor}>Advertisement</Text>
           </View>
 
           {/* article continued */}

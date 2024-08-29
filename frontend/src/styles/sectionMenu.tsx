@@ -20,7 +20,7 @@ export const menuStyles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: varGray1,
     marginBottom: 12,
-    marginTop: 6
+    marginTop: 6,
   },
   icon: {
     marginRight: 16,
@@ -32,7 +32,7 @@ export const menuStyles = StyleSheet.create({
     fontWeight: "500", // TODO: figma says 500 but this font is thicker
     fontSize: 16,
     fontFamily: font2,
-    textTransform: "uppercase"
+    textTransform: "uppercase",
   },
   descriptionText: {
     flex: 1, // takes up remaining space
@@ -40,7 +40,7 @@ export const menuStyles = StyleSheet.create({
     fontWeight: "400", // TODO: figma says 500 but this font is thicker
     fontSize: 16,
     fontFamily: font2,
-    marginBottom: 16
+    marginBottom: 16,
   },
   otherText: {
     color: varTextColor,
@@ -59,6 +59,7 @@ export const menuStyles = StyleSheet.create({
     textTransform: "uppercase",
     fontFamily: font2,
     color: varGray1,
+    paddingTop: 5,
   },
   menuItemSelected: {
     fontSize: 14,
@@ -66,12 +67,13 @@ export const menuStyles = StyleSheet.create({
     textTransform: "uppercase",
     fontFamily: font2,
     color: varTextColor,
+    paddingTop: 5,
   },
   menuItem: {
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
   contentContainer: {
-    marginBottom: 70
-  }
+    marginBottom: 70,
+  },
 });
