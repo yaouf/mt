@@ -11,7 +11,7 @@ function Divider({ marginTop, marginBottom, color }: DividerProps) {
     <View
       style={{
         width: "100%",
-        height: 1.3,
+        height: 1,
         backgroundColor: color !== undefined ? color : "#1C1B1F",
         marginTop: marginTop !== undefined ? marginTop : 32,
         marginBottom: marginBottom !== undefined ? marginBottom : 4,
