@@ -89,7 +89,6 @@ export default LargeCard;
 
 const styles = StyleSheet.create({
   title: {
-    height: 93,
     alignSelf: "stretch",
     color: varTextColor,
     fontFamily: font1,
@@ -97,6 +96,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "700",
     lineHeight: 28,
+    marginBottom: 20, 
   },
   author: {
     color: varTextColor,
