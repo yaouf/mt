@@ -23,7 +23,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
   }
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{borderBottomWidth: 1, borderColor: "#ccc"}}>
       {/* <TouchableOpacity
         key={1}
         style={menuStyles.menuItem}

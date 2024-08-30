@@ -155,6 +155,7 @@ export default function Nav() {
               options={{
                 headerTitle: () => <Header />,
                 headerStyle: {},
+                headerShadowVisible: false, 
               }}
             />
             <Tab.Screen

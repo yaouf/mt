@@ -79,6 +79,7 @@ export const text = StyleSheet.create({
     fontSize: 24,
     fontFamily: font2,
     marginBottom: 4,
+    marginTop: 20,
   },
   sectionHeader2: {
     // like recommended text, featured story on fyp
