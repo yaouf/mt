@@ -1,5 +1,4 @@
 import { View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
-import { WebView } from "react-native-webview";
 import { baseStyles } from "../../styles/styles";
 import { formatDates } from "src/code/formatDates";
 import SplitArticle from "./SplitContent";
