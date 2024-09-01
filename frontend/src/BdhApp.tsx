@@ -1,24 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { View, Animated } from "react-native";
 import Onboarding from "./onboarding/Onboarding";
 import Nav from "./pages/Nav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { sendNotification, setAsync } from "./code/helpers";
 import { NotificationProvider } from "./pages/settings/NotificationProvider";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { menuItems } from "./code/setup";
-import { createDevice } from "./code/serverlessAPIs";
 import * as Notifications from "expo-notifications";
-import { Linking } from "react-native";
-
-// Handle foreground notifications
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
 
 const fullStack = createStackNavigator();
 
@@ -32,20 +20,28 @@ const MyTheme = {
 
 function BdhApp() {
   const [hasOnboarded, setHasOnboarded] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initialize animated value
 
   useEffect(() => {
     const load = async () => {
       try {
         const onboarded = await AsyncStorage.getItem("hasOnboarded");
         if (onboarded === "true") {
-          setHasOnboarded(true); // toggle to false for development
+          setHasOnboarded(true);
         }
       } catch (err) {
         console.log("err while setting up notifications", err);
       }
     };
     load();
-  }, []); // Added dependency array to ensure this only runs once on mount
+
+    // Trigger the fade-in animation
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000, // Duration of the fade-in animation
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
 
   useEffect(() => {
     const notificationListener = Notifications.addNotificationReceivedListener(
@@ -59,88 +55,37 @@ function BdhApp() {
         console.log("Notification response received:", response);
       });
 
+    // Returning cleanup function for removing listeners
     return () => {
       notificationListener.remove();
       responseListener.remove();
     };
   }, []);
 
-  // TODO: notifications - https://docs.expo.dev/versions/latest/sdk/notifications/#notification
-
   return (
     <NotificationProvider>
-      <NavigationContainer
-        theme={MyTheme}
-        // linking={{
-        //   config: {
-        //     // Configuration for linking
-        //   },
-        //   async getInitialURL() {
-        //     // First, you may want to do the default deep link handling
-        //     // Check if app was opened from a deep link
-        //     const url = await Linking.getInitialURL();
-
-        //     if (url != null) {
-        //       return url;
-        //     }
-
-        //     // Handle URL from expo push notifications
-        //     const response =
-        //       await Notifications.getLastNotificationResponseAsync();
-
-        //     return response?.notification.request.content.data.url;
-        //   },
-        //   subscribe(listener) {
-        //     const onReceiveURL = ({ url }: { url: string }) => listener(url);
-
-        //     // Listen to incoming links from deep linking
-        //     const eventListenerSubscription = Linking.addEventListener(
-        //       "url",
-        //       onReceiveURL
-        //     );
-
-        //     // Listen to expo push notifications
-        //     const subscription =
-        //       Notifications.addNotificationResponseReceivedListener(
-        //         (response) => {
-        //           const url = response.notification.request.content.data.url;
-
-        //           // Any custom logic to see whether the URL needs to be handled
-        //           //...
-        //           console.log("******", response);
-
-        //           // Let React Navigation handle the URL
-        //           listener(url);
-        //         }
-        //       );
-
-        //     return () => {
-        //       // Clean up the event listeners
-        //       eventListenerSubscription.remove();
-        //       subscription.remove();
-        //     };
-        //   },
-        // }}
-      >
-        {hasOnboarded ? (
-          <Nav />
-        ) : (
-          <fullStack.Navigator
-            initialRouteName={"Onboarding"}
-            screenOptions={{ gestureEnabled: false }}
-          >
-            <fullStack.Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{ headerShown: false }}
-            />
-            <fullStack.Screen
-              name="MainApp"
-              component={Nav}
-              options={{ headerShown: false }}
-            />
-          </fullStack.Navigator>
-        )}
+      <NavigationContainer theme={MyTheme}>
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          {hasOnboarded ? (
+            <Nav />
+          ) : (
+            <fullStack.Navigator
+              initialRouteName={"Onboarding"}
+              screenOptions={{ gestureEnabled: false }}
+            >
+              <fullStack.Screen
+                name="Onboarding"
+                component={Onboarding}
+                options={{ headerShown: false }}
+              />
+              <fullStack.Screen
+                name="MainApp"
+                component={Nav}
+                options={{ headerShown: false }}
+              />
+            </fullStack.Navigator>
+          )}
+        </Animated.View>
       </NavigationContainer>
     </NotificationProvider>
   );

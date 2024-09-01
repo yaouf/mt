@@ -77,6 +77,7 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     gap: 36,
+    paddingBottom: 10,
   },
   text: {
     color: varTextColor,
@@ -133,6 +134,7 @@ export const articleStyles = StyleSheet.create({
     fontSize: fontsizeHeader,
     fontStyle: "normal",
     fontWeight: "400",
+    textAlign: "center",
     // lineHeight: "normal",
   },
   readMoreHeading: {
@@ -153,11 +155,10 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#FFF",
     width: "100%",
-    padding: 16,
-    justifyContent: "flex-end",
+    padding: 20,
+    justifyContent: "space-between",
     alignItems: "flex-start",
-    height: 58,
-    gap: 235,
+    height: 80,
   },
   actions: {
     display: "flex",

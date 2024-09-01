@@ -11,6 +11,7 @@ import { Article } from "src/types/data";
 import { Dispatch, SetStateAction, useState } from "react";
 import { fetchArticle } from "src/code/fetchContent";
 import WebView from "react-native-webview";
+import * as WebBrowser from "expo-web-browser";
 
 type SplitArticleType = {
   content: string;
@@ -100,8 +101,9 @@ function SplitArticle({ content }: SplitArticleType) {
           }
 
           const fetchedArticle = await fetchArticle(slug, date, setArticle);
-          setArticle(article);
+          setArticle(fetchedArticle);
           // navigate to Article screen with fetched article data
+          console.log(slug);
           navigation.push("Article", { data: fetchedArticle });
         } catch (error) {
           // handle article error
@@ -110,10 +112,7 @@ function SplitArticle({ content }: SplitArticleType) {
       }
       // opens url in web browser if not article
       else {
-        Linking.openURL(href).catch((err) =>
-          console.error("Failed to open external link:", err)
-        );
-        return;
+        await WebBrowser.openBrowserAsync(href);
       }
     };
 
@@ -159,7 +158,7 @@ function SplitArticle({ content }: SplitArticleType) {
               }}
               style={articleStyles.adImage}
             />
-            <Text style={articleStyles.adAuthor}>Ad Author</Text>
+            <Text style={articleStyles.adAuthor}>Advertisement</Text>
           </View>
 
           {/* article continued */}
@@ -184,7 +183,7 @@ function SplitArticle({ content }: SplitArticleType) {
               }}
               style={articleStyles.adImage}
             />
-            <Text style={articleStyles.adAuthor}>Ad Author</Text>
+            <Text style={articleStyles.adAuthor}>Advertisement</Text>
           </View>
 
           {/* article continued */}

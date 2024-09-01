@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test('Test Notification Form Elements', async ({ page }) => {
   // Navigate to the page
@@ -16,8 +16,8 @@ test('Test Notification Form Elements', async ({ page }) => {
   const bodyTextareaExists = await page.isVisible('#body');
   const slugInputExists = await page.isVisible('#slug');
   const breakingNewsCheckboxExists = await page.isVisible('input[value="Breaking News"]');
-  const weeklySummaryCheckboxExists = await page.isVisible('input[value="Weekly Summary"]');
-  const dailySummaryCheckboxExists = await page.isVisible('input[value="Daily Summary"]');
+  const universityNewsCheckboxExists = await page.isVisible('input[value="University News"]');
+  const metroCheckboxExists = await page.isVisible('input[value="Metro"]');
   const scheduleButtonExists = await page.isVisible('button:text("Schedule Notification")');
 
   // Assert that all form elements are present
@@ -26,8 +26,8 @@ test('Test Notification Form Elements', async ({ page }) => {
   expect(bodyTextareaExists).toBeTruthy();
   expect(slugInputExists).toBeTruthy();
   expect(breakingNewsCheckboxExists).toBeTruthy();
-  expect(weeklySummaryCheckboxExists).toBeTruthy();
-  expect(dailySummaryCheckboxExists).toBeTruthy();
+  expect(universityNewsCheckboxExists).toBeTruthy();
+  expect(metroCheckboxExists).toBeTruthy();
   expect(scheduleButtonExists).toBeTruthy();
 });
 

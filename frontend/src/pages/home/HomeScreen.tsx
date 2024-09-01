@@ -1,16 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { View, FlatList, Text } from "react-native";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { View, FlatList, RefreshControl } from "react-native";
 import Top from "./sections/Top";
 import { NavProp } from "src/types/navStacks";
 import { Article } from "src/types/data";
 import Divider from "src/components/Divider";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useScrollToTop } from "@react-navigation/native";
 import SmallHorzGroup from "./sections/SmallHorzGroup";
 import AllSmallGroup from "./sections/AllSmallGroup";
 import * as SplashScreen from "expo-splash-screen";
 import { fetchSectionHome } from "src/code/fetchContent";
-import { baseStyles } from "src/styles/styles";
 
 interface Section_Type {
   id: number;
@@ -19,35 +17,37 @@ interface Section_Type {
 
 SplashScreen.preventAutoHideAsync();
 
-/**
- * Home screen!!
- * TODO: refresh content (look into flatlist refresh prop)
- */
 function HomeScreen({ navigation }: NavProp) {
   const flatListRef = useRef<FlatList>(null);
   useScrollToTop(flatListRef);
 
-  const [top, setTop] = useState<string[]>([]); // list of top story uuids
-  const [topLoaded, setTopLoaded] = useState(false); // splash screen prop
-  const [topStories, setTopStories] = useState<Article[]>(); // list of top stories populated once loaded
+  const [top, setTop] = useState<string[]>([]);
+  const [topLoaded, setTopLoaded] = useState(false);
+  const [topStories, setTopStories] = useState<Article[]>();
+  const [refreshing, setRefreshing] = useState(false);
 
-  // load the top content first so stories in the top are not also shown in each section
-  useEffect(() => {
-    async function fetchTop() {
-      try {
-        const data: Article[] = await fetchSectionHome("homepage", 5);
-        const top: string[] = data.map((a) => a.uuid);
-        setTop(top);
-        setTopStories(data);
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        // Tell the application to render once top is fetched
-        setTopLoaded(true);
-      }
+  const fetchTop = async () => {
+    try {
+      const data: Article[] = await fetchSectionHome("homepage", 5);
+      const top: string[] = data.map((a) => a.uuid);
+      setTop(top);
+      setTopStories(data);
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      setTopLoaded(true);
     }
+  };
+
+  useEffect(() => {
     fetchTop();
   }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchTop();  // Re-run the fetchTop function to reload top stories
+    setRefreshing(false);
+  };
 
   const onLayoutRootView = useCallback(async () => {
     if (topLoaded) {
@@ -59,7 +59,6 @@ function HomeScreen({ navigation }: NavProp) {
     return null;
   }
 
-  // list of items to use in the flatlist
   const sections: Section_Type[] = [
     {
       id: 1,
@@ -157,14 +156,16 @@ function HomeScreen({ navigation }: NavProp) {
         ref={flatListRef}
         data={sections}
         renderItem={({ item }) => item.component}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => (
           <View style={{ marginHorizontal: 16 }}>
             <Divider />
           </View>
         )}
         initialNumToRender={1}
-        // onRefresh={() => console.log("here")}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

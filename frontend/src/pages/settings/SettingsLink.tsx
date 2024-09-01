@@ -2,6 +2,8 @@ import { TouchableOpacity, Text, StyleSheet, Linking } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { text, varTextColor } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";
+import * as WebBrowser from "expo-web-browser";
+
 
 type SettingsLinkProps = {
   title: string;
@@ -19,7 +21,7 @@ function SettingsLink({ title, link, inApp, navigation }: SettingsLinkProps) {
     } else {
       const supported = await Linking.canOpenURL(link);
       if (supported) {
-        await Linking.openURL(link);
+        await WebBrowser.openBrowserAsync(link);
       } else {
         console.error("Don't know how to open URI: " + link);
       }

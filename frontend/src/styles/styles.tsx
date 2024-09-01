@@ -60,9 +60,9 @@ export const text = StyleSheet.create({
   sectionHeader1: {
     // main section headers
     color: varTextColor,
-    fontWeight: "600",
+    fontWeight: "800",
     fontSize: 16,
-    fontFamily: font2,
+    fontFamily: font2
   },
   seeMore: {
     // see more header for section
@@ -79,6 +79,7 @@ export const text = StyleSheet.create({
     fontSize: 24,
     fontFamily: font2,
     marginBottom: 4,
+    marginTop: 20,
   },
   sectionHeader2: {
     // like recommended text, featured story on fyp
