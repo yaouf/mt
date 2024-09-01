@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { View, TextInput, FlatList, Image, Text } from "react-native";
+import { useRef, useState, useEffect } from "react";
+import { View, TextInput, FlatList, Image, Text, Button } from "react-native";
 import { varGray1 } from "../../styles/styles";
 import { search } from "src/styles/search";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -14,11 +14,13 @@ function Search({ navigation }: NavProp) {
 
   const [searchActivated, setSearchActivated] = useState(false);
   const [text, onChangeText] = useState("");
+  const [loading, setLoading] = useState(false);
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
 
   const handleSearch = async () => {
     setSearchActivated(false);
+    setLoading(true);
     try {
       const response = await fetch(
         `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`
@@ -28,8 +30,10 @@ function Search({ navigation }: NavProp) {
       const articleList: Article[] = resultObject.items;
 
       setArticles(articleList);
+      setLoading(false)
       setSearchCompleted(true); // Hide the logo when search is completed
     } catch (error) {
+      setLoading(false);
       console.error("Error" + error);
     }
   };
@@ -42,7 +46,9 @@ function Search({ navigation }: NavProp) {
   };
 
   return (
+    
     <View>
+
       <View style={search.searchbar}>
         <MaterialIcons
           name="search"
@@ -74,18 +80,15 @@ function Search({ navigation }: NavProp) {
           </TouchableOpacity>
         )}
       </View>
-
-      {!searchCompleted && (
-        // <Image
-        //   source={require("assets/images/splash.png")}
-        //   style={{
-        //     width: 500,
-        //     height: 400,
-        //     alignSelf: "center",
-        //     marginVertical: 100,
-        //   }}
-        //   resizeMode="contain"
-        // />
+      
+      <View style={search.container}>
+        {!searchCompleted && (loading ?
+          <Image
+        source={require("assets/images/splash.png")}
+        style={search.img}
+        resizeMode="contain"
+          />
+        :
         <Text
           style={{
             color: "gray",
@@ -96,9 +99,10 @@ function Search({ navigation }: NavProp) {
           Search for an article to get started.
         </Text>
       )}
-
+      </View>
+      
       <View>
-        {searchCompleted && (
+        {searchCompleted &&
           <FlatList
             data={articles}
             renderItem={({ item, index }) => (
@@ -112,7 +116,7 @@ function Search({ navigation }: NavProp) {
             style={{ marginTop: 16 }}
             initialNumToRender={8}
           />
-        )}
+      }
       </View>
     </View>
   );

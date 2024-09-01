@@ -6,12 +6,15 @@ import { useContext, useEffect, useState } from "react";
 import { SavedContext } from "../Nav";
 import { handleBookmark } from "src/code/helpers";
 import { ArticleDetailProps } from "src/types/other";
+import { useNavigation } from "@react-navigation/native";
 
 /**
  * action bar at the bottom of each article
  * share, save, (notifications for this section / author in a future version)
  */
+
 function BottomBar(props: ArticleDetailProps) {
+  const navigation = useNavigation();
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
 
@@ -29,13 +32,23 @@ function BottomBar(props: ArticleDetailProps) {
   return (
     <View style={articleStyles.actionBar}>
       <View style={articleStyles.actions}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={{  }}
+        >
+          <Ionicons name="arrow-back" size={24} color="#1C1B1F" />
+        </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => handleNotification()}>
           <Image
             source={require("../../../assets/icons/notifications.png")}
             style={styles.icon}
           />
         </TouchableOpacity> */}
+      </View>
+
+        <View style={articleStyles.actions}>
         <TouchableOpacity
+          style={{paddingRight: 10}}
           onPress={() =>
             handleBookmark(
               saved,
