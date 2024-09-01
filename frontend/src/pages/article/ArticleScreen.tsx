@@ -1,4 +1,5 @@
 import { View, ScrollView, Image, Text, TouchableOpacity } from "react-native";
+import { WebView } from "react-native-webview";
 import { baseStyles } from "../../styles/styles";
 import { formatDates } from "src/code/formatDates";
 import SplitArticle from "./SplitContent";
@@ -101,6 +102,7 @@ function ArticleScreen({
 
           {/* Article text */}
           <SplitArticle content={article.content} />
+
           {/* Read more section, with small cards */}
           {/* <Divider />
           <Text style={articleStyles.readMoreHeading}>RELATED ARTICLES</Text>

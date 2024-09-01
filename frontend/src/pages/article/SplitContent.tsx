@@ -10,6 +10,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Article } from "src/types/data";
 import { Dispatch, SetStateAction, useState } from "react";
 import { fetchArticle } from "src/code/fetchContent";
+import WebView from "react-native-webview";
 
 type SplitArticleType = {
   content: string;
@@ -25,6 +26,13 @@ function SplitArticle({ content }: SplitArticleType) {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const customHTMLElementModels = {
+    iframe: HTMLElementModel.fromCustomModel({
+      tagName: "iframe",
+      mixedUAStyles: {
+        width: "100%",
+      },
+      contentModel: HTMLContentModel.textual,
+    }),
     a: HTMLElementModel.fromCustomModel({
       tagName: "a",
       mixedUAStyles: articleStyles.hyperlink,
@@ -109,6 +117,24 @@ function SplitArticle({ content }: SplitArticleType) {
       }
     };
 
+    function IframeRenderer({ tnode }: any) {
+      const { attributes } = tnode;
+      const src = attributes.src;
+      const height = parseInt(attributes.height) || 500;
+
+      return (
+        <WebView
+          source={{ uri: src }}
+          style={{
+            marginVertical: 20,
+            width: "100%",
+            height: height,
+          }}
+          scrollEnabled={false}
+        />
+      );
+    }
+
     return (
       <View style={articleStyles.articleBodyWrapper}>
         <View style={articleStyles.articleBody}>
@@ -116,6 +142,7 @@ function SplitArticle({ content }: SplitArticleType) {
             source={source1}
             baseStyle={articleStyles.text}
             customHTMLElementModels={customHTMLElementModels}
+            renderers={{ iframe: IframeRenderer }}
             renderersProps={{
               a: {
                 onPress: (event, href) =>
@@ -140,6 +167,7 @@ function SplitArticle({ content }: SplitArticleType) {
             source={source2}
             baseStyle={articleStyles.text}
             customHTMLElementModels={customHTMLElementModels}
+            renderers={{ iframe: IframeRenderer }}
             renderersProps={{
               a: {
                 onPress: (event, href) =>
@@ -164,6 +192,7 @@ function SplitArticle({ content }: SplitArticleType) {
             source={source3}
             baseStyle={articleStyles.text}
             customHTMLElementModels={customHTMLElementModels}
+            renderers={{ iframe: IframeRenderer }}
             renderersProps={{
               a: {
                 onPress: (event, href) =>
