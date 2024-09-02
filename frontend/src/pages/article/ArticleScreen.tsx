@@ -31,20 +31,20 @@ function ArticleScreen({
             <View style={baseStyles.container}>
               {(article.dominantMedia.content ||
                 article.dominantMedia.authors) && (
-                <Text style={articleStyles.mediaCaption}>
-                  {article.dominantMedia.content
-                    .replace("\n", " ") // some media captions have p tags, others don't
-                    .replace("<p>", "")
-                    .replace("<p>", "") // these actually are different idk how (ex: https://www.browndailyherald.com/027da5c6-560c-413a-84ba-0b74baf0b4d3%22)
-                    .replace("</p>", "")
-                    .replace(`<\/p>`, "")}
-                  {article.dominantMedia.authors.length > 0 &&
-                    " Media by: " +
-                      article.dominantMedia.authors.map(
-                        (mediaAuthor) => mediaAuthor.name // TODO: media author links??
-                      ) +
-                      "| The Brown Daily Herald"}
-                </Text>
+                  <Text style={articleStyles.mediaCaption}>
+                    {article.dominantMedia.content
+                      ? article.dominantMedia.content
+                          .replace("\n", " ")
+                          .replace("<p>", "")
+                          .replace("<p>", "")
+                          .replace("</p>", "")
+                          .replace(`<\/p>`, "")
+                      : ""}
+                    {article.dominantMedia.authors.length > 0 &&
+                      " Media by: " +
+                        article.dominantMedia.authors.map((mediaAuthor) => mediaAuthor.name).join(", ") +
+                        " | The Brown Daily Herald"}
+                  </Text>
               )}
             </View>
           </View>

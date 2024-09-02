@@ -4,8 +4,9 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
+  Dimensions,
 } from "react-native";
-import { formatDates } from "../../code/formatDates";
+import { shortFormatDates } from "../../code/formatDates";
 import {
   font1,
   font2,
@@ -35,29 +36,28 @@ function HorizontalCard({ article, navigation }: CardProps) {
       >
         <View style={styles.card}>
           <View style={styles.content}>
+            <View style={styles.imageWrapper}>
             <Image
               source={{
                 uri: img_uri,
               }}
               style={styles.image}
             />
+            </View>
             <View style={styles.text}>
               <View style={styles.innerText}>
-                <Text style={styles.section}>
-                  {article.tags[0].name.replace("&;", "&")}
-                </Text>
                 <Text
                   style={styles.title}
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
                 >
                   {article.headline}
                 </Text>
+                </View>
+              <View style={styles.innerText}>
                 <Text style={styles.author}>
                   {article.authors.map((a: Author) => a.name).join(", ")}
                 </Text>
                 <Text style={styles.published}>
-                  {formatDates(article.published_at)}
+                  {shortFormatDates(article.published_at)}
                 </Text>
               </View>
             </View>
@@ -80,58 +80,41 @@ const styles = StyleSheet.create({
     display: "flex",
     // width: 358,
     width: "100%",
-    height: 120,
     flexDirection: "column",
-    alignItems: "flex-end",
     flexShrink: 0,
-    borderRadius: 8,
-    backgroundColor: "#FFF",
-    shadowColor: varTextColor,
-    shadowOffset: {
-      width: 0,
-      height: 1.497,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 29.949,
+    borderRadius: 0,
+    backgroundColor: "#fff",
+    // shadowColor: varTextColor,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 1.497,
+    // },
+    // shadowOpacity: 0.08,
+    // shadowRadius: 29.949,
     overflow: "visible",
+
   },
   content: {
     display: "flex",
-    paddingRight: 8,
     flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "flex-start",
     gap: 8,
     alignSelf: "stretch",
   },
-  image: {
-    display: "flex",
-    paddingTop: 35.893,
-    paddingRight: 21.133,
-    paddingBottom: 34.62,
-    paddingLeft: 24.38,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    flexGrow: 1,
-    flexShrink: 0,
-    flexBasis: 0,
-    alignSelf: "stretch",
-    backgroundColor: "#C9C9C9",
-    width: 95,
-    height: 120,
-    borderTopLeftRadius: 7.487,
-    borderBottomLeftRadius: 7.487,
+  imageWrapper: {
+    // paddingTop: 35.893,
+    // paddingRight: 21.133,
+    // paddingBottom: 34.62,
+    // paddingLeft: 24.38,
+    flex: 1,
+  },
+  image:{
+    height: 80,
   },
   text: {
+    flex: 3,
     display: "flex",
-    width: 247,
-    paddingVertical: 16,
-    paddingHorizontal: 0,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
-    gap: 16,
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   innerText: {
     display: "flex",
@@ -142,6 +125,18 @@ const styles = StyleSheet.create({
     flexShrink: 0,
     flexBasis: 0,
   },
+  subhead: {
+    alignSelf: "stretch",
+    color: varTextColor,
+    fontFamily: font1,
+    fontSize: 18,
+    fontStyle: "normal",
+    fontWeight: "400",
+    lineHeight: 22,
+    fontStyle: "italic",
+    marginBottom: 12, 
+  },
+
   section: {
     color: varGray1,
     fontFamily: font3,
@@ -151,7 +146,6 @@ const styles = StyleSheet.create({
     // lineHeight: 1,
   },
   title: {
-    height: 38,
     alignSelf: "stretch",
     overflow: "hidden",
     flexWrap: "nowrap",
@@ -164,15 +158,16 @@ const styles = StyleSheet.create({
   author: {
     color: varTextColor,
     fontFamily: font2,
-    fontSize: 10,
+    fontSize: 12,
     fontStyle: "normal",
     fontWeight: "500",
     lineHeight: 14,
+    maxWidth: "75%",
   },
   published: {
     color: varGray1,
     fontFamily: font3,
-    fontSize: 10,
+    fontSize: 12,
     fontStyle: "normal",
     fontWeight: "500",
     // lineHeight: "normal";

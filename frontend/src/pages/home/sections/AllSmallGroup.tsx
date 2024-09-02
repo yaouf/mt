@@ -6,6 +6,8 @@ import { Article } from "src/types/data";
 import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";
+import Divider from "src/components/Divider";
+
 
 /**
  * Section with all small cards
@@ -48,11 +50,11 @@ function AllSmallGroup(props: SectionGroupProps) {
       ) : (
         <View style={layout.grid}>
           {articles.map((article: Article, i) => (
-            <SmallCard
+            <View><SmallCard
               article={article}
               navigation={props.navigation}
               key={`${props.slug}-home-${i}`}
-            />
+            /><Divider /></View>
           ))}
         </View>
       )}

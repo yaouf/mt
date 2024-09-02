@@ -122,9 +122,9 @@ function SettingsScreen({ navigation }: NavProp) {
   return (
     <ScrollView>
       <SavedArticlesPreview navigation={navigation} />
+      <Divider />
 
       <View style={baseStyles.container}>
-        <Divider marginBottom={12} />
         <Text style={text.sectionHeader1}>Stay Updated</Text>
         <View style={{ rowGap: 16, marginTop: 4 }}>
           <Notif
@@ -149,24 +149,23 @@ function SettingsScreen({ navigation }: NavProp) {
             asyncName="dailyNotifs"
           />
         </View>
-        <Divider marginTop={28} />
       </View>
+      <Divider />
 
       <View>
+
         <Text
           style={{
             ...settings.smallHeading,
             marginBottom: 22,
-            marginTop: 32,
             paddingHorizontal: 16,
           }}
         >
           Support
         </Text>
         {support.map((link, i) => (
-          <View key={`support-${i}`} style={{ paddingHorizontal: 4 }}>
+          <View key={`support-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
             <SettingsLink title={link.title} link={link.link} />
-            <Divider marginBottom={12} marginTop={12} color={varGray1} />
           </View>
         ))}
       </View>
@@ -182,9 +181,8 @@ function SettingsScreen({ navigation }: NavProp) {
           More BDH
         </Text>
         {links.map((link, i) => (
-          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4 }}>
+          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12, }}>
             <SettingsLink title={link.title} link={link.link} />
-            <Divider marginBottom={12} marginTop={12} color={varGray1} />
           </View>
         ))}
       </View>

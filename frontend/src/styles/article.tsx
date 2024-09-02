@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { font1, font2, font3, varTextColor, varGray1 } from "./styles";
+import { font1, font2, font3, varTextColor, varGray1, varTextSecondaryColor } from "./styles";
 
 const fontsizeHeader = 16; // figma says 12.456??
 //spacing is also a little weird in the header with the fonts rn
@@ -12,7 +12,7 @@ export const articleStyles = StyleSheet.create({
   mediaCaption: {
     color: varGray1,
     fontFamily: font1,
-    fontSize: fontsizeHeader,
+    fontSize: fontsizeHeader-2,
     fontStyle: "normal",
     fontWeight: "400",
     marginTop: 12,
@@ -34,14 +34,14 @@ export const articleStyles = StyleSheet.create({
   },
   lead: {
     // alignSelf: "stretch",
-    color: varGray1,
+    color: varTextSecondaryColor,
     fontFamily: font1,
     fontSize: fontsizeHeader,
     fontStyle: "italic",
     fontWeight: "400",
   },
   author: {
-    color: varTextColor,
+    color: varTextSecondaryColor,
     fontFamily: font2,
     fontSize: fontsizeHeader,
     fontWeight: "700",
@@ -159,8 +159,10 @@ export const articleStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-start",
     height: 80,
+    borderTopWidth: 1,
+    borderColor: "#eee",
   },
-  actions: {
+    actions: {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "flex-end",

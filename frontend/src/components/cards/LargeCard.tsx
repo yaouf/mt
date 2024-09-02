@@ -14,6 +14,8 @@ import {
   font2,
   font3,
   varTextColor,
+  varRed,
+  varTextSecondaryColor,
   varGray1,
 } from "../../styles/styles";
 
@@ -59,8 +61,11 @@ function LargeCard({ article, navigation }: CardProps) {
                 {all_tags[0].replace("&;", "&")}
               </Text>
             )}
-            <Text style={styles.title} numberOfLines={3} ellipsizeMode="tail">
+            <Text style={styles.title}>
               {article.headline}
+            </Text>
+            <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail">
+              {article.subhead}
             </Text>
             <Text style={styles.author}>
               {article.authors.map((a: Author) => a.name).join(", ")}
@@ -92,19 +97,31 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
     color: varTextColor,
     fontFamily: font1,
-    fontSize: 20,
+    fontSize: 22,
     fontStyle: "normal",
     fontWeight: "700",
     lineHeight: 28,
-    marginBottom: 20, 
+    marginBottom: 8, 
+  },
+  subhead: {
+    alignSelf: "stretch",
+    color: varTextColor,
+    fontFamily: font1,
+    fontSize: 18,
+    fontStyle: "normal",
+    fontWeight: "400",
+    lineHeight: 22,
+    fontStyle: "italic",
+    marginBottom: 12, 
   },
   author: {
-    color: varTextColor,
+    color: varTextSecondaryColor,
     fontFamily: font2,
     fontSize: 16,
     fontStyle: "normal",
     fontWeight: "500",
     lineHeight: 20,
+    maxWidth: "75%",
   },
   card: {
     display: "flex",
@@ -112,26 +129,26 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     flexDirection: "column",
     alignItems: "flex-start",
-    borderRadius: 8,
+    borderRadius: 0,
     backgroundColor: "#FFF",
-    shadowColor: varTextColor,
-    shadowOffset: {
-      width: 0,
-      height: 1.497,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 29.949,
-    elevation: 3,
+    // shadowColor: varTextColor,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 1.497,
+    // },
+    // shadowOpacity: 0.08,
+    // shadowRadius: 29.949,
+    // elevation: 3,
     marginTop: 16,
     overflow: "visible",
     // marginVertical: 12,
   },
   section: {
-    color: varGray1,
+    color: varRed,
     fontFamily: font3,
-    fontSize: 16,
+    fontSize: 14,
     fontStyle: "normal",
-    // fontWeight: "500",
+    fontWeight: "700",
     /* lineHeight: 'normal',*/
   },
   published: {
@@ -145,7 +162,7 @@ const styles = StyleSheet.create({
   image: {
     backgroundColor: "#C9C9C9",
     display: "flex",
-    height: 167.435,
+    height: 250,
     width: "100%",
     paddingTop: 59.893,
     paddingBottom: 58.055,
@@ -153,8 +170,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     alignSelf: "stretch",
-    borderTopLeftRadius: 7.487,
-    borderTopRightRadius: 7.487,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
   },
   text: {
     display: "flex",
