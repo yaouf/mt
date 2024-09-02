@@ -1,5 +1,4 @@
 import {
-  Image,
   Platform,
   StyleSheet,
   Text,
@@ -17,10 +16,13 @@ import {
   font3,
   varTextColor,
   varGray1,
+  varRed,
+  varTextSecondaryColor,
 } from "../../styles/styles";
 import ShowContextMenu from "./ShowContextMenu";
 
 function SmallCard({ article, navigation, specialWidth }: CardProps) {
+  const all_tags = article.tags.map((t: Tag) => t.name);
   // let cardStyles: StyleProp<ViewStyle> = {
   //   ...styles.card,
   //   ...{ width: "48%" },
@@ -30,20 +32,11 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
   //   cardStyles = { ...styles.card, ...{ width: specialWidth } };
   // }
 
-  let cardSize: StyleProp<ViewStyle> = { width: "48%" };
+  let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
   if (specialWidth !== undefined) {
     cardSize = { width: specialWidth };
   }
 
-  let img_uri =
-    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
-  if (article.dominantMedia.attachment_uuid) {
-    img_uri =
-      "https://snworksceo.imgix.net/bdh/" +
-      article.dominantMedia.attachment_uuid +
-      ".sized-1000x1000." +
-      article.dominantMedia.extension;
-  }
 
   return (
     <View style={cardSize}>
@@ -52,30 +45,24 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
         onPress={() => navigation.push("Article", { data: article })}
       >
         <View style={styles.card}>
-          <Image
-            source={{
-              uri: img_uri,
-            }}
-            style={styles.image}
-          />
           <View style={styles.text}>
-            <Text style={styles.section}>
-              {" "}
-              {article.tags[0].name.replace("&;", "&")}
-            </Text>
-            <Text style={styles.title} numberOfLines={3} ellipsizeMode="tail">
+            <Text style={styles.title}>
               {article.headline}
             </Text>
-            <Text style={styles.author}>
+            {article.subhead && article.subhead.trim() !== '' && (
+            <Text style={styles.subhead}>
+              {article.subhead}
+            </Text>
+          )}
+
+            <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end"}}>
+          <Text style={styles.author}>
               {article.authors.map((a: Author) => a.name).join(", ")}
             </Text>
-            <View style={styles.bottom}>
-              <View style={styles.publishedSection}>
-                <Text style={styles.published}>
+          <Text style={styles.published}>
                   {shortFormatDates(article.published_at)}
-                </Text>
-              </View>
-            </View>
+          </Text>
+          </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -95,7 +82,7 @@ const styles2 = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
+    },
   touchableItem: {
     width: 200,
     height: 200,
@@ -109,30 +96,33 @@ const styles2 = StyleSheet.create({
     right: 10, // Adjust as per your requirement
     backgroundColor: "orange",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 8,
   },
 });
 
 const styles = StyleSheet.create({
   title: {
-    height: 60,
+    height: "auto",
     alignSelf: "stretch",
     color: varTextColor,
     fontFamily: font1,
-    fontSize: 14,
+    fontSize: 20,
     fontStyle: "normal",
     fontWeight: "700",
     lineHeight: 20,
     overflow: "hidden",
     flexWrap: "nowrap",
+    marginBottom: 4,
   },
   author: {
-    color: varTextColor,
+    color: varTextSecondaryColor,
     fontFamily: font2,
-    fontSize: 10,
+    fontSize: 14,
     fontStyle: "normal",
     fontWeight: "500",
     lineHeight: 14,
+    maxWidth: "75%",
+
   },
   card: {
     display: "flex",
@@ -140,16 +130,16 @@ const styles = StyleSheet.create({
     // width: "48%",
     flexDirection: "column",
     alignItems: "flex-start",
-    borderRadius: 8,
+    borderRadius: 0,
     backgroundColor: "#FFF",
-    shadowColor: varTextColor,
-    shadowOffset: {
-      width: 0,
-      height: 1.497,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 29.949,
-    elevation: 3,
+    // shadowColor: varTextColor,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 1.497,
+    // },
+    // shadowOpacity: 0.08,
+    // shadowRadius: 29.949,
+    // elevation: 3,
     overflow: "visible",
   },
   section: {
@@ -163,30 +153,15 @@ const styles = StyleSheet.create({
   published: {
     color: varGray1,
     fontFamily: font3,
-    fontSize: 10,
+    fontSize: 12,
+    fontWeight: "500",
     fontStyle: "normal",
     // fontWeight: "500",
     /* line-height: normal; */
   },
-  image: {
-    backgroundColor: "#C9C9C9",
-    display: "flex",
-    height: 111.815,
-    width: "100%",
-    paddingTop: 39.997,
-    paddingBottom: 38.769,
-    paddingHorizontal: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "stretch",
-    borderTopLeftRadius: 7.487,
-    borderTopRightRadius: 7.487,
-  },
   text: {
     display: "flex",
     flexDirection: "column",
-    paddingTop: 8,
-    paddingBottom: 8,
     paddingHorizontal: 12,
     alignItems: "flex-start",
     alignSelf: "stretch",
@@ -214,6 +189,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 64,
   },
+  subhead: {
+    alignSelf: "stretch",
+    color: varTextColor,
+    fontFamily: font1,
+    fontSize: 18,
+    fontStyle: "normal",
+    fontWeight: "400",
+    lineHeight: 22,
+    fontStyle: "italic",
+    marginBottom: 12, 
+  },
+
   option: {
     backgroundColor: "rgba(237, 237, 237, 0.80)",
     display: "flex",
