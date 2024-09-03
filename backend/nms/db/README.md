@@ -1,3 +1,5 @@
+Prepend NODE_ENV= to command to set node env. 
+
 To run locally:
 1. Go to the nms/db folder in integrated terminal.
 2. Run `npm run update`
