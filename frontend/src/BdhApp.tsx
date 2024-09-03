@@ -7,6 +7,7 @@ import { NotificationProvider } from "./pages/settings/NotificationProvider";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const fullStack = createStackNavigator();
 
@@ -65,27 +66,29 @@ function BdhApp() {
   return (
     <NotificationProvider>
       <NavigationContainer theme={MyTheme}>
-        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-          {hasOnboarded ? (
-            <Nav />
-          ) : (
-            <fullStack.Navigator
-              initialRouteName={"Onboarding"}
-              screenOptions={{ gestureEnabled: false }}
-            >
-              <fullStack.Screen
-                name="Onboarding"
-                component={Onboarding}
-                options={{ headerShown: false }}
-              />
-              <fullStack.Screen
-                name="MainApp"
-                component={Nav}
-                options={{ headerShown: false }}
-              />
-            </fullStack.Navigator>
-          )}
-        </Animated.View>
+        <SafeAreaProvider>
+          <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+            {hasOnboarded ? (
+              <Nav />
+            ) : (
+              <fullStack.Navigator
+                initialRouteName={"Onboarding"}
+                screenOptions={{ gestureEnabled: false }}
+              >
+                <fullStack.Screen
+                  name="Onboarding"
+                  component={Onboarding}
+                  options={{ headerShown: false }}
+                />
+                <fullStack.Screen
+                  name="MainApp"
+                  component={Nav}
+                  options={{ headerShown: false }}
+                />
+              </fullStack.Navigator>
+            )}
+          </Animated.View>
+        </SafeAreaProvider>
       </NavigationContainer>
     </NotificationProvider>
   );

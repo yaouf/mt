@@ -7,6 +7,7 @@ import SettingsStackScreen from "./settings/SettingsStackScreen";
 import SearchStackScreen from "./search/SearchStackScreen";
 import { NotificationProvider } from "./settings/NotificationProvider";
 import {
+  View,
   Dispatch,
   SetStateAction,
   createContext,
@@ -19,6 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
 import * as Notifications from "expo-notifications";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const Tab = createBottomTabNavigator();
 
@@ -109,6 +111,7 @@ export default function Nav() {
   );
 
   return (
+    <SafeAreaView style={{flex: 1, paddingTop: 0, marginTop: 0}}>
     <HoldMenuProvider safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}>
       <NotificationProvider>
         <SavedContext.Provider value={{ savedArticles, setSavedArticles }}>
@@ -134,7 +137,7 @@ export default function Nav() {
                 tabBarInactiveTintColor: "gray",
                 tabBarStyle: {
                   height: 65,
-                  marginBottom: 30,
+                  marginBottom: 0,
                   paddingTop: 8,
                   paddingBottom: 8,
                   paddingRight: 20,
@@ -172,5 +175,6 @@ export default function Nav() {
         </SavedContext.Provider>
       </NotificationProvider>
     </HoldMenuProvider>
+    </SafeAreaView>
   );
 }

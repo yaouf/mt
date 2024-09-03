@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import ShowContextMenu from "./ShowContextMenu";
 import { CardProps } from "src/types/navStacks";
-import { Author, Tag } from "src/types/data";
+import { Tag } from "src/types/data";
 import { formatDates } from "../../code/formatDates";
 import {
   font1,
@@ -66,9 +66,12 @@ function LargeCard({ article, navigation }: CardProps) {
             </Text>
             <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail">
               {article.subhead}
+<<<<<<< Updated upstream
             </Text>
             <Text style={styles.author}>
               {article.authors.map((a: Author) => a.name).join(", ")}
+=======
+>>>>>>> Stashed changes
             </Text>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
@@ -102,6 +105,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 28,
     marginBottom: 8, 
+<<<<<<< Updated upstream
   },
   subhead: {
     alignSelf: "stretch",
@@ -122,6 +126,19 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 20,
     maxWidth: "75%",
+=======
+  },
+  subhead: {
+    alignSelf: "stretch",
+    color: varTextColor,
+    fontFamily: font1,
+    fontSize: 18,
+    fontStyle: "normal",
+    fontWeight: "400",
+    lineHeight: 22,
+    fontStyle: "italic",
+    marginBottom: 12, 
+>>>>>>> Stashed changes
   },
   card: {
     display: "flex",
@@ -178,7 +195,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     paddingTop: 12,
     paddingBottom: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 0,
     alignItems: "flex-start",
     alignSelf: "stretch",
     gap: 4,

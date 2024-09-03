@@ -41,7 +41,7 @@ export const layout = StyleSheet.create({
   vStack: {
     rowGap: 16,
     marginTop: 16,
-    overflow: "visible",
+    overflow: "visible"
   },
   grid: {
     flexDirection: "row",

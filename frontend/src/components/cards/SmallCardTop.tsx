@@ -8,7 +8,10 @@ import {
     ViewStyle,
   } from "react-native";
   import { CardProps } from "src/types/navStacks";
+<<<<<<< Updated upstream
   import { Author } from "src/types/data";
+=======
+>>>>>>> Stashed changes
   import { shortFormatDates } from "../../code/formatDates";
   import {
     font1,
@@ -50,9 +53,12 @@ import {
             <Text style={{color: varRed, fontWeight: 700, fontFamily: font2, fontSize: 12,}}>
               {all_tags[0].replace("&;", "&")}
             </Text>
+<<<<<<< Updated upstream
             <Text style={styles.published}>
                     {shortFormatDates(article.published_at)}
             </Text>
+=======
+>>>>>>> Stashed changes
             </View>
               <Text style={styles.title}>
                 {article.headline}
@@ -60,8 +66,13 @@ import {
               <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail">
               {article.subhead}
             </Text>
+<<<<<<< Updated upstream
               <Text style={styles.author}>
                 {article.authors.map((a: Author) => a.name).join(", ")}
+=======
+              <Text style={styles.published}>
+                      {shortFormatDates(article.published_at)}
+>>>>>>> Stashed changes
               </Text>
             </View>
           </View>
@@ -114,6 +125,7 @@ import {
       flexWrap: "nowrap",
       marginBottom: 8,
     },
+<<<<<<< Updated upstream
     author: {
       color: varTextSecondaryColor,
       fontFamily: font2,
@@ -123,6 +135,8 @@ import {
       lineHeight: 14,
       maxWidth: "75%",
     },
+=======
+>>>>>>> Stashed changes
     card: {
       display: "flex",
       // width: 170,
@@ -162,7 +176,11 @@ import {
       display: "flex",
       flexDirection: "column",
       paddingBottom: 8,
+<<<<<<< Updated upstream
       paddingHorizontal: 12,
+=======
+      paddingHorizontal: 0,
+>>>>>>> Stashed changes
       alignItems: "flex-start",
       alignSelf: "stretch",
       gap: 4,
