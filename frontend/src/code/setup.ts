@@ -7,13 +7,13 @@ import { createDevice } from "./serverlessAPIs";
 // for the horizontal section menu
 // TODO: are we including post, multimedia, special projects ... and what order
 export const menuItems: MenuItem[] = [
-  { id: 3, title: "opinions", slug: "opinions" },
-  { id: 4, title: "university news", slug: "university-news" },
-  { id: 5, title: "arts & culture", slug: "arts-culture" },
-  { id: 6, title: "metro", slug: "metro" },
+  { id: 3, title: "university news", slug: "university-news" },
+  { id: 4, title: "metro", slug: "metro" },
+  { id: 5, title: "opinions", slug: "opinions" },
+  { id: 6, title: "arts & culture", slug: "arts-culture" },
   { id: 7, title: "sports", slug: "sports" },
   { id: 8, title: "science & research", slug: "science-research" },
-  { id: 9, title: "podcast", slug: "podcast" },
+  // { id: 9, title: "podcasts", slug: "podcasts" },
 ];
 
 /**

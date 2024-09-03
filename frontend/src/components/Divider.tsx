@@ -1,4 +1,5 @@
 import { View } from "react-native";
+import { varGray1 } from "src/styles/styles";
 
 type DividerProps = {
   marginTop?: number;
@@ -8,15 +9,16 @@ type DividerProps = {
 
 function Divider({ marginTop, marginBottom, color }: DividerProps) {
   return (
+    <View style={{width: "100%", display: "flex", alignItems : "center"}}>
     <View
       style={{
-        width: "100%",
+        width: "95%",
         height: 1,
-        backgroundColor: color !== undefined ? color : "#1C1B1F",
-        marginTop: marginTop !== undefined ? marginTop : 32,
-        marginBottom: marginBottom !== undefined ? marginBottom : 4,
+        backgroundColor: color !== undefined ? color : "#ddd",
+        marginVertical: 20,
       }}
     />
+    </View>
   );
 }
 

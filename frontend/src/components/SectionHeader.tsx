@@ -6,10 +6,9 @@ import { text } from "src/styles/styles";
 
 const styles = StyleSheet.create({
   headerContainer: {
+    display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 8,
+    alignItems: "flex-start"
   },
 });
 
@@ -22,17 +21,10 @@ type SectionHeaderProps = {
 function SectionHeader(props: SectionHeaderProps) {
   const { setCurrSection } = useContext(MenuContext);
 
-  const viewMore = () => {
-    setCurrSection(props.slug);
-    props.navigation.push("Section", { slug: props.slug });
-  };
 
   return (
     <View style={styles.headerContainer} key={`${props.slug}-section-header`}>
-      <Text style={text.sectionHeader1}>{props.title}</Text>
-      <TouchableOpacity onPress={viewMore}>
-        <Text style={text.seeMore}>See more</Text>
-      </TouchableOpacity>
+      <View style={styles.accent}></View><Text style={text.sectionHeader1}>{props.title}</Text>
     </View>
   );
 }
