@@ -92,9 +92,7 @@ function ArticleScreen({
             {/* Published date, section */}
             <View style={articleStyles.publishedDetails}>
               <Text style={articleStyles.publishedDetailsText}>
-                {formatDates(article.published_at) +
-                  "  |  " +
-                  article.tags[0].name.replace("&;", "&")}
+                {formatDates(article.published_at)}
               </Text>
             </View>
           </View>

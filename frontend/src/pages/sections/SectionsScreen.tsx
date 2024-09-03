@@ -1,4 +1,4 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator, RefreshControl } from "react-native";
 import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
 import { useEffect, useState } from "react";
 import { fetchSection } from "src/code/fetchContent";
@@ -22,6 +22,8 @@ function SectionsScreen({
   const [section, setSection] = useState<Article[]>();
   const [title, setTitle] = useState();
   const [pages, setPages] = useState();
+  const [refreshing, setRefreshing] = useState(false);
+
 
   useEffect(() => {
     fetchSection(slug, 1, setSection).then((resp) => {
@@ -83,6 +85,13 @@ function SectionsScreen({
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchSection(slug, 1, setSection);
+    setRefreshing(false);
+  };
+
+
   return (
     <View>
       <View style={baseStyles.container}>
@@ -92,6 +101,10 @@ function SectionsScreen({
             keyExtractor={(item, index) => `${slug}-${index}`}
             renderItem={({ item, index }) => renderCards(index)}
             ListHeaderComponent={<Text style={text.bigTitle}>{title}</Text>}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+    
           />
         </View>
       </View>
