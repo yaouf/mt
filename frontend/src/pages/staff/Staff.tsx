@@ -67,12 +67,11 @@ function Staff({
         {author.bio !== "" && (
           <View>
             <Divider marginTop={0} marginBottom={8} />
-            <Text style={text.sectionHeader1}>Bio</Text>
             <Text style={{ ...text.textSmall, marginTop: 8 }}>
               {author.bio
                 .replace("<p>", "")
                 .replace("</p>", "")
-                .replace("amp;", "")}
+                .replace("&amp;", "&")}
             </Text>
           </View>
         )}
@@ -81,7 +80,7 @@ function Staff({
       {articles.length > 0 && (
         <View>
           <Divider marginTop={18} marginBottom={8} />
-          <Text style={text.sectionHeader1}>Articles</Text>
+          <Text style={text.sectionHeader1}>Recent Articles</Text>
           <View style={layout.vStack}>
             {articles.map((article: Article, i) => (
               <HorizontalCard

@@ -137,18 +137,6 @@ function HomeScreen({ navigation }: NavProp) {
         />
       ),
     },
-    {
-      id: 8,
-      component: (
-        <AllSmallGroup
-          navigation={navigation}
-          slug="podcasts"
-          count={4}
-          title="Podcasts"
-          top={top}
-        />
-      ),
-    },
   ];
 
   return (
