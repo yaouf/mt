@@ -111,7 +111,7 @@ export default function Nav() {
   );
 
   return (
-    <SafeAreaView style={{flex: 1, paddingTop: 0, marginTop: 0}}>
+    <SafeAreaView style={{flex: 1, paddingTop: 0, marginTop: 0}} edges={["bottom", "left", "right"]}>
     <HoldMenuProvider safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}>
       <NotificationProvider>
         <SavedContext.Provider value={{ savedArticles, setSavedArticles }}>
