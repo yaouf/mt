@@ -2,13 +2,14 @@ import { View, Text, ActivityIndicator } from "react-native";
 import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
 import { useEffect, useState } from "react";
 import { fetchSection } from "src/code/fetchContent";
-import LargeCard from "src/components/cards/LargeCard";
+import LargeSectionCard from "src/components/cards/LargeSectionCard";
 import SmallCard from "src/components/cards/SmallCard";
 import { FlatList } from "react-native-gesture-handler";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import { StackScreenProps } from "@react-navigation/stack";
 import { HomeStackProps } from "src/types/navStacks";
 import { Article } from "src/types/data";
+import Divider from "src/components/Divider";
 
 // TODO: if reach the end of the list, load the next page of content
 // (another api call but with page= page+ 1 unless page=last page)
@@ -44,35 +45,36 @@ function SectionsScreen({
   const renderCards = (index: number) => {
     if (index === 0) {
       return (
-        <LargeCard
+        <View><LargeSectionCard
           article={section[0]}
           navigation={navigation}
           key={`${slug}-0}`}
-        />
+        /><Divider /></View>
       );
-    } else if (index === 1 || (cards === "small" && (index + 3) % 4 === 0)) {
+    } else if (index === 1 || (cards === "small" && (index + 1) % 2 === 0)) {
       cards = "horizontal";
       return (
         <View style={layout.grid}>
-          {section.slice(index, index + 4).map((article, i) => (
+          {section.slice(index, index + 2).map((article, i) => (
+            <View>
             <SmallCard
               article={article}
               navigation={navigation}
               key={`${slug}-small-${index}-${i}`}
-            />
+            /><Divider /></View>
           ))}
         </View>
       );
-    } else if (cards === "horizontal" && (index + 3) % 4 === 0) {
+    } else if (cards === "horizontal" && (index + 1) % 2 === 0) {
       cards = "small";
       return (
         <View style={layout.vStack}>
-          {section.slice(index, index + 4).map((article, i) => (
-            <HorizontalCard
+          {section.slice(index, index + 2).map((article, i) => (
+            <View><HorizontalCard
               article={article}
               navigation={navigation}
               key={`${slug}-horizontal-${index}-${i}`}
-            />
+            /><Divider /></View>
           ))}
         </View>
       );

@@ -8,10 +8,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: "flex",
     flexDirection: "row",
+<<<<<<< Updated upstream
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 0,
     marginBottom: 20,
+=======
+    alignItems: "flex-start"
+>>>>>>> Stashed changes
   },
 });
 
@@ -27,7 +31,11 @@ function SectionHeader(props: SectionHeaderProps) {
 
   return (
     <View style={styles.headerContainer} key={`${props.slug}-section-header`}>
+<<<<<<< Updated upstream
       <View style={styles.accent}></View><Text style={text.sectionHeader1}>{props.title}</Text><View></View>
+=======
+      <View style={styles.accent}></View><Text style={text.sectionHeader1}>{props.title}</Text>
+>>>>>>> Stashed changes
     </View>
   );
 }
