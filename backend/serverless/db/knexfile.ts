@@ -1,7 +1,7 @@
 // Update with your config settings.
 
-import { Knex } from "knex";
 import "dotenv/config";
+import { Knex } from "knex";
 const rootDir = process.cwd(); // Get the absolute path of the root directory
 console.log(rootDir);
 // import { defineString } from "firebase-functions/params";
@@ -12,7 +12,7 @@ console.log(rootDir);
 const startPath = rootDir.endsWith("db") ? "" : "../db/";
 console.log("full path: ", startPath + "dist/dev.sqlite3");
 function configFunc(stagingDbUrl: string) {
-  // console.log("stagingDbUrl: ", stagingDbUrl);
+  // TODO: use env var package for validation.
   let dbUrl: string = stagingDbUrl;
   if(!dbUrl) {
     dbUrl = process.env.DB_URL || "";
@@ -46,22 +46,29 @@ const config: { [key: string]: Knex.Config<string> } = {
       directory: "./data/seeds",
     },
   },
-
   production: {
-    client: "postgresql",
+    client: "mssql",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
+      host: dbUrl,
+      port: 1433,
+      database: process.env.DB_NAME || "",
+      user: process.env.DB_USER || "",
+      password: process.env.DB_PASSWORD || "", 
+      options: {
+        encrypt: true
+      }
     },
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      directory: "./data/migrations",
     },
-  },
+    seeds: {
+      directory: "./data/seeds",
+    },
+  }
 };
 return config;
 }

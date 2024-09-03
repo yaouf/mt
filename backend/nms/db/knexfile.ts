@@ -40,22 +40,29 @@ const config: { [key: string]: Knex.Config } = {
       directory: "./data/seeds",
     },
   },
-
   production: {
-    client: "postgresql",
+    client: "mssql",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password",
+      host: env.DB_URL,
+      port: 1433,
+      database: env.DB_NAME,
+      user: env.DB_USER,
+      password: env.DB_PASSWORD, 
+      options: {
+        encrypt: true
+      }
     },
     pool: {
       min: 2,
       max: 10,
     },
     migrations: {
-      tableName: "knex_migrations",
+      directory: "./data/migrations",
     },
-  },
+    seeds: {
+      directory: "./data/seeds",
+    },
+  }
 };
 
 export default config;

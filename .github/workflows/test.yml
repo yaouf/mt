@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB_URL: ${{ secrets.DB_URL }}
-      ENV: development
+      NODE_ENV: development
     strategy:
       matrix:
         node-version: [18, 21]
