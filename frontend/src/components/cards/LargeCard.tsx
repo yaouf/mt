@@ -66,12 +66,6 @@ function LargeCard({ article, navigation }: CardProps) {
             </Text>
             <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail">
               {article.subhead}
-<<<<<<< Updated upstream
-            </Text>
-            <Text style={styles.author}>
-              {article.authors.map((a: Author) => a.name).join(", ")}
-=======
->>>>>>> Stashed changes
             </Text>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
@@ -105,7 +99,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 28,
     marginBottom: 8, 
-<<<<<<< Updated upstream
   },
   subhead: {
     alignSelf: "stretch",
@@ -117,28 +110,6 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     fontStyle: "italic",
     marginBottom: 12, 
-  },
-  author: {
-    color: varTextSecondaryColor,
-    fontFamily: font2,
-    fontSize: 16,
-    fontStyle: "normal",
-    fontWeight: "500",
-    lineHeight: 20,
-    maxWidth: "75%",
-=======
-  },
-  subhead: {
-    alignSelf: "stretch",
-    color: varTextColor,
-    fontFamily: font1,
-    fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: "400",
-    lineHeight: 22,
-    fontStyle: "italic",
-    marginBottom: 12, 
->>>>>>> Stashed changes
   },
   card: {
     display: "flex",

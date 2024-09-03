@@ -46,22 +46,10 @@ function HorizontalCard({ article, navigation }: CardProps) {
             <View style={styles.text}>
               <View style={styles.innerText}>
                 <Text
-<<<<<<< Updated upstream
-                  style={styles.title}
-                >
-                  {article.headline}
-                </Text>
-                </View>
-              <View style={styles.innerText}>
-                <Text style={styles.author}>
-                  {article.authors.map((a: Author) => a.name).join(", ")}
-                </Text>
-=======
                   style={styles.title} numberOfLines={4} ellipsizeMode="tail"
                 >
                   {article.headline}
                 </Text>
->>>>>>> Stashed changes
                 <Text style={styles.published}>
                   {shortFormatDates(article.published_at)}
                 </Text>
@@ -103,11 +91,7 @@ const styles = StyleSheet.create({
   content: {
     display: "flex",
     flexDirection: "row",
-<<<<<<< Updated upstream
-    gap: 8,
-=======
     gap: 16,
->>>>>>> Stashed changes
     alignSelf: "stretch",
   },
   imageWrapper: {
@@ -115,27 +99,16 @@ const styles = StyleSheet.create({
     // paddingRight: 21.133,
     // paddingBottom: 34.62,
     // paddingLeft: 24.38,
-<<<<<<< Updated upstream
-    flex: 1,
-  },
-  image:{
-    height: 80,
-=======
     flex: 1
   },
   image:{
     height: 85,
     aspectRatio: 1
->>>>>>> Stashed changes
   },
   text: {
     flex: 3,
     display: "flex",
     flexDirection: "column",
-<<<<<<< Updated upstream
-    justifyContent: "space-between",
-=======
->>>>>>> Stashed changes
   },
   innerText: {
     display: "flex",
@@ -176,18 +149,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     lineHeight: 18,
   },
-<<<<<<< Updated upstream
-  author: {
-    color: varTextColor,
-    fontFamily: font2,
-    fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "500",
-    lineHeight: 14,
-    maxWidth: "75%",
-  },
-=======
->>>>>>> Stashed changes
   published: {
     color: varGray1,
     fontFamily: font3,
