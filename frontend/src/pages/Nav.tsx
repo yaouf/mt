@@ -157,7 +157,7 @@ export default function Nav() {
               component={HomeStackScreen}
               options={{
                 headerTitle: () => <Header />,
-                headerStyle: {},
+                // headerStyle: {},
                 headerShadowVisible: false, 
               }}
             />
