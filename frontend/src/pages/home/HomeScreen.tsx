@@ -69,9 +69,9 @@ function HomeScreen({ navigation }: NavProp) {
       component: (
         <SmallHorzGroup
           navigation={navigation}
-          slug="opinions"
+          slug="university-news"
           count={5}
-          title="Opinions"
+          title="University News"
           top={top}
         />
       ),
@@ -81,21 +81,22 @@ function HomeScreen({ navigation }: NavProp) {
       component: (
         <SmallHorzGroup
           navigation={navigation}
-          slug="news"
-          count={5}
-          title="News"
+          slug="metro"
+          count={4}
+          title="Metro"
           top={top}
         />
       ),
     },
+
     {
       id: 4,
       component: (
         <AllSmallGroup
           navigation={navigation}
-          slug="arts-culture"
-          count={2}
-          title="Arts & Culture"
+          slug="opinions"
+          count={3}
+          title="Opinions"
           top={top}
         />
       ),
@@ -103,11 +104,11 @@ function HomeScreen({ navigation }: NavProp) {
     {
       id: 5,
       component: (
-        <AllSmallGroup
+        <SmallHorzGroup
           navigation={navigation}
-          slug="metro"
+          slug="arts-culture"
           count={4}
-          title="Metro"
+          title="Arts & Culture"
           top={top}
         />
       ),
@@ -118,7 +119,7 @@ function HomeScreen({ navigation }: NavProp) {
         <SmallHorzGroup
           navigation={navigation}
           slug="sports"
-          count={5}
+          count={4}
           title="Sports"
           top={top}
         />
@@ -127,23 +128,11 @@ function HomeScreen({ navigation }: NavProp) {
     {
       id: 7,
       component: (
-        <AllSmallGroup
+        <SmallHorzGroup
           navigation={navigation}
           slug="science-research"
-          count={2}
-          title="Science & Research"
-          top={top}
-        />
-      ),
-    },
-    {
-      id: 8,
-      component: (
-        <AllSmallGroup
-          navigation={navigation}
-          slug="podcast"
           count={4}
-          title="Podcasts"
+          title="Science & Research"
           top={top}
         />
       ),
@@ -159,7 +148,6 @@ function HomeScreen({ navigation }: NavProp) {
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => (
           <View style={{ marginHorizontal: 16 }}>
-            <Divider />
           </View>
         )}
         initialNumToRender={1}

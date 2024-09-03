@@ -6,6 +6,7 @@ import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
 import { text } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
+import { font2 } from "src/styles/styles";
 import { setUpDevice } from "../code/setup";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
@@ -81,7 +82,7 @@ function PushNotifsScreen({
               style={settings.continueButton}
               onPress={saveNotifPreferences}
             >
-              <Text style={text.sectionHeader1}>Save and continue</Text>
+              <Text style={{fontFamily: font2}}>Save and continue</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[settings.continueButton, styles.maybeLaterButton]}

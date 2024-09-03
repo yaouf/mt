@@ -15,6 +15,7 @@ export const font3 =
 
 // to use in place of black
 export const varTextColor = "#020202";
+export const varTextSecondaryColor = "#333";
 export const varRed = "#ED1C24";
 export const varGray1 = "#9E9E9E";
 
@@ -40,7 +41,7 @@ export const layout = StyleSheet.create({
   vStack: {
     rowGap: 16,
     marginTop: 16,
-    overflow: "visible",
+    overflow: "visible"
   },
   grid: {
     flexDirection: "row",
@@ -61,9 +62,17 @@ export const text = StyleSheet.create({
     // main section headers
     color: varTextColor,
     fontWeight: "800",
-    fontSize: 16,
-    fontFamily: font2
+    fontSize: 20,
+    fontFamily: font1
   },
+  sectionHeader2: {
+    // with added padding for settings
+    color: varTextColor,
+    fontWeight: "800",
+    fontSize: 20,
+    fontFamily: font1,
+  },
+
   seeMore: {
     // see more header for section
     fontWeight: "600",

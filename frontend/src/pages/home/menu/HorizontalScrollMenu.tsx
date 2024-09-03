@@ -12,6 +12,7 @@ import { menuStyles } from "src/styles/sectionMenu";
 import { MenuContext } from "../HomeStackScreen";
 import { menuItems } from "src/code/setup";
 import { setAsync } from "src/code/helpers";
+import { useIsFocused } from "@react-navigation/native";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =

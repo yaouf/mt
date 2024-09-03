@@ -7,6 +7,9 @@ import { fetchSectionHome } from "src/code/fetchContent";
 import SectionHeader from "src/components/SectionHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";
 import HorizontalCard from "src/components/cards/HorizontalCard";
+import Divider from "src/components/Divider";
+import LargeCard from "src/components/cards/LargeCard";
+import LargeSectionCard from "src/components/cards/LargeSectionCard";
 
 /**
  * Section with all small cards
@@ -45,27 +48,34 @@ function SmallHorzGroup(props: SectionGroupProps) {
         <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
       ) : (
         <View style={{ overflow: "visible" }}>
-          <View style={layout.grid}>
-            {/* // first two as small cards TODO: can we always assume at least 2?? */}
-            {articles.slice(0, 2).map((article: Article, i) => (
-              <SmallCard
+          <View>
+            {/* // first as large card, second as small card TODO: can we always assume at least 2?? */}
+            {articles.slice(0, 1).map((article: Article, i) => (
+              <View><LargeSectionCard
                 article={article}
                 navigation={props.navigation}
                 key={`news-home-${i}`}
-              />
+              /><Divider /></View>
+            ))}
+            {articles.slice(1, 2).map((article: Article, i) => (
+              <View><LargeSectionCard
+                article={article}
+                navigation={props.navigation}
+                key={`news-home-${i}`}
+              /><Divider /></View>
             ))}
           </View>
-          <View style={layout.vStack}>
+          <View style={{}}>
             {articles.slice(2).map(
               (
                 article: Article,
                 i // rest as horizontal
               ) => (
-                <HorizontalCard
+                <View style={{}}><HorizontalCard
                   article={article}
                   navigation={props.navigation}
                   key={`news-home-${i + 2}`}
-                />
+                /><Divider /></View>
               )
             )}
           </View>
