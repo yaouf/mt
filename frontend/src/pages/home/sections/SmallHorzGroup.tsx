@@ -8,11 +8,8 @@ import SectionHeader from "src/components/SectionHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import Divider from "src/components/Divider";
-<<<<<<< Updated upstream
-=======
 import LargeCard from "src/components/cards/LargeCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
->>>>>>> Stashed changes
 
 /**
  * Section with all small cards
@@ -52,21 +49,13 @@ function SmallHorzGroup(props: SectionGroupProps) {
       ) : (
         <View style={{ overflow: "visible" }}>
           <View>
-<<<<<<< Updated upstream
-            {/* // first two as small cards TODO: can we always assume at least 2?? */}
-            {articles.slice(0, 2).map((article: Article, i) => (
-              <View><SmallCard
-=======
             {/* // first as large card, second as small card TODO: can we always assume at least 2?? */}
             {articles.slice(0, 1).map((article: Article, i) => (
               <View><LargeSectionCard
->>>>>>> Stashed changes
                 article={article}
                 navigation={props.navigation}
                 key={`news-home-${i}`}
               /><Divider /></View>
-<<<<<<< Updated upstream
-=======
             ))}
             {articles.slice(1, 2).map((article: Article, i) => (
               <View><LargeSectionCard
@@ -74,7 +63,6 @@ function SmallHorzGroup(props: SectionGroupProps) {
                 navigation={props.navigation}
                 key={`news-home-${i}`}
               /><Divider /></View>
->>>>>>> Stashed changes
             ))}
           </View>
           <View style={{}}>

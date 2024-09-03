@@ -51,19 +51,9 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
             {article.subhead && article.subhead.trim() !== '' && (
             <Text style={styles.subhead}>
               {article.subhead}
-<<<<<<< Updated upstream
-            </Text>
-          )}
-
-            <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end"}}>
-          <Text style={styles.author}>
-              {article.authors.map((a: Author) => a.name).join(", ")}
-            </Text>
-=======
             </Text>
           )}
             <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end"}}>
->>>>>>> Stashed changes
           <Text style={styles.published}>
                   {shortFormatDates(article.published_at)}
           </Text>
@@ -118,19 +108,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     flexWrap: "nowrap",
     marginBottom: 4,
-<<<<<<< Updated upstream
-  },
-  author: {
-    color: varTextSecondaryColor,
-    fontFamily: font2,
-    fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "500",
-    lineHeight: 14,
-    maxWidth: "75%",
-
-=======
->>>>>>> Stashed changes
   },
   card: {
     display: "flex",
@@ -170,11 +147,7 @@ const styles = StyleSheet.create({
   text: {
     display: "flex",
     flexDirection: "column",
-<<<<<<< Updated upstream
-    paddingHorizontal: 12,
-=======
     paddingHorizontal: 0,
->>>>>>> Stashed changes
     alignItems: "flex-start",
     alignSelf: "stretch",
     gap: 4,
