@@ -20,7 +20,34 @@ function ArticleScreen({
   return (
     <SafeAreaView>
       <ScrollView>
-        {article.dominantMedia.authors && (
+
+        <View style={baseStyles.container}>
+          {/* Article title, lead, author, published date, section */}
+          <View style={articleStyles.headingContainer}>
+            <Text
+              style={[
+                articleStyles.title,
+                article.dominantMedia.attachment_uuid
+                  ? null
+                  : { paddingTop: 30 },
+              ]}
+            >
+              {article.headline}
+            </Text>
+            {article.subhead && (
+              <Text style={articleStyles.lead}>{article.subhead}</Text>
+            )}
+            <View
+              style={{
+                height: 1,
+                backgroundColor: "white",
+                width: "100%",
+                marginBottom: -15
+              }}
+            />
+            </View>
+
+            {article.dominantMedia.authors && (
           <View>
             <Image
               source={{
@@ -50,30 +77,7 @@ function ArticleScreen({
           </View>
         )}
 
-        <View style={baseStyles.container}>
-          {/* Article title, lead, author, published date, section */}
-          <View style={articleStyles.headingContainer}>
-            <Text
-              style={[
-                articleStyles.title,
-                article.dominantMedia.attachment_uuid
-                  ? null
-                  : { paddingTop: 30 },
-              ]}
-            >
-              {article.headline}
-            </Text>
-            {article.subhead && (
-              <Text style={articleStyles.lead}>{article.subhead}</Text>
-            )}
-            <View
-              style={{
-                height: 1,
-                backgroundColor: "#eee",
-                width: "100%",
-                marginBottom: 5,
-              }}
-            />
+            <View>
             <Text style={articleStyles.author}>
               {article.authors.map((author, i) => (
                 <TouchableOpacity

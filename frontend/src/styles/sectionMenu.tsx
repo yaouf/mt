@@ -52,7 +52,6 @@ export const menuStyles = StyleSheet.create({
     justifyContent: "center",
     height: 43,
     marginTop: 4,
-    borderColor: "white"
   },
   menuItemText: {
     fontSize: 14,
