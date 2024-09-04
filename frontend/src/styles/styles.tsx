@@ -66,6 +66,14 @@ export const text = StyleSheet.create({
     fontFamily: font3,
     paddingTop: 10
   },
+  resetSectionsButton: {
+    // main section headers
+    color: varTextColor,
+    fontWeight: "800",
+    fontSize: 20,
+    fontFamily: font3,
+    paddingTop: 0
+  },
   sectionHeader2: {
     // with added padding for settings
     color: varTextColor,

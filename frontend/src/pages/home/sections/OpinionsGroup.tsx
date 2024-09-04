@@ -4,7 +4,7 @@ import { View, ActivityIndicator } from "react-native";
 import { SectionGroupProps } from "src/types/navStacks";
 import { Article } from "src/types/data";
 import { fetchSectionHome } from "src/code/fetchContent";
-import SectionHeader from "src/components/SectionHeader";
+import OpinionsHeader from "src/components/OpinionsHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";
 import Divider from "src/components/Divider";
 
@@ -14,7 +14,7 @@ import Divider from "src/components/Divider";
  * @param props
  * @returns
  */
-function AllSmallGroup(props: SectionGroupProps) {
+function OpinionsGroup(props: SectionGroupProps) {
   const [articles, setArticles] = useState<Article[]>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -40,7 +40,7 @@ function AllSmallGroup(props: SectionGroupProps) {
 
   return (
     <View style={baseStyles.container}>
-      <SectionHeader
+      <OpinionsHeader
         title={props.title}
         slug={props.slug}
         navigation={props.navigation}
@@ -62,4 +62,4 @@ function AllSmallGroup(props: SectionGroupProps) {
   );
 }
 
-export default AllSmallGroup;
+export default OpinionsGroup;

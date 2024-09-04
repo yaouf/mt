@@ -131,7 +131,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
           }}
           style={[menuStyles.rowItem, menuStyles.reset]}
         >
-          <Text style={text.sectionHeader1}>Reset Sections</Text>
+          <Text style={text.resetSectionsButton}>Reset Sections</Text>
         </TouchableOpacity>
       </ScrollView>
     </GestureHandlerRootView>
