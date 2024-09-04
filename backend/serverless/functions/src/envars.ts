@@ -14,5 +14,15 @@ const trustedApiKey = defineString("API_KEY", {
     description: "this defines the trusted api key",
 
 }).value();
-const envars = { environment, stagingDbUrl, trustedApiKey};
+const dbName = defineString("DB_NAME", {
+  default: ""
+}).value();
+const dbUser = defineString("DB_USER", {
+  default: ""
+}).value();
+const dbPassword = defineString("DB_PASSWORD", {
+  default: ""
+}).value();
+
+const envars = { environment, stagingDbUrl, trustedApiKey, dbName, dbUser, dbPassword};
 export default envars;

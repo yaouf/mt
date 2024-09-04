@@ -14,6 +14,7 @@ export async function seed(knex: Knex): Promise<void> {
       "University News": false,
       "Metro": false,
       expoPushToken: "ExponentPushToken[psEoIvGQmUy-WCOX2LVqq5]",
+      isPushEnabled: true,
     },
     {
       id: uuidv4(),
@@ -22,6 +23,7 @@ export async function seed(knex: Knex): Promise<void> {
       "University News": false,
       "Metro": false,
       expoPushToken: "ExponentPushToken[mGGu2cGvMo9QjWr2QlsH9a]",
+      isPushEnabled: true,
     },
     {
       id: uuidv4(),
@@ -30,6 +32,7 @@ export async function seed(knex: Knex): Promise<void> {
       "University News": false,
       "Metro": false,
       expoPushToken: "ExponentPushToken[IIDil0LpnR0mZj4irAdv_x]",
+      isPushEnabled: true,
     },
   ]);
 
