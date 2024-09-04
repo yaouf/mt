@@ -17,6 +17,8 @@ export const articleStyles = StyleSheet.create({
     fontWeight: "400",
     marginTop: 12,
     marginBottom: 22,
+    alignSelf: "flex-start",
+    marginLeft: -15
   },
   headingContainer: {
     display: "flex",
@@ -24,12 +26,13 @@ export const articleStyles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 7.422,
     marginBottom: 27,
+    paddingTop: 25
   },
   title: {
     // alignSelf: "stretch",
     color: varTextColor,
     fontFamily: font1,
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "700",
   },
   lead: {
@@ -64,6 +67,7 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
+    marginTop: 3
   },
   articleBody: {
     width: "100%",
@@ -72,6 +76,7 @@ export const articleStyles = StyleSheet.create({
     alignItems: "center",
     gap: 36,
     paddingBottom: 10,
+    marginLeft: -3
   },
   text: {
     color: varTextColor,
@@ -152,7 +157,7 @@ export const articleStyles = StyleSheet.create({
     padding: 18,
     justifyContent: "space-between",
     alignItems: "flex-start",
-    height: 64,
+    height: 60,
     borderTopWidth: 1,
     borderColor: "#eee",
   },
