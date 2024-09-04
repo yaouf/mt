@@ -36,16 +36,16 @@ export async function seed(knex: Knex): Promise<void> {
   await knex("notifications").del();
 
   // TODO: Uncomment this once tests work with preexisting notifications
-  await knex("notifications").insert([
-    {
-      time: "2022-01-01T00:00:00.000Z",
-      title: "Test Notification 1",
-      body: "This is a test notification.",
-      "Breaking News": true,
-      "University News": false,
-      "Metro": false,
-      url: "https://www.browndailyherald.com/test-notification-1",
-      status: "pending",
-    }]);
+  // await knex("notifications").insert([
+  //   {
+  //     time: "2022-01-01T00:00:00.000Z",
+  //     title: "Test Notification 1",
+  //     body: "This is a test notification.",
+  //     "Breaking News": true,
+  //     "University News": false,
+  //     "Metro": false,
+  //     url: "https://www.browndailyherald.com/test-notification-1",
+  //     status: "pending",
+  //   }]);
 
 }
