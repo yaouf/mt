@@ -1,66 +1,55 @@
 export function formatDates(publishedAt: string) {
-  const timeData = publishedAt.split(" ")[1];
-  var hour = timeData.split(":")[0];
-  var minute = timeData.split(":")[1];
-  var ampm = "";
+  // Parse the publishedAt string as a date object
+  const date = new Date(publishedAt + 'Z'); // Adding 'Z' indicates the input is in GMT
 
-  if (parseInt(hour) > 12) {
-    ampm = "p.m.";
-    hour = (parseInt(hour) - 12).toString();
-  } else {
-    ampm = "a.m.";
-  }
+  // Get the user's timezone offset in minutes and convert to hours
+  const timezoneOffsetMinutes = date.getTimezoneOffset();
+  const timezoneOffsetHours = timezoneOffsetMinutes / 60;
 
-  const dateData = publishedAt.split(" ")[0].split("-");
-  var year = dateData[0];
-  var month = dateData[1];
-  var day = dateData[2];
+  // Adjust the date to the user's local timezone
+  const localDate = new Date(date.getTime() - timezoneOffsetMinutes * 60000);
 
-  const month_dict: { [id: string]: string } = {
-    "01": "January",
-    "02": "February",
-    "03": "March",
-    "04": "April",
-    "05": "May",
-    "06": "June",
-    "07": "July",
-    "08": "August",
-    "09": "September",
-    "10": "October",
-    "11": "November",
-    "12": "December",
+  // Format the date components
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+    timeZoneName: 'short'
   };
 
-  return (
-    month_dict[month] +
-    " " +
-    day +
-    ", " +
-    year +
-    "  |  " +
-    hour +
-    ":" +
-    minute +
-    " " +
-    ampm +
-    " ET"
-  );
+  // Format the localDate to the required string format
+  const formattedDate = localDate.toLocaleDateString(undefined, options);
+
+  return formattedDate;
 }
+
+
+
+
+
 
 export function shortFormatDates(publishedAt: string) {
   const publishedDate = new Date(publishedAt);
+
+  // Manually adjust the time by -4 hours
+  publishedDate.setHours(publishedDate.getHours() - 4);
+
   const currentDate = new Date();
   const timeDifference = currentDate.getTime() - publishedDate.getTime();
   const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
   // Check if the date is within the last 24 hours
   if (timeDifference < oneDay) {
-    const hour = publishedDate.getHours();
+    let hour = publishedDate.getHours();
     const minute = publishedDate.getMinutes();
     const ampm = hour >= 12 ? "pm" : "am";
     const formattedHour = hour % 12 || 12; // Convert to 12-hour format
+    const formattedMinute = minute.toString().padStart(2, '0');
 
-    return `${formattedHour}:${minute.toString().padStart(2, '0')}${ampm} EDT`;
+    return `${formattedHour}:${formattedMinute}${ampm} EDT`;
   }
 
   // Otherwise, return formatted date
