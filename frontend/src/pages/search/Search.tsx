@@ -113,7 +113,7 @@ function Search({ navigation }: NavProp) {
               />
             )}
             ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}
-            style={{ marginTop: 16 }}
+            style={{ marginTop: 16, marginBottom: 186 }}
             initialNumToRender={8}
           />
       }
