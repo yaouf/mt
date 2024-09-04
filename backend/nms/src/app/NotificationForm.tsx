@@ -218,7 +218,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="slug"
           >
-            Article Slug
+            URL
           </label>
           <input
             type="text"
@@ -227,7 +227,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             value={newFormData.slug}
             onChange={handleSlugChange}
             className="border rounded-md px-3 py-2 w-full"
-            placeholder="Article slug"
+            placeholder="URL"
           />
         </div>
 
