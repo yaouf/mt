@@ -2,23 +2,24 @@ import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema
-    .createTable("devices", (table) => {
+    .createTable("devices", table => {
       table.uuid("id").primary();
       table.string("deviceType").notNullable();
       table.boolean("Breaking News").notNullable();
       table.boolean("University News").notNullable();
       table.boolean("Metro").notNullable();
-      table.string("expoPushToken").unique();
+      table.string("expoPushToken").unique().notNullable();
+      table.boolean("isPushEnabled").notNullable();
     })
     .then(() =>
-      knex.schema.createTable("users", (table) => {
+      knex.schema.createTable("users", table => {
         table.uuid("id").primary();
         table.string("email").unique().notNullable();
         table.string("name").notNullable();
       })
     )
     .then(() =>
-      knex.schema.createTable("notifications", (table) => {
+      knex.schema.createTable("notifications", table => {
         table.increments("id").primary();
         table.string("time").notNullable();
         table.string("title").notNullable();

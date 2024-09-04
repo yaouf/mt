@@ -24,7 +24,6 @@ export async function up(knex: Knex): Promise<void> {
         table.string("time").notNullable();
         table.string("title").notNullable();
         table.string("body").nullable();
-        table.string("slug").nullable();
         table.boolean("Breaking News").notNullable();
         table.boolean("University News").notNullable();
         table.boolean("Metro").notNullable();
