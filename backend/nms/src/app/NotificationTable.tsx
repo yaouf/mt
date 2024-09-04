@@ -38,10 +38,10 @@ const NotificationTable = ({
 
   return (
     <div className="container mx-auto p-5">
-       <div className="flex items-center mb-8">
-      <h1 className="text-3xl font-bold">Scheduled Notifications</h1>
-       <SignOutButton />
-       </div>
+      <div className="flex items-center mb-8">
+        <h1 className="text-3xl font-bold">Scheduled Notifications</h1>
+        <SignOutButton />
+      </div>
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
@@ -49,7 +49,7 @@ const NotificationTable = ({
             <th className="py-2 px-4 border-b">Title</th>
             <th className="py-2 px-4 border-b">Body</th>
             <th className="py-2 px-4 border-b">Tags</th>
-            <th className="py-2 px-4 border-b">Pathname</th>
+            <th className="py-2 px-4 border-b">URL</th>
             <th className="py-2 px-4 border-b">Status</th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
@@ -61,7 +61,15 @@ const NotificationTable = ({
               <td className="py-2 px-4 border-b">{notification.title}</td>
               <td className="py-2 px-4 border-b">{notification.body}</td>
               <td className="py-2 px-4 border-b">{formatTags(notification)}</td>
-              <td className="py-2 px-4 border-b">{notification.pathname}</td>
+              <td className="py-2 px-4 border-b">
+                <a
+                  href={notification.url}
+                  className="text-blue-500 hover:text-blue-700 underline"
+                >
+                  {notification.url}
+                </a>
+              </td>
+              <td className="py-2 px-4 border-b">{notification.url}</td>
               <td className="py-2 px-4 border-b">{notification.status}</td>
               <td className="py-2 px-4 border-b">
                 <button

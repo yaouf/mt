@@ -13,6 +13,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     slug: "",
     mediaType: "",
     publicationDate: "",
+    domain: "Normal"
   });
 
   const handleInputChange = (e) => {
@@ -66,6 +67,15 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
+   const handleDomainChange = (e) => {
+    const { value } = e.target;
+
+   setNewFormData((prevData) => ({
+    ...prevData,
+    domain: value
+   }));
+  };
+
   const handleScheduleNotification = async () => {
     try {
       console.log("newNotification", newFormData);
@@ -91,6 +101,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           slug: "",
           mediaType: "",
           publicationDate: "",
+          domain: "Normal"
         });
       } else {
         console.error("Error scheduling notification");
@@ -258,6 +269,37 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             <option value="gallery">Gallery</option>
             <option value="multimedia">Multimedia</option>
           </select>
+        </div>
+
+        {/* Radio buttons */}
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Domain
+          </label>
+          <div>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="options"
+                value="https://www.browndailyherald.com"
+                checked={newFormData.domain === "Normal"}
+                onChange={handleDomainChange}
+                className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
+              />
+              <span className="ml-2">Normal</span>
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="radio"
+                name="options"
+                value="https://www.projects.browndailyherald.com"
+                checked={newFormData.domain === "Projects"}
+                onChange={handleDomainChange}
+                className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
+              />
+              <span className="ml-2">Projects</span>
+            </label>
+          </div>
         </div>
 
         {/* Button to schedule notification */}

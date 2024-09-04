@@ -12,7 +12,7 @@ const notificationQueue = new Bull(
 // Send notifications to corresponding devices
 notificationQueue.process(async job => {
   // This is the job data that was passed to `notificationQueue.add()`
-  const { jobId, time, title, body, tags, pathname } = job.data;
+  const { jobId, time, title, body, tags, url } = job.data;
   console.log("tags", tags);
   // Fetch all devices that have subscribed to the tags
   let devices: Set<Device> = new Set<Device>();
@@ -72,7 +72,7 @@ notificationQueue.process(async job => {
       sound: "default",
       title: title,
       body: body,
-      data: { pathname },
+      data: { url },
     });
 
     // The Expo push notification service accepts batches of notifications so

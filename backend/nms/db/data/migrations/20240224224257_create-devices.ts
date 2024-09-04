@@ -26,7 +26,7 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("Breaking News").notNullable();
         table.boolean("University News").notNullable();
         table.boolean("Metro").notNullable();
-        table.string("pathname").nullable();
+        table.string("url").nullable();
         table.string("status").notNullable();
       })
     );
