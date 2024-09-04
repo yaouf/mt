@@ -115,6 +115,7 @@ function ArticleScreen({
           </View> */}
           {/* </View> */}
         </View>
+        <View style={{height: 80}}></View>
       </ScrollView>
       <BottomBar
         published_at={article.published_at}
