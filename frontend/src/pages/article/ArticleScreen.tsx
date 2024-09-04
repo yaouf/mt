@@ -78,7 +78,7 @@ function ArticleScreen({
               {article.authors.map((author, i) => (
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.push("Staff", { slug: author.slug })
+                    navigation.navigate("Staff", { slug: author.slug })
                   }
                 >
                   <Text style={articleStyles.author}>
