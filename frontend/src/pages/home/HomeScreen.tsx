@@ -6,7 +6,7 @@ import { Article } from "src/types/data";
 import Divider from "src/components/Divider";
 import { useScrollToTop } from "@react-navigation/native";
 import SmallHorzGroup from "./sections/SmallHorzGroup";
-import AllSmallGroup from "./sections/AllSmallGroup";
+import OpinionsGroup from "./sections/OpinionsGroup";
 import * as SplashScreen from "expo-splash-screen";
 import { fetchSectionHome } from "src/code/fetchContent";
 
@@ -92,7 +92,7 @@ function HomeScreen({ navigation }: NavProp) {
     {
       id: 4,
       component: (
-        <AllSmallGroup
+        <OpinionsGroup
           navigation={navigation}
           slug="opinions"
           count={3}
