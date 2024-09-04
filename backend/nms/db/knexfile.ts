@@ -11,6 +11,20 @@ console.log(rootDir);
 const startPath = rootDir.endsWith("db") ? "../" : "";
 
 const config: { [key: string]: Knex.Config } = {
+  test: {
+    client: "sqlite3",
+    connection: {
+      filename:
+        startPath + "dist/dev.sqlite3",
+    },
+    useNullAsDefault: true,
+    seeds: {
+      directory: "./data/seeds",
+    },
+    migrations: {
+      directory: "./data/migrations",
+    },
+  },
   development: {
     client: "sqlite3",
     connection: {

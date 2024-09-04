@@ -1,6 +1,6 @@
 import { Knex } from "knex";
 import { v4 as uuidv4 } from "uuid";
-
+// TODO: rename this file to 001.ts
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex("devices").del();
@@ -32,4 +32,20 @@ export async function seed(knex: Knex): Promise<void> {
       expoPushToken: "ExponentPushToken[IIDil0LpnR0mZj4irAdv_x]",
     },
   ]);
+
+  await knex("notifications").del();
+
+  // TODO: Uncomment this once tests work with preexisting notifications
+//   await knex("notifications").insert([
+//     {
+//       time: "2022-01-01T00:00:00.000Z",
+//       title: "Test Notification 1",
+//       body: "This is a test notification.",
+//       "Breaking News": true,
+//       "University News": false,
+//       "Metro": false,
+//       pathname: "/test-notification-1",
+//       status: "pending",
+//     }]);
+
 }

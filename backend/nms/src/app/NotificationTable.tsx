@@ -1,3 +1,4 @@
+import SignOutButton from "./SignOut";
 
 const NotificationTable = ({
   scheduledNotifications,
@@ -36,8 +37,11 @@ const NotificationTable = ({
   };
 
   return (
-    <div className="container mx-auto p-8">
-      <h1 className="text-3xl font-bold mb-8">Scheduled Notifications</h1>
+    <div className="container mx-auto p-5">
+       <div className="flex items-center mb-8">
+      <h1 className="text-3xl font-bold">Scheduled Notifications</h1>
+       <SignOutButton />
+       </div>
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>

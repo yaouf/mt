@@ -12,7 +12,7 @@ type ResponseData = {
 export default async function addNotification(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
-) {
+) { 
   try {
     // Assuming the request body contains the notification data
     // if a string, parse it

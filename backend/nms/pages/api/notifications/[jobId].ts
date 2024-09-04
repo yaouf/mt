@@ -22,7 +22,7 @@ export default async function getNotification(
     const jobId = parseInt(req.query.jobId as string);
     if(isNaN(jobId)) {
       return res
-        .status(400)
+        .status(404)
         .json({
           message:
             "Invalid jobId. Please provide a valid jobId like so: /api/notifications/1",
