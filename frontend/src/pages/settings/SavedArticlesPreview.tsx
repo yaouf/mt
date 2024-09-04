@@ -29,12 +29,13 @@ function SavedArticlesPreview({ navigation }: NavProp) {
           {Object.keys(savedArticles)
             .slice(0, 2)
             .map((uuid, i) => (
+              <View style={{marginTop: 10}}>
               <FavArticle
                 slug={savedArticles[uuid].slug}
                 published_at={savedArticles[uuid].date}
                 navigation={navigation}
                 key={`saved-article-card-${i}`}
-              />
+              /></View>
             ))}
           {Object.keys(savedArticles).length > 2 && (
             <TouchableOpacity
