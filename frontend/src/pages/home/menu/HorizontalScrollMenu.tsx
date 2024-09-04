@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,11 +12,19 @@ import { menuStyles } from "src/styles/sectionMenu";
 import { MenuContext } from "../HomeStackScreen";
 import { menuItems } from "src/code/setup";
 import { setAsync } from "src/code/helpers";
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
     useContext(MenuContext);
+  // Reset currSection to "all" when the Home tab is focused
+
+  // Reset currSection to "all" when the HomeScreen is focused
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setCurrSection("all");
+  //   }, [setCurrSection])
+  // );
 
   if (!sectionMenu) {
     setSectionMenu(menuItems);
@@ -24,7 +32,11 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
   }
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{borderBottomWidth: 1, borderColor: "#ccc"}}>
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
+    >
       {/* <TouchableOpacity
         key={1}
         style={menuStyles.menuItem}
@@ -61,7 +73,9 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
             style={menuStyles.menuItem}
             onPress={() => {
               navigation.push("Section", { slug: menuItem.slug });
+
               setCurrSection(menuItem.slug);
+              console.log("this is my current slug", menuItem.slug);
             }}
           >
             <Text style={menuStyles.menuItemText}>{menuItem.title}</Text>
