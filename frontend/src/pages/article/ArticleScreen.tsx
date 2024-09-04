@@ -99,6 +99,7 @@ function ArticleScreen({
 
           {/* Article text */}
           <SplitArticle content={article.content} />
+
           {/* Read more section, with small cards */}
           {/* <Divider />
           <Text style={articleStyles.readMoreHeading}>RELATED ARTICLES</Text>
