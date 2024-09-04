@@ -8,7 +8,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { shortFormatDates } from "../../code/formatDates";
+import { formatDates } from "../../code/formatDates";
 import {
   font1,
   font2,
@@ -31,7 +31,7 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
   //   cardStyles = { ...styles.card, ...{ width: specialWidth } };
   // }
 
-  let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
+  let cardSize: StyleProp<ViewStyle> = { minWidth: "100%",};
   if (specialWidth !== undefined) {
     cardSize = { width: specialWidth };
   }
@@ -55,7 +55,7 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
           )}
             <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end"}}>
           <Text style={styles.published}>
-                  {shortFormatDates(article.published_at)}
+                  {formatDates(article.published_at)}
           </Text>
           </View>
           </View>
@@ -114,8 +114,8 @@ const styles = StyleSheet.create({
     // width: 170,
     // width: "48%",
     flexDirection: "column",
-    alignItems: "flex-start",
-    borderRadius: 0,
+    alignItems: "stretch",
+    borderWidth: 0,
     backgroundColor: "#FFF",
     // shadowColor: varTextColor,
     // shadowOffset: {
@@ -185,28 +185,10 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     marginBottom: 12, 
   },
-
-  option: {
-    backgroundColor: "rgba(237, 237, 237, 0.80)",
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    alignSelf: "stretch",
-    paddingVertical: 11,
-    paddingHorizontal: 16,
-    padding: 8,
-    fontSize: 16,
-    borderBottomColor: "rgba(60, 60, 67, 0.36)",
-    borderBottomWidth: 0.5,
-  },
   publishedSection: {
     display: "flex",
     alignItems: "center",
     gap: 4,
-  },
-  options: {
-    width: 16,
-    height: 16,
   },
   line: {
     width: 254,

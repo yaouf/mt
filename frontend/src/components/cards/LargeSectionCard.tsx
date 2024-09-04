@@ -8,7 +8,7 @@ import {
   import ShowContextMenu from "./ShowContextMenu";
   import { CardProps } from "src/types/navStacks";
   import { Tag } from "src/types/data";
-  import { shortFormatDates } from "../../code/formatDates";
+  import { formatDates } from "../../code/formatDates";
   import {
     font1,
     font2,
@@ -61,7 +61,7 @@ import {
               <View style={styles.bottom}>
                 <View style={styles.publishedSection}>
                   <Text style={styles.published}>
-                    {shortFormatDates(article.published_at)}
+                    {formatDates(article.published_at)}
                   </Text>
                 </View>
               </View>
@@ -107,7 +107,7 @@ import {
       width: "100%",
       paddingBottom: 8,
       flexDirection: "column",
-      alignItems: "flex-start",
+      alignItems: "stretch",
       borderRadius: 0,
       backgroundColor: "#FFF",
       // shadowColor: varTextColor,

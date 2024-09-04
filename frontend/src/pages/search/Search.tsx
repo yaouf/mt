@@ -118,6 +118,7 @@ function Search({ navigation }: NavProp) {
           />
       }
       </View>
+      
     </View>
   );
 }

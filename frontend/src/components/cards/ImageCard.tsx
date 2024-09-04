@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     display: "flex",
     width: 96,
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "stretch",
     shadowColor: varTextColor,
     shadowOffset: {
       width: 0,
