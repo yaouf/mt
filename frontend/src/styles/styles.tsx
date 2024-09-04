@@ -63,7 +63,9 @@ export const text = StyleSheet.create({
     color: varTextColor,
     fontWeight: "800",
     fontSize: 20,
-    fontFamily: font1
+    fontFamily: "roboto",
+    paddingTop: 10
+
   },
   sectionHeader2: {
     // with added padding for settings

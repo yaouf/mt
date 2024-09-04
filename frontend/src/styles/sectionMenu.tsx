@@ -5,8 +5,8 @@ export const menuStyles = StyleSheet.create({
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 15,
-    borderBottomColor: "black",
+    paddingVertical: 4,
+    borderBottomColor: "white",
     borderBottomWidth: 5,
   },
   rowItem: {
@@ -52,6 +52,7 @@ export const menuStyles = StyleSheet.create({
     justifyContent: "center",
     height: 43,
     marginTop: 4,
+    borderColor: "white"
   },
   menuItemText: {
     fontSize: 14,
