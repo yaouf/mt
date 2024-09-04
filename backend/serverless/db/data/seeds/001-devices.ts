@@ -9,7 +9,7 @@ export async function seed(knex: Knex): Promise<void> {
   await knex("devices").insert([
     {
       id: uuidv4(),
-      deviceType: "iOS",
+      deviceType: "ios",
       "Breaking News": true,
       "University News": false,
       "Metro": false,
@@ -18,7 +18,7 @@ export async function seed(knex: Knex): Promise<void> {
     },
     {
       id: uuidv4(),
-      deviceType: "iOS",
+      deviceType: "ios",
       "Breaking News": true,
       "University News": false,
       "Metro": false,
