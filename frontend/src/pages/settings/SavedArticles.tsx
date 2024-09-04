@@ -17,7 +17,9 @@ function SavedArticles({ navigation }: NavProp) {
     <View style={baseStyles.container}>
       <FlatList
         data={savedArticleArray}
+        style={{height: "100%"}}
         keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => <View style={{height: 10}} />}
         renderItem={({ item }) => (
           <FavArticle
             slug={item.slug}
