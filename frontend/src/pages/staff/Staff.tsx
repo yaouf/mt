@@ -71,7 +71,7 @@ function Staff({
               {author.bio
                 .replace("<p>", "")
                 .replace("</p>", "")
-                .replace("&amp;", "&")}
+                .replaceAll("&amp;", "&")}
             </Text>
           </View>
         )}

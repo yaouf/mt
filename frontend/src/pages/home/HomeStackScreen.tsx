@@ -10,13 +10,17 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
+  useCallback,
   useEffect,
   useState,
 } from "react";
 import { getAsync } from "src/code/helpers";
 import { menuItems } from "src/code/setup";
 import { MenuItem } from "src/types/other";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  useFocusEffect,
+} from "@react-navigation/native";
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -45,6 +49,10 @@ function HomeStackScreen({ navigation, route }) {
       navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" } });
     } else {
       navigation.getParent()?.setOptions({ tabBarStyle: { display: "flex" } });
+    }
+    if (routeName === "HomeScreen") {
+      navigation.getParent()?.setOptions({ tabBarActiveTintColor: "red" });
+      setCurrSection("all");
     }
   }, [navigation, route]);
 
