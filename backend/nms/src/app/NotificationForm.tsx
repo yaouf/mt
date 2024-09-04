@@ -101,7 +101,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
   };
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="container mx-auto px-8 py-2">
       <h2 className="text-2xl font-bold mb-4">Create a New Notification</h2>
       <form>
         {/* Input for time */}
@@ -264,7 +264,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         <button
           type="button"
           onClick={handleScheduleNotification}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md transition transform duration-200 hover:bg-blue-600 hover:scale-105"
         >
           Schedule Notification
         </button>
