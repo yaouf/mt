@@ -13,7 +13,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     slug: "",
     mediaType: "",
     publicationDate: "",
-    domain: "Normal"
+    domain: "https://www.browndailyherald.com"
   });
 
   const handleInputChange = (e) => {
@@ -101,7 +101,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           slug: "",
           mediaType: "",
           publicationDate: "",
-          domain: "Normal"
+          domain: "https://www.browndailyherald.com"
         });
       } else {
         console.error("Error scheduling notification");
@@ -282,7 +282,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 type="radio"
                 name="options"
                 value="https://www.browndailyherald.com"
-                checked={newFormData.domain === "Normal"}
+                checked={newFormData.domain === "https://www.browndailyherald.com"}
                 onChange={handleDomainChange}
                 className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
               />
@@ -293,7 +293,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 type="radio"
                 name="options"
                 value="https://www.projects.browndailyherald.com"
-                checked={newFormData.domain === "Projects"}
+                checked={newFormData.domain === "https://www.projects.browndailyherald.com"}
                 onChange={handleDomainChange}
                 className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
               />
