@@ -39,8 +39,8 @@ export const baseStyles = StyleSheet.create({
 export const layout = StyleSheet.create({
   hStack: { flexDirection: "row", columnGap: 16 },
   vStack: {
-    rowGap: 16,
-    marginTop: 16,
+    rowGap: 0,
+    marginTop: 0,
     overflow: "visible"
   },
   grid: {
@@ -48,8 +48,8 @@ export const layout = StyleSheet.create({
     flexWrap: "wrap",
     columnGap: 12,
     justifyContent: "space-between",
-    rowGap: 16,
-    marginTop: 16,
+    rowGap: 0,
+    marginTop: 0,
     overflow: "visible",
   },
 });
@@ -63,9 +63,8 @@ export const text = StyleSheet.create({
     color: varTextColor,
     fontWeight: "800",
     fontSize: 20,
-    fontFamily: "roboto",
+    fontFamily: font3
     paddingTop: 10
-
   },
   sectionHeader2: {
     // with added padding for settings
@@ -108,7 +107,7 @@ export const text = StyleSheet.create({
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "600",
-    fontSize: 12,
+    fontSize: 16,
     marginBottom: 8,
     marginTop: 8,
   },
@@ -117,7 +116,7 @@ export const text = StyleSheet.create({
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "400",
-    fontSize: 12,
+    fontSize: 14,
     overflow: "hidden",
     maxWidth: "100%",
   },

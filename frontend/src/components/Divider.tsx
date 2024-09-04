@@ -12,7 +12,7 @@ function Divider({ marginTop, marginBottom, color }: DividerProps) {
     <View style={{width: "100%", display: "flex", alignItems : "center"}}>
     <View
       style={{
-        width: "95%",
+        width: "100%",
         height: 1,
         backgroundColor: color !== undefined ? color : "#ddd",
         marginVertical: 20,

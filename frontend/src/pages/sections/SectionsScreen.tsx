@@ -56,7 +56,7 @@ function SectionsScreen({
     } else if (index === 1 || (cards === "small" && (index + 1) % 2 === 0)) {
       cards = "horizontal";
       return (
-        <View style={layout.grid}>
+        <View style={layout.vStack}>
           {section.slice(index, index + 2).map((article, i) => (
             <View>
             <SmallCard

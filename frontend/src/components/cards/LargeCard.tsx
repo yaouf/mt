@@ -114,9 +114,9 @@ const styles = StyleSheet.create({
   card: {
     display: "flex",
     width: "100%",
-    paddingBottom: 8,
+    paddingBottom: 0,
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "stretch",
     borderRadius: 0,
     backgroundColor: "#FFF",
     // shadowColor: varTextColor,

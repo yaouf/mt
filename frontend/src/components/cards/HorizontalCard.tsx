@@ -6,7 +6,7 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
-import { shortFormatDates } from "../../code/formatDates";
+import { formatDates } from "../../code/formatDates";
 import {
   font1,
   font2,
@@ -51,7 +51,7 @@ function HorizontalCard({ article, navigation }: CardProps) {
                   {article.headline}
                 </Text>
                 <Text style={styles.published}>
-                  {shortFormatDates(article.published_at)}
+                  {formatDates(article.published_at)}
                 </Text>
                 </View>
             </View>

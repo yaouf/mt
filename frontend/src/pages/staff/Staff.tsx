@@ -6,6 +6,7 @@ import { fetchAuthor } from "src/code/fetchContent";
 import Divider from "src/components/Divider";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
+import { articleStyles } from "src/styles/article";
 import { Article, Author, Media } from "src/types/data";
 import { SettingsStackProps } from "src/types/navStacks";
 
@@ -38,7 +39,7 @@ function Staff({
             flexDirection: "row",
             gap: 8,
             alignItems: "center",
-            marginBottom: 21,
+            marginBottom: 14,
             marginTop: 24,
           }}
         >
@@ -53,7 +54,7 @@ function Staff({
             {author.tagline !== "" && (
               <Text
                 style={{
-                  ...text.textSmall,
+                  ...text.textMedium,
                   fontStyle: "italic",
                   marginTop: 4,
                 }}
@@ -67,7 +68,7 @@ function Staff({
         {author.bio !== "" && (
           <View>
             <Divider marginTop={0} marginBottom={8} />
-            <Text style={{ ...text.textSmall, marginTop: 8 }}>
+            <Text style={{ ...articleStyles.articleBody, marginTop: 8 }}>
               {author.bio
                 .replace("<p>", "")
                 .replace("</p>", "")
@@ -79,7 +80,7 @@ function Staff({
 
       {articles.length > 0 && (
         <View>
-          <Divider marginTop={18} marginBottom={8} />
+          <Divider marginTop={10} marginBottom={10} />
           <Text style={text.sectionHeader1}>Recent Articles</Text>
           <View style={layout.vStack}>
             {articles.map((article: Article, i) => (
