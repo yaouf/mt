@@ -69,7 +69,6 @@ const NotificationTable = ({
                   {notification.url}
                 </a>
               </td>
-              <td className="py-2 px-4 border-b">{notification.url}</td>
               <td className="py-2 px-4 border-b">{notification.status}</td>
               <td className="py-2 px-4 border-b">
                 <button
