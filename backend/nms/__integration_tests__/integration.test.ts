@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import * as admin from "firebase-admin";
+import serviceAccount from "../secrets/serviceAccountKey.json";
 
 test.beforeEach(async ({ page }) => {
     // Navigate to the page
@@ -13,17 +14,6 @@ test.beforeEach(async ({ page }) => {
     // wait 1 second for buttons to load
     await page.waitForTimeout(1000);
 });
-// const thing = fs.readFileSync('secrets/serviceAccountKey.json', 'utf8');
-// console.log("JSON: ", thing);
-// const stringJson = JSON.parse(thing);
-// let json;
-// if (typeof stringJson == 'string') {
-//     json = JSON.parse(stringJson);
-// } else {
-//   json = stringJson;
-// }
-// const serviceAccount = json;
-import serviceAccount from "../secrets/serviceAccountKey.json";
 
 test.beforeAll(async () => {
   // Initialize Firebase Admin with emulator config
@@ -91,7 +81,7 @@ test("Test Notification Table Header", async ({ page }) => {
   const timeHeaderExists = await page.isVisible('th:text("Time")');
   const titleHeaderExists = await page.isVisible('th:text("Title")');
   const bodyHeaderExists = await page.isVisible('th:text("Body")');
-  const pathnameHeaderExists = await page.isVisible('th:text("Pathname")');
+  const urlHeaderExists = await page.isVisible('th:text("URL")');
   const tagsHeaderExists = await page.isVisible('th:text("Tags")');
   const statusHeaderExists = await page.isVisible('th:text("Status")');
   const actionsHeaderExists = await page.isVisible('th:text("Actions")');
@@ -100,7 +90,7 @@ test("Test Notification Table Header", async ({ page }) => {
   expect(timeHeaderExists).toBeTruthy();
   expect(titleHeaderExists).toBeTruthy();
   expect(bodyHeaderExists).toBeTruthy();
-  expect(pathnameHeaderExists).toBeTruthy();
+  expect(urlHeaderExists).toBeTruthy();
   expect(tagsHeaderExists).toBeTruthy();
   expect(statusHeaderExists).toBeTruthy();
   expect(actionsHeaderExists).toBeTruthy();

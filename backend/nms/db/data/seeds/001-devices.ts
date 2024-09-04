@@ -44,7 +44,7 @@ export async function seed(knex: Knex): Promise<void> {
 //       "Breaking News": true,
 //       "University News": false,
 //       "Metro": false,
-//       pathname: "/test-notification-1",
+//       url: "/test-notification-1",
 //       status: "pending",
 //     }]);
 
