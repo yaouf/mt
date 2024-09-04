@@ -63,7 +63,7 @@ export const text = StyleSheet.create({
     color: varTextColor,
     fontWeight: "800",
     fontSize: 20,
-    fontFamily: font3
+    fontFamily: font3,
     paddingTop: 10
   },
   sectionHeader2: {
