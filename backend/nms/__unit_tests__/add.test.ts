@@ -4,7 +4,7 @@ import * as pagesHandlerGetOne from '../pages/api/notifications/[jobId]';
 import * as pagesHandler from '../pages/api/notifications/add';
 import * as pagesHandlerDelete from '../pages/api/notifications/delete';
 import * as pagesHandlerGetAll from '../pages/api/notifications/index';
-import notificationQueue from '../pages/queue/queue';
+import notificationQueue from '../pages/api/queue/queue';
 
 describe('adding, getting, and deleting notifications', () => {
 

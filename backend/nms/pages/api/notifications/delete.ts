@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-import notificationQueue from "../../queue/queue";
+import notificationQueue from "../queue/queue";
 
 type ResponseData = {
   message: string;

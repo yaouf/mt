@@ -1,6 +1,6 @@
 import Bull from "bull";
 import Expo, { ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
-import db from "../../dist/data/db-config";
+import db from "../../../dist/data/db-config";
 import { Device } from "../types/types";
 
 // Connect to a local Redis instance. For production, configure the connection accordingly.
