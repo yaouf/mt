@@ -9,10 +9,10 @@
     "lint": "next lint",
     "build:db": "cd db && npm run update",
     "update:db": "cd db && npm run update",
-    "test": "npm run update:db && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
-    "test:pw": "firebase emulators:start --project bdh-mobile-app---dev & (npm run update:db && npx playwright test)",
-    "test:all": "npm run test:pw && npm run test",
-    "test:all:debug": "npm run test:pw -- --debug && npm run test"
+    "test": "NODE_ENV=test npm run update:db && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
+    "test:pw": "NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev & (NODE_ENV=test npm run update:db && npx playwright test)",
+    "test:all": "NODE_ENV=test npm run test:pw && npm run test",
+    "test:all:debug": "NODE_ENV=test npm run test:pw -- --debug && npm run test"
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.5",
