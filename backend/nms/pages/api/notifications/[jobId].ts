@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
+import { firewall } from "./firewall";
 
 type ResponseData = {
   message: string;
@@ -15,6 +16,13 @@ export default async function getNotification(
   req: NextApiRequest,
   res: NextApiResponse<Notification[] | ResponseData>,
 ) {
+  try {
+    await firewall(req, res);
+  } catch (error) {
+    // If firewall check fails, return 403 Forbidden
+    return res.status(403).json({ message: 'Access denied' });
+  }
+  
   try {
     // get path param
     console.log("query", req.query);

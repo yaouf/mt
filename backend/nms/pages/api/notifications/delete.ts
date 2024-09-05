@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 import notificationQueue from "../queue/queue";
+import { firewall } from "./firewall";
 
 type ResponseData = {
   message: string;
@@ -14,6 +15,13 @@ export default async function deleteNotification(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
+  try {
+    await firewall(req, res);
+  } catch (error) {
+    // If firewall check fails, return 403 Forbidden
+    return res.status(403).json({ message: 'Access denied' });
+  }
+  
   try {
     // Assuming the request body contains the notification data
     // if a string, parse it
