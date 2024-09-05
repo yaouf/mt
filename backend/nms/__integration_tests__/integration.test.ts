@@ -13,6 +13,9 @@ test.beforeEach(async ({ page }) => {
     await page.click('button:text("Login")');
     // wait 1 second for buttons to load
     await page.waitForTimeout(1000);
+
+    // Toggle see sent notifications. 
+    await page.click('button:text("See Sent")');
 });
 
 test.beforeAll(async () => {

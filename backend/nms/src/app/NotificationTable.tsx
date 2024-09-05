@@ -1,9 +1,13 @@
+import { useState } from "react";
 import SignOutButton from "./SignOut";
+import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
 
 const NotificationTable = ({
   scheduledNotifications,
   setScheduledNotifications,
 }) => {
+  const [isSentVisible, setIsSentVisible] = useState(false);
+
   const onDeleteNotification = async (notification) => {
     try {
       console.log("Deleting notification:", notification);
@@ -42,6 +46,7 @@ const NotificationTable = ({
         <h1 className="text-3xl font-bold">Scheduled Notifications</h1>
         <SignOutButton />
       </div>
+      <ToggleSentVisibleButton isSentVisible={isSentVisible} setIsSentVisible={setIsSentVisible} />
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
@@ -55,7 +60,7 @@ const NotificationTable = ({
           </tr>
         </thead>
         <tbody>
-          {scheduledNotifications.map((notification) => (
+          {scheduledNotifications.filter(notification => isSentVisible ? true : notification.status !== "sent").map((notification) => (
             <tr key={notification.id}>
               <td className="py-2 px-4 border-b">{notification.time}</td>
               <td className="py-2 px-4 border-b">{notification.title}</td>

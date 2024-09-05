@@ -6,7 +6,7 @@ import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
 export default function Home() {
-  const [scheduledNotifications, setScheduledNotifications] = useState([] as any[]);
+  const [scheduledNotifications, setScheduledNotifications] = useState([] as any[]);    
     useEffect(() => {
     const fetchNotifications = async () => {
       try {
