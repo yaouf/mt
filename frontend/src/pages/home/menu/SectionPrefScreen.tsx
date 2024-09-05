@@ -42,7 +42,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
 
   const renderItem = ({ item, drag }: RenderItemParams<MenuItem>) => {
     return (
-      <TouchableOpacity onLongPress={drag} style={menuStyles.rowItem}>
+      <TouchableOpacity onLongPress={drag} style={menuStyles.rowItem} delayLongPress={150}>
         <TouchableOpacity onPress={() => remove(item)}>
           <Feather
             name="minus-circle"
