@@ -5,6 +5,7 @@
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
+    "scheme": "browndailyherald", // Custom scheme for ios,
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -16,7 +17,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.browndailyherald.thebrowndailyherald"
+      "bundleIdentifier": "com.browndailyherald.thebrowndailyherald",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["browndailyherald"] // Custom scheme for iOS
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
