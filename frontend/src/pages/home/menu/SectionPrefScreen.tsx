@@ -1,18 +1,17 @@
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { useContext, useState } from "react";
-import { Text, View, TouchableOpacity, ScrollView } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Text, TouchableOpacity, View } from "react-native";
 import DraggableFlatList, {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
-import { varRed, text, varGray1, baseStyles } from "src/styles/styles";
-import { MaterialIcons } from "@expo/vector-icons";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { NavProp } from "src/types/navStacks";
-import { Feather } from "@expo/vector-icons";
-import { menuStyles } from "src/styles/sectionMenu";
-import { MenuContext } from "../HomeStackScreen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { setAsync } from "src/code/helpers";
+import { menuStyles } from "src/styles/sectionMenu";
+import { baseStyles, text, varGray1, varRed } from "src/styles/styles";
+import { NavProp } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
+import { MenuContext } from "../HomeStackScreen";
 
 function SectionPrefScreen({ navigation }: NavProp) {
   const { original, sectionMenu, setSectionMenu } = useContext(MenuContext);
@@ -152,7 +151,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
       {/* Instead of ScrollView, you can directly have a View or FlatList */}
       <View style={menuStyles.contentContainer}>
         <Text style={[{ marginBottom: 12 }, text.sectionHeader1]}>
-          FAVORITE SECTIONS
+          Favorite Sections
         </Text>
         <Text style={menuStyles.descriptionText}>
           Add and reorder topics to customize the menu on your Top Stories page.
@@ -180,7 +179,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
             <Text
               style={[{ marginBottom: 12, marginTop: 16 }, text.sectionHeader1]}
             >
-              REMOVED SECTIONS
+              Removed Sections
             </Text>
           )}
           {removed.map((item) => (
