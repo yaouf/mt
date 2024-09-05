@@ -11,6 +11,16 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const fullStack = createStackNavigator();
 
+const linking = {
+  prefixes: ['com.browndailyherald.thebrowndailyherald"://', 'https://browndailyherald.com'],  // custom app scheme and web domain
+  config: {
+    screens: {
+      HomeScreen: 'home',
+      Article: 'article/:slug',  // handles the article slug from deep link
+    },
+  },
+};
+
 const MyTheme = {
   ...DefaultTheme,
   colors: {
@@ -65,7 +75,7 @@ function BdhApp() {
 
   return (
     <NotificationProvider>
-      <NavigationContainer theme={MyTheme}>
+      <NavigationContainer theme={MyTheme} linking={linking}>
         <SafeAreaProvider>
           <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
             {hasOnboarded ? (
