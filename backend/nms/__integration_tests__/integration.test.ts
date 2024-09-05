@@ -109,7 +109,7 @@ test("Test Notification Form", async ({ page }) => {
   await page.click("main");
 
   await page.selectOption("#mediaType", "article");
-  await page.getByTestId('breaking-news-uid').check();
+  await page.getByRole("checkbox", { name: "Breaking News" }).check();
 
   // Submit the form
   const res = await page
@@ -138,7 +138,7 @@ test("Test Notification Deletion", async ({ page }) => {
   await page.click("main");
 
   await page.selectOption("#mediaType", "article");
-  await page.getByTestId('breaking-news-uid').check();
+  await page.getByRole("checkbox", { name: "Breaking News" }).check();
 
   // Submit the form
   const res = await page

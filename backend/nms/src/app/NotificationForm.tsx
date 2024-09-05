@@ -113,7 +113,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   return (
     <div className="container mx-auto px-8 py-2">
-      <h2 className="text-2xl font-bold mb-4">Create a New Notification by Slug</h2>
+      <h2 className="text-2xl font-bold mb-4">Create a New Notification</h2>
       <form>
         {/* Input for time */}
         <div className="mb-4">
@@ -180,7 +180,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
               <input
                 type="checkbox"
                 name="tags"
-                data-testid="breaking-news-uid"
                 value="Breaking News"
                 checked={newFormData.tags.includes("Breaking News")}
                 onChange={handleCheckboxChange}
@@ -192,7 +191,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
               <input
                 type="checkbox"
                 name="tags"
-                data-testid="university-news-uid"
                 value="University News"
                 checked={newFormData.tags.includes("University News")}
                 onChange={handleCheckboxChange}
@@ -205,7 +203,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 type="checkbox"
                 name="tags"
                 value="Metro"
-                 data-testid="metro-uid"
                 checked={newFormData.tags.includes("Metro")}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"

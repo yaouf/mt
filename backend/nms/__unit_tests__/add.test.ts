@@ -1,7 +1,7 @@
 // Import the handler under test and its config from the pages/api directory
 import { testApiHandler } from 'next-test-api-route-handler';
 import * as pagesHandlerGetOne from '../pages/api/notifications/[jobId]';
-import * as pagesHandlerAdd from '../pages/api/notifications/add';
+import * as pagesHandler from '../pages/api/notifications/add';
 import * as pagesHandlerDelete from '../pages/api/notifications/delete';
 import * as pagesHandlerGetAll from '../pages/api/notifications/index';
 import notificationQueue from '../pages/api/queue/queue';
@@ -27,7 +27,7 @@ it('creates notification', async () => {
   //   const publicationDate = data.publicationDate;
 
   await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerAdd,
+    pagesHandler,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -79,7 +79,7 @@ it('gets all notifications after adding first', async () => {
 it('adds second notification', async () => {
 
   await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerAdd,
+    pagesHandler,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
