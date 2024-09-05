@@ -1,18 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const NotificationForm = ({ setScheduledNotifications }) => {
+const NotificationFormId = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
     time: "",
     title: "",
     body: "",
     tags: [] as string[],
-    slug: "",
-    mediaType: "",
-    publicationDate: "",
+    uid: "",
     domain: "https://www.browndailyherald.com"
   });
 
@@ -39,33 +36,14 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }
   };
 
-  const handleSlugChange = (e) => {
+  const handleUidChange = (e) => {
     const { value } = e.target;
     setNewFormData((prevData) => ({
       ...prevData,
-      slug: value,
+      uid: value,
     }));
   };
 
-  const handleMediaTypeChange = (e) => {
-    const { value } = e.target;
-    setNewFormData((prevData) => ({
-      ...prevData,
-      mediaType: value,
-    }));
-  };
-
-  const handlePublicationDateChange = (date) => {
-    // Format the date as "YYYY/MM"
-    const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}`;
-
-    setNewFormData((prevData) => ({
-      ...prevData,
-      publicationDate: formattedDate,
-    }));
-  };
 
    const handleDomainChange = (e) => {
     const { value } = e.target;
@@ -98,9 +76,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           title: "",
           body: "",
           tags: [],
-          slug: "",
-          mediaType: "",
-          publicationDate: "",
+          uid: "",
           domain: "https://www.browndailyherald.com"
         });
       } else {
@@ -113,19 +89,19 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   return (
     <div className="container mx-auto px-8 py-2">
-      <h2 className="text-2xl font-bold mb-4">Create a New Notification by Slug</h2>
+      <h2 className="text-2xl font-bold mb-4">Create a New Notification by UID</h2>
       <form>
         {/* Input for time */}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="time"
+            htmlFor="time-uid"
           >
             Time
           </label>
           <input
             type="datetime-local"
-            id="time"
+            id="time-uid"
             name="time"
             value={newFormData.time}
             onChange={handleInputChange}
@@ -137,13 +113,13 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="title"
+            htmlFor="title-uid"
           >
             Title
           </label>
           <input
             type="text"
-            id="title"
+            id="title-uid"
             name="title"
             value={newFormData.title}
             onChange={handleInputChange}
@@ -156,12 +132,12 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="body"
+            htmlFor="body-uid"
           >
             Body
           </label>
           <textarea
-            id="body"
+            id="body-uid"
             name="body"
             value={newFormData.body}
             onChange={handleInputChange}
@@ -180,7 +156,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
               <input
                 type="checkbox"
                 name="tags"
-                data-testid="breaking-news-uid"
                 value="Breaking News"
                 checked={newFormData.tags.includes("Breaking News")}
                 onChange={handleCheckboxChange}
@@ -192,7 +167,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
               <input
                 type="checkbox"
                 name="tags"
-                data-testid="university-news-uid"
                 value="University News"
                 checked={newFormData.tags.includes("University News")}
                 onChange={handleCheckboxChange}
@@ -205,7 +179,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 type="checkbox"
                 name="tags"
                 value="Metro"
-                 data-testid="metro-uid"
                 checked={newFormData.tags.includes("Metro")}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
@@ -215,63 +188,23 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           </div>
         </div>
 
-        {/* Input for slug */}
+        {/* Input for uid */}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="slug"
+            htmlFor="uid"
           >
-            Article Slug
+           UID
           </label>
           <input
             type="text"
-            id="slug"
-            name="slug"
-            value={newFormData.slug}
-            onChange={handleSlugChange}
+            id="uid"
+            name="uid"
+            value={newFormData.uid}
+            onChange={handleUidChange}
             className="border rounded-md px-3 py-2 w-full"
-            placeholder="Article slug"
+            placeholder="uid"
           />
-        </div>
-
-        {/* Datepicker for article publication date */}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="articlePublicationDate"
-          >
-            Article Publication Date
-          </label>
-          <DatePicker
-            id="articlePublicationDate"
-            selected={newFormData.publicationDate}
-            onChange={handlePublicationDateChange}
-            dateFormat="yyyy/MM"
-            className="border rounded-md px-3 py-2 w-full"
-          />
-        </div>
-
-        {/* Dropdown for media type */}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="mediaType"
-          >
-            Media Type
-          </label>
-          <select
-            id="mediaType"
-            name="mediaType"
-            value={newFormData.mediaType}
-            onChange={handleMediaTypeChange}
-            className="border rounded-md px-3 py-2 w-full"
-          >
-            <option value="">Select Media Type</option>
-            <option value="article">Article</option>
-            <option value="page">Page</option>
-            <option value="gallery">Gallery</option>
-            <option value="multimedia">Multimedia</option>
-          </select>
         </div>
 
         {/* Radio buttons */}
@@ -311,11 +244,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           onClick={handleScheduleNotification}
           className="bg-blue-500 text-white px-4 py-2 rounded-md transition transform duration-200 hover:bg-blue-600 hover:scale-105"
         >
-          Schedule Notification
+          Schedule UID Notification
         </button>
       </form>
     </div>
   );
 };
 
-export default NotificationForm;
+export default NotificationFormId;
