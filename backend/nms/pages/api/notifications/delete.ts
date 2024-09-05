@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
+import protectedHandler from "../protected";
 import notificationQueue from "../queue/queue";
 
 type ResponseData = {
@@ -14,6 +15,7 @@ export default async function deleteNotification(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
+  protectedHandler(req, res);
   try {
     // Assuming the request body contains the notification data
     // if a string, parse it

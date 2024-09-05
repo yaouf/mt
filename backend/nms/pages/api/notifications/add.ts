@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 import notificationQueue from "../queue/queue";
 // import { Notification } from "../../types/types";
-
+import protectedHandler from "../protected";
 type ResponseData = {
   message?: string;
   jobId?: number;
@@ -13,6 +13,7 @@ export default async function addNotification(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) { 
+  protectedHandler(req, res);
   try {
     // Assuming the request body contains the notification data
     // if a string, parse it

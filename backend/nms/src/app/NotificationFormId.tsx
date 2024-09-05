@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import { auth } from "./firebase";
+
 
 const NotificationFormId = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
@@ -57,10 +59,13 @@ const NotificationFormId = ({ setScheduledNotifications }) => {
   const handleScheduleNotification = async () => {
     try {
       console.log("newNotification", newFormData);
+      const user = auth.currentUser;
+      const token = await user!.getIdToken();
       const response = await fetch("/api/notifications/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newFormData),
       });

@@ -5,13 +5,25 @@ import AuthWrapper from "./AuthWrapper";
 import NotificationForm from "./NotificationForm";
 import NotificationFormId from "./NotificationFormId";
 import NotificationTable from "./NotificationTable";
+import { auth } from "./firebase";
 
 export default function Home() {
   const [scheduledNotifications, setScheduledNotifications] = useState([] as any[]);    
     useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("/api/notifications");
+        const user = auth.currentUser;
+        const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+        wait(1000);
+        console.log("user", auth, auth.currentUser);
+        const token = await user!.getIdToken();
+        const response = await fetch("/api/notifications", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         console.log(data);
         setScheduledNotifications(data);

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
+import protectedHandler from "../protected";
 
 type ResponseData = {
   message: string;
@@ -15,6 +16,7 @@ export default async function getNotification(
   req: NextApiRequest,
   res: NextApiResponse<Notification[] | ResponseData>,
 ) {
+  protectedHandler(req, res);
   try {
     // get path param
     console.log("query", req.query);
