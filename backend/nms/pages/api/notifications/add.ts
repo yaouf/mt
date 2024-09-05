@@ -35,8 +35,10 @@ export default async function addNotification(
     const publicationDate = data.publicationDate;
     const domain = data.domain;
 
+    const uid = data.uid;
+
     // Validate required fields
-    if (!time || !title || !tags || !slug || !mediaType || !publicationDate || !domain) {
+    if (!time || !title || !tags || !domain) {
       // find which field is missing
       console.log(time)
       return res.status(400).json({ message: "Missing fields." });
@@ -48,8 +50,16 @@ export default async function addNotification(
     const universityNews = tags.includes("University News");
     const metro = tags.includes("Metro");
 
-    // Create url from slug, mediaType, and publicationDate
-    const url = `${domain}/${mediaType}/${publicationDate}/${slug}`;
+    let url: string = '';
+    let isUid: boolean = false;
+    // Create url from uid
+    if (uid) {
+      url = `${domain}/${uid}`;
+      isUid = true;
+    } else {
+          // Create url from slug, mediaType, and publicationDate
+    url = `${domain}/${mediaType}/${publicationDate}/${slug}`;
+    }
     console.log("url", url);
     // Insert the notification data into the "notifications" table
     const insertedRows = await db("notifications")
@@ -80,7 +90,7 @@ export default async function addNotification(
 
     // Add the notification to the queue
     const job = await notificationQueue.add(
-      { jobId, time, title, body, tags, url },
+      { jobId, time, title, body, tags, url, isUid },
       { delay: milliseconds, jobId: jobId.toString() }
     );
     // console.log("job", job);
