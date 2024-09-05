@@ -8,6 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { NavProp } from "src/types/navStacks";
 import HorizontalCard from "../../components/cards/HorizontalCard";
 import { Article } from "src/types/data";
+import {trackEvent} from "@aptabase/react-native";
 
 function Search({ navigation }: NavProp) {
   const textInputRef = useRef<TextInput>(null);
@@ -21,6 +22,7 @@ function Search({ navigation }: NavProp) {
   const handleSearch = async () => {
     setSearchActivated(false);
     setLoading(true);
+    trackEvent("search", {text});
     try {
       const response = await fetch(
         `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`

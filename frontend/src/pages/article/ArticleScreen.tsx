@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { View, ScrollView, Image, Text, TouchableOpacity, SafeAreaView } from "react-native";
 import { baseStyles } from "../../styles/styles";
 import { formatDates } from "src/code/formatDates";
@@ -7,7 +8,7 @@ import BottomBar from "./BottomBar";
 import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
 import { StackScreenProps } from "@react-navigation/stack";
-
+import { trackEvent } from "@aptabase/react-native";
 // TODO: future - related articles
 // links to other articles
 
@@ -16,6 +17,18 @@ function ArticleScreen({
   navigation,
 }: StackScreenProps<HomeStackProps, "Article">) {
   const article: Article = route.params.data;
+ 
+ 
+  useEffect(() => {
+    trackEvent("article", {
+      uuid: route.params.data.uuid,
+      slug: route.params.data.slug,
+    }); // Call the trackEvent function
+  }, []); // Empty dependency array ensures it only runs on component mount
+  
+
+
+
 
   return (
     <SafeAreaView>
