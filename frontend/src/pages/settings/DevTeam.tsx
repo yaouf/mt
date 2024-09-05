@@ -19,14 +19,15 @@ function DevTeam() {
         <View style={s.rowStyles}>
           <Text style={text.textMedium}>🗞️</Text>
           <Text style={text.textMedium}>
-            Leadership: Charlie Clynes '25, Jakobi Haskell '25, Rachel Chae '25, Max Karpawich '24
+            Leadership: Charlie Clynes '25, Jakobi Haskell '25, Rachel Chae '25,
+            Max Karpawich '24
           </Text>
         </View>
 
         <View style={s.rowStyles}>
           <Text style={text.textMedium}>📱</Text>
           <Text style={text.textMedium}>
-            Front end: Kiera Walsh '24, Annika Singh '26, Kara
+            Front end: Kiera Walsh '24, Rachel Chae '25, Annika Singh '26, Kara
             Wong '26, Nayani Modugula '26
           </Text>
         </View>
@@ -42,8 +43,8 @@ function DevTeam() {
         <View style={s.rowStyles}>
           <Text style={text.textMedium}>🎨</Text>
           <Text style={text.textMedium}>
-            Design: Grace Chen '24, Audrey Chou '26, Emily Lin
-            '26, Jesse Hogan '24
+            Design: Grace Chen '24, Audrey Chou '26, Emily Lin '26, Jesse Hogan
+            '24
           </Text>
         </View>
       </View>
