@@ -1,7 +1,7 @@
 import { cleanEnv, str } from "envalid";
 
 const env = cleanEnv(process.env, {
-  ALLOWED_WEBSITE_URL: str({devDefault: '*'}),
+  FIREWALL_ENABLED: str({devDefault: 'false', default: 'true'}),
     DB_URL: str({devDefault: ''}),
   NODE_ENV: str({ choices: ['development', 'test', 'staging', 'production']  }),
   DB_USER: str({devDefault: ''}),
