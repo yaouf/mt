@@ -1,4 +1,5 @@
 import { Alert, Share } from "react-native";
+import { trackEvent } from "@aptabase/react-native";
 
 export const shareArticle = async (uri: string) => {
   try {
@@ -7,5 +8,7 @@ export const shareArticle = async (uri: string) => {
     });
   } catch (error: any) {
     Alert.alert(error.message);
+  } finally {
+    trackEvent("sharedarticle", {uri});
   }
 };

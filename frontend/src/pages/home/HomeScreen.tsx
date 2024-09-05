@@ -9,6 +9,7 @@ import SmallHorzGroup from "./sections/SmallHorzGroup";
 import OpinionsGroup from "./sections/OpinionsGroup";
 import * as SplashScreen from "expo-splash-screen";
 import { fetchSectionHome } from "src/code/fetchContent";
+import { trackEvent } from "@aptabase/react-native";
 
 interface Section_Type {
   id: number;
@@ -36,6 +37,7 @@ function HomeScreen({ navigation }: NavProp) {
       console.warn(e);
     } finally {
       setTopLoaded(true);
+      trackEvent("homescreen", {})
     }
   };
 
