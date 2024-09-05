@@ -1,7 +1,7 @@
 // Import the handler under test and its config from the pages/api directory
 import { testApiHandler } from 'next-test-api-route-handler';
 import * as pagesHandlerGetOne from '../pages/api/notifications/[jobId]';
-import * as pagesHandler from '../pages/api/notifications/add';
+import * as pagesHandlerAdd from '../pages/api/notifications/add';
 import * as pagesHandlerDelete from '../pages/api/notifications/delete';
 import * as pagesHandlerGetAll from '../pages/api/notifications/index';
 import notificationQueue from '../pages/api/queue/queue';
@@ -27,7 +27,7 @@ it('creates notification', async () => {
   //   const publicationDate = data.publicationDate;
 
   await testApiHandler<any[]>({
-    pagesHandler,
+    pagesHandlerAdd,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -58,7 +58,7 @@ it('gets all notifications after adding first', async () => {
 
   // now get the notification that was added
   await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerGetAll,
+    pagesHandlerAdd: pagesHandlerGetAll,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -79,7 +79,7 @@ it('gets all notifications after adding first', async () => {
 it('adds second notification', async () => {
 
   await testApiHandler<any[]>({
-    pagesHandler,
+    pagesHandlerAdd: pagesHandlerAdd,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -121,7 +121,7 @@ it('gets all notifications after second was added', async () => {
 
    // now get the notification that was added
    await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerGetAll,
+    pagesHandlerAdd: pagesHandlerGetAll,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -152,7 +152,7 @@ it('gets second single notification', async () => {
 
   // now get the notification that was added
   await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerGetOne,
+    pagesHandlerAdd: pagesHandlerGetOne,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -186,7 +186,7 @@ it('gets first single notification', async () => {
 
   // now get the notification that was added
   await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerGetOne,
+    pagesHandlerAdd: pagesHandlerGetOne,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -215,7 +215,7 @@ it('gets first single notification', async () => {
 
   // now get the notification that was added
   await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerGetOne,
+    pagesHandlerAdd: pagesHandlerGetOne,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
@@ -237,7 +237,7 @@ it('gets first single notification', async () => {
 it("deletes a notification", async () => {
   // deletes the notification that was added
   await testApiHandler<any[]>({
-    pagesHandler: pagesHandlerDelete,
+    pagesHandlerAdd: pagesHandlerDelete,
     requestPatcher: (req) => {
       req.headers = { "x-api-key": process.env.API_KEY };
     },
