@@ -64,8 +64,80 @@ function SectionPrefScreen({ navigation }: NavProp) {
   };
 
   return (
+    //   <GestureHandlerRootView style={baseStyles.container}>
+    //     <View style={[{marginTop: 12}, menuStyles.header]}>
+    //       <TouchableOpacity onPress={() => navigation.pop()}>
+    //         <MaterialIcons name="close" size={24} color="#1C1B1F" />
+    //       </TouchableOpacity>
+
+    //       <Text style={menuStyles.otherText}>Section Preferences</Text>
+
+    //       <TouchableOpacity onPress={applyChanges}>
+    //         <Text style={[menuStyles.otherText, { fontWeight: 500 }]}>Done</Text>
+    //       </TouchableOpacity>
+    //     </View>
+
+    //     <ScrollView style={menuStyles.contentContainer}>
+    //       <View>
+    //       <Text style={[{ marginBottom: 12}, text.sectionHeader1]}>FAVORITE SECTIONS</Text>
+    //         <Text style={[menuStyles.descriptionText]}>
+    //           Add and reorder topics to customize the menu on your Top Stories
+    //           page.
+    //         </Text>
+
+    //         <View style={menuStyles.rowItem}>
+    //           <MaterialIcons
+    //             name="lock-outline"
+    //             size={24}
+    //             color={varGray1}
+    //             style={menuStyles.icon}
+    //           />
+    //           <Text style={[menuStyles.rowText, { color: varGray1 }]}>ALL</Text>
+    //         </View>
+    //         <DraggableFlatList
+    //           data={preferences}
+    //           onDragEnd={({ data }) => setPreferences(data)}
+    //           keyExtractor={(item) => item.id.toString()}
+    //           renderItem={renderItem}
+    //           scrollEnabled={true}
+    //         />
+    //       </View>
+
+    //       <View>
+    //         {removed.length > 0 && (
+    //           <Text style={[{ marginBottom: 12, marginTop: 16}, text.sectionHeader1]}>REMOVED SECTIONS</Text>
+    //         )}
+    //         {removed.map((item) => (
+    //           <TouchableOpacity
+    //             onPress={() => add(item)}
+    //             style={menuStyles.rowItem}
+    //             key={`section-${item.id}`}
+    //           >
+    //             <Feather
+    //               name="plus-circle"
+    //               size={24}
+    //               color="#249607"
+    //               style={menuStyles.icon}
+    //             />
+    //             <Text style={menuStyles.rowText}>{item.title}</Text>
+    //           </TouchableOpacity>
+    //         ))}
+    //       </View>
+
+    //       <TouchableOpacity
+    //         onPress={() => {
+    //           setPreferences(original);
+    //           setRemoved([]);
+    //         }}
+    //         style={[menuStyles.rowItem, menuStyles.reset]}
+    //       >
+    //         <Text style={text.resetSectionsButton}>Reset Sections</Text>
+    //       </TouchableOpacity>
+    //     </ScrollView>
+    //   </GestureHandlerRootView>
+    // );
     <GestureHandlerRootView style={baseStyles.container}>
-      <View style={[{marginTop: 12}, menuStyles.header]}>
+      <View style={[{ marginTop: 12 }, menuStyles.header]}>
         <TouchableOpacity onPress={() => navigation.pop()}>
           <MaterialIcons name="close" size={24} color="#1C1B1F" />
         </TouchableOpacity>
@@ -77,35 +149,39 @@ function SectionPrefScreen({ navigation }: NavProp) {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={menuStyles.contentContainer}>
-        <View>
-        <Text style={[{ marginBottom: 12}, text.sectionHeader1]}>FAVORITE SECTIONS</Text>
-          <Text style={[menuStyles.descriptionText]}>
-            Add and reorder topics to customize the menu on your Top Stories
-            page.
-          </Text>
+      {/* Instead of ScrollView, you can directly have a View or FlatList */}
+      <View style={menuStyles.contentContainer}>
+        <Text style={[{ marginBottom: 12 }, text.sectionHeader1]}>
+          FAVORITE SECTIONS
+        </Text>
+        <Text style={menuStyles.descriptionText}>
+          Add and reorder topics to customize the menu on your Top Stories page.
+        </Text>
 
-          <View style={menuStyles.rowItem}>
-            <MaterialIcons
-              name="lock-outline"
-              size={24}
-              color={varGray1}
-              style={menuStyles.icon}
-            />
-            <Text style={[menuStyles.rowText, { color: varGray1 }]}>ALL</Text>
-          </View>
-          <DraggableFlatList
-            data={preferences}
-            onDragEnd={({ data }) => setPreferences(data)}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={renderItem}
-            scrollEnabled={true}
+        <View style={menuStyles.rowItem}>
+          <MaterialIcons
+            name="lock-outline"
+            size={24}
+            color={varGray1}
+            style={menuStyles.icon}
           />
+          <Text style={[menuStyles.rowText, { color: varGray1 }]}>ALL</Text>
         </View>
+
+        <DraggableFlatList
+          data={preferences}
+          onDragEnd={({ data }) => setPreferences(data)}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+        />
 
         <View>
           {removed.length > 0 && (
-            <Text style={[{ marginBottom: 12, marginTop: 16}, text.sectionHeader1]}>REMOVED SECTIONS</Text>
+            <Text
+              style={[{ marginBottom: 12, marginTop: 16 }, text.sectionHeader1]}
+            >
+              REMOVED SECTIONS
+            </Text>
           )}
           {removed.map((item) => (
             <TouchableOpacity
@@ -133,7 +209,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
         >
           <Text style={text.resetSectionsButton}>Reset Sections</Text>
         </TouchableOpacity>
-      </ScrollView>
+      </View>
     </GestureHandlerRootView>
   );
 }
