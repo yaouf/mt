@@ -6,7 +6,10 @@ import { Device } from "../types/types";
 // Connect to a local Redis instance. For production, configure the connection accordingly.
 const notificationQueue = new Bull(
   "notificationQueue",
-  "redis://127.0.0.1:6379"
+  "redis://127.0.0.1:6379",
+  {
+    redis: {},
+  }
 );
 
 // Send notifications to corresponding devices
@@ -152,5 +155,7 @@ notificationQueue.process(async (job) => {
     console.error("Error updating notification status:", error);
   }
 });
+
+notificationQueue.on("completed", job => job.remove());
 
 export default notificationQueue;

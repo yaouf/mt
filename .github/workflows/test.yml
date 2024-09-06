@@ -32,13 +32,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Create Secrets Folder
-        run: mkdir secrets 
-        working-directory: ./backend/nms
-
       - name: Add Secret Service Account Key JSON File
         run: touch serviceAccountKey.json && echo "${{secrets.SERVICE_ACCOUNT_KEY}}" | base64 -d > serviceAccountKey.json
-        working-directory: ./backend/nms/secrets
+        working-directory: ./backend/nms
 
       - name: Install Global Deps
         run: sudo apt-get update && sudo apt-get install -y redis-server
