@@ -1,5 +1,4 @@
 import * as Notifications from "expo-notifications";
-import { useEffect, useState } from "react";
 
 
 
@@ -10,6 +9,16 @@ import { Dispatch, SetStateAction } from "react";
 import { Text } from "react-native";
 import { fetchArticle } from "src/code/fetchContent";
 import { Article } from "src/types/data";
+
+const linking = {
+  prefixes: ['com.browndailyherald.thebrowndailyherald"://', 'https://browndailyherald.com'],  // custom app scheme and web domain
+  config: {
+    screens: {
+      HomeScreen: 'home',
+      Article: 'article/:slug',  // handles the article slug from deep link
+    },
+  },
+};
 
 function NotificationHandler() {
 
