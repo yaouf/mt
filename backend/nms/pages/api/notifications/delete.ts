@@ -32,12 +32,10 @@ export default async function deleteNotification(
 
     // Delete the notification from the job queue
     const job = await notificationQueue.getJob(jobId.toString());
-    if (!job) {
-      return res
-        .status(404)
-        .json({ message: "Notification not found in queue." });
+    if (job) {
+      console.log("Job deleted from queue. ");
+      await job.remove();
     }
-    await job.remove();
 
     // Delete the notification from the "notifications" table
     const deletedCount = await db("notifications").where({ id: jobId }).del();
