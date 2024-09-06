@@ -37,13 +37,14 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
       showsHorizontalScrollIndicator={false}
       style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
     >
-      <TouchableOpacity
-        key={1}
+    {/* commented out because the page's scroll doesn't work
+      <TouchableOpacity key={1}
         style={menuStyles.menuItem}
         onPress={() => navigation.push("SectionPref")}
       >
         <Ionicons name="filter-outline" size={24} color="black" />
       </TouchableOpacity>
+    */}
 
       {currSection === "all" ? (
         <View style={menuStyles.menuItem}>
