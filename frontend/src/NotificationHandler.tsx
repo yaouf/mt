@@ -9,8 +9,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-
-
 import { Image, Text, Linking } from "react-native";
 import { articleStyles } from "src/styles/article";
 import {
@@ -35,7 +33,6 @@ const linking = {
     },
   },
 };
-
 
 function NotificationHandler() {
 

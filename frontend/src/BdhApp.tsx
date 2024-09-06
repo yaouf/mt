@@ -29,16 +29,6 @@ import NotificationHandler from "./NotificationHandler";
 
 const fullStack = createStackNavigator();
 
-const linking = {
-  prefixes: ['com.browndailyherald.thebrowndailyherald"://', 'https://browndailyherald.com'],  // custom app scheme and web domain
-  config: {
-    screens: {
-      HomeScreen: 'home',
-      Article: 'article/:slug',  // handles the article slug from deep link
-    },
-  },
-};
-
 const MyTheme = {
   ...DefaultTheme,
   colors: {
@@ -74,7 +64,7 @@ function BdhApp() {
 
   return (
     <NotificationProvider>
-      <NavigationContainer theme={MyTheme} linking={linking}>
+      <NavigationContainer theme={MyTheme}>
         <NotificationHandler />
         <SafeAreaProvider>
           <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
