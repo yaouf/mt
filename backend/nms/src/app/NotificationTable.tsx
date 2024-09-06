@@ -26,6 +26,7 @@ const NotificationTable = ({
         setScheduledNotifications(data);
       } else {
         console.error("Error deleting notification");
+        console.error(response.json);
       }
     } catch (error) {
       console.error("Error:", error);
