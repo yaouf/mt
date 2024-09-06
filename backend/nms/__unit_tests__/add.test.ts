@@ -8,8 +8,15 @@ import notificationQueue from '../pages/api/queue/queue';
 
 describe('adding, getting, and deleting notifications', () => {
 
+  beforeAll(async () => {
+   if (await notificationQueue.count() !== 0) {
+    throw new Error("Queue is not empty");
+   }
+  })
+
   // close the queue after all tests
   afterAll(async () => {
+    await notificationQueue.empty();
     await notificationQueue.close();
   });
 
