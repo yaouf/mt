@@ -13,6 +13,8 @@ import { NavProp } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
 import { MenuContext } from "../HomeStackScreen";
 
+// TODO: fix scroll feature
+
 function SectionPrefScreen({ navigation }: NavProp) {
   const { original, sectionMenu, setSectionMenu } = useContext(MenuContext);
   const [preferences, setPreferences] = useState<MenuItem[]>(sectionMenu);
