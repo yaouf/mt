@@ -1,30 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Animated } from "react-native";
-import Onboarding from "./onboarding/Onboarding";
-import Nav from "./pages/Nav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NotificationProvider } from "./pages/settings/NotificationProvider";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import * as Notifications from "expo-notifications";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Onboarding from "./onboarding/Onboarding";
+import Nav from "./pages/Nav";
+import { NotificationProvider } from "./pages/settings/NotificationProvider";
 
 
-
-import { Image, Text, Linking } from "react-native";
-import { articleStyles } from "src/styles/article";
-import {
-  HTMLContentModel,
-  HTMLElementModel,
-  RenderHTML,
-} from "react-native-render-html";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Article } from "src/types/data";
-import { Dispatch, SetStateAction } from "react";
-import { fetchArticle } from "src/code/fetchContent";
-import WebView from "react-native-webview";
-import * as WebBrowser from "expo-web-browser";
+import * as Notifications from "expo-notifications";
 import NotificationHandler from "./NotificationHandler";
 
 const fullStack = createStackNavigator();
@@ -51,6 +36,17 @@ function BdhApp() {
   const [hasOnboarded, setHasOnboarded] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initialize animated value
 
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+    handleSuccess: async () => console.log('handle success notification'),
+    handleError: async () => console.log('handle error notification'),
+  });
+
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -75,7 +71,7 @@ function BdhApp() {
   return (
     <NotificationProvider>
       <NavigationContainer theme={MyTheme} linking={linking}>
-        <NotificationHandler />
+      <NotificationHandler />
         <SafeAreaProvider>
           <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
             {hasOnboarded ? (

@@ -1,6 +1,6 @@
 // import { NativeBaseProvider } from "native-base";
-import BdhApp from "./src/BdhApp";
 import Aptabase from "@aptabase/react-native";
+import BdhApp from "./src/BdhApp";
 // import at the top
 // import "react-native-gesture-handler";
 
