@@ -16,6 +16,7 @@
       "**/*"
     ],
     "ios": {
+      "associatedDomains": ["applinks:browndailyherald.com/article"],
       "supportsTablet": true,
       "bundleIdentifier": "com.browndailyherald.thebrowndailyherald",
       "infoPlist": {
