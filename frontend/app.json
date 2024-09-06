@@ -5,7 +5,7 @@
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "browndailyherald", // Custom scheme for ios,
+    "scheme": "browndailyherald",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -21,7 +21,7 @@
       "infoPlist": {
         "CFBundleURLTypes": [
           {
-            "CFBundleURLSchemes": ["browndailyherald"] // Custom scheme for iOS
+            "CFBundleURLSchemes": ["browndailyherald"]
           }
         ]
       }
