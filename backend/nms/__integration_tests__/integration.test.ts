@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import * as admin from "firebase-admin";
-import serviceAccount from "../secrets/serviceAccountKey.json";
+import serviceAccount from "../serviceAccountKey.json";
 
 test.beforeEach(async ({ page }) => {
     // Navigate to the page
@@ -160,4 +160,10 @@ test("Test Notification Deletion", async ({ page }) => {
   // Check if notification is no longer in the table
   const notificationExists = await page.isVisible("text=test-slug-2");
   expect(notificationExists).toBeFalsy();
+
+  // // Delete all notifications
+  // const deleteButtons = await page.$$('button:text("Delete")');
+  // for (const button of deleteButtons) {
+  //   await button.click();
+  // }
 });
