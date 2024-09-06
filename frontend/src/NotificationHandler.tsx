@@ -1,12 +1,10 @@
 import * as Notifications from "expo-notifications";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as WebBrowser from "expo-web-browser";
 import { Dispatch, SetStateAction } from "react";
-import { Text } from "react-native";
 import { fetchArticle } from "src/code/fetchContent";
 import { Article } from "src/types/data";
 
@@ -81,7 +79,7 @@ function NotificationHandler() {
     };
   }, []);
 
-  return (<Text>Hello</Text>);
+  return (null);
 }
 
 export default NotificationHandler;
