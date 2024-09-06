@@ -23,7 +23,8 @@ function BottomBar(props: ArticleDetailProps) {
   }, [savedArticles, saved]);
 
   function handleShare() {
-    shareArticle(`https://browndailyherald.com/${props.uuid}`);
+    const split = props.published_at.split('-');
+    shareArticle(`https://www.browndailyherald.com/article/${split[0]}/${split[1]}/${props.slug}`);
   }
 
   // not doing individual article/section notifs for now
