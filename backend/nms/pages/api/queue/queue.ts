@@ -9,8 +9,15 @@ const notificationQueue = new Bull(
   "redis://127.0.0.1:6379",
   {
     redis: {},
+    defaultJobOptions: {
+      removeOnComplete: true,
+      removeOnFail: {
+        count: 100
+      }
+    }
   }
 );
+console.log('connected to queue');
 
 // Send notifications to corresponding devices
 notificationQueue.process(async (job) => {
@@ -24,7 +31,6 @@ notificationQueue.process(async (job) => {
     const devices = (await db("devices")
       .select("expoPushToken")
       .where(tag, true)) as Device[];
-    console.log("oneDevice", devices);
     for (let device of devices) {
       deviceMap.set(device.expoPushToken, device);
     }
@@ -155,7 +161,5 @@ notificationQueue.process(async (job) => {
     console.error("Error updating notification status:", error);
   }
 });
-
-notificationQueue.on("completed", job => job.remove());
 
 export default notificationQueue;
