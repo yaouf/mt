@@ -9,6 +9,24 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+
+
+import { Image, Text, Linking } from "react-native";
+import { articleStyles } from "src/styles/article";
+import {
+  HTMLContentModel,
+  HTMLElementModel,
+  RenderHTML,
+} from "react-native-render-html";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { Article } from "src/types/data";
+import { Dispatch, SetStateAction } from "react";
+import { fetchArticle } from "src/code/fetchContent";
+import WebView from "react-native-webview";
+import * as WebBrowser from "expo-web-browser";
+import NotificationHandler from "./NotificationHandler";
+
 const fullStack = createStackNavigator();
 
 const linking = {
@@ -54,28 +72,10 @@ function BdhApp() {
     }).start();
   }, [fadeAnim]);
 
-  useEffect(() => {
-    const notificationListener = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log("Notification received:", notification);
-      }
-    );
-
-    const responseListener =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("Notification response received:", response);
-      });
-
-    // Returning cleanup function for removing listeners
-    return () => {
-      notificationListener.remove();
-      responseListener.remove();
-    };
-  }, []);
-
   return (
     <NotificationProvider>
       <NavigationContainer theme={MyTheme} linking={linking}>
+        <NotificationHandler />
         <SafeAreaProvider>
           <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
             {hasOnboarded ? (
