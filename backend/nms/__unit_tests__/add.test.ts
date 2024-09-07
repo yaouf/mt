@@ -4,19 +4,25 @@ import * as pagesHandlerGetOne from '../pages/api/notifications/[jobId]';
 import * as pagesHandlerAdd from '../pages/api/notifications/add';
 import * as pagesHandlerDelete from '../pages/api/notifications/delete';
 import * as pagesHandlerGetAll from '../pages/api/notifications/index';
-import notificationQueue from '../pages/api/queue/queue';
+import { notificationQueue, worker } from '../pages/api/queue/queue';
 
 describe('adding, getting, and deleting notifications', () => {
 
   beforeAll(async () => {
-   if (await notificationQueue.count() !== 0) {
+    const count = await notificationQueue.count();
+   if (count !== 0) {
+    const notifs = await notificationQueue.getJobs();
+    console.log("notification count", count);
+    console.log("notifs", notifs);
     throw new Error("Queue is not empty");
+    // await notificationQueue.drain(true);
    }
   })
 
   // close the queue after all tests
   afterAll(async () => {
-    await notificationQueue.empty();
+    await worker.close();
+    await notificationQueue.obliterate({force: true});
     await notificationQueue.close();
   });
 
