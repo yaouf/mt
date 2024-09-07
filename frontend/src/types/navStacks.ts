@@ -14,11 +14,6 @@ export type HomeStackProps = {
   SectionPref: {};
 };
 
-export type FYStackProps = {
-  ForYouScreen: undefined;
-  Article: { data: Article };
-};
-
 export type SearchStackProps = {
   SearchScreen: undefined;
   Article: { data: Article };

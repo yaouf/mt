@@ -26,7 +26,7 @@ export const articleStyles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 7.422,
     marginBottom: 27,
-    paddingTop: 25
+    paddingTop: 25,
   },
   title: {
     // alignSelf: "stretch",
