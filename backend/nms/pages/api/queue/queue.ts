@@ -1,26 +1,35 @@
-import Bull from "bull";
+import { Job, Queue, Worker } from "bullmq";
 import Expo, { ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
 import db from "../../../dist/data/db-config";
 import { Device } from "../types/types";
 
+const connection = {
+  host: "localhost",
+  port: 6379
+};
+
 // Connect to a local Redis instance. For production, configure the connection accordingly.
-const notificationQueue = new Bull(
+const notificationQueue = new Queue(
   "notificationQueue",
-  "redis://127.0.0.1:6379",
   {
-    redis: {},
+    connection,
     defaultJobOptions: {
       removeOnComplete: true,
       removeOnFail: {
-        count: 100
+        count: 5
       }
     }
   }
 );
 console.log('connected to queue');
 
+notificationQueue.setGlobalConcurrency(1);
+
+
+// Handle failures. 
+
 // Send notifications to corresponding devices
-notificationQueue.process(async (job) => {
+const worker = new Worker("notificationQueue", async (job) => {
   // This is the job data that was passed to `notificationQueue.add()`
   const { jobId, time, title, body, tags, url, isUid } = job.data;
   console.log("tags", tags);
@@ -160,6 +169,17 @@ notificationQueue.process(async (job) => {
   } catch (error) {
     console.error("Error updating notification status:", error);
   }
+}, { connection });
+
+worker.on('failed', (job: Job, error: Error) => {
+  // Do something with the return value.
+  console.error("job with data : ", job.data, " failed with error: ", error);
 });
 
-export default notificationQueue;
+worker.on('error', err => {
+  // log the error
+  console.error("worker failed with error", err);
+});
+
+export { notificationQueue, worker };
+

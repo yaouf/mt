@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-import notificationQueue from "../queue/queue";
+import { notificationQueue } from "../queue/queue";
 // import { Notification } from "../../types/types";
 
 type ResponseData = {
@@ -89,11 +89,11 @@ export default async function addNotification(
     console.log("milliseconds", milliseconds);
 
     // Add the notification to the queue
-    const job = await notificationQueue.add(
+    const job = await notificationQueue.add("notification",
       { jobId, time, title, body, tags, url, isUid },
-      { delay: milliseconds, jobId: jobId.toString() }
+      { delay: milliseconds, jobId: jobId.toString() + "_n" }
     );
-    // console.log("job", job);
+    console.log("job", job);
 
     // const scheduledNotifications = await notificationQueue.getDelayed();
     // console.log(scheduledNotifications);
@@ -102,7 +102,7 @@ export default async function addNotification(
     console.log(notifications);
     res.status(200).json(notifications);
   } catch (error) {
-    console.error("Error adding notification to the database:", error);
+    console.error("Error adding notification to the queue:", error);
     res.status(500).json({ message: "Internal server error." });
   }
 }

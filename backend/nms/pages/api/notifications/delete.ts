@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-import notificationQueue from "../queue/queue";
+import { notificationQueue } from "../queue/queue";
 
 type ResponseData = {
   message: string;
@@ -31,10 +31,12 @@ export default async function deleteNotification(
     }
 
     // Delete the notification from the job queue
-    const job = await notificationQueue.getJob(jobId.toString());
+    const job = await notificationQueue.getJob(jobId.toString() + "_n");
     if (job) {
       console.log("Job deleted from queue. ");
       await job.remove();
+    } else {
+      console.warn("could not find job in queue with id: ", jobId.toString() + "_n");
     }
 
     // Delete the notification from the "notifications" table

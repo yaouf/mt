@@ -99,36 +99,36 @@ test("Test Notification Table Header", async ({ page }) => {
   expect(actionsHeaderExists).toBeTruthy();
 });
 
-test("Test Notification Form", async ({ page }) => {
-  // Fill out the form inputs
-  await page.fill("#time", "2050-05-01T12:00");
-  await page.fill("#title", "Test Notification");
-  await page.fill("#body", "This is a test notification body");
-  await page.fill("#slug", "test-slug");
-  await page.fill("#articlePublicationDate", "2022-02-01");
-  await page.click("main");
+// test("Test Notification Form", async ({ page }) => {
+//   // Fill out the form inputs
+//   await page.fill("#time", "2050-05-01T12:00");
+//   await page.fill("#title", "Test Notification");
+//   await page.fill("#body", "This is a test notification body");
+//   await page.fill("#slug", "test-slug");
+//   await page.fill("#articlePublicationDate", "2022-02-01");
+//   await page.click("main");
 
-  await page.selectOption("#mediaType", "article");
-  await page.getByTestId('breaking-news-uid').check();
+//   await page.selectOption("#mediaType", "article");
+//   await page.getByTestId('breaking-news-uid').check();
 
-  // Submit the form
-  const res = await page
-    .getByRole("button", { name: "Schedule Notification" })
-    .click();
-  console.log(res);
+//   // Submit the form
+//   const res = await page
+//     .getByRole("button", { name: "Schedule Notification" })
+//     .click();
+//   console.log(res);
 
-  // wait for the notification to be added
-  await page.waitForSelector("tbody td");
+//   // wait for the notification to be added
+//   await page.waitForSelector("tbody td");
 
-  // wait 1 seconds for the notification to be added
-  // await page.waitForTimeout(1000);
+//   // wait 1 seconds for the notification to be added
+//   // await page.waitForTimeout(1000);
 
-  // Check if notification is displayed in the table
-  const notificationExists = await page.isVisible("text=pending");
-  expect(notificationExists).toBeTruthy();
-});
+//   // Check if notification is displayed in the table
+//   const notificationExists = await page.isVisible("text=pending");
+//   expect(notificationExists).toBeTruthy();
+// });
 
-test("Test Notification Deletion", async ({ page }) => {
+test("Test Notification Creation and Deletion", async ({ page }) => {
   // Create a new notification
   await page.fill("#time", "2050-05-01T13:00");
   await page.fill("#title", "Test Notification");

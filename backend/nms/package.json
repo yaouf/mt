@@ -5,12 +5,12 @@
   "scripts": {
     "dev": "redis-server & next dev",
     "build": "next build",
-    "start": "redis-server & next start",
+    "start": "next start",
     "lint": "next lint",
     "build:db": "cd db && npm run update",
     "update:db": "cd db && npm run update",
     "test": "NODE_ENV=test npm run update:db && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
-    "test:pw": "NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev & (NODE_ENV=test npm run update:db && npx playwright test)",
+    "test:pw": "redis-server & NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev & (NODE_ENV=test npm run update:db && npx playwright test)",
     "test:all": "NODE_ENV=test npm run test:pw && npm run test",
     "test:all:debug": "NODE_ENV=test npm run test:pw -- --debug && npm run test",
     "kill:redis": "lsof -ti :6379 | xargs kill -9"
@@ -19,7 +19,7 @@
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-react": "^7.24.1",
     "@playwright/test": "^1.43.1",
-    "bull": "^4.12.2",
+    "bullmq": "^5.12.14",
     "dotenv": "^16.4.5",
     "envalid": "^8.0.0",
     "expo-server-sdk": "^3.7.0",
