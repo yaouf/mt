@@ -1,11 +1,10 @@
 {
   "expo": {
     "name": "BDH",
-    "slug": "push-notif",
+    "slug": "bdh-app",
     "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "browndailyherald",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/splash.png",
@@ -32,6 +31,7 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "package": "com.browndailyherald.thebrowndailyherald",
     "web": {
       "favicon": "./assets/favicon.png"
     },
