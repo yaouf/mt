@@ -99,16 +99,6 @@ export const text = StyleSheet.create({
     marginBottom: 4,
     marginTop: 20,
   },
-  sectionHeader2: {
-    // like recommended text, featured story on fyp
-    color: varTextColor,
-    fontFamily: font2,
-    fontStyle: "normal",
-    fontWeight: "600",
-    fontSize: 14,
-    marginBottom: 8,
-    marginTop: 8,
-  },
   sectionHeader3: {
     // like back from archive, stay updated on fyp
     color: varTextColor,

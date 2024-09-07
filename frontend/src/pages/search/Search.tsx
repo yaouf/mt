@@ -86,7 +86,7 @@ function Search({ navigation }: NavProp) {
       <View style={search.container}>
         {!searchCompleted && (loading ?
           <Image
-        source={require("assets/images/splash.png")}
+        source={require("assets/logo-black.png")}
         style={search.img}
         resizeMode="contain"
           />

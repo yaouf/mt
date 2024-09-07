@@ -5,7 +5,6 @@ import ArticleScreen from "../article/ArticleScreen";
 import SectionsScreen from "../sections/SectionsScreen";
 import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
 import Staff from "../staff/Staff";
-import SectionPrefScreen from "./menu/SectionPrefScreen";
 import {
   Dispatch,
   SetStateAction,
@@ -117,11 +116,6 @@ function HomeStackScreen({ navigation, route }) {
         <HomeStack.Screen
           name="Staff"
           component={Staff}
-          options={{ headerShown: false }}
-        />
-        <HomeStack.Screen
-          name="SectionPref"
-          component={SectionPrefScreen}
           options={{ headerShown: false }}
         />
       </HomeStack.Navigator>
