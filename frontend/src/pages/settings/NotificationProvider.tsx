@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { AppState, Platform } from "react-native";
+import { AppState, Platform, AppStateStatus } from "react-native";
 import { setAsync } from "src/code/helpers";
 
 interface NotificationContextType {
@@ -31,14 +31,12 @@ interface NotificationContextType {
  * - Important for knowing push notif enabled within both the app context and device settings context
  */
 
-// these are just defaults in case the child can't find a provider parent
+// These are just defaults in case the child can't find a provider parent
 export const NotificationContext = createContext<NotificationContextType>({
   systemPermissionStatus: "undetermined",
   setSystemPermissionStatus: () => {},
   checkPermissions: () => {},
-  requestPermission: async () => {
-    return "";
-  },
+  requestPermission: async () => "",
   breaking: true,
   setBreaking: () => {},
   universityNews: true,
@@ -54,15 +52,15 @@ export const NotificationProvider = ({ children }) => {
   const [systemPermissionStatus, setSystemPermissionStatus] =
     useState("undetermined");
 
-  // notifications
+  // Notifications
   const [universityNews, setUniversityNews] = useState(true);
   const [daily, setDaily] = useState(true);
   const [breaking, setBreaking] = useState(true);
 
-  // device id & push token
+  // Device ID & push token
   const [deviceID, setDeviceID] = useState("");
 
-  // On app startup, check the permissions of the systems settings and the internal app settings
+  // On app startup, check the permissions of the system settings and the internal app settings
   const checkPermissions = async () => {
     const { status } = await Notifications.getPermissionsAsync();
     setSystemPermissionStatus(status);
@@ -84,7 +82,7 @@ export const NotificationProvider = ({ children }) => {
     if (Device.isDevice) {
       const { status } = await Notifications.requestPermissionsAsync();
       setSystemPermissionStatus(status);
-      setAsync("systemPermissionStatus", systemPermissionStatus);
+      setAsync("systemPermissionStatus", status);
       return status;
     } else {
       console.log("Must use physical device for Push Notifications");
@@ -93,26 +91,30 @@ export const NotificationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const handleAppStateChange = async (nextAppState) => {
+    // Handler for AppState changes
+    const handleAppStateChange = async (nextAppState: AppStateStatus) => {
       if (nextAppState === "active") {
         const { status } = await Notifications.getPermissionsAsync();
         setSystemPermissionStatus(status);
         console.log("App has come to the foreground");
       }
     };
-  
-    AppState.addEventListener("change", handleAppStateChange);
-  
-    checkPermissions(); // Initial permission check
-  
+
+    // Subscribe to AppState changes
+    const subscription = AppState.addEventListener("change", handleAppStateChange);
+
+    // Initial permission check
+    checkPermissions();
+
+    // Cleanup function to remove the listener
     return () => {
-      AppState.removeEventListener("change", handleAppStateChange);
+      subscription.remove();
     };
   }, []);
 
   // Effect to check permissions when the app loads
   useEffect(() => {
-    console.log("checking permissions use effect notif provider");
+    console.log("Checking permissions useEffect in NotificationProvider");
     checkPermissions();
   }, []);
 

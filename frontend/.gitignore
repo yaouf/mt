@@ -38,3 +38,7 @@ xo
 config.debug.php
 
 .env
+
+#build folders
+ios/
+android/

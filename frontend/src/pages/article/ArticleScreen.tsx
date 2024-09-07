@@ -117,16 +117,6 @@ function ArticleScreen({
           {/* Article text */}
           <SplitArticle content={article.content} />
 
-          {/* Read more section, with small cards */}
-          {/* <Divider />
-          <Text style={articleStyles.readMoreHeading}>RELATED ARTICLES</Text>
-          <View style={layout.grid}>
-            <SmallCard article={dummyData[0]} navigation={navigation} />
-            <SmallCard article={dummyData[1]} navigation={navigation} />
-            <SmallCard article={dummyData[2]} navigation={navigation} />
-            <SmallCard article={dummyData[3]} navigation={navigation} />
-          </View> */}
-          {/* </View> */}
         </View>
         <View style={{height: 80}}></View>
       </ScrollView>
