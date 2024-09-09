@@ -100,7 +100,9 @@ function HomeStackScreen({ navigation, route }) {
         <HomeStack.Screen
           name="Article"
           component={ArticleScreen}
-          options={{ headerShown: false }}
+          options={{ 
+            headerShown: false,
+          }}
         />
         <HomeStack.Screen
           name="Section"
