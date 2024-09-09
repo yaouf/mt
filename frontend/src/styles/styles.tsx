@@ -43,6 +43,11 @@ export const layout = StyleSheet.create({
     marginTop: 0,
     overflow: "visible"
   },
+  recentArticlesStack: {
+    rowGap: 10,
+    marginTop: 0,
+    overflow: "visible"
+  },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",

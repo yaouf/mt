@@ -100,9 +100,10 @@ function ArticleScreen({
                   <Text style={articleStyles.mediaCaption}>
                     {article.dominantMedia.content
                       ? article.dominantMedia.content
-                          .replace("\n", " ")
-                          .replace("<p>", "")
-                          .replace("</p>", "")
+                          .replaceAll("\n", " ")
+                          .replaceAll("<p>", "")
+                          .replaceAll("</p>", "")
+                          .replaceAll("&nbsp;", " ")
                       : ""}
                     {article.dominantMedia.authors.length > 0 &&
                       " Media by " +
