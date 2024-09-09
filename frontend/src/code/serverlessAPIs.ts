@@ -9,14 +9,14 @@ import { Platform } from "react-native";
 export const createDevice = async (
   breaking: boolean,
   universityNews: boolean,
-  daily: boolean,
+  metro: boolean,
   expoPushToken: string
 ): Promise<string> => {
   const body = JSON.stringify({
     deviceType: Platform.OS,
     "Breaking News": breaking,
     "University News": universityNews,
-    "Metro": daily,
+    "Metro": metro,
     expoPushToken: expoPushToken,
     isPushEnabled: true,
   });
@@ -79,13 +79,13 @@ export const updateSettings = async (
   deviceId: string,
   breaking?: boolean,
   universityNews?: boolean,
-  daily?: boolean
+  metro?: boolean
 ) => {
   const body = JSON.stringify({
     deviceId: deviceId,
     "Breaking News": breaking,
     "University News": universityNews,
-    "Metro": daily,
+    "Metro": metro,
   });
 
   console.log("updating settings for device", deviceId);
