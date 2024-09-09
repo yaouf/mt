@@ -1,5 +1,4 @@
 import {
-    Platform,
     StyleSheet,
     Text,
     View,
@@ -9,6 +8,7 @@ import {
   } from "react-native";
   import { CardProps } from "src/types/navStacks";
   import { formatDates } from "../../code/formatDates";
+  import { Tag } from "src/types/data";
   import {
     font1,
     font2,
@@ -16,24 +16,12 @@ import {
     varTextColor,
     varGray1,
     varRed,
-    varTextSecondaryColor,
   } from "../../styles/styles";
   
-  function SmallCardTop({ article, navigation, specialWidth }: CardProps) {
+  function SmallCardTop({ article, navigation }: CardProps) {
     const all_tags = article.tags.map((t: Tag) => t.name);
-    // let cardStyles: StyleProp<ViewStyle> = {
-    //   ...styles.card,
-    //   ...{ width: "48%" },
-    // };
-    // if (specialWidth !== undefined) {
-    //   // @ts-ignore
-    //   cardStyles = { ...styles.card, ...{ width: specialWidth } };
-    // }
   
     let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
-    if (specialWidth !== undefined) {
-      cardSize = { width: specialWidth };
-    }
   
   
     return (
