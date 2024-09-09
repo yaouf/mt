@@ -1,8 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { Article, Author, Media } from "src/types/data";
 
-// TODO: edit so that section articles aren't included if in top stories
-
 export async function fetchSectionHome(
   section: string,
   limit: number
