@@ -40,15 +40,14 @@ function ArticleScreen({
             <Text
               style={[
                 articleStyles.title,
-                article.dominantMedia.attachment_uuid
-                  ? null
-                  : { paddingTop: 30 },
               ]}
             >
               {article.headline}
             </Text>
-            {article.subhead && (
+            {article.subhead ? (
               <Text style={articleStyles.lead}>{article.subhead}</Text>
+            ) : (
+              <View style={{ height: 0, marginBottom: 7.422 }} /> // Placeholder for gap
             )}
             <View
               style={{
@@ -81,7 +80,7 @@ function ArticleScreen({
                           .replace(`<\/p>`, "")
                       : ""}
                     {article.dominantMedia.authors.length > 0 &&
-                      " Media by: " +
+                      " Media by " +
                         article.dominantMedia.authors.map((mediaAuthor) => mediaAuthor.name).join(", ") +
                         " | The Brown Daily Herald"}
                   </Text>
