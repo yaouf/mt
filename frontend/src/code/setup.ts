@@ -36,7 +36,7 @@ export const setUpDevice = async (
 
   let token = (
     await Notifications.getExpoPushTokenAsync({
-      projectId: "51f97ce3-1a0c-4159-abc3-4b04e2e1db8b",
+      projectId: "2f15114e-2295-4fe6-bd82-606b41277acc",
     })
   ).data;
   // token = token.replace("ExponentPushToken[", "").replace("]", "");
