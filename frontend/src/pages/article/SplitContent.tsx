@@ -1,4 +1,5 @@
-import { View, Image, Text } from "react-native";
+import React, { useMemo, useCallback, useState, useRef } from 'react';
+import { View, Image, Text, StyleSheet } from "react-native";
 import { articleStyles } from "src/styles/article";
 import {
   HTMLContentModel,
@@ -8,11 +9,48 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Article } from "src/types/data";
-import { Dispatch, SetStateAction, useState } from "react";
 import { fetchArticle } from "src/code/fetchContent";
 import WebView from "react-native-webview";
 import * as WebBrowser from "expo-web-browser";
-import React from "react"; // Import React for memo
+
+const IframeRenderer = React.memo(
+  ({ tnode }: any) => {
+    const [iframeHeight, setIframeHeight] = useState(1);
+    const webViewRef = useRef(null);
+
+    const { src } = useMemo(() => {
+      const { attributes } = tnode;
+      return { src: attributes.src };
+    }, [tnode.attributes.src]);
+
+    const onWebViewMessage = useCallback((event) => {
+      const height = parseInt(event.nativeEvent.data);
+      if (!isNaN(height)) {
+        setIframeHeight(height);
+      }
+    }, []);
+
+    const injectedJavaScript = `
+      window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight);
+      true; // note: this is required, or you'll sometimes get silent failures
+    `;
+
+    return (
+      <WebView
+        ref={webViewRef}
+        source={{ uri: src }}
+        style={[styles.webView, { height: iframeHeight }]}
+        scrollEnabled={false}
+        onMessage={onWebViewMessage}
+        injectedJavaScript={injectedJavaScript}
+        onLoadEnd={() => {
+          webViewRef.current?.injectJavaScript(injectedJavaScript);
+        }}
+      />
+    );
+  },
+  (prevProps, nextProps) => prevProps.tnode.attributes.src === nextProps.tnode.attributes.src
+);
 
 type SplitArticleType = {
   content: string;
@@ -24,28 +62,26 @@ function SplitArticle({ content }: SplitArticleType) {
   };
 
   const [article, setArticle] = useState<Article | undefined>();
-
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const customHTMLElementModels = {
+  const customHTMLElementModels = useMemo(() => ({
     iframe: HTMLElementModel.fromCustomModel({
       tagName: "iframe",
       mixedUAStyles: {
         width: "100%",
       },
-      contentModel: HTMLContentModel.textual,
+      contentModel: HTMLContentModel.block,
     }),
     a: HTMLElementModel.fromCustomModel({
       tagName: "a",
       mixedUAStyles: articleStyles.hyperlink,
       contentModel: HTMLContentModel.textual,
     }),
-  };
+  }), []);
 
-  const handleLinkPress = async (
+  const handleLinkPress = useCallback(async (
     event: any,
-    href: string,
-    setArticle: Dispatch<SetStateAction<Article | undefined>>
+    href: string
   ) => {
     const articleBaseURL = "https://www.browndailyherald.com/article/";
     if (href.startsWith(articleBaseURL)) {
@@ -69,49 +105,35 @@ function SplitArticle({ content }: SplitArticleType) {
     } else {
       await WebBrowser.openBrowserAsync(href);
     }
-  };
+  }, [navigation]);
 
-  const IframeRenderer = React.memo(
-    ({ tnode }: any) => {
-      const { attributes } = tnode;
-      const src = attributes.src;
-      const height = parseInt(attributes.height) || 500;
-
-      return (
-        <WebView
-          source={{ uri: src }}
-          style={{
-            marginVertical: 20,
-            width: "100%",
-            height: height,
-          }}
-          scrollEnabled={false}
-        />
-      );
+  const renderers = useMemo(() => ({ iframe: IframeRenderer }), []);
+  const renderersProps = useMemo(() => ({
+    a: {
+      onPress: handleLinkPress,
     },
-    (prevProps, nextProps) => {
-      // Prevent re-render if the source URL of the iframe hasn't changed
-      return prevProps.tnode.attributes.src === nextProps.tnode.attributes.src;
-    }
-  );
+  }), [handleLinkPress]);
 
   // Split content by paragraphs
-  let splitContent = source.html.split("\n");
-  if (splitContent.length === 1) {
-    splitContent = source.html.split("</p><p>");
-  }
+  const splitContent = useMemo(() => {
+    let split = source.html.split("\n");
+    if (split.length === 1) {
+      split = source.html.split("</p><p>");
+    }
 
-  const toSplitBy = "\n";
-  const adFrequency = 7; // Advertisement every 7 paragraphs after the first ad
-  const firstAdPosition = 5; // First ad after the 5th paragraph
+    const adFrequency = 7; // Advertisement every 7 paragraphs after the first ad
+    const firstAdPosition = 5; // First ad after the 5th paragraph
 
-  // Insert placeholders for ads directly into splitContent
-  for (let i = firstAdPosition; i < splitContent.length; i += adFrequency + 1) {
-    splitContent.splice(i, 0, "<!-- ADVERTISEMENT_PLACEHOLDER -->");
-  }
+    // Insert placeholders for ads
+    for (let i = firstAdPosition; i < split.length; i += adFrequency + 1) {
+      split.splice(i, 0, "<!-- ADVERTISEMENT_PLACEHOLDER -->");
+    }
+
+    return split;
+  }, [source.html]);
 
   // Function to render ads as components
-  const renderAdComponent = () => (
+  const renderAdComponent = useCallback(() => (
     <View style={articleStyles.advert}>
       <Image
         source={{
@@ -121,7 +143,7 @@ function SplitArticle({ content }: SplitArticleType) {
       />
       <Text style={articleStyles.adAuthor}>Advertisement</Text>
     </View>
-  );
+  ), []);
 
   // Render content with ads inserted at placeholder positions
   return (
@@ -137,15 +159,12 @@ function SplitArticle({ content }: SplitArticleType) {
           return (
             <RenderHTML
               key={`para-${index}`}
-              source={{ html: paragraph + toSplitBy }}
+              source={{ html: paragraph + "\n" }}
               baseStyle={articleStyles.text}
               customHTMLElementModels={customHTMLElementModels}
-              renderers={{ iframe: IframeRenderer }}
-              renderersProps={{
-                a: {
-                  onPress: (event, href) => handleLinkPress(event, href, setArticle),
-                },
-              }}
+              renderers={renderers}
+              renderersProps={renderersProps}
+              GenericPressable={View}
             />
           );
         })}
@@ -154,4 +173,11 @@ function SplitArticle({ content }: SplitArticleType) {
   );
 }
 
-export default SplitArticle;
+const styles = StyleSheet.create({
+  webView: {
+    width: '100%',
+    marginVertical: 10,
+  },
+});
+
+export default React.memo(SplitArticle);
