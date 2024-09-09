@@ -7,7 +7,6 @@ import SettingsStackScreen from "./settings/SettingsStackScreen";
 import SearchStackScreen from "./search/SearchStackScreen";
 import { NotificationProvider } from "./settings/NotificationProvider";
 import {
-  View,
   Dispatch,
   SetStateAction,
   createContext,

@@ -44,7 +44,7 @@ function ArticleScreen({
       return;
     }
 
-    let direction = '';
+    let direction = 'up';
 
     if (currentOffset > scrollOffset.current) {
       direction = 'down';
@@ -62,7 +62,7 @@ function ArticleScreen({
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16} // Controls how often the event is fired, 16ms is around 60fps
