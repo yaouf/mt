@@ -137,7 +137,7 @@ function SplitArticle({ content }: SplitArticleType) {
           return (
             <RenderHTML
               key={`para-${index}`}
-              source={{ html: paragraph }}
+              source={{ html: paragraph + toSplitBy }}
               baseStyle={articleStyles.text}
               customHTMLElementModels={customHTMLElementModels}
               renderers={{ iframe: IframeRenderer }}
