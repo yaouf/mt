@@ -8,7 +8,6 @@ import {
   baseStyles,
   font2,
   text,
-  varGray1,
   varTextColor
 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";

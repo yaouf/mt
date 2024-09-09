@@ -1,7 +1,6 @@
 import { NavProp, OnboardParams } from "../types/navStacks";
 import { createStackNavigator } from "@react-navigation/stack";
 import PushNotifsScreen from "./PushNotifsScreen";
-import { NavigationContainer } from "@react-navigation/native";
 import WelcomeScreen from "./WelcomeScreen";
 
 const onboardingStack = createStackNavigator<OnboardParams>();

@@ -14,7 +14,6 @@ import {
   font3,
   varTextColor,
   varRed,
-  varTextSecondaryColor,
   varGray1,
 } from "../../styles/styles";
 

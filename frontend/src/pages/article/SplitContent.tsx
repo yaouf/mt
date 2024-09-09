@@ -1,4 +1,4 @@
-import { View, Image, Text, Linking } from "react-native";
+import { View, Image, Text } from "react-native";
 import { articleStyles } from "src/styles/article";
 import {
   HTMLContentModel,

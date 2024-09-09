@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { baseStyles, text } from "src/styles/styles";
+import { text } from "src/styles/styles";
 
 const s = StyleSheet.create({
   rowStyles: {
