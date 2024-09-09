@@ -25,7 +25,7 @@ function SectionHeader(props: SectionHeaderProps) {
 
   return (
     <View style={styles.opinionsHeaderContainer} key={`${props.slug}-section-header`}>
-      <View style={styles.accent}></View><Text style={text.sectionHeader1}>{props.title}</Text>
+      <View/><Text style={text.sectionHeader1}>{props.title}</Text>
     </View>
   );
 }

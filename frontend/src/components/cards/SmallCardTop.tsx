@@ -18,7 +18,6 @@ import {
     varRed,
     varTextSecondaryColor,
   } from "../../styles/styles";
-  import ShowContextMenu from "./ShowContextMenu";
   
   function SmallCardTop({ article, navigation, specialWidth }: CardProps) {
     const all_tags = article.tags.map((t: Tag) => t.name);
@@ -62,11 +61,6 @@ import {
             </View>
           </View>
         </TouchableWithoutFeedback>
-        <ShowContextMenu
-          published_at={article.published_at}
-          slug={article.slug}
-          uuid={article.uuid}
-        />
       </View>
     );
   }
@@ -161,27 +155,11 @@ import {
       alignItems: "flex-start",
       alignSelf: "stretch",
     },
-    contextMenu: {
-      display: "flex",
-      width: 254,
-      flexDirection: "column",
-      alignItems: "flex-start",
-      position: "absolute",
-      right: 3,
-      top: -42,
-      borderRadius: 12,
-      elevation: Platform.OS === "android" ? 8 : 0,
-      shadowColor: varTextColor,
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.1,
-      shadowRadius: 64,
-    },
     subhead: {
         alignSelf: "stretch",
         color: varTextColor,
         fontFamily: font1,
         fontSize: 16,
-        fontStyle: "normal",
         fontWeight: "400",
         lineHeight: 22,
         fontStyle: "italic",
