@@ -19,22 +19,9 @@ import {
   varTextSecondaryColor,
 } from "../../styles/styles";
 
-function SmallCard({ article, navigation, specialWidth }: CardProps) {
-  const all_tags = article.tags.map((t: Tag) => t.name);
-  // let cardStyles: StyleProp<ViewStyle> = {
-  //   ...styles.card,
-  //   ...{ width: "48%" },
-  // };
-  // if (specialWidth !== undefined) {
-  //   // @ts-ignore
-  //   cardStyles = { ...styles.card, ...{ width: specialWidth } };
-  // }
+function SmallCard({ article, navigation }: CardProps) {
 
   let cardSize: StyleProp<ViewStyle> = { minWidth: "100%",};
-  if (specialWidth !== undefined) {
-    cardSize = { width: specialWidth };
-  }
-
 
   return (
     <View style={cardSize}>

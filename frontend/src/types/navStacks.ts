@@ -45,7 +45,6 @@ export type NavProp = {
 export type CardProps = {
   article: Article;
   navigation: StackNavigationProp<any, any>;
-  specialWidth?: string;
 };
 
 // for sections (like on home page)
