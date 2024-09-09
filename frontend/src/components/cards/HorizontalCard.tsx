@@ -4,12 +4,10 @@ import {
   Text,
   View,
   TouchableWithoutFeedback,
-  Dimensions,
 } from "react-native";
 import { formatDates } from "../../code/formatDates";
 import {
   font1,
-  font2,
   font3,
   varTextColor,
   varGray1,

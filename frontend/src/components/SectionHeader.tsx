@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { MenuContext } from "src/pages/home/HomeStackScreen";
 import { text } from "src/styles/styles";
 

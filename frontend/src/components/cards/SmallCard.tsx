@@ -1,5 +1,4 @@
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -11,12 +10,9 @@ import { CardProps } from "src/types/navStacks";
 import { formatDates } from "../../code/formatDates";
 import {
   font1,
-  font2,
   font3,
   varTextColor,
   varGray1,
-  varRed,
-  varTextSecondaryColor,
 } from "../../styles/styles";
 
 function SmallCard({ article, navigation }: CardProps) {

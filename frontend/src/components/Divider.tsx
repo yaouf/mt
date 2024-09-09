@@ -1,5 +1,4 @@
 import { View } from "react-native";
-import { varGray1 } from "src/styles/styles";
 
 type DividerProps = {
   marginTop?: number;

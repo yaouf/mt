@@ -8,7 +8,6 @@ import OpinionsHeader from "src/components/OpinionsHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";
 import Divider from "src/components/Divider";
 
-
 /**
  * Section with all small cards
  * @param props

@@ -9,7 +9,6 @@ import {
   Dispatch,
   SetStateAction,
   createContext,
-  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -18,7 +17,6 @@ import { menuItems } from "src/code/setup";
 import { MenuItem } from "src/types/other";
 import {
   getFocusedRouteNameFromRoute,
-  useFocusEffect,
 } from "@react-navigation/native";
 
 const HomeStack = createStackNavigator<HomeStackProps>();

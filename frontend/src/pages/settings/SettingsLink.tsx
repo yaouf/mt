@@ -4,7 +4,6 @@ import { text, varTextColor } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as WebBrowser from "expo-web-browser";
 
-
 type SettingsLinkProps = {
   title: string;
   link: string;
