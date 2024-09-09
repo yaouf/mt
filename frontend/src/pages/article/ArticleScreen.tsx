@@ -30,7 +30,7 @@ function ArticleScreen({
     // Animate the bottom bar in or out based on visibility state
     Animated.timing(translateY, {
       toValue: isBottomBarVisible ? 0 : 100, // 0 to show, 100 to hide (adjust based on bar height)
-      duration: 250, // Duration of the animation
+      duration: 180, // Duration of the animation
       useNativeDriver: true, // Use native driver for better performance
     }).start();
   }, [isBottomBarVisible]);
@@ -38,6 +38,12 @@ function ArticleScreen({
   // Handle scroll direction to show/hide BottomBar
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const currentOffset = event.nativeEvent.contentOffset.y;
+
+    if (currentOffset <= 0) {
+      setBottomBarVisible(true);
+      return;
+    }
+
     let direction = '';
 
     if (currentOffset > scrollOffset.current) {
