@@ -1,6 +1,5 @@
-import { Image, Platform, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
-import ShowContextMenu from "./ShowContextMenu";
 import { CardProps } from "src/types/navStacks";
 import { font1, varTextColor } from "../../styles/styles";
 
@@ -34,11 +33,6 @@ function ImageCard({ article, navigation }: CardProps) {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <ShowContextMenu
-        published_at={article.published_at}
-        slug={article.slug}
-        uuid={article.uuid}
-      />
     </View>
   );
 }
@@ -98,21 +92,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     alignSelf: "stretch",
-  },
-  contextMenu: {
-    display: "flex",
-    width: 254,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    position: "absolute",
-    right: 3,
-    top: -42,
-    borderRadius: 12,
-    elevation: Platform.OS === "android" ? 8 : 0,
-    shadowColor: varTextColor,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.1,
-    shadowRadius: 64,
   },
   option: {
     backgroundColor: "rgba(237, 237, 237, 0.80)",

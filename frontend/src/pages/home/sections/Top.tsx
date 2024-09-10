@@ -1,9 +1,9 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import LargeCard from "../../../components/cards/LargeCard";
 import { Article } from "src/types/data";
 import SmallCardTop from "src/components/cards/SmallCardTop";
 import SmallPhotoCardTop from "src/components/cards/SmallPhotoCardTop";
-import { baseStyles, layout, text } from "src/styles/styles";
+import { baseStyles } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import Divider from "src/components/Divider";
 

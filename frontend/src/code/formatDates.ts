@@ -1,6 +1,6 @@
 export function formatDates(publishedAt: string) {
   // Parse the publishedAt string as a date object
-  const date = new Date(publishedAt + 'Z'); // Adding 'Z' indicates the input is in GMT
+  const date = new Date(publishedAt); // Adding 'Z' indicates the input is in GMT
 
   // Get the user's timezone offset in minutes and convert to hours
   const timezoneOffsetMinutes = date.getTimezoneOffset();
@@ -18,17 +18,6 @@ export function formatDates(publishedAt: string) {
     minute: 'numeric',
     hour12: true,
     timeZoneName: 'short'
-
-
-
-
-
-
-
-
-
-
-
   };
 
   // Format the localDate to the required string format

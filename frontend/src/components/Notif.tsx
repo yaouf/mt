@@ -37,7 +37,7 @@ function Notif({
         updateSettings(deviceID, newVal, undefined, undefined);
       } else if (asyncName === "universityNewsNotifs") {
         updateSettings(deviceID, undefined, newVal, undefined);
-      } else if (asyncName === "dailyNotifs") {
+      } else if (asyncName === "metroNotifs") {
         updateSettings(deviceID, undefined, undefined, newVal);
       }
     } catch (error) {

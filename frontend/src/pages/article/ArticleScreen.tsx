@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { View, ScrollView, Image, Text, TouchableOpacity, SafeAreaView } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { View, ScrollView, Image, Text, TouchableOpacity, SafeAreaView, Animated, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import { baseStyles } from "../../styles/styles";
 import { formatDates } from "src/code/formatDates";
 import SplitArticle from "./SplitContent";
@@ -9,46 +9,73 @@ import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
 import { StackScreenProps } from "@react-navigation/stack";
 import { trackEvent } from "@aptabase/react-native";
-// TODO: future - related articles
-// links to other articles
 
 function ArticleScreen({
   route,
   navigation,
 }: StackScreenProps<HomeStackProps, "Article">) {
   const article: Article = route.params.data;
- 
- 
+  const [isBottomBarVisible, setBottomBarVisible] = useState(true);
+  const scrollOffset = useRef(0);
+  const translateY = useRef(new Animated.Value(0)).current; // Animated value for translateY
+
   useEffect(() => {
     trackEvent("article", {
       uuid: route.params.data.uuid,
       slug: route.params.data.slug,
-    }); // Call the trackEvent function
-  }, []); // Empty dependency array ensures it only runs on component mount
-  
+    });
+  }, []);
 
+  useEffect(() => {
+    // Animate the bottom bar in or out based on visibility state
+    Animated.timing(translateY, {
+      toValue: isBottomBarVisible ? 0 : 100, // 0 to show, 100 to hide (adjust based on bar height)
+      duration: 180, // Duration of the animation
+      useNativeDriver: true, // Use native driver for better performance
+    }).start();
+  }, [isBottomBarVisible]);
 
+  // Handle scroll direction to show/hide BottomBar
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const currentOffset = event.nativeEvent.contentOffset.y;
 
+    if (currentOffset <= 0) {
+      setBottomBarVisible(true);
+      return;
+    }
+
+    let direction = 'up';
+
+    if (currentOffset > scrollOffset.current) {
+      direction = 'down';
+    } else if (currentOffset < scrollOffset.current) {
+      direction = 'up';
+    }
+
+    // Show BottomBar when scrolling up, hide when scrolling down
+    if (direction) {
+      setBottomBarVisible(direction === 'up');
+    }
+
+    // Update the offset for the next event
+    scrollOffset.current = currentOffset;
+  };
 
   return (
-    <SafeAreaView>
-      <ScrollView>
-
+    <SafeAreaView style={{flex: 1}}>
+      <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16} // Controls how often the event is fired, 16ms is around 60fps
+      >
         <View style={baseStyles.container}>
-          {/* Article title, lead, author, published date, section */}
           <View style={articleStyles.headingContainer}>
-            <Text
-              style={[
-                articleStyles.title,
-                article.dominantMedia.attachment_uuid
-                  ? null
-                  : { paddingTop: 30 },
-              ]}
-            >
+            <Text style={articleStyles.title}>
               {article.headline}
             </Text>
-            {article.subhead && (
+            {article.subhead ? (
               <Text style={articleStyles.lead}>{article.subhead}</Text>
+            ) : (
+              <View style={{ height: 0, marginBottom: 7.422 }} /> // Placeholder for gap
             )}
             <View
               style={{
@@ -58,42 +85,41 @@ function ArticleScreen({
                 marginBottom: -15
               }}
             />
-            </View>
+          </View>
 
-            {article.dominantMedia.authors && (
-          <View>
-            <Image
-              source={{
-                uri: `https://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
-              }}
-              style={articleStyles.image}
-            />
-            <View style={baseStyles.container}>
-              {(article.dominantMedia.content ||
-                article.dominantMedia.authors) && (
+          {article.dominantMedia.authors && (
+            <View>
+              <Image
+                source={{
+                  uri: `https://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
+                }}
+                style={articleStyles.image}
+              />
+              <View style={baseStyles.container}>
+                {(article.dominantMedia.content || article.dominantMedia.authors) && (
                   <Text style={articleStyles.mediaCaption}>
                     {article.dominantMedia.content
                       ? article.dominantMedia.content
-                          .replace("\n", " ")
-                          .replace("<p>", "")
-                          .replace("<p>", "")
-                          .replace("</p>", "")
-                          .replace(`<\/p>`, "")
+                          .replaceAll("\n", " ")
+                          .replaceAll("<p>", "")
+                          .replaceAll("</p>", "")
+                          .replaceAll("&nbsp;", " ")
                       : ""}
                     {article.dominantMedia.authors.length > 0 &&
-                      " Media by: " +
+                      " Media by " +
                         article.dominantMedia.authors.map((mediaAuthor) => mediaAuthor.name).join(", ") +
                         " | The Brown Daily Herald"}
                   </Text>
-              )}
+                )}
+              </View>
             </View>
-          </View>
-        )}
+          )}
 
-            <View>
+          <View>
             <Text style={articleStyles.author}>
               {article.authors.map((author, i) => (
                 <TouchableOpacity
+                  key={author.slug}
                   onPress={() =>
                     navigation.navigate("Staff", { slug: author.slug })
                   }
@@ -106,7 +132,6 @@ function ArticleScreen({
               ))}
             </Text>
 
-            {/* Published date, section */}
             <View style={articleStyles.publishedDetails}>
               <Text style={articleStyles.publishedDetailsText}>
                 {formatDates(article.published_at)}
@@ -114,17 +139,26 @@ function ArticleScreen({
             </View>
           </View>
 
-          {/* Article text */}
           <SplitArticle content={article.content} />
-
         </View>
-        <View style={{height: 80}}></View>
+        <View style={{ height: 80 }}></View>
       </ScrollView>
-      <BottomBar
-        published_at={article.published_at}
-        slug={article.slug}
-        uuid={article.uuid}
-      />
+
+      {/* Animate the BottomBar */}
+      <Animated.View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          width: '100%',
+          transform: [{ translateY }],
+        }}
+      >
+        <BottomBar
+          published_at={article.published_at}
+          slug={article.slug}
+          uuid={article.uuid}
+        />
+      </Animated.View>
     </SafeAreaView>
   );
 }

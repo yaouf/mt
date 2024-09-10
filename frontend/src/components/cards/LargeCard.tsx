@@ -5,7 +5,6 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import ShowContextMenu from "./ShowContextMenu";
 import { CardProps } from "src/types/navStacks";
 import { Tag } from "src/types/data";
 import { formatDates } from "../../code/formatDates";
@@ -15,7 +14,6 @@ import {
   font3,
   varTextColor,
   varRed,
-  varTextSecondaryColor,
   varGray1,
 } from "../../styles/styles";
 
@@ -77,12 +75,6 @@ function LargeCard({ article, navigation }: CardProps) {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <ShowContextMenu
-        published_at={article.published_at}
-        slug={article.slug}
-        uuid={article.uuid}
-        large={true}
-      />
     </View>
   );
 }
@@ -105,7 +97,6 @@ const styles = StyleSheet.create({
     color: varTextColor,
     fontFamily: font1,
     fontSize: 18,
-    fontStyle: "normal",
     fontWeight: "400",
     lineHeight: 22,
     fontStyle: "italic",

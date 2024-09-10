@@ -1,5 +1,4 @@
 import {
-    Platform,
     StyleSheet,
     Text,
     View,
@@ -9,6 +8,7 @@ import {
   } from "react-native";
   import { CardProps } from "src/types/navStacks";
   import { formatDates } from "../../code/formatDates";
+  import { Tag } from "src/types/data";
   import {
     font1,
     font2,
@@ -16,25 +16,12 @@ import {
     varTextColor,
     varGray1,
     varRed,
-    varTextSecondaryColor,
   } from "../../styles/styles";
-  import ShowContextMenu from "./ShowContextMenu";
   
-  function SmallCardTop({ article, navigation, specialWidth }: CardProps) {
+  function SmallCardTop({ article, navigation }: CardProps) {
     const all_tags = article.tags.map((t: Tag) => t.name);
-    // let cardStyles: StyleProp<ViewStyle> = {
-    //   ...styles.card,
-    //   ...{ width: "48%" },
-    // };
-    // if (specialWidth !== undefined) {
-    //   // @ts-ignore
-    //   cardStyles = { ...styles.card, ...{ width: specialWidth } };
-    // }
   
     let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
-    if (specialWidth !== undefined) {
-      cardSize = { width: specialWidth };
-    }
   
   
     return (
@@ -62,11 +49,6 @@ import {
             </View>
           </View>
         </TouchableWithoutFeedback>
-        <ShowContextMenu
-          published_at={article.published_at}
-          slug={article.slug}
-          uuid={article.uuid}
-        />
       </View>
     );
   }
@@ -161,27 +143,11 @@ import {
       alignItems: "flex-start",
       alignSelf: "stretch",
     },
-    contextMenu: {
-      display: "flex",
-      width: 254,
-      flexDirection: "column",
-      alignItems: "flex-start",
-      position: "absolute",
-      right: 3,
-      top: -42,
-      borderRadius: 12,
-      elevation: Platform.OS === "android" ? 8 : 0,
-      shadowColor: varTextColor,
-      shadowOffset: { width: 0, height: 8 },
-      shadowOpacity: 0.1,
-      shadowRadius: 64,
-    },
     subhead: {
         alignSelf: "stretch",
         color: varTextColor,
         fontFamily: font1,
         fontSize: 16,
-        fontStyle: "normal",
         fontWeight: "400",
         lineHeight: 22,
         fontStyle: "italic",

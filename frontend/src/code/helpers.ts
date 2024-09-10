@@ -110,6 +110,8 @@ export const sendNotification = async () => {
       console.error("Failed to send push notification:", response.statusText);
     }
   } catch (error) {
-    console.error("Error sending push notification:", error.message);
+    if (error instanceof Error) {
+      console.error("Error sending push notification:", error.message);
+    }
   }
 };

@@ -8,7 +8,6 @@ import {
   baseStyles,
   font2,
   text,
-  varGray1,
   varTextColor
 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
@@ -33,8 +32,8 @@ function SettingsScreen({ navigation }: NavProp) {
     setBreaking,
     universityNews,
     setUniversityNews,
-    daily,
-    setDaily,
+    metro,
+    setMetro,
     deviceID,
     setDeviceID,
     checkPermissions,
@@ -52,8 +51,8 @@ function SettingsScreen({ navigation }: NavProp) {
         const universityNewsNotifs = await AsyncStorage.getItem("universityNewsNotifs");
         setUniversityNews(universityNewsNotifs === "true");
 
-        const dailyNotifs = await AsyncStorage.getItem("dailyNotifs");
-        setDaily(dailyNotifs === "true");
+        const metroNotifs = await AsyncStorage.getItem("metroNotifs");
+        setMetro(metroNotifs === "true");
 
         const id = await AsyncStorage.getItem("deviceID");
         console.log("this is the device id in the settingsscreen", id);
@@ -72,7 +71,7 @@ function SettingsScreen({ navigation }: NavProp) {
     load();
   }, []);
 
-  console.log("statussss", systemPermissionStatus, breaking, universityNews, daily);
+  console.log("statussss", systemPermissionStatus, breaking, universityNews, metro);
   console.log("Device ID in settings:", deviceID);
 
   const support = [
@@ -144,9 +143,9 @@ function SettingsScreen({ navigation }: NavProp) {
           <Notif
             title="Metro"
             description="Updates from Providence and beyond"
-            value={daily}
-            setValue={setDaily}
-            asyncName="dailyNotifs"
+            value={metro}
+            setValue={setMetro}
+            asyncName="metroNotifs"
           />
         </View>
       </View>

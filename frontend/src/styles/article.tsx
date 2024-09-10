@@ -74,7 +74,6 @@ export const articleStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    gap: 36,
     paddingBottom: 10,
     marginLeft: -3
   },

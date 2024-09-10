@@ -17,14 +17,6 @@ import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
     useContext(MenuContext);
-  // Reset currSection to "all" when the Home tab is focused
-
-  // Reset currSection to "all" when the HomeScreen is focused
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setCurrSection("all");
-  //   }, [setCurrSection])
-  // );
 
   if (!sectionMenu) {
     setSectionMenu(menuItems);

@@ -1,7 +1,6 @@
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import { SavedContext } from "../Nav";
-import { Text, Touchable, TouchableOpacity, View } from "react-native";
-import { setAsync } from "src/code/helpers";
+import { Text, TouchableOpacity, View } from "react-native";
 import { NavProp } from "src/types/navStacks";
 import FavArticle from "./FavArticle";
 import { baseStyles, layout, text, varGray1 } from "src/styles/styles";

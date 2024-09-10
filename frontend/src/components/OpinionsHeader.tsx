@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React, { useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { MenuContext } from "src/pages/home/HomeStackScreen";
 import { text } from "src/styles/styles";
 
@@ -25,7 +25,7 @@ function SectionHeader(props: SectionHeaderProps) {
 
   return (
     <View style={styles.opinionsHeaderContainer} key={`${props.slug}-section-header`}>
-      <View style={styles.accent}></View><Text style={text.sectionHeader1}>{props.title}</Text>
+      <View/><Text style={text.sectionHeader1}>{props.title}</Text>
     </View>
   );
 }
