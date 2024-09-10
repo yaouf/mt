@@ -25,11 +25,11 @@ export const menuItems: MenuItem[] = [
 export const setUpDevice = async (
   setBreaking: Dispatch<SetStateAction<boolean>>,
   setUniversityNews: Dispatch<SetStateAction<boolean>>,
-  setDaily: Dispatch<SetStateAction<boolean>>,
+  setMetro: Dispatch<SetStateAction<boolean>>,
   systemPermissionStatus: string,
   breaking?: boolean,
   universityNews?: boolean,
-  daily?: boolean
+  metro?: boolean
 ): Promise<string> => {
   setAsync("hasOnboarded", "true");
   let deviceID: string = "";
@@ -46,21 +46,21 @@ export const setUpDevice = async (
     if (systemPermissionStatus === "granted") {
       setAsync("breakingNotifs", JSON.stringify(breaking));
       setAsync("universityNewsNotifs", JSON.stringify(universityNews));
-      setAsync("dailyNotifs", JSON.stringify(daily));
+      setAsync("metroNotifs", JSON.stringify(metro));
       deviceID = await createDevice(
         breaking as boolean,
         universityNews as boolean,
-        daily as boolean,
+        metro as boolean,
         token
       );
       console.log("push token", token);
     } else {
       setBreaking(false);
       setUniversityNews(false);
-      setDaily(false);
+      setMetro(false);
       setAsync("breakingNotifs", JSON.stringify(false));
       setAsync("universityNewsNotifs", JSON.stringify(false));
-      setAsync("dailyNotifs", JSON.stringify(false));
+      setAsync("metroNotifs", JSON.stringify(false));
       deviceID = await createDevice(false, false, false, token);
       console.log("deviceID being set in line 65 of setup.ts", deviceID);
       console.log("push token", token);

@@ -20,8 +20,8 @@ interface NotificationContextType {
   setBreaking: Dispatch<SetStateAction<boolean>>;
   universityNews: boolean;
   setUniversityNews: Dispatch<SetStateAction<boolean>>;
-  daily: boolean;
-  setDaily: Dispatch<SetStateAction<boolean>>;
+  metro: boolean;
+  setMetro: Dispatch<SetStateAction<boolean>>;
   deviceID: string;
   setDeviceID: Dispatch<SetStateAction<string>>;
 }
@@ -41,8 +41,8 @@ export const NotificationContext = createContext<NotificationContextType>({
   setBreaking: () => {},
   universityNews: true,
   setUniversityNews: () => {},
-  daily: true,
-  setDaily: () => {},
+  metro: true,
+  setMetro: () => {},
   deviceID: "",
   setDeviceID: () => {},
 });
@@ -54,7 +54,7 @@ export const NotificationProvider = ({ children }) => {
 
   // Notifications
   const [universityNews, setUniversityNews] = useState(true);
-  const [daily, setDaily] = useState(true);
+  const [metro, setMetro] = useState(true);
   const [breaking, setBreaking] = useState(true);
 
   // Device ID & push token
@@ -129,8 +129,8 @@ export const NotificationProvider = ({ children }) => {
         setBreaking,
         universityNews,
         setUniversityNews,
-        daily,
-        setDaily,
+        metro,
+        setMetro,
         deviceID,
         setDeviceID,
       }}
