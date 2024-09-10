@@ -10,10 +10,10 @@
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
-import { helloWorld } from "./url/helloWorld";
-import { createDevice } from "./url/createDevice";
-import { updateSettings } from "./url/updateSettings";
 import { createUser } from "./auth/createUser";
-import { viewSettings } from "./url/viewSettings";
+import { createDevice } from "./url/createDevice";
 import { updateNotificationStatus } from "./url/updateNotificationStatus";
-export { helloWorld, createDevice, updateSettings, createUser, viewSettings, updateNotificationStatus };
+import { updateSettings } from "./url/updateSettings";
+import { viewSettings } from "./url/viewSettings";
+export { createDevice, createUser, updateNotificationStatus, updateSettings, viewSettings };
+
