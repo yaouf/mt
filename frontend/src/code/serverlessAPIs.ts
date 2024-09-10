@@ -38,7 +38,7 @@ export const createDevice = async (
 
   try {
     const response = await fetch(
-      "https://createdevice-h4fuv4ya3q-uc.a.run.app/",
+      "https://createdevice-sjblykwjfa-uc.a.run.app/",
       requestOptions
     );
 
@@ -101,7 +101,7 @@ export const updateSettings = async (
   };
 
   const response = await fetch(
-    "https://updatesettings-h4fuv4ya3q-uc.a.run.app/",
+    "https://updatesettings-sjblykwjfa-uc.a.run.app/",
     requestOptions
   );
 
