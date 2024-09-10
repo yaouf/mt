@@ -1,6 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator } from "react-native";
 import { fetchArticle } from "src/code/fetchContent";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import { varGray1 } from "src/styles/styles";

@@ -70,8 +70,8 @@ function Staff({
             <Divider marginTop={0} marginBottom={8} />
             <Text style={{ ...articleStyles.articleBody, marginTop: 8 }}>
               {author.bio
-                .replace("<p>", "")
-                .replace("</p>", "")
+                .replaceAll("<p>", "")
+                .replaceAll("</p>", "")
                 .replaceAll("&amp;", "&")}
             </Text>
           </View>
@@ -82,7 +82,8 @@ function Staff({
         <View>
           <Divider marginTop={10} marginBottom={10} />
           <Text style={text.sectionHeader1}>Recent Articles</Text>
-          <View style={layout.vStack}>
+          <View style={{height: 10}}></View>
+          <View style={layout.recentArticlesStack}>
             {articles.map((article: Article, i) => (
               <HorizontalCard
                 article={article}

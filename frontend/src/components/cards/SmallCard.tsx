@@ -1,5 +1,4 @@
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
@@ -11,31 +10,14 @@ import { CardProps } from "src/types/navStacks";
 import { formatDates } from "../../code/formatDates";
 import {
   font1,
-  font2,
   font3,
   varTextColor,
   varGray1,
-  varRed,
-  varTextSecondaryColor,
 } from "../../styles/styles";
-import ShowContextMenu from "./ShowContextMenu";
 
-function SmallCard({ article, navigation, specialWidth }: CardProps) {
-  const all_tags = article.tags.map((t: Tag) => t.name);
-  // let cardStyles: StyleProp<ViewStyle> = {
-  //   ...styles.card,
-  //   ...{ width: "48%" },
-  // };
-  // if (specialWidth !== undefined) {
-  //   // @ts-ignore
-  //   cardStyles = { ...styles.card, ...{ width: specialWidth } };
-  // }
+function SmallCard({ article, navigation }: CardProps) {
 
   let cardSize: StyleProp<ViewStyle> = { minWidth: "100%",};
-  if (specialWidth !== undefined) {
-    cardSize = { width: specialWidth };
-  }
-
 
   return (
     <View style={cardSize}>
@@ -61,11 +43,6 @@ function SmallCard({ article, navigation, specialWidth }: CardProps) {
           </View>
         </View>
       </TouchableWithoutFeedback>
-      <ShowContextMenu
-        published_at={article.published_at}
-        slug={article.slug}
-        uuid={article.uuid}
-      />
     </View>
   );
 }
@@ -159,27 +136,11 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     alignSelf: "stretch",
   },
-  contextMenu: {
-    display: "flex",
-    width: 254,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    position: "absolute",
-    right: 3,
-    top: -42,
-    borderRadius: 12,
-    elevation: Platform.OS === "android" ? 8 : 0,
-    shadowColor: varTextColor,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.1,
-    shadowRadius: 64,
-  },
   subhead: {
     alignSelf: "stretch",
     color: varTextColor,
     fontFamily: font1,
     fontSize: 18,
-    fontStyle: "normal",
     fontWeight: "400",
     lineHeight: 22,
     fontStyle: "italic",

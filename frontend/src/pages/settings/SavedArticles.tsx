@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { View, FlatList } from "react-native";
-import { baseStyles, layout } from "src/styles/styles";
+import { baseStyles } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { SavedContext } from "../Nav";
 import FavArticle from "./FavArticle";

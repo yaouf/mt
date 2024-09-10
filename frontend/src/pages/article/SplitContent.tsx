@@ -1,4 +1,5 @@
-import { View, Image, Text, Linking } from "react-native";
+import React, { useMemo, useCallback, useState, useRef } from 'react';
+import { View, Image, Text, StyleSheet } from "react-native";
 import { articleStyles } from "src/styles/article";
 import {
   HTMLContentModel,
@@ -8,10 +9,48 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Article } from "src/types/data";
-import { Dispatch, SetStateAction, useState } from "react";
 import { fetchArticle } from "src/code/fetchContent";
 import WebView from "react-native-webview";
 import * as WebBrowser from "expo-web-browser";
+
+const IframeRenderer = React.memo(
+  ({ tnode }: any) => {
+    const [iframeHeight, setIframeHeight] = useState(1);
+    const webViewRef = useRef(null);
+
+    const { src } = useMemo(() => {
+      const { attributes } = tnode;
+      return { src: attributes.src };
+    }, [tnode.attributes.src]);
+
+    const onWebViewMessage = useCallback((event) => {
+      const height = parseInt(event.nativeEvent.data);
+      if (!isNaN(height)) {
+        setIframeHeight(height);
+      }
+    }, []);
+
+    const injectedJavaScript = `
+      window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight);
+      true; // note: this is required, or you'll sometimes get silent failures
+    `;
+
+    return (
+      <WebView
+        ref={webViewRef}
+        source={{ uri: src }}
+        style={[styles.webView, { height: iframeHeight }]}
+        scrollEnabled={false}
+        onMessage={onWebViewMessage}
+        injectedJavaScript={injectedJavaScript}
+        onLoadEnd={() => {
+          webViewRef.current?.injectJavaScript(injectedJavaScript);
+        }}
+      />
+    );
+  },
+  (prevProps, nextProps) => prevProps.tnode.attributes.src === nextProps.tnode.attributes.src
+);
 
 type SplitArticleType = {
   content: string;
@@ -23,233 +62,122 @@ function SplitArticle({ content }: SplitArticleType) {
   };
 
   const [article, setArticle] = useState<Article | undefined>();
-
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const customHTMLElementModels = {
+  const customHTMLElementModels = useMemo(() => ({
     iframe: HTMLElementModel.fromCustomModel({
       tagName: "iframe",
       mixedUAStyles: {
         width: "100%",
       },
-      contentModel: HTMLContentModel.textual,
+      contentModel: HTMLContentModel.block,
     }),
     a: HTMLElementModel.fromCustomModel({
       tagName: "a",
       mixedUAStyles: articleStyles.hyperlink,
       contentModel: HTMLContentModel.textual,
     }),
-  };
+  }), []);
 
-  var splitContent = source.html.split("\n");
-  var char = "\n";
-  if (splitContent.length == 1) {
-    char = "</p><p>";
-    splitContent = source.html.split("</p><p>");
-  }
-  if (splitContent.length >= 15) {
-    const source1 = {
-      html: "",
-    };
-    splitContent.map((val, index) => {
-      if (index <= splitContent.length / 3) {
-        source1.html += val + char;
-      }
-    });
-    const source2 = {
-      html: "",
-    };
-    splitContent.map((val, index) => {
-      if (
-        index > splitContent.length / 3 &&
-        index <= (2 * splitContent.length) / 3
-      ) {
-        source2.html += val + char;
-      }
-    });
-    const source3 = {
-      html: "",
-    };
-    splitContent.map((val, index) => {
-      if (index > (2 * splitContent.length) / 3) {
-        source3.html += val + char;
-      }
-    });
+  const handleLinkPress = useCallback(async (
+    event: any,
+    href: string
+  ) => {
+    const articleBaseURL = "https://www.browndailyherald.com/article/";
+    if (href.startsWith(articleBaseURL)) {
+      try {
+        const seg = href.split("/");
+        const slug = seg.pop();
+        const month = seg.pop();
+        const year = seg.pop();
+        const date = year + "-" + month;
 
-    // navigates to new article screen in stack
-    const handleLinkPress = async (
-      event: any,
-      href: string,
-      setArticle: Dispatch<SetStateAction<Article | undefined>>
-    ) => {
-      // checks if url is article
-      const articleBaseURL = "https://www.browndailyherald.com/article/";
-      if (href.startsWith(articleBaseURL)) {
-        try {
-          // fetch article data
-          const seg = href.split("/"); // splits href into slug and date
-
-          const slug = seg.pop(); // retrieves slug
-
-          const month = seg.pop(); // retrieves date month
-          const year = seg.pop(); //retrieves date year
-          const date = year + "-" + month;
-
-          // check if slug, year, or month is invalid
-          if (!slug || !year || !month) {
-            throw new Error("Invalid URL format");
-          }
-
-          const fetchedArticle = await fetchArticle(slug, date, setArticle);
-          setArticle(fetchedArticle);
-          // navigate to Article screen with fetched article data
-          console.log(slug);
-          navigation.push("Article", { data: fetchedArticle });
-        } catch (error) {
-          // handle article error
-          console.error("Error fetching article:", error);
+        if (!slug || !year || !month) {
+          throw new Error("Invalid URL format");
         }
-      }
-      // opens url in web browser if not article
-      else {
-        await WebBrowser.openBrowserAsync(href);
-      }
-    };
 
-    function IframeRenderer({ tnode }: any) {
-      const { attributes } = tnode;
-      const src = attributes.src;
-      const height = parseInt(attributes.height) || 500;
+        const fetchedArticle = await fetchArticle(slug, date, setArticle);
+        setArticle(fetchedArticle);
+        navigation.push("Article", { data: fetchedArticle });
+      } catch (error) {
+        console.error("Error fetching article:", error);
+      }
+    } else {
+      await WebBrowser.openBrowserAsync(href);
+    }
+  }, [navigation]);
 
-      return (
-        <WebView
-          source={{ uri: src }}
-          style={{
-            marginVertical: 20,
-            width: "100%",
-            height: height,
-          }}
-          scrollEnabled={false}
-        />
-      );
+  const renderers = useMemo(() => ({ iframe: IframeRenderer }), []);
+  const renderersProps = useMemo(() => ({
+    a: {
+      onPress: handleLinkPress,
+    },
+  }), [handleLinkPress]);
+
+  // Split content by paragraphs
+  const splitContent = useMemo(() => {
+    let split = source.html.split("\n");
+    if (split.length === 1) {
+      split = source.html.split("</p><p>");
     }
 
-    return (
-      <View style={articleStyles.articleBodyWrapper}>
-        <View style={articleStyles.articleBody}>
-          <RenderHTML
-            source={source1}
-            baseStyle={articleStyles.text}
-            customHTMLElementModels={customHTMLElementModels}
-            renderers={{ iframe: IframeRenderer }}
-            renderersProps={{
-              a: {
-                onPress: (event, href) =>
-                  handleLinkPress(event, href, setArticle),
-              },
-            }}
-          />
+    const adFrequency = 7; // Advertisement every 7 paragraphs after the first ad
+    const firstAdPosition = 5; // First ad after the 5th paragraph
 
-          {/* Advertisement block */}
-          <View style={articleStyles.advert}>
-            <Image
-              source={{
-                uri: "https://www.peacemakersnetwork.org/wp-content/uploads/2019/09/placeholder.jpg",
-              }}
-              style={articleStyles.adImage}
+    // Insert placeholders for ads
+    for (let i = firstAdPosition; i < split.length; i += adFrequency + 1) {
+      split.splice(i, 0, "<!-- ADVERTISEMENT_PLACEHOLDER -->");
+    }
+
+    return split;
+  }, [source.html]);
+
+  // Function to render ads as components
+  const renderAdComponent = useCallback(() => (
+    <View style={articleStyles.advert}>
+      <Image
+        source={{
+          uri: "https://www.peacemakersnetwork.org/wp-content/uploads/2019/09/placeholder.jpg",
+        }}
+        style={articleStyles.adImage}
+      />
+      <Text style={articleStyles.adAuthor}>Advertisement</Text>
+    </View>
+  ), []);
+
+  // Render content with ads inserted at placeholder positions
+  return (
+    <View style={articleStyles.articleBodyWrapper}>
+      <View style={articleStyles.articleBody}>
+        {splitContent.map((paragraph, index) => {
+          if (paragraph === "<!-- ADVERTISEMENT_PLACEHOLDER -->") {
+            // Render ad component when encountering placeholder
+            return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
+          }
+
+          // Render normal paragraph content
+          return (
+            <RenderHTML
+              key={`para-${index}`}
+              source={{ html: paragraph + "\n" }}
+              baseStyle={articleStyles.text}
+              customHTMLElementModels={customHTMLElementModels}
+              renderers={renderers}
+              renderersProps={renderersProps}
+              GenericPressable={View}
             />
-            <Text style={articleStyles.adAuthor}>Advertisement</Text>
-          </View>
-
-          {/* article continued */}
-          <RenderHTML
-            source={source2}
-            baseStyle={articleStyles.text}
-            customHTMLElementModels={customHTMLElementModels}
-            renderers={{ iframe: IframeRenderer }}
-            renderersProps={{
-              a: {
-                onPress: (event, href) =>
-                  handleLinkPress(event, href, setArticle),
-              },
-            }}
-          />
-
-          {/* Advertisement block */}
-          <View style={articleStyles.advert}>
-            <Image
-              source={{
-                uri: "https://www.peacemakersnetwork.org/wp-content/uploads/2019/09/placeholder.jpg",
-              }}
-              style={articleStyles.adImage}
-            />
-            <Text style={articleStyles.adAuthor}>Advertisement</Text>
-          </View>
-
-          {/* article continued */}
-          <RenderHTML
-            source={source3}
-            baseStyle={articleStyles.text}
-            customHTMLElementModels={customHTMLElementModels}
-            renderers={{ iframe: IframeRenderer }}
-            renderersProps={{
-              a: {
-                onPress: (event, href) =>
-                  handleLinkPress(event, href, setArticle),
-              },
-            }}
-          />
-        </View>
+          );
+        })}
       </View>
-    );
-  } else {
-    const source1 = {
-      html: "",
-    };
-    splitContent.map((val, index) => {
-      if (index <= splitContent.length / 2) {
-        source1.html += val + char;
-      }
-    });
-    const source2 = {
-      html: "",
-    };
-    splitContent.map((val, index) => {
-      if (index > splitContent.length / 2) {
-        source2.html += val + char;
-      }
-    });
-
-    return (
-      <View style={articleStyles.articleBodyWrapper}>
-        <View style={articleStyles.articleBody}>
-          <RenderHTML
-            source={source1}
-            baseStyle={articleStyles.text}
-            customHTMLElementModels={customHTMLElementModels}
-          />
-
-          {/* Advertisement block */}
-          <View style={articleStyles.advert}>
-            <Image
-              source={{
-                uri: "https://www.peacemakersnetwork.org/wp-content/uploads/2019/09/placeholder.jpg",
-              }}
-              style={articleStyles.adImage}
-            />
-            <Text style={articleStyles.adAuthor}>Advertisement</Text>
-          </View>
-
-          {/* article continued */}
-          <RenderHTML
-            source={source2}
-            baseStyle={articleStyles.text}
-            customHTMLElementModels={customHTMLElementModels}
-          />
-        </View>
-      </View>
-    );
-  }
+    </View>
+  );
 }
 
-export default SplitArticle;
+const styles = StyleSheet.create({
+  webView: {
+    width: '100%',
+    marginVertical: 10,
+  },
+});
+
+export default React.memo(SplitArticle);

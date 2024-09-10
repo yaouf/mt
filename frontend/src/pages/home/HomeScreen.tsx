@@ -3,7 +3,6 @@ import { View, FlatList, RefreshControl } from "react-native";
 import Top from "./sections/Top";
 import { NavProp } from "src/types/navStacks";
 import { Article } from "src/types/data";
-import Divider from "src/components/Divider";
 import { useScrollToTop } from "@react-navigation/native";
 import SmallHorzGroup from "./sections/SmallHorzGroup";
 import OpinionsGroup from "./sections/OpinionsGroup";

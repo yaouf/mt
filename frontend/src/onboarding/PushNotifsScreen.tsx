@@ -20,8 +20,8 @@ function PushNotifsScreen({
     setBreaking,
     universityNews,
     setUniversityNews,
-    daily,
-    setDaily,
+    metro,
+    setMetro,
     setDeviceID,
     systemPermissionStatus,
     requestPermission,
@@ -32,11 +32,11 @@ function PushNotifsScreen({
       setUpDevice(
         setBreaking,
         setUniversityNews,
-        setDaily,
+        setMetro,
         status,
         breaking,
         universityNews,
-        daily
+        metro
       ).then((id) => setDeviceID(id));
     });
 
@@ -71,8 +71,8 @@ function PushNotifsScreen({
               <Notif
                 title="Metro"
                 description="Updates from Providence and beyond"
-                value={daily}
-                setValue={setDaily}
+                value={metro}
+                setValue={setMetro}
                 onboarding={true}
               />
             </View>
@@ -87,7 +87,7 @@ function PushNotifsScreen({
             <TouchableOpacity
               style={[settings.continueButton, styles.maybeLaterButton]}
               onPress={() => {
-                setUpDevice(setBreaking, setUniversityNews, setDaily, systemPermissionStatus)
+                setUpDevice(setBreaking, setUniversityNews, setMetro, systemPermissionStatus)
                   .then((id) => setDeviceID(id))
                   .then(() => route.params.parentNav.push("MainApp"));
               }}

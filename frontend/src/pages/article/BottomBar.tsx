@@ -1,5 +1,5 @@
 import { articleStyles } from "src/styles/article";
-import { View, Image, TouchableOpacity } from "react-native";
+import { View, ScrollView, Image, TouchableOpacity } from "react-native";
 import { shareArticle } from "./ShareArticle";
 import { Ionicons } from "@expo/vector-icons";
 import { useContext, useEffect, useState } from "react";
