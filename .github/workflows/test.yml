@@ -1,0 +1,51 @@
+name: Run Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DB_URL: ${{ secrets.DB_URL }}
+      NODE_ENV: development
+      NEXT_PUBLIC_FB_API_KEY: ${{secrets.NEXT_PUBLIC_FB_API_KEY}}
+      NEXT_PUBLIC_FB_AUTH_DOMAIN: ${{secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN}}
+      NEXT_PUBLIC_FB_PROJECT_ID: ${{secrets.NEXT_PUBLIC_FB_PROJECT_ID}}
+      NEXT_PUBLIC_FB_STORAGE_BUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGE_BUCKET}}
+      NEXT_PUBLIC_FB_MESSAGING_SENDER_ID: ${{secrets.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID}}
+      NEXT_PUBLIC_FB_APP_ID: $${{secrets.NEXT_PUBLIC_FB_APP_ID}}
+      NEXT_PUBLIC_FB_MEASUREMENT_ID: $${{secrets.NEXT_PUBLIC_FB_MEASUREMENT_ID}}
+    strategy:
+      matrix:
+        node-version: [21]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Add Secret Service Account Key JSON File
+        run: touch serviceAccountKey.json && echo "${{secrets.SERVICE_ACCOUNT_KEY}}" | base64 -d > serviceAccountKey.json
+        working-directory: ./backend/nms
+
+      - name: Install Global Deps
+        run: sudo apt-get update && sudo apt-get install -y redis-server
+        working-directory: ./backend/nms
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./backend/nms
+
+      - name: Run Jest tests
+        run: npm test
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        working-directory: ./backend/nms

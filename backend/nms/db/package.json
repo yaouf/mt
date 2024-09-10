@@ -1,0 +1,27 @@
+{
+  "name": "db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm i && tsc",
+    "knex": "npx knex",
+    "update": "npm run build && npm run knex -- migrate:rollback && npm run knex -- migrate:latest && npm run knex -- seed:run",
+    "new": "npm run build && npx knex migrate:make $1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/uuid": "^9.0.8",
+    "dotenv": "^16.4.5",
+    "envalid": "^8.0.0",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.26"
+  }
+}
