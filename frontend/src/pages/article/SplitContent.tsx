@@ -150,6 +150,7 @@ function SplitArticle({ content }: SplitArticleType) {
     <View style={articleStyles.articleBodyWrapper}>
       <View style={articleStyles.articleBody}>
         {splitContent.map((paragraph, index) => {
+          // TODO: Remove advertisement placeholder in later commit
           if (paragraph === "<!-- ADVERTISEMENT_PLACEHOLDER -->") {
             // Render ad component when encountering placeholder
             return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
