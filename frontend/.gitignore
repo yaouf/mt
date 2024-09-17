@@ -37,7 +37,7 @@ Dockerfile*
 xo
 config.debug.php
 
-.env
+.env*
 
 #build folders
 ios/
