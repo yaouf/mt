@@ -1,13 +1,13 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useContext } from "react";
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, SafeAreaView, Dimensions, StyleSheet } from "react-native";
 import Notif from "src/components/Notif";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
-import { font2, text } from "src/styles/styles";
+import { text } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
+import { font2 } from "src/styles/styles";
 import { setUpDevice } from "../code/setup";
-
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 
@@ -45,7 +45,6 @@ function PushNotifsScreen({
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView>
       <View style={styles.container}>
         <View>
               <Text style={text.bigTitle}>Welcome.</Text>
@@ -97,7 +96,6 @@ function PushNotifsScreen({
             </TouchableOpacity>
           </View>
       </View>
-      </ScrollView>
     </SafeAreaView>
   );
 }
