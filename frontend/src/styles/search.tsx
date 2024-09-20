@@ -24,7 +24,7 @@ export const search = StyleSheet.create({
   },
 
   searchText: {
-    fontSize: 15,
+    fontSize: 16,
     color: varGray1,
     flex: 1,
   },

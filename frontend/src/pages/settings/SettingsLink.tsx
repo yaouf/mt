@@ -41,7 +41,7 @@ function SettingsLink({ title, link, inApp, navigation }: SettingsLinkProps) {
       accessibilityHint={`Press to open ${title} link`}
       accessibilityRole="button"
     >
-      <Text style={{ ...text.notifSmall, fontSize: 14 }}>{title}</Text>
+      <Text style={{ ...text.notifSmall, fontSize: 16 }}>{title}</Text>
       <Ionicons name="chevron-forward-outline" size={24} color={varTextColor} />
     </TouchableOpacity>
   );

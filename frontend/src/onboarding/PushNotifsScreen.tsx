@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useContext } from "react";
-import { Text, TouchableOpacity, View, SafeAreaView, Dimensions, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, View, SafeAreaView, Dimensions, StyleSheet, ScrollView } from "react-native";
 import Notif from "src/components/Notif";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
@@ -45,13 +45,14 @@ function PushNotifsScreen({
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <View accessible={true}>
-              <Text style={text.bigTitle}>Welcome.</Text>
-              <Text style={text.normal}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        <View style={styles.contentContainer}>
+          <View>
+            <Text style={styles.title}>Welcome.</Text>
+            <Text style={styles.description}>
               Turn on alerts for the topics that interest you and we'll keep you
               updated.
-              </Text>
+            </Text>
           
             <View style={styles.notifContainer}>
               <Notif
@@ -76,29 +77,32 @@ function PushNotifsScreen({
                 onboarding={true}
               />
             </View>
-        </View> 
-        <View style={{width: "100%"}}>
-            <TouchableOpacity
-              style={settings.continueButton}
-              onPress={saveNotifPreferences}
-              accessible={true}
-              accessibilityHint="Press to save notification preferences and continue to the app"
-            >
-              <Text style={{fontFamily: font2}}>Save and continue</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[settings.continueButton, styles.maybeLaterButton]}
-              onPress={() => {
-                setUpDevice(setBreaking, setUniversityNews, setMetro, systemPermissionStatus)
-                  .then((id) => setDeviceID(id))
-                  .then(() => route.params.parentNav.push("MainApp"));
-              }}
-              accessible={true}
-              accessibilityHint="Press to skip setting up notifications"
-            >
-              <Text style={text.normal}>Maybe Later</Text>
-            </TouchableOpacity>
-          </View>
+          </View> 
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.continueButton}
+          onPress={saveNotifPreferences}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityHint="Press to save notification preferences and continue to the app"
+        >
+          <Text style={styles.buttonText}>Save and continue</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.continueButton, styles.maybeLaterButton]}
+          onPress={() => {
+            setUpDevice(setBreaking, setUniversityNews, setMetro, systemPermissionStatus)
+              .then((id) => setDeviceID(id))
+              .then(() => route.params.parentNav.push("MainApp"));
+          }}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityHint="Press to skip setting up notifications"
+        >
+          <Text style={styles.buttonText}>Maybe Later</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -109,21 +113,40 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
   },
-  container: {
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+  contentContainer: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    padding: 0.05*screenHeight, 
+    padding: '5%',
+  },
+  title: {
+    ...text.bigTitle,
+    fontSize: 32,
+    marginBottom: '5%',
+  },
+  description: {
+    ...text.normal,
+    fontSize: 16,
+    marginBottom: '5%',
   },
   notifContainer: {
-    marginTop: 20, // Add some margin to push the content down
     rowGap: 16,
-    width: screenWidth*0.8, // The switches overflow from their container so they need custom width 
+    width: '100%',
+  },
+  buttonContainer: {
+    padding: '5%',
+  },
+  continueButton: {
+    ...settings.continueButton,
+    marginBottom: '2%',
   },
   maybeLaterButton: {
     borderColor: "white",
-    marginTop: 0, 
+  },
+  buttonText: {
+    fontFamily: font2,
+    fontSize: 16,
   },
 });
 
