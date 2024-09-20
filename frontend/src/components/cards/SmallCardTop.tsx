@@ -29,22 +29,32 @@ import {
         <TouchableWithoutFeedback
           style={styles2.touchableItem}
           onPress={() => navigation.push("Article", { data: article })}
+          accessibilityRole="button"
+          accessibilityHint={`Double tap to open article`}
         >
           <View style={styles.card}>
             <View style={styles.text}>
             <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end", marginBottom: 8}}>
-            <Text style={{color: varRed, fontWeight: 700, fontFamily: font2, fontSize: 12,}}>
+            <Text style={{color: varRed, fontWeight: 700, fontFamily: font2, fontSize: 12,}}
+              accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
+            >
               {all_tags[0].replace("&;", "&")}
             </Text>
             </View>
-              <Text style={styles.title}>
+              <Text style={styles.title}
+                accessibilityLabel={`Headline: ${article.headline}.`}
+              >
                 {article.headline}
               </Text>
-              <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail">
+              <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail"
+                accessibilityLabel={`Subtitle: ${article.subhead}.`}
+              >
               {article.subhead}
             </Text>
-              <Text style={styles.published}>
-                      {formatDates(article.published_at)}
+              <Text style={styles.published}
+                accessibilityLabel={`Published on ${formatDates(article.published_at)}.`}
+              >
+                {formatDates(article.published_at)}
               </Text>
             </View>
           </View>

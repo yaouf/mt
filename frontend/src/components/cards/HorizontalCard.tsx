@@ -47,7 +47,8 @@ function HorizontalCard({ article, navigation }: CardProps) {
                 >
                   {article.headline}
                 </Text>
-                <Text style={styles.published}>
+                <Text style={styles.published}
+                >
                   {formatDates(article.published_at)}
                 </Text>
                 </View>
