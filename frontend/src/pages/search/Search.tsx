@@ -57,6 +57,7 @@ function Search({ navigation }: NavProp) {
           size={24}
           color={varGray1}
           style={{ marginHorizontal: 8 }}
+          accessible={false}
         />
         <TextInput
           onChangeText={onChangeText}
@@ -67,17 +68,24 @@ function Search({ navigation }: NavProp) {
           style={search.searchText}
           onFocus={() => setSearchActivated(true)}
           onSubmitEditing={handleSearch} // Handle search on submit
+          accessibilityLabel="Search input"
+          accessibilityHint="Enter keywords to search for articles"
         />
         {searchActivated && (
           <TouchableOpacity
             onPress={handleSearchCancel}
             style={search.searchCancel}
+            accessibilityLabel="Cancel search"
+            accessibilityHint="Clear search input and cancel search"
+            accessible={true}
+            accessibilityRole="button"
           >
             <Ionicons
               name="close-circle-outline"
               size={24}
               color={varGray1}
               style={{ marginHorizontal: 8 }}
+              accessible={false}
             />
           </TouchableOpacity>
         )}
@@ -86,9 +94,10 @@ function Search({ navigation }: NavProp) {
       <View style={search.container}>
         {!searchCompleted && (loading ?
           <Image
-        source={require("assets/logo-black.png")}
-        style={search.img}
-        resizeMode="contain"
+            source={require("assets/logo-black.png")}
+            style={search.img}
+            resizeMode="contain"
+            accessible={false}
           />
         :
         <Text
@@ -118,7 +127,7 @@ function Search({ navigation }: NavProp) {
             style={{ marginTop: 16, marginBottom: 186 }}
             initialNumToRender={8}
           />
-      }
+        }
       </View>
       
     </View>

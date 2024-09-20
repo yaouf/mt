@@ -28,11 +28,15 @@ function Staff({
   }, []);
 
   if (!author || !articles || !media || !posts) {
-    return <ActivityIndicator color={varGray1} style={{ flex: 1 }} />;
+    return <ActivityIndicator color={varGray1} style={{ flex: 1 }} accessibilityLabel="Loading staff information" />;
   }
 
   return (
-    <ScrollView style={baseStyles.container}>
+    <ScrollView 
+      style={baseStyles.container}
+      accessibilityLabel="Staff member details"
+      accessibilityHint="Scroll to view staff member's information, articles, and media"
+    >
       <View>
         <View
           style={{
@@ -42,15 +46,18 @@ function Staff({
             marginBottom: 14,
             marginTop: 24,
           }}
+          accessible={true}
+          accessibilityRole="header"
         >
           {author.metadata && (
             <Image
               source={{ uri: author.metadata[0].value }}
               style={{ width: 64, height: 64, borderRadius: 50 }}
+              accessibilityLabel="Staff member's profile picture"
             />
           )}
           <View style={{ flex: 1 }}>
-            <Text style={text.sectionHeader1}>{author.name}</Text>
+            <Text style={text.sectionHeader1} accessibilityRole="header">{author.name}</Text>
             {author.tagline !== "" && (
               <Text
                 style={{
@@ -58,6 +65,7 @@ function Staff({
                   fontStyle: "italic",
                   marginTop: 4,
                 }}
+                accessibilityLabel="Staff member's tagline"
               >
                 {author.tagline}
               </Text>
@@ -66,9 +74,12 @@ function Staff({
         </View>
 
         {author.bio !== "" && (
-          <View>
+          <View accessible={true}>
             <Divider marginTop={0} marginBottom={8} />
-            <Text style={{ ...articleStyles.articleBody, marginTop: 8 }}>
+            <Text 
+              style={{ ...articleStyles.articleBody, marginTop: 8 }}
+              accessibilityLabel="Staff member's biography"
+            >
               {author.bio
                 .replaceAll("<p>", "")
                 .replaceAll("</p>", "")
@@ -79,9 +90,9 @@ function Staff({
       </View>
 
       {articles.length > 0 && (
-        <View>
+        <View accessibilityLabel="Recent articles section">
           <Divider marginTop={10} marginBottom={10} />
-          <Text style={text.sectionHeader1}>Recent Articles</Text>
+          <Text style={text.sectionHeader1} accessibilityRole="header">Recent Articles</Text>
           <View style={{height: 10}}></View>
           <View style={layout.recentArticlesStack}>
             {articles.map((article: Article, i) => (
@@ -96,9 +107,9 @@ function Staff({
       )}
 
       {media.length > 0 && (
-        <View>
+        <View accessibilityLabel="Media section">
           <Divider marginTop={18} marginBottom={8} />
-          <Text style={text.sectionHeader1}>Media</Text>
+          <Text style={text.sectionHeader1} accessibilityRole="header">Media</Text>
           <View
             style={{
               flexDirection: "row",
@@ -122,6 +133,7 @@ function Staff({
                     media.preview_extension
                   )
                 }
+                accessibilityLabel={`Media item ${i + 1}`}
               />
             ))}
           </View>

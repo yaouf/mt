@@ -46,7 +46,7 @@ function PushNotifsScreen({
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View>
+        <View accessible={true}>
               <Text style={text.bigTitle}>Welcome.</Text>
               <Text style={text.normal}>
               Turn on alerts for the topics that interest you and we'll keep you
@@ -81,6 +81,8 @@ function PushNotifsScreen({
             <TouchableOpacity
               style={settings.continueButton}
               onPress={saveNotifPreferences}
+              accessible={true}
+              accessibilityHint="Press to save notification preferences and continue to the app"
             >
               <Text style={{fontFamily: font2}}>Save and continue</Text>
             </TouchableOpacity>
@@ -91,6 +93,8 @@ function PushNotifsScreen({
                   .then((id) => setDeviceID(id))
                   .then(() => route.params.parentNav.push("MainApp"));
               }}
+              accessible={true}
+              accessibilityHint="Press to skip setting up notifications"
             >
               <Text style={text.normal}>Maybe Later</Text>
             </TouchableOpacity>
@@ -115,11 +119,11 @@ const styles = StyleSheet.create({
   notifContainer: {
     marginTop: 20, // Add some margin to push the content down
     rowGap: 16,
-    width: screenWidth*0.8, // The switches oveflow from their container so they need custom width 
+    width: screenWidth*0.8, // The switches overflow from their container so they need custom width 
   },
   maybeLaterButton: {
     borderColor: "white",
-    marginTop: 0, // Adjust spacing if needed
+    marginTop: 0, 
   },
 });
 

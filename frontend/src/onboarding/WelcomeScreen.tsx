@@ -44,11 +44,14 @@ function WelcomeScreen({ navigation }: NavProp) {
         source={require("assets/logo-black.png")}
         style={styles.img}
         resizeMode="contain"
+        accessibilityHint="Brown Daily Herald Logo"
       />
       {showButton && (
         <TouchableOpacity
           onPress={() => navigation.push("PushNotifs")}
           style={styles.button}
+          accessible={true}
+          accessibilityHint="Continue to Notification Preferences"
         >
           <Text style={styles.buttonText}>Continue</Text>
         </TouchableOpacity>
