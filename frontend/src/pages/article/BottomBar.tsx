@@ -31,11 +31,13 @@ function BottomBar(props: ArticleDetailProps) {
   // function handleNotification() {}
 
   return (
-    <View style={articleStyles.actionBar}>
+    <View style={articleStyles.actionBar} accessibilityLabel="Article Action Bar">
       <View style={articleStyles.actions}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{  }}
+          accessibilityLabel="Back Button"
+          accessibilityHint="Press to go back to the previous screen"
         >
           <Ionicons name="arrow-back" size={24} color="#1C1B1F" />
         </TouchableOpacity>
@@ -61,6 +63,9 @@ function BottomBar(props: ArticleDetailProps) {
               setSaved
             )
           }
+          accessible={true}
+          accessibilityLabel="Bookmark Button"
+          accessibilityHint="Press to bookmark or unbookmark the article"
         >
           {saved ? (
             <Ionicons name="bookmark" size={24} color="#1C1B1F" />
@@ -68,7 +73,10 @@ function BottomBar(props: ArticleDetailProps) {
             <Ionicons name="bookmark-outline" size={24} color="#1C1B1F" />
           )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleShare()}>
+        <TouchableOpacity onPress={() => handleShare()} 
+        accessible={true}
+        accessibilityLabel="Share Button"
+        accessibilityHint="Press to share the article">
           <Image
             source={require("../../../assets/icons/share.png")}
             style={articleStyles.icon}

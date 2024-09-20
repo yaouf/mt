@@ -28,10 +28,17 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
       horizontal
       showsHorizontalScrollIndicator={false}
       style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
+      accessibilityLabel="Section menu"
+      accessibilityHint="Scroll horizontally to view different BDH sections"
     >
-
       {currSection === "all" ? (
-        <View style={menuStyles.menuItem}>
+        <View 
+          style={menuStyles.menuItem}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityState={{ selected: true }}
+          accessibilityLabel="All sections, selected"
+        >
           <Text style={menuStyles.menuItemSelected}>all</Text>
         </View>
       ) : (
@@ -42,6 +49,10 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
             navigation.popToTop();
             setCurrSection("all");
           }}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="All sections"
+          accessibilityHint="Double tap to view all sections"
         >
           <Text style={menuStyles.menuItemText}>all</Text>
         </TouchableOpacity>
@@ -49,7 +60,14 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
       {sectionMenu.map((menuItem) =>
         menuItem.slug === currSection ? (
-          <View style={menuStyles.menuItem}>
+          <View 
+            key={menuItem.id}
+            style={menuStyles.menuItem}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityState={{ selected: true }}
+            accessibilityLabel={`${menuItem.title} section, selected`}
+          >
             <Text style={menuStyles.menuItemSelected}>{menuItem.title}</Text>
           </View>
         ) : (
@@ -58,10 +76,12 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
             style={menuStyles.menuItem}
             onPress={() => {
               navigation.push("Section", { slug: menuItem.slug });
-
               setCurrSection(menuItem.slug);
-              console.log("this is my current slug", menuItem.slug);
             }}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={`${menuItem.title} section`}
+            accessibilityHint={`Double tap to view ${menuItem.title} section`}
           >
             <Text style={menuStyles.menuItemText}>{menuItem.title}</Text>
           </TouchableOpacity>

@@ -36,6 +36,10 @@ function SettingsLink({ title, link, inApp, navigation }: SettingsLinkProps) {
         width: "100%",
         paddingHorizontal: 12, // because 4 in the other padding
       }}
+      accessible={true}
+      accessibilityLabel={`${title} link`}
+      accessibilityHint={`Press to open ${title} link`}
+      accessibilityRole="button"
     >
       <Text style={{ ...text.notifSmall, fontSize: 14 }}>{title}</Text>
       <Ionicons name="chevron-forward-outline" size={24} color={varTextColor} />

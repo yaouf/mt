@@ -141,7 +141,7 @@ function HomeScreen({ navigation }: NavProp) {
   ];
 
   return (
-    <View onLayout={onLayoutRootView}>
+    <View onLayout={onLayoutRootView} accessibilityLabel="Home Screen">
       <FlatList
         ref={flatListRef}
         data={sections}
@@ -155,6 +155,7 @@ function HomeScreen({ navigation }: NavProp) {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        accessibilityLabel="Section Headers List"
       />
     </View>
   );
