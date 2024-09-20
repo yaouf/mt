@@ -119,34 +119,45 @@ export default function Nav() {
               const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
 
               return {
-                tabBarIcon: ({ color }) => {
-                  let iconName = "home-outline";
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
+                  let label;
 
-                  if (route.name === "Settings") {
-                    iconName = "settings-outline";
-                  } else if (route.name === "Search") {
-                    iconName = "search-outline";
-                  } else if (route.name === "For You") {
-                    iconName = "star-outline";
+                  if (route.name === 'Home') {
+                    iconName = focused ? 'home-sharp' : 'home-outline';
+                    label = 'Home';
+                  } else if (route.name === 'Settings') {
+                    iconName = focused ? 'settings-sharp' : 'settings-outline';
+                    label = 'Settings';
+                  } else if (route.name === 'Search') {
+                    iconName = focused ? 'search-sharp' : 'search-outline';
+                    label = 'Search';
+                  } else if (route.name === 'For You') {
+                    iconName = focused ? 'star-sharp' : 'star-outline';
+                    label = 'For You';
                   }
 
-                  return <Ionicons name={iconName} size={24} color={color} />;
+                  return (
+                    <Ionicons 
+                      name={iconName} 
+                      size={size + 4} // Increase icon size slightly
+                      color={color} 
+                      accessibilityLabel={label}
+                    />
+                  );
                 },
                 tabBarActiveTintColor: "#ED1C24",
                 tabBarInactiveTintColor: "gray",
                 tabBarStyle: {
-                  height: 65,
+                  height: 60,
                   marginBottom: 0,
-                  paddingTop: 8,
-                  paddingBottom: 8,
+                  paddingTop: 2, 
+                  paddingBottom: 2, 
                   paddingRight: 20,
                   paddingLeft: 20,
                   display: routeName === "Article" ? "none" : "flex",
                 },
-                tabBarLabelStyle: {
-                  fontFamily: font2,
-                  fontSize: 10,
-                },
+                tabBarShowLabel: false,
                 headerShown: routeName === "Article" ? false : true,
               };
             }}

@@ -41,8 +41,8 @@ export const settings = StyleSheet.create({
   smallHeading: {
     color: varGray1,
     fontFamily: font2,
-    fontSize: 12,
+    fontSize: 18,
     fontWeight: "700",
     textTransform: "uppercase",
-  },
+  }
 });

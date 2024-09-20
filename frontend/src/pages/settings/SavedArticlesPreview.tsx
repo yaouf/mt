@@ -56,7 +56,7 @@ function SavedArticlesPreview({ navigation }: NavProp) {
           )}
         </View>
       ) : (
-        <Text style={{ ...text.normal, fontSize: 14, marginTop: 12 }}>
+        <Text style={{ ...text.normal, fontSize: 16, marginTop: 12 }}>
           No saved articles yet. Press the bookmark on an article to save it.
         </Text>
       )}

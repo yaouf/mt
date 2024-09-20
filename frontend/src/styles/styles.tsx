@@ -67,7 +67,7 @@ export const text = StyleSheet.create({
     // main section headers
     color: varTextColor,
     fontWeight: "800",
-    fontSize: 20,
+    fontSize: 26,
     fontFamily: font3,
     paddingTop: 10
   },
@@ -110,7 +110,7 @@ export const text = StyleSheet.create({
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "600",
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 8,
     marginTop: 8,
   },
@@ -119,7 +119,7 @@ export const text = StyleSheet.create({
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "400",
-    fontSize: 14,
+    fontSize: 16,
     overflow: "hidden",
     maxWidth: "100%",
   },
@@ -144,4 +144,16 @@ export const text = StyleSheet.create({
     fontWeight: "400",
     fontSize: 14,
   },
+});
+
+export const settingsText = StyleSheet.create({
+  title: {
+    ...text.sectionHeader1,
+    fontSize: 24,
+  },
+  description: {
+    ...text.normal,
+    fontSize: 18,
+  },
+  // ... other styles ...
 });
