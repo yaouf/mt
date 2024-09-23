@@ -29,7 +29,7 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env*
 
 # typescript
 *.tsbuildinfo
@@ -37,7 +37,7 @@ Dockerfile*
 xo
 config.debug.php
 
-.env
+.env*
 
 #build folders
 ios/

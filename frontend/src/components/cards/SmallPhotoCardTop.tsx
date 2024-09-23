@@ -35,6 +35,8 @@ import {
       <View>
         <TouchableWithoutFeedback
           onPress={() => navigation.push("Article", { data: article })}
+          accessibilityRole="button"
+          accessibilityHint={`Double tap to open article`}
         >
           <View style={styles.card}>
             <Image
@@ -44,15 +46,21 @@ import {
               style={styles.image}
             />
             <View style={styles.text}>
-              <Text style={styles.section}>
+              <Text style={styles.section}
+                accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
+              >
                 {all_tags[0].replace("&;", "&")}
               </Text>
-              <Text style={styles.title}>
+              <Text style={styles.title}
+                accessibilityLabel={`Headline: ${article.headline}.`}
+              >
                 {article.headline}
               </Text>
               <View style={styles.bottom}>
                 <View style={styles.publishedSection}>
-                  <Text style={styles.published}>
+                  <Text style={styles.published}
+                    accessibilityLabel={`Published on ${formatDates(article.published_at)}.`}
+                  >
                     {formatDates(article.published_at)}
                   </Text>
                 </View>

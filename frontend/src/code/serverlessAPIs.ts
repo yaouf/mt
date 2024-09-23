@@ -30,7 +30,7 @@ export const createDevice = async (
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "X-API-KEY": process.env.EXPO_PUBLIC_API_KEY,
+      "X-API-KEY": process.env.EXPO_PUBLIC_API_KEY ?? "",
     },
     body: body,
     redirect: "follow",
@@ -38,7 +38,7 @@ export const createDevice = async (
 
   try {
     const response = await fetch(
-      "https://createdevice-sjblykwjfa-uc.a.run.app/",
+      process.env.EXPO_PUBLIC_CREATE_DEVICE_ENDPOINT ?? "",
       requestOptions
     );
 
@@ -53,7 +53,7 @@ export const createDevice = async (
     // Check if the response content type is JSON
     const contentType = response.headers.get("content-type");
     let result;
-    if (contentType && contentType.includes("application/json")) {
+    if (contentType?.includes("application/json")) {
       result = await response.json();
       console.log("Parsed JSON response:", result);
     } else {
@@ -101,7 +101,7 @@ export const updateSettings = async (
   };
 
   const response = await fetch(
-    "https://updatesettings-sjblykwjfa-uc.a.run.app/",
+    process.env.EXPO_PUBLIC_UPDATE_SETTINGS_ENDPOINT ?? "",
     requestOptions
   );
 
