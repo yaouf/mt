@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "build:db": "cd db && npm run update",
-    "update:db": "cd db && npm run update",
+    "dangerous:update:db": "cd db && npm run dangerous:update",
     "test": "NODE_ENV=test npm run update:db && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
     "test:pw": "redis-server & NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev & (NODE_ENV=test npm run update:db && npx playwright test)",
     "test:all": "NODE_ENV=test npm run test:pw && npm run test",
