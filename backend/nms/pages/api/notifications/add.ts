@@ -85,15 +85,16 @@ export default async function addNotification(
 
     // Calculate the delay in milliseconds
     const dateTime = new Date(time);
+    console.log("current time", Date.now(), "scheduled time", dateTime.getTime());
     const milliseconds = dateTime.getTime() - Date.now();
     console.log("milliseconds", milliseconds);
 
     // Add the notification to the queue
-    const job = await notificationQueue.add("notification",
+    const _job = await notificationQueue.add("notification",
       { jobId, time, title, body, tags, url, isUid },
       { delay: milliseconds, jobId: jobId.toString() + "_n" }
     );
-    console.log("job", job);
+    // console.log("job", job);
 
     // const scheduledNotifications = await notificationQueue.getDelayed();
     // console.log(scheduledNotifications);

@@ -1,5 +1,6 @@
 "use client";
 
+import moment from "moment-timezone";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,7 +19,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewFormData((prevData) => ({
+        setNewFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -78,17 +79,26 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   const handleScheduleNotification = async () => {
     try {
-      console.log("newNotification", newFormData);
+      const userTimeZone = moment.tz.guess();
+      const localTime = newFormData.time;
+      const utcTime = moment.tz(localTime, userTimeZone).utc().format();
+
+      // Update the form data with UTC time before sending it to the server
+      const updatedFormData = {
+        ...newFormData,
+        time: utcTime, 
+      };
+
+      console.log("newNotification", updatedFormData);
       const response = await fetch("/api/notifications/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newFormData),
+        body: JSON.stringify(updatedFormData),
       });
 
       if (response.ok) {
-        console.log("Scheduled Notification:", newFormData);
         const data = (await response.json()) as any[];
         setScheduledNotifications(data);
 
