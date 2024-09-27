@@ -7,7 +7,7 @@ Functions are in `functions` folder, and organized in subfolders according to th
 1. Download Visual Studio Code and recommended workspace extensions.
 2. Create a .env file under `serverless/functions` and add the environment variables from the `.env.example` file. Can use `cp .env.example .env` to copy the file. 
 3. Open command prompt using `Ctrl + ~` and navigate to the `serverless/functions folder. 
-4. Run `npm run update:db`. Run this command whenever there are changes to the database schema or sample data or db folder or the database environment (development, staging, production) is changed.
+4. Run `npm run build:db`.
 5. Run `npm run dev`
 6. Send a POST request to corresponding endpoint shown from CLI. 
 
