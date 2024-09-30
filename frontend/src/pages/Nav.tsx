@@ -1,3 +1,4 @@
+import { trackEvent } from "@aptabase/react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -85,12 +86,14 @@ export default function Nav() {
   useEffect(() => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
+        console.log("Notification received in listener", notification);
         setNotification(notification);
       });
 
     responseListener.current =
       Notifications.addNotificationResponseReceivedListener(async (response) => {
         console.log(response);
+        console.log("response in listener", response);
 
         const setArticle = (article: Article) => {
           // navigation.navigate("Article", {data: article});
@@ -100,6 +103,14 @@ export default function Nav() {
         const date = response.notification.request.content.data.date;
         const fetchedArticle = await fetchArticle(slug, date, setArticle);
         navigation.navigate("Article", {data: fetchedArticle});
+
+        trackEvent("notification_clicked", {
+          action: response.actionIdentifier,
+          slug: slug,
+          date: date,
+        });
+
+        
 
       });
 
