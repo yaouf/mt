@@ -1,11 +1,8 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { font2 } from "src/styles/styles";
-import Header from "src/components/Header";
-import HomeStackScreen from "./home/HomeStackScreen";
-import SettingsStackScreen from "./settings/SettingsStackScreen";
-import SearchStackScreen from "./search/SearchStackScreen";
-import { NotificationProvider } from "./settings/NotificationProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { getFocusedRouteNameFromRoute, useNavigation } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
 import {
   Dispatch,
   SetStateAction,
@@ -14,12 +11,16 @@ import {
   useRef,
   useState,
 } from "react";
-import { getAsync } from "src/code/helpers";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
-import * as Notifications from "expo-notifications";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { fetchArticle } from "src/code/fetchContent";
+import { getAsync } from "src/code/helpers";
+import Header from "src/components/Header";
+import { Article } from "src/types/data";
+import HomeStackScreen from "./home/HomeStackScreen";
+import SearchStackScreen from "./search/SearchStackScreen";
+import { NotificationProvider } from "./settings/NotificationProvider";
+import SettingsStackScreen from "./settings/SettingsStackScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -79,6 +80,8 @@ export default function Nav() {
     load();
   }, []);
 
+  const navigation = useNavigation();
+
   useEffect(() => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -86,8 +89,18 @@ export default function Nav() {
       });
 
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
+      Notifications.addNotificationResponseReceivedListener(async (response) => {
         console.log(response);
+
+        const setArticle = (article: Article) => {
+          // navigation.navigate("Article", {data: article});
+        }
+        // navigate to the article page
+        const slug = response.notification.request.content.data.slug;
+        const date = response.notification.request.content.data.date;
+        const fetchedArticle = await fetchArticle(slug, date, setArticle);
+        navigation.navigate("Article", {data: fetchedArticle});
+
       });
 
     return () => {
