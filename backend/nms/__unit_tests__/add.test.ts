@@ -48,7 +48,7 @@ describe("adding, getting, and deleting notifications", () => {
           title: "Hello",
           body: "World",
           tags: ["Breaking News"],
-          isUid: 0,
+          isUid: false,
           url: "https://www.browndailyherald.com/article/2022-03-01/hello-world",
         };
         const blob = JSON.stringify(body);
@@ -127,7 +127,7 @@ describe("adding, getting, and deleting notifications", () => {
           //   "publicationDate": '2022-03-01',
           //  "domain": "https://www.projects.browndailyherald.com",
           url: "https://www.projects.browndailyherald.com/article/2022-03-01/second-world",
-          isUid: 0,
+          isUid: false,
         };
         const blob = JSON.stringify(body);
         const res = await fetch({
