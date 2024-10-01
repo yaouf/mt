@@ -30,15 +30,17 @@ export default async function addNotification(
     const title = data.title;
     const body = data.body;
     const tags = data.tags;
-    const slug = data.slug;
-    const mediaType = data.mediaType;
-    const publicationDate = data.publicationDate;
-    const domain = data.domain;
+    // const slug = data.slug;
+    // const mediaType = data.mediaType;
+    // const publicationDate = data.publicationDate;
+    // const domain = data.domain;
 
-    const uid = data.uid;
+    // const uid = data.uid;
+    const url = data.url;
+    const isUid = data.isUid;
 
     // Validate required fields
-    if (!time || !title || !tags || !domain) {
+    if (!time || !title || !tags || !url) {
       // find which field is missing
       console.log(time)
       return res.status(400).json({ message: "Missing fields." });
@@ -49,18 +51,17 @@ export default async function addNotification(
     const breakingNews = tags.includes("Breaking News");
     const universityNews = tags.includes("University News");
     const metro = tags.includes("Metro");
-
-    let url: string = '';
-    let isUid: boolean = false;
+    
     // Create url from uid
-    if (uid) {
-      url = `${domain}/${uid}`;
-      isUid = true;
-    } else {
-          // Create url from slug, mediaType, and publicationDate
-    url = `${domain}/${mediaType}/${publicationDate}/${slug}`;
-    }
+    // if (isUid) {
+    //   url = `${domain}/${uid}`;
+    //   isUid = true;
+    // } else {
+    //       // Create url from slug, mediaType, and publicationDate
+    // url = `${domain}/${mediaType}/${publicationDate}/${slug}`;
+    // }
     console.log("url", url);
+    console.log("isUid", isUid);
     // Insert the notification data into the "notifications" table
     const insertedRows = await db("notifications")
       .insert({
@@ -71,6 +72,7 @@ export default async function addNotification(
         "University News": universityNews,
         "Metro": metro,
         url: url,
+        isUid: isUid,
         status: "pending",
       })
       .returning("id");
