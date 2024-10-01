@@ -2,8 +2,8 @@
 
 import moment from "moment-timezone";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { validate as isValidUUID } from "uuid";
 
 const NotificationForm = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
@@ -11,10 +11,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     title: "",
     body: "",
     tags: [] as string[],
-    slug: "",
-    mediaType: "",
-    publicationDate: "",
-    domain: "https://www.browndailyherald.com"
+    // slug: "",
+    // mediaType: "",
+    // publicationDate: "",
+    // domain: "https://www.browndailyherald.com"
+    url: ""
   });
 
   const handleInputChange = (e) => {
@@ -40,42 +41,42 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }
   };
 
-  const handleSlugChange = (e) => {
-    const { value } = e.target;
-    setNewFormData((prevData) => ({
-      ...prevData,
-      slug: value,
-    }));
-  };
+  // const handleSlugChange = (e) => {
+  //   const { value } = e.target;
+  //   setNewFormData((prevData) => ({
+  //     ...prevData,
+  //     slug: value,
+  //   }));
+  // };
 
-  const handleMediaTypeChange = (e) => {
-    const { value } = e.target;
-    setNewFormData((prevData) => ({
-      ...prevData,
-      mediaType: value,
-    }));
-  };
+  // const handleMediaTypeChange = (e) => {
+  //   const { value } = e.target;
+  //   setNewFormData((prevData) => ({
+  //     ...prevData,
+  //     mediaType: value,
+  //   }));
+  // };
 
-  const handlePublicationDateChange = (date) => {
-    // Format the date as "YYYY/MM"
-    const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}`;
+  // const handlePublicationDateChange = (date) => {
+  //   // Format the date as "YYYY/MM"
+  //   const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1)
+  //     .toString()
+  //     .padStart(2, "0")}`;
 
-    setNewFormData((prevData) => ({
-      ...prevData,
-      publicationDate: formattedDate,
-    }));
-  };
+  //   setNewFormData((prevData) => ({
+  //     ...prevData,
+  //     publicationDate: formattedDate,
+  //   }));
+  // };
 
-   const handleDomainChange = (e) => {
-    const { value } = e.target;
+  //  const handleDomainChange = (e) => {
+  //   const { value } = e.target;
 
-   setNewFormData((prevData) => ({
-    ...prevData,
-    domain: value
-   }));
-  };
+  //  setNewFormData((prevData) => ({
+  //   ...prevData,
+  //   domain: value
+  //  }));
+  // };
 
   const handleScheduleNotification = async () => {
     try {
@@ -83,10 +84,20 @@ const NotificationForm = ({ setScheduledNotifications }) => {
       const localTime = newFormData.time;
       const utcTime = moment.tz(localTime, userTimeZone).utc().format();
 
+    //   // Parse the URL
+    // const url = new URL(newFormData.url);
+    // const pathSegments = url.pathname.split('/').filter(Boolean);
+    // const [mediaType, year, month, slug] = pathSegments;
+
+    // const publicationDate = `${year}/${month}`; 
+      const lastSegment = newFormData.url.split('/').pop();
+      const isUid = isValidUUID(lastSegment);
+
       // Update the form data with UTC time before sending it to the server
       const updatedFormData = {
         ...newFormData,
         time: utcTime, 
+        isUid: isUid
       };
 
       console.log("newNotification", updatedFormData);
@@ -108,10 +119,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           title: "",
           body: "",
           tags: [],
-          slug: "",
-          mediaType: "",
-          publicationDate: "",
-          domain: "https://www.browndailyherald.com"
+          url: "",
+          // slug: "",
+          // mediaType: "",
+          // publicationDate: "",
+          // domain: "https://www.browndailyherald.com"
         });
       } else {
         console.error("Error scheduling notification");
@@ -123,7 +135,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   return (
     <div className="container mx-auto px-8 py-2">
-      <h2 className="text-2xl font-bold mb-4">Create a New Notification by Slug</h2>
+      <h2 className="text-2xl font-bold mb-4">Create a New Notification</h2>
       <form>
         {/* Input for time */}
         <div className="mb-4">
@@ -226,7 +238,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         </div>
 
         {/* Input for slug */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="slug"
@@ -242,10 +254,10 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             className="border rounded-md px-3 py-2 w-full"
             placeholder="Article slug"
           />
-        </div>
+        </div> */}
 
         {/* Datepicker for article publication date */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="articlePublicationDate"
@@ -259,10 +271,10 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             dateFormat="yyyy/MM"
             className="border rounded-md px-3 py-2 w-full"
           />
-        </div>
+        </div> */}
 
         {/* Dropdown for media type */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="mediaType"
@@ -282,10 +294,10 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             <option value="gallery">Gallery</option>
             <option value="multimedia">Multimedia</option>
           </select>
-        </div>
+        </div> */}
 
         {/* Radio buttons */}
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Domain
           </label>
@@ -313,6 +325,25 @@ const NotificationForm = ({ setScheduledNotifications }) => {
               <span className="ml-2">Projects</span>
             </label>
           </div>
+        </div> */}
+
+         {/* Input for URL */}
+  <div className="mb-4">
+    <label
+      className="block text-gray-700 text-sm font-bold mb-2"
+      htmlFor="url"
+    >
+      Article URL
+    </label>
+    <input
+      type="text"
+      id="url"
+      name="url"
+      value={newFormData.url}
+      onChange={handleInputChange}
+      className="border rounded-md px-3 py-2 w-full"
+      placeholder="https://www.browndailyherald.com/article/2024/09/sydney-skybetter-named-new-faculty-director-of-brown-arts-institute"
+          />
         </div>
 
         {/* Button to schedule notification */}

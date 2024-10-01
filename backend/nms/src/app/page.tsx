@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import AuthWrapper from "./AuthWrapper";
 import NotificationForm from "./NotificationForm";
-import NotificationFormUID from "./NotificationFormUID";
 import NotificationTable from "./NotificationTable";
 
 export default function Home() {
@@ -28,7 +27,7 @@ export default function Home() {
         scheduledNotifications={scheduledNotifications}
         setScheduledNotifications={setScheduledNotifications}
       />
-      <NotificationFormUID setScheduledNotifications={setScheduledNotifications} />
+      {/* <NotificationFormUID setScheduledNotifications={setScheduledNotifications} /> */}
       <NotificationForm setScheduledNotifications={setScheduledNotifications} />
     </main>
     </AuthWrapper>
