@@ -49,7 +49,7 @@ const NotificationTable = ({
   }
 
   return (
-    <div className="container mx-auto p-5">
+    <div className="container mx-auto p-5 hidden md:block">
       <div className="flex items-center mb-8">
         <h1 className="text-3xl font-bold">Scheduled Notifications</h1>
         <SignOutButton />
