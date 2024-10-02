@@ -70,7 +70,7 @@ const NotificationTable = ({
               <td className="py-2 px-4 border-b">
                 <a
                   href={notification.url}
-                  className="text-blue-500 hover:text-blue-700 underline"
+                  className="text-blue-500 hover:text-blue-700 underline break-all"
                 >
                   {notification.url}
                 </a>
