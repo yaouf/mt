@@ -25,7 +25,7 @@ export default function Home() {
     <AuthWrapper>
       {/* Display environment variables */}
       <div className="flex justify-center py-3">
-        <div className="flex flex-col items-start space-y-2 px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
+        <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
           <h2 className="text-lg font-semibold text-black mb-2">Environment Variables</h2>
           <p className="text-gray-700 flex">
             <span className="font-bold mr-2">NODE_ENV</span> 
@@ -42,7 +42,7 @@ export default function Home() {
         </div>
       </div>
       
-      <main className="flex min-h-screen flex-col items-center justify-between px-20 py-3">
+      <main className="flex min-h-screen flex-col items-center justify-between md:px-20 py-3">
         <NotificationTable
           scheduledNotifications={scheduledNotifications}
           setScheduledNotifications={setScheduledNotifications}
