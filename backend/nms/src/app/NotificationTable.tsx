@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useState } from "react";
 import SignOutButton from "./SignOut";
 import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
@@ -41,6 +42,10 @@ const NotificationTable = ({
     return tags.join(", ");
   };
 
+  const formatTime = (time) => {
+    return moment(time).tz("America/New_York").format("YYYY-MM-DD hh:mm A z");
+  }
+
   return (
     <div className="container mx-auto p-5">
       <div className="flex items-center mb-8">
@@ -63,7 +68,7 @@ const NotificationTable = ({
         <tbody>
           {scheduledNotifications.filter(notification => isSentVisible ? true : notification.status !== "sent").map((notification) => (
             <tr key={notification.id}>
-              <td className="py-2 px-4 border-b">{notification.time}</td>
+              <td className="py-2 px-4 border-b">{formatTime(notification.time)}</td>
               <td className="py-2 px-4 border-b">{notification.title}</td>
               <td className="py-2 px-4 border-b">{notification.body}</td>
               <td className="py-2 px-4 border-b">{formatTags(notification)}</td>
