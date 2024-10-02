@@ -45,11 +45,11 @@ describe("adding, getting, and deleting notifications", () => {
       test: async ({ fetch }) => {
         const body = {
           time: "2060-03-20T14:27:00.601256+00:00",
-          title: "Hello",
-          body: "World",
+          title: "Breaking News",
+          body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
           tags: ["Breaking News"],
-          isUid: false,
-          url: "https://www.browndailyherald.com/article/2022-03-01/hello-world",
+          isUid: 0,
+          url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
         };
         const blob = JSON.stringify(body);
         const res = await fetch({
@@ -59,19 +59,19 @@ describe("adding, getting, and deleting notifications", () => {
         });
         // The next line would cause TypeScript to complain:
         // const { goodbye: hello } = await res.json();
-        const hi = await res.json();
-        expect(hi).toEqual([
+        const result = await res.json();
+        expect(result).toEqual([
           {
-            body: "World",
+            body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
             "Breaking News": 1,
             Metro: 0,
             id: 1,
-            url: "https://www.browndailyherald.com/article/2022-03-01/hello-world",
+            url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
             status: "pending",
             time: "2060-03-20T14:27:00.601256+00:00",
-            title: "Hello",
+            title: "Breaking News",
             "University News": 0,
-            isUid: false,
+            isUid: 0,
           },
         ]); // ◄ Passes!
       },
@@ -94,15 +94,15 @@ describe("adding, getting, and deleting notifications", () => {
         expect(jsonResult).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              body: "World",
+              body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
               "Breaking News": 1,
               Metro: 0,
               id: 1,
-              url: "https://www.browndailyherald.com/article/2022-03-01/hello-world",
+              url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
               time: "2060-03-20T14:27:00.601256+00:00",
-              title: "Hello",
+              title: "Breaking News",
               "University News": 0,
-              isUid: false,
+              isUid: 0,
             }),
           ])
         ); // ◄ Passes!
@@ -122,12 +122,8 @@ describe("adding, getting, and deleting notifications", () => {
           title: "Second",
           body: "World",
           tags: ["Breaking News"],
-          //   "slug": 'second-world',
-          //   "mediaType": 'article',
-          //   "publicationDate": '2022-03-01',
-          //  "domain": "https://www.projects.browndailyherald.com",
           url: "https://www.projects.browndailyherald.com/article/2022-03-01/second-world",
-          isUid: false,
+          isUid: 0,
         };
         const blob = JSON.stringify(body);
         const res = await fetch({
@@ -135,21 +131,19 @@ describe("adding, getting, and deleting notifications", () => {
           body: blob,
           headers: { "Content-Type": "application/json" },
         });
-        // The next line would cause TypeScript to complain:
-        // const { goodbye: hello } = await res.json();
-        const hi = await res.json();
-        console.log(hi);
-        expect(hi).toEqual([
+        const result = await res.json();
+        console.log(result);
+        expect(result).toEqual([
           {
-            body: "World",
+            body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
             "Breaking News": 1,
             Metro: 0,
             id: 1,
-            url: "https://www.browndailyherald.com/article/2022-03-01/hello-world",
-            isUid: false,
+            url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
+            isUid: 0,
             status: "pending",
             time: "2060-03-20T14:27:00.601256+00:00",
-            title: "Hello",
+            title: "Breaking News",
             "University News": 0,
           },
           {
@@ -158,7 +152,7 @@ describe("adding, getting, and deleting notifications", () => {
             Metro: 0,
             id: 2,
             url: "https://www.projects.browndailyherald.com/article/2022-03-01/second-world",
-            isUid: false,
+            isUid: 0,
             status: "pending",
             time: "2060-03-20T14:27:00.601256+00:00",
             title: "Second",
@@ -185,14 +179,14 @@ describe("adding, getting, and deleting notifications", () => {
         expect(jsonResult).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              body: "World",
+              body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
               "Breaking News": 1,
               Metro: 0,
               id: 1,
-              url: "https://www.browndailyherald.com/article/2022-03-01/hello-world",
-              isUid: false,
+              url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
+              isUid: 0,
               time: "2060-03-20T14:27:00.601256+00:00",
-              title: "Hello",
+              title: "Breaking News",
               "University News": 0,
             }),
             expect.objectContaining({
@@ -201,7 +195,7 @@ describe("adding, getting, and deleting notifications", () => {
               Metro: 0,
               id: 2,
               url: "https://www.projects.browndailyherald.com/article/2022-03-01/second-world",
-              isUid: false,
+              isUid: 0,
               time: "2060-03-20T14:27:00.601256+00:00",
               title: "Second",
               "University News": 0,
@@ -234,7 +228,7 @@ describe("adding, getting, and deleting notifications", () => {
             Metro: 0,
             id: 2,
             url: "https://www.projects.browndailyherald.com/article/2022-03-01/second-world",
-            isUid: false,
+            isUid: 0,
             time: "2060-03-20T14:27:00.601256+00:00",
             title: "Second",
             "University News": 0,
@@ -261,14 +255,14 @@ describe("adding, getting, and deleting notifications", () => {
         const jsonResult = await res.json();
         expect(jsonResult).toEqual(
           expect.objectContaining({
-            body: "World",
+            body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
             "Breaking News": 1,
             Metro: 0,
             id: 1,
-            url: "https://www.browndailyherald.com/article/2022-03-01/hello-world",
-            isUid: false,
+            url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
+            isUid: 0,
             time: "2060-03-20T14:27:00.601256+00:00",
-            title: "Hello",
+            title: "Breaking News",
             "University News": 0,
           })
         ); // ◄ Passes!
@@ -319,7 +313,7 @@ describe("adding, getting, and deleting notifications", () => {
               Metro: 0,
               id: 2,
               url: "https://www.projects.browndailyherald.com/article/2022-03-01/second-world",
-              isUid: false,
+              isUid: 0,
               time: "2060-03-20T14:27:00.601256+00:00",
               title: "Second",
               "University News": 0,
