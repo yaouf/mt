@@ -47,7 +47,6 @@ export default function Home() {
           scheduledNotifications={scheduledNotifications}
           setScheduledNotifications={setScheduledNotifications}
         />
-        {/* <NotificationFormUID setScheduledNotifications={setScheduledNotifications} /> */}
         <NotificationForm setScheduledNotifications={setScheduledNotifications} />
       </main>
     </AuthWrapper>
