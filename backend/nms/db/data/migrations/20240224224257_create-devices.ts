@@ -29,6 +29,7 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("Metro").notNullable();
         table.string("url").nullable();
         table.string("status").notNullable();
+        table.boolean("isUid").notNullable();
       })
     );
 }
