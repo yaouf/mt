@@ -9,7 +9,7 @@
     "lint": "next lint",
     "build:db": "cd db && npm run build",
     "dangerous:update:db": "cd db && npm run dangerous:update",
-    "test": "NODE_ENV=test npm run dangerous:update:db && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
+    "test": "NODE_ENV=test ENV=test npm run dangerous:update:db && (redis-server & jest --verbose --detectOpenHandles --forceExit)",
     "test:pw": "redis-server & NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev & (NODE_ENV=test npm run dangerous:update:db && npx playwright test)",
     "test:all": "NODE_ENV=test npm run test:pw && npm run test",
     "test:all:debug": "NODE_ENV=test npm run test:pw -- --debug && npm run test",
