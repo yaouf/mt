@@ -13,10 +13,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     title: "",
     body: "",
     tags: [] as string[],
-    // slug: "",
-    // mediaType: "",
-    // publicationDate: "",
-    // domain: "https://www.browndailyherald.com"
     url: "",
   });
 
@@ -43,55 +39,12 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }
   };
 
-  // const handleSlugChange = (e) => {
-  //   const { value } = e.target;
-  //   setNewFormData((prevData) => ({
-  //     ...prevData,
-  //     slug: value,
-  //   }));
-  // };
-
-  // const handleMediaTypeChange = (e) => {
-  //   const { value } = e.target;
-  //   setNewFormData((prevData) => ({
-  //     ...prevData,
-  //     mediaType: value,
-  //   }));
-  // };
-
-  // const handlePublicationDateChange = (date) => {
-  //   // Format the date as "YYYY/MM"
-  //   const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1)
-  //     .toString()
-  //     .padStart(2, "0")}`;
-
-  //   setNewFormData((prevData) => ({
-  //     ...prevData,
-  //     publicationDate: formattedDate,
-  //   }));
-  // };
-
-  //  const handleDomainChange = (e) => {
-  //   const { value } = e.target;
-
-  //  setNewFormData((prevData) => ({
-  //   ...prevData,
-  //   domain: value
-  //  }));
-  // };
-
   const handleScheduleNotification = async () => {
     try {
       const userTimeZone = moment.tz.guess();
       const localTime = newFormData.time;
       const utcTime = moment.tz(localTime, userTimeZone).utc().format();
 
-      //   // Parse the URL
-      // const url = new URL(newFormData.url);
-      // const pathSegments = url.pathname.split('/').filter(Boolean);
-      // const [mediaType, year, month, slug] = pathSegments;
-
-      // const publicationDate = `${year}/${month}`;
       const lastSegment = newFormData.url.split("/").pop();
       const isUid = isValidUUID(lastSegment);
 
@@ -122,10 +75,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           body: "",
           tags: [],
           url: "",
-          // slug: "",
-          // mediaType: "",
-          // publicationDate: "",
-          // domain: "https://www.browndailyherald.com"
         });
       } else {
         console.error("Error scheduling notification");
@@ -264,96 +213,6 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             </label>
           </div>
         </div>
-
-        {/* Input for slug */}
-        {/* <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="slug"
-          >
-            Article Slug
-          </label>
-          <input
-            type="text"
-            id="slug"
-            name="slug"
-            value={newFormData.slug}
-            onChange={handleSlugChange}
-            className="border rounded-md px-3 py-2 w-full"
-            placeholder="Article slug"
-          />
-        </div> */}
-
-        {/* Datepicker for article publication date */}
-        {/* <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="articlePublicationDate"
-          >
-            Article Publication Date
-          </label>
-          <DatePicker
-            id="articlePublicationDate"
-            selected={newFormData.publicationDate}
-            onChange={handlePublicationDateChange}
-            dateFormat="yyyy/MM"
-            className="border rounded-md px-3 py-2 w-full"
-          />
-        </div> */}
-
-        {/* Dropdown for media type */}
-        {/* <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="mediaType"
-          >
-            Media Type
-          </label>
-          <select
-            id="mediaType"
-            name="mediaType"
-            value={newFormData.mediaType}
-            onChange={handleMediaTypeChange}
-            className="border rounded-md px-3 py-2 w-full"
-          >
-            <option value="">Select Media Type</option>
-            <option value="article">Article</option>
-            <option value="page">Page</option>
-            <option value="gallery">Gallery</option>
-            <option value="multimedia">Multimedia</option>
-          </select>
-        </div> */}
-
-        {/* Radio buttons */}
-        {/* <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Domain
-          </label>
-          <div>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="options"
-                value="https://www.browndailyherald.com"
-                checked={newFormData.domain === "https://www.browndailyherald.com"}
-                onChange={handleDomainChange}
-                className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
-              />
-              <span className="ml-2">Normal</span>
-            </label>
-            <label className="inline-flex items-center ml-4">
-              <input
-                type="radio"
-                name="options"
-                value="https://www.projects.browndailyherald.com"
-                checked={newFormData.domain === "https://www.projects.browndailyherald.com"}
-                onChange={handleDomainChange}
-                className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
-              />
-              <span className="ml-2">Projects</span>
-            </label>
-          </div>
-        </div> */}
 
         {/* Input for URL */}
         <div className="mb-4">
