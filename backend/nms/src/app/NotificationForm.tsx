@@ -5,6 +5,8 @@ import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { validate as isValidUUID } from "uuid";
 
+const TITLE_CHAR_LIM = 43; // max notif title length for normal text size (I think).
+const BODY_CHAR_LIM = 165; // max notif body length for normal text size.
 const NotificationForm = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
     time: "",
@@ -15,12 +17,12 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     // mediaType: "",
     // publicationDate: "",
     // domain: "https://www.browndailyherald.com"
-    url: ""
+    url: "",
   });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-        setNewFormData((prevData) => ({
+    setNewFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -84,20 +86,20 @@ const NotificationForm = ({ setScheduledNotifications }) => {
       const localTime = newFormData.time;
       const utcTime = moment.tz(localTime, userTimeZone).utc().format();
 
-    //   // Parse the URL
-    // const url = new URL(newFormData.url);
-    // const pathSegments = url.pathname.split('/').filter(Boolean);
-    // const [mediaType, year, month, slug] = pathSegments;
+      //   // Parse the URL
+      // const url = new URL(newFormData.url);
+      // const pathSegments = url.pathname.split('/').filter(Boolean);
+      // const [mediaType, year, month, slug] = pathSegments;
 
-    // const publicationDate = `${year}/${month}`; 
-      const lastSegment = newFormData.url.split('/').pop();
+      // const publicationDate = `${year}/${month}`;
+      const lastSegment = newFormData.url.split("/").pop();
       const isUid = isValidUUID(lastSegment);
 
       // Update the form data with UTC time before sending it to the server
       const updatedFormData = {
         ...newFormData,
-        time: utcTime, 
-        isUid: isUid
+        time: utcTime,
+        isUid: isUid,
       };
 
       console.log("newNotification", updatedFormData);
@@ -156,7 +158,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         </div>
 
         {/* Input for title */}
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="title"
@@ -169,13 +171,26 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             name="title"
             value={newFormData.title}
             onChange={handleInputChange}
-            className="border rounded-md px-3 py-2 w-full"
+            className={`border rounded-md px-3 py-2 w-full ${
+              newFormData.title.length > TITLE_CHAR_LIM
+                ? "border-red-500 focus:outline-red-500"
+                : ""
+            }`}
             placeholder="Notification title"
           />
+          <span
+            className={`absolute bottom-1 right-2 text-sm ${
+              newFormData.title.length > TITLE_CHAR_LIM
+                ? "text-red-500"
+                : "text-gray-500"
+            }`}
+          >
+            {newFormData.title.length}/{TITLE_CHAR_LIM}
+          </span>
         </div>
 
         {/* Input for body */}
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="body"
@@ -187,9 +202,22 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             name="body"
             value={newFormData.body}
             onChange={handleInputChange}
-            className="border rounded-md px-3 py-2 w-full"
+            className={`border rounded-md px-3 py-2 w-full ${
+              newFormData.body.length > BODY_CHAR_LIM
+                ? "border-red-500 focus:outline-red-500"
+                : ""
+            }`}
             placeholder="Notification body"
           />
+          <span
+            className={`absolute bottom-1 right-2 text-sm ${
+              newFormData.body.length > BODY_CHAR_LIM
+                ? "text-red-500"
+                : "text-gray-500"
+            }`}
+          >
+            {newFormData.body.length}/{BODY_CHAR_LIM}
+          </span>
         </div>
 
         {/* Checkboxes for tags */}
@@ -227,7 +255,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 type="checkbox"
                 name="tags"
                 value="Metro"
-                 data-testid="metro-uid"
+                data-testid="metro-uid"
                 checked={newFormData.tags.includes("Metro")}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
@@ -327,22 +355,22 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           </div>
         </div> */}
 
-         {/* Input for URL */}
-  <div className="mb-4">
-    <label
-      className="block text-gray-700 text-sm font-bold mb-2"
-      htmlFor="url"
-    >
-      Article URL
-    </label>
-    <input
-      type="text"
-      id="url"
-      name="url"
-      value={newFormData.url}
-      onChange={handleInputChange}
-      className="border rounded-md px-3 py-2 w-full"
-      placeholder="https://www.browndailyherald.com/article/2024/09/sydney-skybetter-named-new-faculty-director-of-brown-arts-institute"
+        {/* Input for URL */}
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="url"
+          >
+            Article URL
+          </label>
+          <input
+            type="text"
+            id="url"
+            name="url"
+            value={newFormData.url}
+            onChange={handleInputChange}
+            className="border rounded-md px-3 py-2 w-full"
+            placeholder="https://www.browndailyherald.com/article/2024/09/sydney-skybetter-named-new-faculty-director-of-brown-arts-institute"
           />
         </div>
 
