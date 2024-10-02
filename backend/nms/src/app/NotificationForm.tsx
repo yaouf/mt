@@ -7,6 +7,8 @@ import { validate as isValidUUID } from "uuid";
 
 const TITLE_CHAR_LIM = 43; // max notif title length for normal text size (I think).
 const BODY_CHAR_LIM = 165; // max notif body length for normal text size.
+const BANNER_DURATION = 5000; // how long the dashboard banner stays up after a notification is sent.
+
 const NotificationForm = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
     time: "",
@@ -15,6 +17,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     tags: [] as string[],
     url: "",
   });
+
+  const [bannerMessage, setBannerMessage] = useState("");
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const [bannerTimeout, setBannerTimeout] = useState<ReturnType<typeof setTimeout>>();
+  const [isFailed, setIsFailed] = useState(false); 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -76,16 +83,40 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           tags: [],
           url: "",
         });
+
+        setIsFailed(false); 
+        showBanner("Sent successfully!");
       } else {
         console.error("Error scheduling notification");
+        setIsFailed(true); 
+        showBanner("Send failed");
       }
     } catch (error) {
       console.error("Error:", error);
+      setIsFailed(true); 
+      showBanner("Send failed");
     }
+  };
+
+  const showBanner = (message) => {
+    setBannerMessage(message);
+    setBannerVisible(true);
+    clearTimeout(bannerTimeout);
+    document.documentElement.style.setProperty('--banner-duration', `${BANNER_DURATION / 1000}s`);
+    const timeout = setTimeout(() => {
+      setBannerVisible(false);
+    }, BANNER_DURATION); // Hide banner after X seconds
+    setBannerTimeout(timeout);
   };
 
   return (
     <div className="container mx-auto px-8 py-2">
+      {bannerVisible && (
+        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 text-center py-2 px-4 rounded-lg shadow-lg ${isFailed ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`}>
+          <span className="font-bold">{bannerMessage}</span>
+          <div className={`h-1 mt-2 rounded-full ${isFailed ? 'bg-red-700' : 'bg-blue-700'} animate-progress`}></div>
+        </div>
+      )}
       <h2 className="text-2xl font-bold mb-4">Create a New Notification</h2>
       <form>
         {/* Input for time */}
@@ -171,6 +202,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
         {/* Checkboxes for tags */}
         <div className="mb-4">
+          {/* TODO: add htmlFor=tags to label and id=tags for label */}
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Tags
           </label>
