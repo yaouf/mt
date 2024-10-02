@@ -1,18 +1,15 @@
-import { useCallback, useContext } from "react";
+import { useContext } from "react";
 import {
-  StyleSheet,
-  Text,
   ScrollView,
+  Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { NavProp } from "src/types/navStacks";
-import { menuStyles } from "src/styles/sectionMenu";
-import { MenuContext } from "../HomeStackScreen";
-import { menuItems } from "src/code/setup";
 import { setAsync } from "src/code/helpers";
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { menuItems } from "src/code/setup";
+import { menuStyles } from "src/styles/sectionMenu";
+import { NavProp } from "src/types/navStacks";
+import { MenuContext } from "../HomeStackScreen";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
@@ -46,6 +43,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
           key={2}
           style={menuStyles.menuItem}
           onPress={() => {
+            // TODO: should this also be navigate?
             navigation.popToTop();
             setCurrSection("all");
           }}
@@ -75,7 +73,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
             key={menuItem.id}
             style={menuStyles.menuItem}
             onPress={() => {
-              navigation.push("Section", { slug: menuItem.slug });
+              navigation.navigate("Section", { slug: menuItem.slug });
               setCurrSection(menuItem.slug);
             }}
             accessible={true}

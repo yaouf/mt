@@ -1,7 +1,10 @@
+import moment from "moment";
 import { useState } from "react";
 import SignOutButton from "./SignOut";
 import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
 
+// TODO: factor out this var, since used in multiple places
+const isProduction = process.env.NODE_ENV !== "production";
 const NotificationTable = ({
   scheduledNotifications,
   setScheduledNotifications,
@@ -41,8 +44,12 @@ const NotificationTable = ({
     return tags.join(", ");
   };
 
+  const formatTime = (time) => {
+    return moment(time).tz("America/New_York").format("YYYY-MM-DD hh:mm A z");
+  }
+
   return (
-    <div className="container mx-auto p-5">
+    <div className="container mx-auto p-5 hidden md:block">
       <div className="flex items-center mb-8">
         <h1 className="text-3xl font-bold">Scheduled Notifications</h1>
         <SignOutButton />
@@ -63,26 +70,26 @@ const NotificationTable = ({
         <tbody>
           {scheduledNotifications.filter(notification => isSentVisible ? true : notification.status !== "sent").map((notification) => (
             <tr key={notification.id}>
-              <td className="py-2 px-4 border-b">{notification.time}</td>
+              <td className="py-2 px-4 border-b">{formatTime(notification.time)}</td>
               <td className="py-2 px-4 border-b">{notification.title}</td>
               <td className="py-2 px-4 border-b">{notification.body}</td>
               <td className="py-2 px-4 border-b">{formatTags(notification)}</td>
               <td className="py-2 px-4 border-b">
                 <a
                   href={notification.url}
-                  className="text-blue-500 hover:text-blue-700 underline"
+                  className="text-blue-500 hover:text-blue-700 underline break-all"
                 >
                   {notification.url}
                 </a>
               </td>
               <td className="py-2 px-4 border-b">{notification.status}</td>
               <td className="py-2 px-4 border-b">
-                <button
+                {(notification.status !== "sent" || isProduction) && <button
                   onClick={() => onDeleteNotification(notification)}
                   className="bg-red-500 text-white px-4 py-2 rounded-md"
                 >
                   Delete
-                </button>
+                </button>}
               </td>
             </tr>
           ))}
