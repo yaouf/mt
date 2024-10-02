@@ -5,6 +5,7 @@ import AuthWrapper from "./AuthWrapper";
 import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
+const isProduction = process.env.NODE_ENV === 'production';
 export default function Home() {
   const [scheduledNotifications, setScheduledNotifications] = useState([] as any[]);    
     useEffect(() => {
@@ -28,13 +29,13 @@ export default function Home() {
           <h2 className="text-lg font-semibold text-black mb-2">Environment Variables</h2>
           <p className="text-gray-700 flex">
             <span className="font-bold mr-2">NODE_ENV</span> 
-            <span className={`${process.env.NODE_ENV === 'production' ? 'text-red-500' : 'text-gray-700'}`}>
+            <span className={`${isProduction ? 'text-red-500' : 'text-gray-700'}`}>
               {process.env.NODE_ENV}
             </span>
           </p>
           <p className="text-gray-700 flex">
             <span className="font-bold mr-2">NEXT_PUBLIC_ENV</span> 
-            <span className={`${process.env.NEXT_PUBLIC_ENV === 'production' ? 'text-red-500' : 'text-gray-700'}`}>
+            <span className={`${isProduction ? 'text-red-500' : 'text-gray-700'}`}>
               {process.env.NEXT_PUBLIC_ENV}
             </span>
           </p>
