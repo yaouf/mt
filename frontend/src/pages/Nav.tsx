@@ -42,49 +42,47 @@ export const SavedContext = createContext<SavedContextType>({
   setSavedArticles: () => {}, // Dummy function
 });
 
-  /**
-           * Parses a URL and extracts the domain, mediaType, publicationDate, and slug.
-           * Handles both cases where isUid is true or false.
-           *
-           * @param url - The URL to parse.
-           * @param isUid - Boolean indicating if the URL contains a UID.
-           * @returns An object containing the extracted parts.
-           */
-  function parseArticleUrl(url: string, isUid: boolean) {
-    try {
-      const parsedUrl = new URL(url);
-      const pathSegments = parsedUrl.pathname
-        .split("/")
-        .filter(Boolean);
+/**
+ * Parses a URL and extracts the domain, mediaType, publicationDate, and slug.
+ * Handles both cases where isUid is true or false.
+ *
+ * @param url - The URL to parse.
+ * @param isUid - Boolean indicating if the URL contains a UID.
+ * @returns An object containing the extracted parts.
+ */
+function parseArticleUrl(url: string, isUid: boolean) {
+  try {
+    const parsedUrl = new URL(url);
+    const pathSegments = parsedUrl.pathname.split("/").filter(Boolean);
 
-      if (isUid) {
-        // Assuming the UID is the last segment in the URL
-        const uid = pathSegments.pop();
-        return {
-          domain: parsedUrl.origin,
-          uid,
-        };
-      } else {
-        // Assuming the format is <domain>/<mediatype>/<year>/<month>/<slug>
-        const slug = pathSegments.pop();
-        const month = pathSegments.pop();
-        const year = pathSegments.pop();
-        const mediaType = pathSegments.shift();
+    if (isUid) {
+      // Assuming the UID is the last segment in the URL
+      const uid = pathSegments.pop();
+      return {
+        domain: parsedUrl.origin,
+        uid,
+      };
+    } else {
+      // Assuming the format is <domain>/<mediatype>/<year>/<month>/<slug>
+      const slug = pathSegments.pop();
+      const month = pathSegments.pop();
+      const year = pathSegments.pop();
+      const mediaType = pathSegments.shift();
 
-        const publicationDate = `${year}-${month}`;
+      const publicationDate = `${year}-${month}`;
 
-        return {
-          domain: parsedUrl.origin,
-          mediaType,
-          publicationDate,
-          slug,
-        };
-      }
-    } catch (error) {
-      console.error("Error parsing URL:", error);
-      return null;
+      return {
+        domain: parsedUrl.origin,
+        mediaType,
+        publicationDate,
+        slug,
+      };
     }
+  } catch (error) {
+    console.error("Error parsing URL:", error);
+    return null;
   }
+}
 
 /**
  * Defines how notifications should behave when received by the app
@@ -130,55 +128,48 @@ export default function Nav() {
 
   const navigation = useNavigation();
 
+  const response = Notifications.useLastNotificationResponse();
+
   useEffect(() => {
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("Notification received in listener", notification);
-        setNotification(notification);
-      });
+    
+    const listener = async () => {
+    if (response) {
+      console.log(response);
+      console.log("response in listener", response);
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener(
-        async (response) => {
-          console.log(response);
-          console.log("response in listener", response);
+      const setArticle = async (article: Article) => {
+        // navigation.navigate("Article", {data: article});
+      };
 
-          const setArticle = (article: Article) => {
-            // navigation.navigate("Article", {data: article});
-          };
-
-      
-          // navigate to the article page
-          // const slug = response.notification.request.content.data.slug;
-          // const date = response.notification.request.content.data.date;
-
-          const parsedArticle = parseArticleUrl(response.notification.request.content.data.url, response.notification.request.content.data.isUid);
-          
-          if (parsedArticle && parsedArticle.slug && parsedArticle.publicationDate) {
-            console.log("parsedArticle", parsedArticle);
-            const fetchedArticle = await fetchArticle(parsedArticle.slug, parsedArticle.publicationDate, setArticle);
-            navigation.navigate("Article", { data: fetchedArticle });
-            trackEvent("notification_clicked", {
-              action: response.actionIdentifier,
-              slug: parsedArticle.slug,
-              date: parsedArticle.publicationDate,
-            });
-          } else {
-            console.log("Notification data does not contain a valid slug or publication date");
-            // TODO: handle UUID case
-          }
-        }
+      const parsedArticle = parseArticleUrl(
+        response.notification.request.content.data.url,
+        response.notification.request.content.data.isUid
       );
 
-    return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
+      if (parsedArticle?.slug && parsedArticle?.publicationDate) {
+        console.log("parsedArticle", parsedArticle);
+        const fetchedArticle = await fetchArticle(
+          parsedArticle.slug,
+          parsedArticle.publicationDate,
+          setArticle
         );
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
+        navigation.navigate("Article", { data: fetchedArticle });
+        trackEvent("notification_clicked", {
+          action: response.actionIdentifier,
+          slug: parsedArticle.slug,
+          date: parsedArticle.publicationDate,
+        });
+      } else {
+        console.log(
+          "Notification data does not contain a valid slug or publication date"
+        );
+        // TODO: handle UUID case
+      }
+    }
+  }
+
+  listener();
+}, [response]);
 
   console.log(
     "Title",
