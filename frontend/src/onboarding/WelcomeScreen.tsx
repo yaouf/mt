@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     marginBottom: screenHeight*.25,
   },
   button: {
-    width: "80%", 
+    width: "90%", 
     backgroundColor: "#eee",
     borderRadius: 30, 
     borderWidth: 2,
