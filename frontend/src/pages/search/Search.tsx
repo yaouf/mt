@@ -1,5 +1,16 @@
 import { useRef, useState, useEffect } from "react";
-import { View, TextInput, FlatList, Image, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from "react-native";
+import {
+  View,
+  TextInput,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+  Dimensions,
+  Switch,
+} from "react-native";
 import { varGray1, varTextColor } from "../../styles/styles";
 import { search } from "src/styles/search";
 import { MaterialIcons, Ionicons } from "@expo/vector-icons";
@@ -8,7 +19,7 @@ import HorizontalCard from "../../components/cards/HorizontalCard";
 import { Article } from "src/types/data";
 import { trackEvent } from "@aptabase/react-native";
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get("window");
 
 function Search({ navigation }: NavProp) {
   const textInputRef = useRef<TextInput>(null);
@@ -17,21 +28,27 @@ function Search({ navigation }: NavProp) {
   const [loading, setLoading] = useState(false);
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [searchMode, setSearchMode] = useState("article");
   const animatedWidth = useRef(new Animated.Value(0)).current;
 
   const handleSearch = async () => {
     setLoading(true);
-    trackEvent("search", {text});
+    trackEvent("search", { text });
     try {
-      const response = await fetch(
-        `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`
-      );
+      let queryUrl = "";
+      if (searchMode === "author") {
+        queryUrl = `https://www.browndailyherald.com/search.json?a=1&o=date&au=${text}`;
+      } else {
+        queryUrl = `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`;
+      }
+      const response = await fetch(queryUrl);
       const jsonString = await response.text();
       const resultObject = JSON.parse(jsonString);
       const articleList: Article[] = resultObject.items;
 
       setArticles(articleList);
       setLoading(false);
+      setSearchActivated(false);
       setSearchCompleted(true);
     } catch (error) {
       setLoading(false);
@@ -57,6 +74,12 @@ function Search({ navigation }: NavProp) {
     textInputRef.current?.focus();
   };
 
+  const toggleSearchMode = () => {
+    setSearchMode((prevMode) =>
+      prevMode === "article" ? "author" : "article"
+    );
+  };
+
   const handleFocus = () => {
     setSearchActivated(true);
     Animated.timing(animatedWidth, {
@@ -68,7 +91,7 @@ function Search({ navigation }: NavProp) {
 
   const inputWidth = animatedWidth.interpolate({
     inputRange: [0, 1],
-    outputRange: ['100%', '80%'],
+    outputRange: ["100%", "80%"],
   });
 
   return (
@@ -94,7 +117,10 @@ function Search({ navigation }: NavProp) {
             accessibilityHint="Enter keywords to search for articles"
           />
           {text.length > 0 && (
-            <TouchableOpacity onPress={handleClearText} accessibilityLabel="Clear search text">
+            <TouchableOpacity
+              onPress={handleClearText}
+              accessibilityLabel="Clear search text"
+            >
               <Ionicons name="close-circle" size={20} color={varGray1} />
             </TouchableOpacity>
           )}
@@ -110,7 +136,29 @@ function Search({ navigation }: NavProp) {
           </TouchableOpacity>
         )}
       </View>
-      
+      {searchActivated && (
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 20,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ paddingRight: 10 }}>Search by author instead</Text>
+
+          <Switch
+            trackColor={{ true: "#000000", false: "grey" }}
+            value={searchMode == "author"}
+            onValueChange={() => toggleSearchMode()}
+            accessibilityLabel={`Article/author search toggle`}
+            accessibilityHint={`Toggle to switch between article and author search`}
+            accessibilityRole="switch"
+            accessibilityState={{ checked: searchMode == "author" }}
+          />
+        </View>
+      )}
+
       {!searchCompleted && !loading && (
         <View style={styles.instructionContainer}>
           <Text style={styles.instructionText}>
@@ -118,7 +166,7 @@ function Search({ navigation }: NavProp) {
           </Text>
         </View>
       )}
-      
+
       {loading && (
         <View style={styles.loadingContainer}>
           <Image
@@ -129,7 +177,7 @@ function Search({ navigation }: NavProp) {
           />
         </View>
       )}
-      
+
       {searchCompleted && (
         <FlatList
           data={articles}
@@ -152,20 +200,20 @@ function Search({ navigation }: NavProp) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -187,19 +235,19 @@ const styles = StyleSheet.create({
   },
   instructionContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   instructionText: {
     color: "gray",
     fontSize: 18,
-    textAlign: 'center',
+    textAlign: "center",
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   resultsContainer: {
     paddingHorizontal: 15,
