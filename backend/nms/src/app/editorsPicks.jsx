@@ -1,0 +1,101 @@
+import { useState } from "react";
+
+const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
+  const [url, setUrl] = useState("");
+
+  const handleAddPick = async () => {
+    if (!url) {
+      console.error("URL cannot be empty");
+      return; // Prevent adding an empty URL
+    }
+
+    try {
+      const response = await fetch("/api/editors-picks/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setEditorsPicks((prev) => [...prev, data]); 
+        setUrl(""); 
+      } else {
+        console.error("Error adding editor's pick");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleDeletePick = async (id) => {
+    try {
+      const response = await fetch(`/api/editors-picks/delete?id=${id}`, {
+        method: 'DELETE',
+      });
+  
+      // Log the response to see if the deletion was successful
+      console.log("Delete response:", response);
+  
+      if (response.ok) {
+        // Filter out the deleted pick from the state
+        setEditorsPicks(editorsPicks.filter(pick => pick.id !== id));
+      } else {
+        console.error('Failed to delete editor\'s pick');
+      }
+    } catch (error) {
+      console.error('Error deleting editor\'s pick:', error);
+    }
+  };
+  
+  return (
+    <div className="container mx-auto px-8 py-2"> 
+      <h2 className="text-2xl font-bold mb-4">Editor's Picks</h2>
+      
+      <div className="flex mb-2 w-full"> 
+        <input
+          type="text"
+          name="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
+          className="border rounded-md px-3 py-2 w-full"
+          placeholder="Enter article URL"
+        />
+      </div>
+      <button 
+        onClick={handleAddPick} 
+        className="bg-blue-500 text-white px-4 py-2 rounded-md transition transform duration-200 hover:bg-blue-600 hover:scale-105" 
+      >
+        Add Editor's Pick
+      </button>
+
+      <table className="min-w-full border border-gray-300 mt-4"> 
+        <thead>
+          <tr>
+            <th className="py-2 px-4 border-b">URL</th>
+            <th className="py-2 px-4 border-b">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {editorsPicks.map((pick) => (
+            <tr key={pick.id} className="hover:bg-gray-50">
+              <td className="py-2 px-4 border-b">{pick.url}</td>
+              <td className="py-2 px-4 border-b">
+                <button 
+                  onClick={() => handleDeletePick(pick.id)} 
+                  className="bg-red-500 text-white px-4 py-2 rounded-md"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default EditorsPicks;
