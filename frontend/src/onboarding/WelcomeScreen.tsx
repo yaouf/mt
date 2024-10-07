@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
+import { useCallback, useEffect, useState } from "react";
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { font2 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     marginBottom: screenHeight*.25,
   },
   button: {
-    width: "60%", 
+    width: "90%", 
     backgroundColor: "#eee",
     borderRadius: 30, 
     borderWidth: 2,

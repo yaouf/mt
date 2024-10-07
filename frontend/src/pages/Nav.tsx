@@ -1,11 +1,12 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { trackEvent } from "@aptabase/react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { font2 } from "src/styles/styles";
-import Header from "src/components/Header";
-import HomeStackScreen from "./home/HomeStackScreen";
-import SettingsStackScreen from "./settings/SettingsStackScreen";
-import SearchStackScreen from "./search/SearchStackScreen";
-import { NotificationProvider } from "./settings/NotificationProvider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+} from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
 import {
   Dispatch,
   SetStateAction,
@@ -14,12 +15,16 @@ import {
   useRef,
   useState,
 } from "react";
-import { getAsync } from "src/code/helpers";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { HoldMenuProvider } from "react-native-hold-menu";
-import * as Notifications from "expo-notifications";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { fetchArticle } from "src/code/fetchContent";
+import { getAsync } from "src/code/helpers";
+import Header from "src/components/Header";
+import { Article } from "src/types/data";
+import HomeStackScreen from "./home/HomeStackScreen";
+import SearchStackScreen from "./search/SearchStackScreen";
+import { NotificationProvider } from "./settings/NotificationProvider";
+import SettingsStackScreen from "./settings/SettingsStackScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,6 +41,48 @@ export const SavedContext = createContext<SavedContextType>({
   savedArticles: {},
   setSavedArticles: () => {}, // Dummy function
 });
+
+/**
+ * Parses a URL and extracts the domain, mediaType, publicationDate, and slug.
+ * Handles both cases where isUid is true or false.
+ *
+ * @param url - The URL to parse.
+ * @param isUid - Boolean indicating if the URL contains a UID.
+ * @returns An object containing the extracted parts.
+ */
+function parseArticleUrl(url: string, isUid: boolean) {
+  try {
+    const parsedUrl = new URL(url);
+    const pathSegments = parsedUrl.pathname.split("/").filter(Boolean);
+
+    if (isUid) {
+      // Assuming the UID is the last segment in the URL
+      const uid = pathSegments.pop();
+      return {
+        domain: parsedUrl.origin,
+        uid,
+      };
+    } else {
+      // Assuming the format is <domain>/<mediatype>/<year>/<month>/<slug>
+      const slug = pathSegments.pop();
+      const month = pathSegments.pop();
+      const year = pathSegments.pop();
+      const mediaType = pathSegments.shift();
+
+      const publicationDate = `${year}-${month}`;
+
+      return {
+        domain: parsedUrl.origin,
+        mediaType,
+        publicationDate,
+        slug,
+      };
+    }
+  } catch (error) {
+    console.error("Error parsing URL:", error);
+    return null;
+  }
+}
 
 /**
  * Defines how notifications should behave when received by the app
@@ -79,26 +126,50 @@ export default function Nav() {
     load();
   }, []);
 
+  const navigation = useNavigation();
+
+  const response = Notifications.useLastNotificationResponse();
+
   useEffect(() => {
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener((notification) => {
-        setNotification(notification);
-      });
+    
+    const listener = async () => {
+    if (response) {
+      console.log(response);
+      console.log("response in listener", response);
 
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(response);
-      });
+      const setArticle = async (article: Article) => {
+        // navigation.navigate("Article", {data: article});
+      };
 
-    return () => {
-      notificationListener.current &&
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
+      const parsedArticle = parseArticleUrl(
+        response.notification.request.content.data.url,
+        response.notification.request.content.data.isUid
+      );
+
+      if (parsedArticle?.slug && parsedArticle?.publicationDate) {
+        console.log("parsedArticle", parsedArticle);
+        const fetchedArticle = await fetchArticle(
+          parsedArticle.slug,
+          parsedArticle.publicationDate,
+          setArticle
         );
-      responseListener.current &&
-        Notifications.removeNotificationSubscription(responseListener.current);
-    };
-  }, []);
+        navigation.navigate("Article", { data: fetchedArticle });
+        trackEvent("notification_clicked", {
+          action: response.actionIdentifier,
+          slug: parsedArticle.slug,
+          date: parsedArticle.publicationDate,
+        });
+      } else {
+        console.log(
+          "Notification data does not contain a valid slug or publication date"
+        );
+        // TODO: handle UUID case
+      }
+    }
+  }
+
+  listener();
+}, [response]);
 
   console.log(
     "Title",
@@ -110,81 +181,88 @@ export default function Nav() {
   );
 
   return (
-    <SafeAreaView style={{flex: 1, paddingTop: 0, marginTop: 0}} edges={["bottom", "left", "right"]}>
-    <HoldMenuProvider safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}>
-      <NotificationProvider>
-        <SavedContext.Provider value={{ savedArticles, setSavedArticles }}>
-          <Tab.Navigator
-            screenOptions={({ route }) => {
-              const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
+    <SafeAreaView
+      style={{ flex: 1, paddingTop: 0, marginTop: 0 }}
+      edges={["bottom", "left", "right"]}
+    >
+      <HoldMenuProvider
+        safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}
+      >
+        <NotificationProvider>
+          <SavedContext.Provider value={{ savedArticles, setSavedArticles }}>
+            <Tab.Navigator
+              screenOptions={({ route }) => {
+                const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
 
-              return {
-                tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
-                  let label;
+                return {
+                  tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+                    let label;
 
-                  if (route.name === 'Home') {
-                    iconName = focused ? 'home-sharp' : 'home-outline';
-                    label = 'Home';
-                  } else if (route.name === 'Settings') {
-                    iconName = focused ? 'settings-sharp' : 'settings-outline';
-                    label = 'Settings';
-                  } else if (route.name === 'Search') {
-                    iconName = focused ? 'search-sharp' : 'search-outline';
-                    label = 'Search';
-                  } else if (route.name === 'For You') {
-                    iconName = focused ? 'star-sharp' : 'star-outline';
-                    label = 'For You';
-                  }
+                    if (route.name === "Home") {
+                      iconName = focused ? "home-sharp" : "home-outline";
+                      label = "Home";
+                    } else if (route.name === "Settings") {
+                      iconName = focused
+                        ? "settings-sharp"
+                        : "settings-outline";
+                      label = "Settings";
+                    } else if (route.name === "Search") {
+                      iconName = focused ? "search-sharp" : "search-outline";
+                      label = "Search";
+                    } else if (route.name === "For You") {
+                      iconName = focused ? "star-sharp" : "star-outline";
+                      label = "For You";
+                    }
 
-                  return (
-                    <Ionicons 
-                      name={iconName} 
-                      size={size + 4} // Increase icon size slightly
-                      color={color} 
-                      accessibilityLabel={label}
-                    />
-                  );
-                },
-                tabBarActiveTintColor: "#ED1C24",
-                tabBarInactiveTintColor: "gray",
-                tabBarStyle: {
-                  height: 60,
-                  marginBottom: 0,
-                  paddingTop: 2, 
-                  paddingBottom: 2, 
-                  paddingRight: 20,
-                  paddingLeft: 20,
-                  display: routeName === "Article" ? "none" : "flex",
-                },
-                tabBarShowLabel: false,
-                headerShown: routeName === "Article" ? false : true,
-              };
-            }}
-          >
-            <Tab.Screen
-              name="Home"
-              component={HomeStackScreen}
-              options={{
-                headerTitle: () => <Header />,
-                // headerStyle: {},
-                headerShadowVisible: false, 
+                    return (
+                      <Ionicons
+                        name={iconName}
+                        size={size + 4} // Increase icon size slightly
+                        color={color}
+                        accessibilityLabel={label}
+                      />
+                    );
+                  },
+                  tabBarActiveTintColor: "#ED1C24",
+                  tabBarInactiveTintColor: "gray",
+                  tabBarStyle: {
+                    height: 60,
+                    marginBottom: 0,
+                    paddingTop: 2,
+                    paddingBottom: 2,
+                    paddingRight: 20,
+                    paddingLeft: 20,
+                    display: routeName === "Article" ? "none" : "flex",
+                  },
+                  tabBarShowLabel: false,
+                  headerShown: routeName === "Article" ? false : true,
+                };
               }}
-            />
-            <Tab.Screen
-              name="Search"
-              component={SearchStackScreen}
-              options={{ headerTitle: () => <Header /> }}
-            />
-            <Tab.Screen
-              name="Settings"
-              component={SettingsStackScreen}
-              options={{ headerTitle: () => <Header /> }}
-            />
-          </Tab.Navigator>
-        </SavedContext.Provider>
-      </NotificationProvider>
-    </HoldMenuProvider>
+            >
+              <Tab.Screen
+                name="Home"
+                component={HomeStackScreen}
+                options={{
+                  headerTitle: () => <Header />,
+                  // headerStyle: {},
+                  headerShadowVisible: false,
+                }}
+              />
+              <Tab.Screen
+                name="Search"
+                component={SearchStackScreen}
+                options={{ headerTitle: () => <Header /> }}
+              />
+              <Tab.Screen
+                name="Settings"
+                component={SettingsStackScreen}
+                options={{ headerTitle: () => <Header /> }}
+              />
+            </Tab.Navigator>
+          </SavedContext.Provider>
+        </NotificationProvider>
+      </HoldMenuProvider>
     </SafeAreaView>
   );
 }
