@@ -37,6 +37,8 @@ export async function seed(knex: Knex): Promise<void> {
 
   await knex("notifications").del();
 
+  await knex("editorspicks").del();
+
   // TODO: Uncomment this once tests work with preexisting notifications
   // await knex("notifications").insert([
   //   {
