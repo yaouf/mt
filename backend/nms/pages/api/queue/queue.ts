@@ -34,18 +34,19 @@ const worker = new Worker("notificationQueue", async (job) => {
   const { jobId, time, title, body, tags, url, isUid } = job.data;
   console.log("tags", tags);
   // Fetch all devices that have subscribed to the tags
-  let deviceMap = new Map<string, Device>(); // Use a map with push token as key
-  for (let tag of tags) {
-    console.log("tag", tag);
+  // let deviceMap = new Map<string, Device>(); // Use a map with push token as key
+  // for (let tag of tags) {
+    // console.log("tag", tag);
     const devices = (await db("devices")
-      .select("expoPushToken")
-      .where(tag, true)) as Device[];
-    for (let device of devices) {
-      deviceMap.set(device.expoPushToken, device);
-    }
-  }
+      .distinct("expoPushToken")
+      .join("subscriptions", "devices.id", "subscriptions.device_id")
+      .whereIn("subscriptions.notification_type_id", tags)) as Device[];
+    // for (let device of devices) {
+    //   deviceMap.set(device.expoPushToken, device);
+    // }
+  // }
 
-  const devices = Array.from(deviceMap.values());
+  // const devices = Array.from(deviceMap.values());
   // console.log("devices", devices);
   // if (tags.includes("breaking-news")) {
   //   // Fetch all devices that have subscribed to breaking news alerts
