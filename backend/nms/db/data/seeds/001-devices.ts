@@ -37,6 +37,10 @@ export async function seed(knex: Knex): Promise<void> {
 
   await knex("notifications").del();
 
+  await knex("subscriptions").del();
+
+  await knex("notification_types").del();
+
   // TODO: Uncomment this once tests work with preexisting notifications
   // await knex("notifications").insert([
   //   {
@@ -50,4 +54,27 @@ export async function seed(knex: Knex): Promise<void> {
   //     status: "pending",
   //   }]);
 
+  await knex("notification_types").insert([
+    {
+      name: "Breaking News",
+    },
+    {
+      name: "University News",
+    },
+    {
+      name: "Metro",
+    },
+    {
+      name: "Sports",
+    },
+    {
+      name: "Arts and Culture",
+    },
+    {
+      name: "Science and Research",
+    },
+    {
+      name: "Opinions",
+    },
+  ]);
 }
