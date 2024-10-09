@@ -34,6 +34,14 @@ function SettingsScreen({ navigation }: NavProp) {
     setUniversityNews,
     metro,
     setMetro,
+    sports,
+    setSports,
+    artsAndCulture,
+    setArtsAndCulture,
+    scienceAndResearch,
+    setScienceAndResearch,
+    opinions,
+    setOpinions,
     deviceID,
     setDeviceID,
     checkPermissions,
@@ -53,6 +61,18 @@ function SettingsScreen({ navigation }: NavProp) {
 
         const metroNotifs = await AsyncStorage.getItem("metroNotifs");
         setMetro(metroNotifs === "true");
+
+        const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
+        setSports(sportsNotifs === "true");
+
+        const artsAndCultureNotifs = await AsyncStorage.getItem("artsAndCultureNotifs");
+        setArtsAndCulture(artsAndCultureNotifs === "true");
+
+        const scienceAndResearchNotifs = await AsyncStorage.getItem("scienceAndResearchNotifs");
+        setScienceAndResearch(scienceAndResearchNotifs === "true");
+
+        const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
+        setOpinions(opinionsNotifs === "true");
 
         const id = await AsyncStorage.getItem("deviceID");
         console.log("this is the device id in the settingsscreen", id);
@@ -146,6 +166,35 @@ function SettingsScreen({ navigation }: NavProp) {
             value={metro}
             setValue={setMetro}
             asyncName="metroNotifs"
+          />
+          {/* TODO: change descriptions */}
+          <Notif
+            title="Sports"
+            description="Brown athletics news"
+            value={sports}
+            setValue={setSports}
+            asyncName="sportsNotifs"
+          />
+          <Notif
+            title="Arts and Culture"
+            description="Pop culture news"
+            value={artsAndCulture}
+            setValue={setArtsAndCulture}
+            asyncName="artsAndCultureNotifs"
+          />
+          <Notif
+            title="Science and Research"
+            description="Brown research news"
+            value={scienceAndResearch}
+            setValue={setScienceAndResearch}
+            asyncName="scienceAndResearchNotifs"
+          />
+          <Notif
+            title="Opinions"
+            description="Brown opinion pieces"
+            value={opinions}
+            setValue={setOpinions}
+            asyncName="opinionsNotifs"
           />
         </View>
       </View>
