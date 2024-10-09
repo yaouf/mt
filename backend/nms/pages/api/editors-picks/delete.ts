@@ -25,7 +25,7 @@ export default async function deleteEditorPick(
     const deletedCount = await db("editorspicks").where({ url: url }).del();
 
     if (deletedCount > 0) {
-      const editorspicks = await db("editorspicks").select("*");
+      const editorspicks = await db("editorspicks").select("url");
       console.log("picks", editorspicks);
       res.status(200).json(editorspicks);
     } else {

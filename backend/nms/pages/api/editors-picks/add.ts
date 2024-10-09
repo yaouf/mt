@@ -29,12 +29,12 @@ export default async function addEditorPick(
     const url = data.url;
 
     console.log("url", url);
-    // Insert the notification data into the table
+    // Insert the editor's pick data into the table
     const insertedRows = await db("editorspicks")
       .insert({
         url: url,
       })
-      .returning("id");
+      .returning("url");
     console.log("insertedRows", insertedRows);
 
     // Create a new editor's pick
