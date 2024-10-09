@@ -3,6 +3,7 @@
   import moment from "moment-timezone";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+// TODO: Delete this file
 
 const NotificationFormUID = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
