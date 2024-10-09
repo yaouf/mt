@@ -1,12 +1,19 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useContext } from "react";
-import { Text, TouchableOpacity, View, SafeAreaView, Dimensions, StyleSheet, ScrollView } from "react-native";
+import {
+  Dimensions,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import Notif from "src/components/Notif";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
-import { text } from "src/styles/styles";
+import { font2, text } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
-import { font2 } from "src/styles/styles";
 import { setUpDevice } from "../code/setup";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
@@ -22,6 +29,14 @@ function PushNotifsScreen({
     setUniversityNews,
     metro,
     setMetro,
+    sports,
+    setSports,
+    artsAndCulture,
+    setArtsAndCulture,
+    scienceAndResearch,
+    setScienceAndResearch,
+    opinions,
+    setOpinions,
     setDeviceID,
     systemPermissionStatus,
     requestPermission,
@@ -43,6 +58,8 @@ function PushNotifsScreen({
     route.params.parentNav.push("MainApp");
   };
 
+  console.log("sports", sports, artsAndCulture, scienceAndResearch, opinions);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -53,7 +70,7 @@ function PushNotifsScreen({
               Turn on alerts for the topics that interest you and we'll keep you
               updated.
             </Text>
-          
+
             <View style={styles.notifContainer}>
               <Notif
                 title="Breaking News"
@@ -76,8 +93,37 @@ function PushNotifsScreen({
                 setValue={setMetro}
                 onboarding={true}
               />
+              {/* TODO: change descriptions */}
+              <Notif
+                title="Sports"
+                description="Brown athletics news"
+                value={sports}
+                setValue={setSports}
+                onboarding={true}
+              />
+              <Notif
+                title="Arts and Culture"
+                description="Pop culture news"
+                value={artsAndCulture}
+                setValue={setArtsAndCulture}
+                onboarding={true}
+              />
+              <Notif
+                title="Science and Research"
+                description="Brown research news"
+                value={scienceAndResearch}
+                setValue={setScienceAndResearch}
+                onboarding={true}
+              />
+              <Notif
+                title="Opinions"
+                description="Brown opinion pieces"
+                value={opinions}
+                setValue={setOpinions}
+                onboarding={true}
+              />
             </View>
-          </View> 
+          </View>
         </View>
       </ScrollView>
       <View style={styles.buttonContainer}>
@@ -93,7 +139,12 @@ function PushNotifsScreen({
         <TouchableOpacity
           style={[styles.continueButton, styles.maybeLaterButton]}
           onPress={() => {
-            setUpDevice(setBreaking, setUniversityNews, setMetro, systemPermissionStatus)
+            setUpDevice(
+              setBreaking,
+              setUniversityNews,
+              setMetro,
+              systemPermissionStatus
+            )
               .then((id) => setDeviceID(id))
               .then(() => route.params.parentNav.push("MainApp"));
           }}
@@ -118,28 +169,28 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    padding: '5%',
+    padding: "5%",
   },
   title: {
     ...text.bigTitle,
     fontSize: 32,
-    marginBottom: '5%',
+    marginBottom: "5%",
   },
   description: {
     ...text.normal,
     fontSize: 16,
-    marginBottom: '5%',
+    marginBottom: "5%",
   },
   notifContainer: {
     rowGap: 16,
-    width: '100%',
+    width: "100%",
   },
   buttonContainer: {
-    padding: '5%',
+    padding: "5%",
   },
   continueButton: {
     ...settings.continueButton,
-    marginBottom: '2%',
+    marginBottom: "2%",
   },
   maybeLaterButton: {
     borderColor: "white",
