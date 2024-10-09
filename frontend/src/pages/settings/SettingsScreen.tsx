@@ -167,31 +167,30 @@ function SettingsScreen({ navigation }: NavProp) {
             setValue={setMetro}
             asyncName="metroNotifs"
           />
-          {/* TODO: change descriptions */}
           <Notif
             title="Sports"
-            description="Brown athletics news"
+            description="Game coverage and exclusives"
             value={sports}
             setValue={setSports}
             asyncName="sportsNotifs"
           />
           <Notif
             title="Arts and Culture"
-            description="Pop culture news"
+            description="Events and reviews from our critics"
             value={artsAndCulture}
             setValue={setArtsAndCulture}
             asyncName="artsAndCultureNotifs"
           />
           <Notif
             title="Science and Research"
-            description="Brown research news"
+            description="The cutting edge of research"
             value={scienceAndResearch}
             setValue={setScienceAndResearch}
             asyncName="scienceAndResearchNotifs"
           />
           <Notif
             title="Opinions"
-            description="Brown opinion pieces"
+            description="Columns, op-eds and editorials"
             value={opinions}
             setValue={setOpinions}
             asyncName="opinionsNotifs"

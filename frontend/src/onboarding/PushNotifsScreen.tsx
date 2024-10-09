@@ -72,6 +72,7 @@ function PushNotifsScreen({
             </Text>
 
             <View style={styles.notifContainer}>
+              {/* TODO: factor out duplicate descriptions between this and settingsscreen */}
               <Notif
                 title="Breaking News"
                 description="Urgent and developing coverage"
@@ -93,31 +94,30 @@ function PushNotifsScreen({
                 setValue={setMetro}
                 onboarding={true}
               />
-              {/* TODO: change descriptions */}
               <Notif
                 title="Sports"
-                description="Brown athletics news"
+                description="Game coverage and exclusives"
                 value={sports}
                 setValue={setSports}
                 onboarding={true}
               />
               <Notif
                 title="Arts and Culture"
-                description="Pop culture news"
+                description="Events and reviews from our critics"
                 value={artsAndCulture}
                 setValue={setArtsAndCulture}
                 onboarding={true}
               />
               <Notif
                 title="Science and Research"
-                description="Brown research news"
+                description="The cutting edge of research"
                 value={scienceAndResearch}
                 setValue={setScienceAndResearch}
                 onboarding={true}
               />
               <Notif
                 title="Opinions"
-                description="Brown opinion pieces"
+                description="Columns, op-eds and editorials"
                 value={opinions}
                 setValue={setOpinions}
                 onboarding={true}
