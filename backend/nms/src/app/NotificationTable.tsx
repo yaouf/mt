@@ -4,7 +4,7 @@ import SignOutButton from "./SignOut";
 import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
 
 // TODO: factor out this var, since used in multiple places
-const isProduction = process.env.NODE_ENV !== "production";
+const isProduction = process.env.NODE_ENV === "production";
 const NotificationTable = ({
   scheduledNotifications,
   setScheduledNotifications,
@@ -84,7 +84,7 @@ const NotificationTable = ({
               </td>
               <td className="py-2 px-4 border-b">{notification.status}</td>
               <td className="py-2 px-4 border-b">
-                {(notification.status !== "sent" || isProduction) && <button
+                {(notification.status !== "sent" || !isProduction) && <button
                   onClick={() => onDeleteNotification(notification)}
                   className="bg-red-500 text-white px-4 py-2 rounded-md"
                 >
