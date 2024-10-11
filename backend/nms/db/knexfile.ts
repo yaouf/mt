@@ -39,7 +39,6 @@ const config: { [key: string]: Knex.Config } = {
       directory: "./data/migrations",
     },
   },
-
   staging: {
     client: "pg",
     connection: env.DB_URL,

@@ -6,7 +6,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const handleAddPick = async () => {
     if (!url) {
       console.error("URL cannot be empty");
-      return; 
+      return; // Prevent adding an empty URL
     }
 
     try {
@@ -32,14 +32,9 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
 
   const handleDeletePick = async (url) => {
     try {
-      const response = await fetch(`/api/editors-picks/delete?id=${id}`, {
+      const response = await fetch(`/api/editors-picks/delete?url=${url}`, {
         method: 'DELETE',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url }),
       });
-      ;
   
       // Log the response to see if the deletion was successful
       console.log("Delete response:", response);
@@ -85,7 +80,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         </thead>
         <tbody>
           {editorsPicks.map((pick) => (
-            <tr key={pick.id} className="hover:bg-gray-50">
+            <tr key={pick.url} className="hover:bg-gray-50">
               <td className="py-2 px-4 border-b">{pick.url}</td>
               <td className="py-2 px-4 border-b">
                 <button 
