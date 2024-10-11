@@ -1,9 +1,10 @@
-import { useContext } from "react";
-import { View, FlatList } from "react-native";
+import React, { useContext } from "react";
+import { View, FlatList, TouchableOpacity, Text } from "react-native";
 import { baseStyles } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { SavedContext } from "../Nav";
 import FavArticle from "./FavArticle";
+import { Ionicons } from "@expo/vector-icons";
 
 function SavedArticles({ navigation }: NavProp) {
   const { savedArticles } = useContext(SavedContext);
@@ -15,11 +16,17 @@ function SavedArticles({ navigation }: NavProp) {
 
   return (
     <View style={baseStyles.container}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={{ padding: 10 }}
+      >
+        <Ionicons name="arrow-back" size={24} color="#1C1B1F" />
+      </TouchableOpacity>
       <FlatList
         data={savedArticleArray}
-        style={{height: "100%"}}
+        style={{ height: "100%" }}
         keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <View style={{height: 10}} />}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         renderItem={({ item }) => (
           <FavArticle
             slug={item.slug}

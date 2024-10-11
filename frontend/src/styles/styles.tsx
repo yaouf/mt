@@ -23,7 +23,19 @@ export const baseStyles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     backgroundColor: "#fff",
+    paddingTop: 10,
     // flex: 1,
+  },
+  backButton: {
+    backgroundColor: "blue",
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  backButtonText: {
+    color: "white",
+    fontSize: 16,
   },
   // container: {
   //   flex: 1,
@@ -41,12 +53,12 @@ export const layout = StyleSheet.create({
   vStack: {
     rowGap: 0,
     marginTop: 0,
-    overflow: "visible"
+    overflow: "visible",
   },
   recentArticlesStack: {
     rowGap: 10,
     marginTop: 0,
-    overflow: "visible"
+    overflow: "visible",
   },
   grid: {
     flexDirection: "row",
@@ -69,7 +81,7 @@ export const text = StyleSheet.create({
     fontWeight: "800",
     fontSize: 26,
     fontFamily: font3,
-    paddingTop: 10
+    paddingTop: 10,
   },
   resetSectionsButton: {
     // main section headers
@@ -77,7 +89,7 @@ export const text = StyleSheet.create({
     fontWeight: "800",
     fontSize: 20,
     fontFamily: font3,
-    paddingTop: 0
+    paddingTop: 0,
   },
   sectionHeader2: {
     // with added padding for settings
