@@ -6,7 +6,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const handleAddPick = async () => {
     if (!url) {
       console.error("URL cannot be empty");
-      return; // Prevent adding an empty URL
+      return; 
     }
 
     try {
@@ -30,18 +30,23 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
     }
   };
 
-  const handleDeletePick = async (id) => {
+  const handleDeletePick = async (url) => {
     try {
-      const response = await fetch(`/api/editors-picks/delete?id=${id}`, {
+      const response = await fetch(`/api/editors-picks/delete`, {
         method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
       });
+      ;
   
       // Log the response to see if the deletion was successful
       console.log("Delete response:", response);
   
       if (response.ok) {
         // Filter out the deleted pick from the state
-        setEditorsPicks(editorsPicks.filter(pick => pick.id !== id));
+        setEditorsPicks(editorsPicks.filter(pick => pick.url !== url));
       } else {
         console.error('Failed to delete editor\'s pick');
       }
@@ -81,10 +86,14 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         <tbody>
           {editorsPicks.map((pick) => (
             <tr key={pick.id} className="hover:bg-gray-50">
-              <td className="py-2 px-4 border-b">{pick.url}</td>
+              <td className="py-2 px-4 border-b">
+              <a href={pick.url} className="text-blue-500 hover:text-blue-700 underline break-all">
+                  {pick.url}
+              </a>
+              </td>
               <td className="py-2 px-4 border-b">
                 <button 
-                  onClick={() => handleDeletePick(pick.id)} 
+                  onClick={() => handleDeletePick(pick.url)} 
                   className="bg-red-500 text-white px-4 py-2 rounded-md"
                 >
                   Delete

@@ -7,7 +7,6 @@ type ResponseData = {
 } | EditorPick | EditorPick[];
 
 interface EditorPick {
-  id: number;
   url: string;
 }
 export default async function addEditorPick(
@@ -27,7 +26,6 @@ export default async function addEditorPick(
 
     // Create a new editor's pick
     const newPick: EditorPick = {
-      id: Date.now(), // Unique ID for the new pick
       url: url,
     };
     
