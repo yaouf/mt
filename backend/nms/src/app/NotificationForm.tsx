@@ -4,10 +4,13 @@ import moment from "moment-timezone";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { validate as isValidUUID } from "uuid";
+import ConfirmationModal from "./ConfirmationModal";
 
 const TITLE_CHAR_LIM = 43; // max notif title length for normal text size (I think).
 const BODY_CHAR_LIM = 165; // max notif body length for normal text size.
 const BANNER_DURATION = 5000; // how long the dashboard banner stays up after a notification is sent.
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const NotificationForm = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
@@ -20,10 +23,12 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
   const [bannerMessage, setBannerMessage] = useState("");
   const [bannerVisible, setBannerVisible] = useState(false);
-  const [bannerTimeout, setBannerTimeout] = useState<ReturnType<typeof setTimeout>>();
-  const [isFailed, setIsFailed] = useState(false); 
+  const [bannerTimeout, setBannerTimeout] =
+    useState<ReturnType<typeof setTimeout>>();
+  const [isFailed, setIsFailed] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewFormData((prevData) => ({
       ...prevData,
@@ -31,7 +36,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     if (checked) {
       setNewFormData((prevData) => ({
@@ -46,7 +51,15 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }
   };
 
-  const handleScheduleNotification = async () => {
+  const handleScheduleNotification = () => {
+    if (isProduction) {
+      setIsConfirmModalOpen(true);
+    } else {
+      confirmScheduleNotification();
+    }
+  };
+
+  const confirmScheduleNotification = async () => {
     try {
       const userTimeZone = moment.tz.guess();
       const localTime = newFormData.time;
@@ -84,16 +97,16 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           url: "",
         });
 
-        setIsFailed(false); 
+        setIsFailed(false);
         showBanner("Sent successfully!");
       } else {
         console.error("Error scheduling notification");
-        setIsFailed(true); 
+        setIsFailed(true);
         showBanner("Send failed");
       }
     } catch (error) {
       console.error("Error:", error);
-      setIsFailed(true); 
+      setIsFailed(true);
       showBanner("Send failed");
     }
   };
@@ -102,7 +115,10 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     setBannerMessage(message);
     setBannerVisible(true);
     clearTimeout(bannerTimeout);
-    document.documentElement.style.setProperty('--banner-duration', `${BANNER_DURATION / 1000}s`);
+    document.documentElement.style.setProperty(
+      "--banner-duration",
+      `${BANNER_DURATION / 1000}s`
+    );
     const timeout = setTimeout(() => {
       setBannerVisible(false);
     }, BANNER_DURATION); // Hide banner after X seconds
@@ -112,9 +128,17 @@ const NotificationForm = ({ setScheduledNotifications }) => {
   return (
     <div className="container mx-auto px-8 py-2">
       {bannerVisible && (
-        <div className={`fixed top-4 left-1/2 transform -translate-x-1/2 text-center py-2 px-4 rounded-lg shadow-lg ${isFailed ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`}>
+        <div
+          className={`fixed top-4 left-1/2 transform -translate-x-1/2 text-center py-2 px-4 rounded-lg shadow-lg ${
+            isFailed ? "bg-red-500 text-white" : "bg-blue-500 text-white"
+          }`}
+        >
           <span className="font-bold">{bannerMessage}</span>
-          <div className={`h-1 mt-2 rounded-full ${isFailed ? 'bg-red-700' : 'bg-blue-700'} animate-progress`}></div>
+          <div
+            className={`h-1 mt-2 rounded-full ${
+              isFailed ? "bg-red-700" : "bg-blue-700"
+            } animate-progress`}
+          ></div>
         </div>
       )}
       <h2 className="text-2xl font-bold mb-4">Create a New Notification</h2>
@@ -273,6 +297,16 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         >
           Schedule Notification
         </button>
+
+        {/* Modal to confirm scheduling */}
+        {isProduction && (
+          <ConfirmationModal
+            isOpen={isConfirmModalOpen}
+            onClose={() => setIsConfirmModalOpen(false)}
+            onConfirm={confirmScheduleNotification}
+            message="Are you sure you want to schedule this notification to production?"
+          />
+        )}
       </form>
     </div>
   );

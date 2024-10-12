@@ -1,26 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Notification } from "../types";
 import AuthWrapper from "./AuthWrapper";
 import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
 const isProduction = process.env.NODE_ENV === 'production';
 export default function Home() {
-  const [scheduledNotifications, setScheduledNotifications] = useState([] as any[]);    
+  const [scheduledNotifications, setScheduledNotifications] = useState<Notification[]>([]);    
     useEffect(() => {
     const fetchNotifications = async () => {
       try {
         const response = await fetch("/api/notifications");
         const data = await response.json();
-        console.log(data);
-        setScheduledNotifications(data);
+        // TODO: add runtime type checking using zod or io-ts
+        const notifications = data as Notification[];
+        console.log(notifications);
+        setScheduledNotifications(notifications);
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
     };
     fetchNotifications();
-    }, [])
+    }, []);
+
   return (
     <AuthWrapper>
       {/* Display environment variables */}
