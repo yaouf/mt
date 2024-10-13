@@ -20,7 +20,7 @@ export const updateSettings = onRequest(async (request, response) => {
 
 
   try {
-    logger.info("Updating user settings", { structuredData: true });
+    logger.info("Updating user settings", { structuredData: true }, request.body);
 
     // Request body validation schema
     const schema = Joi.object({
@@ -34,12 +34,14 @@ export const updateSettings = onRequest(async (request, response) => {
     // Validate request body
     const { error, value: validBody } = schema.validate(request.body);
     if (error) {
+      logger.error("Request body validation error: " + error.message);
       response.status(400).send("Request body validation error: " + error.message);
       return;
     }
 
     // Validate deviceId, make sure its uuid v4
     if (!validateUuidV4(validBody.deviceId)) { 
+      logger.error("Request body validation error: \"deviceId\" is not a valid UUID v4.");
       response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
       return;
     }
@@ -81,6 +83,7 @@ export const updateSettings = onRequest(async (request, response) => {
     const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
+      logger.error("Device not found. Are you sure field \"deviceId\" is correct?", { deviceId });
       response.status(404).send("Device not found. Are you sure field \"deviceId\" is correct?");
       return;
     }
@@ -90,7 +93,7 @@ export const updateSettings = onRequest(async (request, response) => {
     // log the result of the update
     logger.info(res);
     // Log the result of update - For logging purposes, might query again or just log the update was successful
-    logger.info("Device settings updated", { deviceId, updates: updateData });
+    logger.info("Device settings updated for deviceId: ", { deviceId, updates: updateData });
 
     response.send("Settings updated!");
     return;
