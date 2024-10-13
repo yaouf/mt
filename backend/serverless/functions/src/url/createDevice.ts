@@ -9,8 +9,9 @@ import { validateApiKey } from "../utils";
 export const createDevice = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
   
-  const { environment, stagingDbUrl } = envars;
-  const dbParams = { environment, stagingDbUrl };
+  const environment = envars.environment.value();
+  const dbUrl = envars.dbUrl.value();
+  const dbParams = { environment, dbUrl };
   logger.info("dbParams: ", dbParams);
 
   logger.info("Creating a new device", { structuredData: true });

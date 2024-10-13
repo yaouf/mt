@@ -11,9 +11,8 @@ console.log(rootDir);
 // (since db is nested under nms)
 const startPath = rootDir.endsWith("db") ? "" : "../db/";
 console.log("full path: ", startPath + "dist/dev.sqlite3");
-function configFunc(stagingDbUrl: string) {
+function configFunc(dbUrl: string) {
   // TODO: use env var package for validation.
-  let dbUrl: string = stagingDbUrl;
   if(!dbUrl) {
     dbUrl = process.env.DB_URL || "";
   }

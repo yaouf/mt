@@ -5,7 +5,7 @@ const environment = defineString("ENV", {
   description: "this defines the env is on production or development or staging",
 }).value();
 console.log(`Environment: ${environment}`);
-const stagingDbUrl = defineString("DB_URL", {
+const dbUrl = defineString("DB_URL", {
     default: "",
     description: "this defines the db url for staging",
 }).value();
@@ -24,5 +24,5 @@ const dbPassword = defineString("DB_PASSWORD", {
   default: ""
 }).value();
 
-const envars = { environment, stagingDbUrl, trustedApiKey, dbName, dbUser, dbPassword};
+const envars = { environment, dbUrl, trustedApiKey, dbName, dbUser, dbPassword};
 export default envars;
