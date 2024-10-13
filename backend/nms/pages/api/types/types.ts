@@ -17,3 +17,7 @@ export type Device = {
   "Metro": boolean;
   expoPushToken: string;
 };
+
+export interface EditorPick {
+  url: string;
+}
