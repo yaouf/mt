@@ -10,7 +10,7 @@ export default async function getNotifications(
   res: NextApiResponse<Notification[] | ResponseData>,
 ) {
   try {
-    const notifications = await db("notifications").select("*");
+    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "url", "isUid");
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error fetching notifications from the database:", error);

@@ -31,14 +31,14 @@ export default async function getNotification(
 
     if (jobId) {
       const notification = await db("notifications")
-        .select("*")
+        .select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "url", "isUid")
         .where({ id: jobId });
       if (notification.length === 0) {
         return res.status(404).json({ message: "Notification not found." });
       } 
       res.status(200).json(notification[0]);
     } else {
-      const notifications = await db("notifications").select("*");
+      const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "url", "isUid");
       res.status(200).json(notifications);
     }
   } catch (error) {
