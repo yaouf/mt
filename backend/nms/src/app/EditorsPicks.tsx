@@ -98,7 +98,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         onClick={handleAddPick} 
         className="bg-blue-500 text-white px-4 py-2 rounded-md transition transform duration-200 hover:bg-blue-600 hover:scale-105" 
       >
-        Add Editor's Pick
+        Add Editor&apos;s Pick
       </button>
     </div>
   );
