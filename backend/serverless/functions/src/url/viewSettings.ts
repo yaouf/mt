@@ -5,6 +5,12 @@ import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
+/**
+ * Gets the settings for a device.
+ * Takes a deviceId and returns an object with the keys "Breaking News", "University News", "Metro", and "isPushEnabled"
+ * and their corresponding boolean values.
+ * Called when a user goes to the settings screen in the app.
+ */
 export const viewSettings = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
 

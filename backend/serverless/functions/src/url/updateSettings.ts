@@ -5,6 +5,12 @@ import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
+/**
+ * Updates the settings for a device.
+ * Takes a deviceId and an object with the keys "Breaking News", "University News", "Metro", and "isPushEnabled"
+ * and their corresponding boolean values to update to.
+ * Called when a user changes their push notification settings in the app.
+ */
 export const updateSettings = onRequest(async (request, response) => {
     if (!validateApiKey(request, response)) return;
 
