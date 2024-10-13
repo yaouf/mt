@@ -18,6 +18,7 @@ function BottomBar(props: ArticleDetailProps) {
   const navigation = useNavigation();
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
+  // TODO: if deviceId does not exist, go through onboarding again. 
   // TODO: make the bottom bar buttons larger
   useEffect(() => {
     setSaved(props.uuid in savedArticles);
