@@ -1,18 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
+import { EditorPick } from "../types/types";
 
 type ResponseData =
   | {
       message?: string;
-      jobId?: number;
       picks?: EditorPick[];
     }
   | EditorPick
   | EditorPick[];
 
-interface EditorPick {
-  url: string;
-}
+
 export default async function addEditorPick(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>

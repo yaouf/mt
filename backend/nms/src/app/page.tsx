@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react";
 import { Notification } from "../types";
 import AuthWrapper from "./AuthWrapper";
+import EditorsPicks from "./EditorsPicks";
 import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
-import EditorsPicks from "./editorsPicks";
 
 const isProduction = process.env.NODE_ENV === 'production';
 export default function Home() {
   const [scheduledNotifications, setScheduledNotifications] = useState<Notification[]>([]);    
   const [editorsPicks, setEditorsPicks] = useState([] as any[]); // New state for editor's picks
-  const [deviceCount, setDeviceCount] = useState(0); // New state for device count
+  const [deviceCount, setDeviceCount] = useState<string>("Loading..."); // New state for device count
 
 // FOR FRIDAY :
 // find the count of devices by making a new API call to /api/devices and display it in the UI. Then in the function
@@ -38,9 +38,9 @@ export default function Home() {
   useEffect(() => {
     const fetchDeviceCount = async () => {
       try{
-        const response = await fetch("/api/device/devices");        
+        const response = await fetch("/api/devices/count");        
         const data = await response.json();
-        setDeviceCount(data.count);
+        setDeviceCount(data.count.toString());
       }
       catch(error){
         console.error("Error fetching device count:", error);
@@ -48,6 +48,15 @@ export default function Home() {
     };
     fetchDeviceCount();
   },[]);
+
+  useEffect(() => {
+    const fetchEditorsPicks = async () => {
+      const response = await fetch("/api/editors-picks");
+      const data = await response.json();
+      setEditorsPicks(data);
+    };
+    fetchEditorsPicks();
+  }, []);
 
   return (
     <AuthWrapper>
@@ -74,7 +83,7 @@ export default function Home() {
         <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
           <p className="text-gray-700 flex">
             <span className="font-bold mr-2">Total devices</span> 
-            <span className={`${isProduction ? 'text-red-500' : 'text-gray-700'}`}>
+            <span className="text-gray-700">
               {deviceCount}
             </span>
           </p>
@@ -89,7 +98,7 @@ export default function Home() {
               
 
         <NotificationForm setScheduledNotifications={setScheduledNotifications} />
-
+        <div className="flex justify-center py-10"></div>
           <EditorsPicks
           editorsPicks={editorsPicks} // Pass the editorsPicks state
           setEditorsPicks={setEditorsPicks} // Pass the state setter function
