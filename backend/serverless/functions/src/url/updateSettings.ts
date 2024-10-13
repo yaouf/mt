@@ -14,8 +14,9 @@ import { validateApiKey, validateUuidV4 } from "../utils";
 export const updateSettings = onRequest(async (request, response) => {
     if (!validateApiKey(request, response)) return;
 
-  const { environment, stagingDbUrl } = envars;
-  const dbParams = { environment, stagingDbUrl };
+  const environment = envars.environment.value();
+  const dbUrl = envars.dbUrl.value();
+  const dbParams = { environment, dbUrl };
 
 
   try {

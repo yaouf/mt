@@ -13,7 +13,9 @@ import { validateApiKey, validateUuidV4 } from "../utils";
 export const updateNotificationStatus = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
 
-  const { environment, stagingDbUrl } = envars;
+  // Call .value() in runtime 
+  const environment = envars.environment.value();
+  const dbUrl = envars.dbUrl.value();
 
     // Request body validation schema
   const schema = Joi.object({
@@ -37,7 +39,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
   // Extract ID and currentNotificationStatus from request body
   const { deviceId, isPushEnabled } = validBody;
 
-  const dbParams = { environment, stagingDbUrl };
+  const dbParams = { environment, dbUrl };
 
   try {
     // Check the current status in the database

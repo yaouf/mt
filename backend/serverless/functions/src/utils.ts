@@ -23,7 +23,7 @@ export function validateApiKey(request: Request, response: Response): boolean {
     }
   
     // Check if the API key is correct
-    if (!tsscmp(untrustedApiKey, envars.trustedApiKey)) {
+    if (!tsscmp(untrustedApiKey, envars.trustedApiKey.value())) {
       response.status(401).send("Unauthorized");
       return false;
     }

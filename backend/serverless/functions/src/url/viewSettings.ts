@@ -37,8 +37,9 @@ export const viewSettings = onRequest(async (request, response) => {
     }  
     logger.info("Device ID received", { deviceId });
     // Get the device settings in device tables
-    const { environment, stagingDbUrl } = envars;
-    const dbParams = { environment, stagingDbUrl };
+    const environment = envars.environment.value();
+    const dbUrl = envars.dbUrl.value();
+    const dbParams = { environment, dbUrl };
     const settings = await db(dbParams)("devices")
     .where("id", deviceId)
     .select("University News", "Metro", "Breaking News")
