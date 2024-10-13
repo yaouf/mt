@@ -43,14 +43,10 @@ fetch("YOUR_CREATE_DEVICE_ENDPOINT", requestOptions)
   .catch(error => console.log('error', error));
 ```
 
-7. After making a change, deploy new versions of the functions to the frontend. Make sure that you're using the dev version of firebase project. Make sure that the env vars are set to the staging versions. Like such:
-firebase functions:config:set api.key="<your-api-key>" \
-  db.url="<your-db-url>" \
-  env.name="<development or staging or production>" \
-  db.name?="<your-db-name>" \
-  db.user?="<your-db-user>" \
-  db.password?="<your-db-password>"
-
-Then, run `npm run deploy` to deploy the new versions of the functions if you want to redeploy all functions.
+7. After making a change, you are ready to deploy new development versions of the functions to the frontend. Make sure that you're using the dev version of firebase project (`firebase use dev`). Make sure that you have an env file .env.<firebase-dev-project-id> with the correct env vars.
+Then, run `npm run deploy` to deploy the new versions of the functions if you want to redeploy all functions and that will automatically update the dev project firebase functions with the env variables in the .env.<firebase-dev-project-id> file.
 If you only want to redeploy certain functions, run `firebase deploy --only <function1>,<function2>`, which is better if you are only changing one function.
-8. After testing with the frontend, change the ENV vars to point to the production versions of the functions. Log into production firebase using `firebase use prod`, and then run `npm run deploy` again to deploy the new versions of the functions.
+
+8. After testing with the frontend, you are ready to deploy new production versions of the functions to the frontend. Make sure that you're using the production version of firebase project (`firebase use prod`). Make sure that you have an env file .env.<firebase-prod-project-id> with the correct env vars. Then, run `npm run deploy` to deploy the new versions of the functions.
+
+Don't worry about updating the api urls on the frontend. When you deploy, firebase will use the same urls for each project.
