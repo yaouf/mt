@@ -32,7 +32,7 @@ function BottomBar(props: ArticleDetailProps) {
 
   // not doing individual article/section notifs for now
   // function handleNotification() {}
-
+  // TODO: add a double tap to save article, double tap again to unsave
   return (
     <View
       style={articleStyles.actionBar}
