@@ -104,6 +104,8 @@ const NotificationTable = ({
                 <td className="py-2 px-4 border-b">
                   <a
                     href={notification.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="text-blue-500 hover:text-blue-700 underline break-all"
                   >
                     {notification.url}
