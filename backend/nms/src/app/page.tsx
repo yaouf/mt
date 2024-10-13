@@ -13,12 +13,6 @@ export default function Home() {
   const [editorsPicks, setEditorsPicks] = useState([] as any[]); // New state for editor's picks
   const [deviceCount, setDeviceCount] = useState<string>("Loading..."); // New state for device count
 
-// FOR FRIDAY :
-// find the count of devices by making a new API call to /api/devices and display it in the UI. Then in the function
- // make a SQL query that counts the number of devices in the database and return it as a JSON response. use smth similar
- //to  const count = await db("devices").select("*").count_all();
-
-
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
