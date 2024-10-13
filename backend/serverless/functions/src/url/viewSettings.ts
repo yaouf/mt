@@ -16,7 +16,7 @@ export const viewSettings = onRequest(async (request, response) => {
 
   try {
 
-    logger.info("Getting user settings", { structuredData: true });
+    // logger.info("Getting user settings", { structuredData: true });
     // Destructure potential fields from request body
     // Schema for request body validation
     const schema = Joi.object({
@@ -25,6 +25,7 @@ export const viewSettings = onRequest(async (request, response) => {
     // Validate request body
     const { error, value: validBody } = schema.validate(request.body);
     if (error) {
+      logger.error("Request body validation error: " + error.message, { requestBody: request.body });
       response.status(400).send("Request body validation error: " + error.message);
       return;
     }
@@ -32,6 +33,7 @@ export const viewSettings = onRequest(async (request, response) => {
     // TODO: how to use types with Joi
     // Validate deviceId, make sure its uuid v4
     if (!validateUuidV4(deviceId)) {
+      logger.error("Request body validation error: \"deviceId\" is not a valid UUID v4.", { deviceId });
       response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
       return;
     }  
@@ -47,13 +49,14 @@ export const viewSettings = onRequest(async (request, response) => {
 
     // Check if the device's settings exist. If not, assume the device doesn't exist
     if (!settings) {
+      logger.error("Device ID not found.", { deviceId });
       // If the device doesn't exist, return an error response
       response.status(404).send("Device ID not found.");
       return;
     }
 
     // Log and send the settings
-    logger.info("Device settings sent", { deviceId, settings });
+    logger.info("Device settings sent for deviceId: ", { deviceId, settings });
     response.send(settings);
     return;
     
