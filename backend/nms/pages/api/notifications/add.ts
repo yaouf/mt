@@ -101,7 +101,7 @@ export default async function addNotification(
     // const scheduledNotifications = await notificationQueue.getDelayed();
     // console.log(scheduledNotifications);
 
-    const notifications = await db("notifications").select("*");
+    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "url", "isUid");
     console.log(notifications);
     res.status(200).json(notifications);
   } catch (error) {
