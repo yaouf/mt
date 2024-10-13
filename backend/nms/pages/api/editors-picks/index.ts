@@ -14,6 +14,6 @@ export default async function getNotifications(
     res.status(200).json(picks);
   } catch (error) {
     console.error("Error fetching editor's picks from the database:", error);
-    res.status(500).json({ message: "Internal server error." });
+    res.status(500).json({ message: error.message });
   }
 }

@@ -43,7 +43,7 @@ export default async function addEditorPick(
     res.status(201).json(newPick);
     
   } catch (error) {
-    console.error("Error deleting editors pick from the database:", error);
-    res.status(500).json({ message: "Internal server error." });
+    console.error("Error adding editors pick to the database:", error);
+    res.status(500).json({ message: error.message });
   }
 }

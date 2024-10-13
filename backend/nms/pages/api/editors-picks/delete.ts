@@ -35,6 +35,6 @@ export default async function deleteEditorPick(
     }
   } catch (error) {
     console.error("Error deleting editors pick from the database:", error);
-    res.status(500).json({ message: "Internal server error." });
+    res.status(500).json({ message: error.message });
   }
 }

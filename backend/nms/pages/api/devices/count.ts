@@ -2,7 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 
 type ResponseData = {
-  count: string;
+  count?: string;
+  message?: string;
 };
 
 export default async function getDeviceCount(
@@ -18,7 +19,6 @@ export default async function getDeviceCount(
     res.status(200).json({ count });
   } catch (error) {
     console.error("Error fetching device count from the database:", error);
-
-    res.status(500).json({ count: "0" });
+    res.status(500).json({ message: error.message });
   }
 }
