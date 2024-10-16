@@ -102,7 +102,6 @@ export const createDevice = onRequest(async (request, response) => {
      // Select all from devices table and log result
     //  const allDevices = await db(dbParams)("devices").select();
     // logger.info(allDevices);
-
      // Send the device ID back to the client
    response.send({
      deviceId: deviceId,

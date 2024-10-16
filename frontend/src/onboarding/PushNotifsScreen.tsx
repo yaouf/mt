@@ -48,10 +48,18 @@ function PushNotifsScreen({
         setBreaking,
         setUniversityNews,
         setMetro,
+        setOpinions,
+        setArtsAndCulture,
+        setSports,
+        setScienceAndResearch,
         status,
         breaking,
         universityNews,
-        metro
+        metro,
+        opinions,
+        artsAndCulture,
+        sports,
+        scienceAndResearch
       ).then((id) => setDeviceID(id));
     });
 
@@ -143,6 +151,10 @@ function PushNotifsScreen({
               setBreaking,
               setUniversityNews,
               setMetro,
+              setOpinions,
+              setArtsAndCulture,
+              setSports,
+              setScienceAndResearch,
               systemPermissionStatus
             )
               .then((id) => setDeviceID(id))
