@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "bdh-mobileapp-dev"
+    "default": "bdh-mobile-app---dev",
+    "dev": "bdh-mobile-app---dev",
+    "prod": "bdh-mobile-app---prod"
   }
 }
