@@ -22,12 +22,17 @@ export const createDevice = onRequest(async (request, response) => {
     // Extract device information from the request body
 
     // Schema for request body validation
+    // TODO: factor out schema and repetitive fields into a single object
     const schema = Joi.object({
       deviceType: Joi.string().required(),
       expoPushToken: Joi.string().required(),
       "Breaking News": Joi.boolean().required(),
       "University News": Joi.boolean().required(),
       "Metro": Joi.boolean().required(),
+      "Opinions": Joi.boolean().required(),
+      "Arts and Culture": Joi.boolean().required(),
+      "Sports": Joi.boolean().required(),
+      "Science and Research": Joi.boolean().required(),
       isPushEnabled: Joi.boolean().required(),
     });
 
@@ -45,6 +50,10 @@ export const createDevice = onRequest(async (request, response) => {
     const breakingNews = validBody["Breaking News"];
     const universityNews = validBody["University News"];
     const metro = validBody["Metro"];
+    const opinions = validBody["Opinions"];
+    const artsAndCulture = validBody["Arts and Culture"];
+    const sports = validBody["Sports"];
+    const scienceAndResearch = validBody["Science and Research"];
     const isPushEnabled = validBody["isPushEnabled"];
 
     // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
@@ -63,6 +72,10 @@ export const createDevice = onRequest(async (request, response) => {
           "Breaking News": breakingNews,
           "University News": universityNews,
           "Metro": metro,
+          "Opinions": opinions,
+          "Arts and Culture": artsAndCulture,
+          "Sports": sports,
+          "Science and Research": scienceAndResearch,
           isPushEnabled: isPushEnabled,
         });
         deviceId = existingDevice.id;
@@ -72,6 +85,10 @@ export const createDevice = onRequest(async (request, response) => {
           "Breaking News": breakingNews,
           "University News": universityNews,
           "Metro": metro,
+          "Opinions": opinions,
+          "Arts and Culture": artsAndCulture,
+          "Sports": sports,
+          "Science and Research": scienceAndResearch,
           isPushEnabled: isPushEnabled,
         } });
     } else {
@@ -83,6 +100,10 @@ export const createDevice = onRequest(async (request, response) => {
       "Breaking News": breakingNews,
       "University News": universityNews,
       "Metro": metro,
+      "Opinions": opinions,
+      "Arts and Culture": artsAndCulture,
+      "Sports": sports,
+      "Science and Research": scienceAndResearch,
       isPushEnabled: isPushEnabled,
       expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
     })
@@ -96,6 +117,10 @@ export const createDevice = onRequest(async (request, response) => {
       "Breaking News": breakingNews,
       "University News": universityNews,
       "Metro": metro,
+      "Opinions": opinions,
+      "Arts and Culture": artsAndCulture,
+      "Sports": sports,
+      "Science and Research": scienceAndResearch,
       isPushEnabled: isPushEnabled,
     });
     }
