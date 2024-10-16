@@ -214,7 +214,6 @@ export default function Nav() {
                       iconName = focused ? "star-sharp" : "star-outline";
                       label = "For You";
                     }
-
                     return (
                       <Ionicons
                         name={iconName}
@@ -236,7 +235,7 @@ export default function Nav() {
                     display: routeName === "Article" ? "none" : "flex",
                   },
                   tabBarShowLabel: false,
-                  headerShown: routeName === "Article" ? false : true,
+                  headerShown: routeName === "Article" ? false : true, // TODO: simplify this logic with !== "Article"
                 };
               }}
             >
