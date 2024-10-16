@@ -1,10 +1,7 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./HomeScreen";
-import { HomeStackProps } from "src/types/navStacks";
-import ArticleScreen from "../article/ArticleScreen";
-import SectionsScreen from "../sections/SectionsScreen";
-import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
-import Staff from "../staff/Staff";
+import {
+  getFocusedRouteNameFromRoute,
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   Dispatch,
   SetStateAction,
@@ -14,12 +11,15 @@ import {
 } from "react";
 import { getAsync } from "src/code/helpers";
 import { menuItems } from "src/code/setup";
+import { HomeStackProps } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
-import {
-  getFocusedRouteNameFromRoute,
-} from "@react-navigation/native";
+import ArticleScreen from "../article/ArticleScreen";
+import SectionsScreen from "../sections/SectionsScreen";
+import Staff from "../staff/Staff";
+import HomeScreen from "./HomeScreen";
+import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
 
-const HomeStack = createStackNavigator<HomeStackProps>();
+const HomeStack = createNativeStackNavigator<HomeStackProps>();
 
 export type MenuContextType = {
   original: MenuItem[];
@@ -89,6 +89,12 @@ function HomeStackScreen({ navigation, route }) {
           header: HorizontalScrollMenu,
           headerStyle: {
             height: 20,
+          },
+          sharedElements: (route, otherRoute, showing) => {
+            if (route.name === "Article" || otherRoute.name === "Article" || showing.name === "Article") {
+              return ["header"];
+            }
+            return [];
           },
         }}
       >
