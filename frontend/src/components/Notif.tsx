@@ -33,12 +33,21 @@ function Notif({
 
   const updateBackend = (newVal: boolean) => {
     try {
+      // TODO: refactor this to be cleaner, maybe take in an object of all the notifs to update
       if (asyncName === "breakingNotifs") {
-        updateSettings(deviceID, newVal, undefined, undefined);
+        updateSettings(deviceID, newVal, undefined, undefined, undefined, undefined, undefined, undefined);
       } else if (asyncName === "universityNewsNotifs") {
-        updateSettings(deviceID, undefined, newVal, undefined);
+        updateSettings(deviceID, undefined, newVal, undefined, undefined, undefined, undefined, undefined);
       } else if (asyncName === "metroNotifs") {
-        updateSettings(deviceID, undefined, undefined, newVal);
+        updateSettings(deviceID, undefined, undefined, newVal, undefined, undefined, undefined, undefined);
+      } else if (asyncName === "opinionsNotifs") {
+        updateSettings(deviceID, undefined, undefined, undefined, newVal, undefined, undefined, undefined);
+      } else if (asyncName === "artsAndCultureNotifs") {
+        updateSettings(deviceID, undefined, undefined, undefined, undefined, newVal, undefined, undefined);
+      } else if (asyncName === "sportsNotifs") {
+        updateSettings(deviceID, undefined, undefined, undefined, undefined, undefined, newVal, undefined);
+      } else if (asyncName === "scienceAndResearchNotifs") {
+        updateSettings(deviceID, undefined, undefined, undefined, undefined, undefined, undefined, newVal);
       }
     } catch (error) {
       console.log("error updating settings", error);
