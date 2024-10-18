@@ -2,10 +2,19 @@ import React, { useState } from "react";
 import { View, Text, Switch, StyleSheet, TouchableOpacity } from "react-native";
 import SectionFilters from "./SectionFilters";
 import { Ionicons } from "@expo/vector-icons";
+import { SearchStackProps } from "src/types/navStacks";
 
-function FiltersScreen() {
+function FiltersScreen({
+  route,
+  navigation,
+}: 
+  SearchStackProps<"Filters\">;
+) {
   const [sortOption, setSortOption] = useState("newest");
-  const [searchType, setSearchType] = useState("Article");
+  const searchType = route.params.searchMode 
+  const search
+  
+    // const [searchMode, setS] = useState("Article");
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sort by</Text>

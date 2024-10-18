@@ -29,14 +29,19 @@ function Search({ navigation }: NavProp) {
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
   const animatedWidth = useRef(new Animated.Value(0)).current;
+  const [searchMode, setSearchMode] = useState("article");
 
   const handleSearch = async () => {
     setLoading(true);
     trackEvent("search", { text });
     try {
-      const response = await fetch(
-        `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`
-      );
+      let queryUrl = "";
+      if (searchMode === "Writer" || searchMode === "Photographer") {
+        queryUrl = `https://www.browndailyherald.com/search.json?a=1&o=date&au=${text}`;
+      } else {
+        queryUrl = `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`;
+      }
+      const response = await fetch(queryUrl);
       const jsonString = await response.text();
       const resultObject = JSON.parse(jsonString);
       const articleList: Article[] = resultObject.items;
@@ -104,7 +109,11 @@ function Search({ navigation }: NavProp) {
             accessibilityLabel="Search input"
             accessibilityHint="Enter keywords to search for articles"
           />
-          <TouchableOpacity onPress={() => navigation.navigate("Filters")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Filters", { searchMode, setSearchMode })
+            }
+          >
             <MaterialIcons
               name="tune"
               size={20}
