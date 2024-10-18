@@ -16,6 +16,7 @@ export type HomeStackProps = {
 
 export type SearchStackProps = {
   SearchScreen: undefined;
+  FilterScreen: { searchType: string };
   Article: { data: Article };
 };
 
