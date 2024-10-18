@@ -105,7 +105,13 @@ function Search({ navigation }: NavProp) {
             accessibilityHint="Enter keywords to search for articles"
           />
           <TouchableOpacity onPress={() => navigation.navigate("Filters")}>
-            <Ionicons name="filter" size={24} color="black" />
+            <MaterialIcons
+              name="tune"
+              size={20}
+              color={varGray1}
+              style={styles.searchIcon}
+              accessible={false}
+            />
           </TouchableOpacity>
           {text.length > 0 && (
             <TouchableOpacity
