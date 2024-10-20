@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "redis-server & next dev",
+    "dev": "concurrently \"redis-server\" \"next dev\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "build:db": "npm --prefix db run build",
     "knex:db": "npm --prefix db run knex",
     "dangerous:update:db": "npm --prefix db run dangerous:update",
-    "test": "cross-env NODE_ENV=test ENV=test npm run dangerous:update:db && (redis-server & cross-env NODE_ENV=test ENV=test jest --verbose --detectOpenHandles --forceExit)",
-    "test:pw": "redis-server & cross-env NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev & (cross-env ENV=test NODE_ENV=test npm run dangerous:update:db && cross-env ENV=test NODE_ENV=test npx playwright test)",
+    "test": "cross-env NODE_ENV=test ENV=test npm run dangerous:update:db && (concurrently \"redis-server\" \"cross-env NODE_ENV=test ENV=test jest --verbose --detectOpenHandles --forceExit\")",
+    "test:pw": "concurrently \"redis-server\" \"cross-env NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev\" && (cross-env ENV=test NODE_ENV=test npm run dangerous:update:db && cross-env ENV=test NODE_ENV=test npx playwright test)",
     "test:all": "cross-env NODE_ENV=test npm run test:pw && npm run test",
     "test:all:debug": "cross-env NODE_ENV=test npm run test:pw -- --debug && npm run test",
     "kill:redis": "lsof -ti :6379 | xargs kill -9"
