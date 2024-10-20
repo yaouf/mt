@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm i && tsc",
-    "knex": "ENV=${ENV:-development} && npx knex --env $ENV",
+    "knex": "node load-env.js",
     "dangerous:update": "npm run build && npm run knex -- migrate:rollback && npm run knex -- migrate:latest && npm run knex -- seed:run",
     "new": "npm run build && npx knex migrate:make $1"
   },
@@ -22,6 +22,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20.11.26"
+    "@types/node": "^20.11.26",
+    "dotenv-cli": "^7.4.2"
   }
 }
