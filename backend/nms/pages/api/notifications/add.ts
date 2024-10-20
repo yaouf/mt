@@ -54,7 +54,7 @@ export default async function addNotification(
     const sports = tags.includes("Sports");
     const artsAndCulture = tags.includes("Arts and Culture");
     const scienceAndResearch = tags.includes("Science and Research");
-    const opinion = tags.includes("Opinion");
+    const opinion = tags.includes("Opinions");
 
     
     // Create url from uid
@@ -79,7 +79,7 @@ export default async function addNotification(
         "Sports": sports,
         "Arts and Culture": artsAndCulture,
         "Science and Research": scienceAndResearch,
-        "Opinion": opinion,
+        "Opinions": opinion,
         url: url,
         isUid: isUid,
         status: "pending",
@@ -88,6 +88,7 @@ export default async function addNotification(
       console.log("insertedRows", insertedRows);
     // Get the ID of the inserted notification
     const jobId = insertedRows[0].id as number;
+    console.log("jobId", jobId);
 
     // Validate the jobId
     if (!jobId) {
@@ -110,8 +111,8 @@ export default async function addNotification(
     // const scheduledNotifications = await notificationQueue.getDelayed();
     // console.log(scheduledNotifications);
 
-    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinion", "url", "isUid");
-    console.log(notifications);
+    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions", "url", "isUid");
+    console.log("notifications in db after adding", notifications);
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error adding notification to the queue:", error);
