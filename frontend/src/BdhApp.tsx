@@ -51,9 +51,10 @@ function BdhApp() {
 
     const checkAppVersion = async () => {
       const currentVersion = Constants.expoConfig?.version ?? "";
+      const TARGET_VERSION = "1.0.13";
       const storedVersion = await AsyncStorage.getItem("appVersion");
 
-      if (storedVersion !== currentVersion) {
+      if (storedVersion !== currentVersion && currentVersion === TARGET_VERSION) {
         console.log("app version is out of date");
         await AsyncStorage.clear();
         await AsyncStorage.setItem("hasOnboarded", "false");
