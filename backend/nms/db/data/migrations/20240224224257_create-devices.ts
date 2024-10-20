@@ -1,5 +1,5 @@
 import type { Knex } from "knex";
-
+// TODO: we really only need one db folder. Delete the one in serverless and use this instead. 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema
     .createTable("devices", table => {
@@ -8,10 +8,6 @@ export async function up(knex: Knex): Promise<void> {
       table.boolean("Breaking News").notNullable();
       table.boolean("University News").notNullable();
       table.boolean("Metro").notNullable();
-      table.boolean("Sports").notNullable().defaultTo(false);
-      table.boolean("Arts and Culture").notNullable().defaultTo(false);
-      table.boolean("Science and Research").notNullable().defaultTo(false);
-      table.boolean("Opinions").notNullable().defaultTo(false);
       table.string("expoPushToken").unique().notNullable();
       table.boolean("isPushEnabled").notNullable();
     })
@@ -31,10 +27,6 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("Breaking News").notNullable();
         table.boolean("University News").notNullable();
         table.boolean("Metro").notNullable();
-        table.boolean("Sports").notNullable().defaultTo(false);
-        table.boolean("Arts and Culture").notNullable().defaultTo(false);
-        table.boolean("Science and Research").notNullable().defaultTo(false);
-        table.boolean("Opinions").notNullable().defaultTo(false);
         table.string("url").nullable();
         table.string("status").notNullable();
         table.boolean("isUid").notNullable();
