@@ -8,6 +8,7 @@ dotenv.config();
 const env = cleanEnv(process.env, {
   DB_URL: str({devDefault: ''}),
   NODE_ENV: str({ choices: ['development', 'test', 'production', 'staging'] }),
+  ENV: str({ choices: ['development', 'test', 'production', 'staging'] }),
   DB_USER: str({devDefault: ''}),
   DB_PASSWORD: str({devDefault: ''}),
   DB_NAME: str({devDefault: ''}),
