@@ -18,7 +18,7 @@ export type Device = {
   "Sports": boolean;
   "Arts and Culture": boolean;
   "Science and Research": boolean;
-  "Opinion": boolean;
+  "Opinions": boolean;
   expoPushToken: string;
 };
 
