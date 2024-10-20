@@ -2,11 +2,11 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 
 // Load the base .env file
-dotenv.config();
-
+const res = dotenv.config({ path: '.env' });
+console.log("config result", res);
 // Get the ENV value
-const env = process.env.NODE_ENV || 'development';
-console.log(`NODE_ENV is set to ${env}`);
+const env = process.env.ENV || 'development';
+console.log(`ENV is set to ${env}`);
 
 // Load the corresponding .env.<ENV> file if it exists
 const envFilePath = `.env.${env}`;
