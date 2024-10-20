@@ -51,6 +51,11 @@ export default async function addNotification(
     const breakingNews = tags.includes("Breaking News");
     const universityNews = tags.includes("University News");
     const metro = tags.includes("Metro");
+    const sports = tags.includes("Sports");
+    const artsAndCulture = tags.includes("Arts and Culture");
+    const scienceAndResearch = tags.includes("Science and Research");
+    const opinion = tags.includes("Opinion");
+
     
     // Create url from uid
     // if (isUid) {
@@ -71,6 +76,10 @@ export default async function addNotification(
         "Breaking News": breakingNews,
         "University News": universityNews,
         "Metro": metro,
+        "Sports": sports,
+        "Arts and Culture": artsAndCulture,
+        "Science and Research": scienceAndResearch,
+        "Opinion": opinion,
         url: url,
         isUid: isUid,
         status: "pending",
@@ -101,7 +110,7 @@ export default async function addNotification(
     // const scheduledNotifications = await notificationQueue.getDelayed();
     // console.log(scheduledNotifications);
 
-    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "url", "isUid");
+    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinion", "url", "isUid");
     console.log(notifications);
     res.status(200).json(notifications);
   } catch (error) {
