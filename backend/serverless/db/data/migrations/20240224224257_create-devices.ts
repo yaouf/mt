@@ -8,10 +8,6 @@ export async function up(knex: Knex): Promise<void> {
       table.boolean("Breaking News").notNullable();
       table.boolean("University News").notNullable();
       table.boolean("Metro").notNullable();
-      table.boolean("Sports").notNullable().defaultTo(false);
-      table.boolean("Arts and Culture").notNullable().defaultTo(false);
-      table.boolean("Science and Research").notNullable().defaultTo(false);
-      table.boolean("Opinions").notNullable().defaultTo(false);
       table.string("expoPushToken").unique().notNullable();
       table.boolean("isPushEnabled").notNullable();
     })
@@ -31,13 +27,8 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("Breaking News").notNullable();
         table.boolean("University News").notNullable();
         table.boolean("Metro").notNullable();
-        table.boolean("Sports").notNullable().defaultTo(false);
-        table.boolean("Arts and Culture").notNullable().defaultTo(false);
-        table.boolean("Science and Research").notNullable().defaultTo(false);
-        table.boolean("Opinions").notNullable().defaultTo(false);
         table.string("url").nullable();
         table.string("status").notNullable();
-        table.boolean("isUid").notNullable();
       })
     ).then(() => 
       knex.schema.createTable("editorspicks", table => {
