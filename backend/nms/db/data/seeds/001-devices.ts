@@ -52,7 +52,7 @@ export async function seed(knex: Knex): Promise<void> {
 
   await knex("notifications").truncate();
 
-  await knex("editorspicks").truncate();
+  await knex("editors_picks").truncate();
 
   // TODO: Uncomment this once tests work with preexisting notifications
   await knex("notifications").insert([

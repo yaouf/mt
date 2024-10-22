@@ -27,7 +27,7 @@ export default async function addEditorPick(
 
     console.log("url", url);
     // Insert the editor's pick data into the table
-    const insertedRows = await db("editorspicks")
+    const insertedRows = await db("editors_picks")
       .insert({
         url: url,
       })

@@ -20,7 +20,7 @@ export const viewEditorsPicks = onRequest(async (request, response) => {
   try {
     // Get the editors picks from the editors_picks table
     // TODO: Change table name to editors_picks
-    const result = await db(dbParams)("editorspicks").select("url");
+    const result = await db(dbParams)("editors_picks").select("url");
 
     logger.info(`Editors picks: ${result}`);
 

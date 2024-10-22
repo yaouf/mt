@@ -22,12 +22,13 @@ export default async function deleteEditorPick(
     console.log("url", url);
 
     // Delete the pick from the table
-    const deletedCount = await db("editorspicks").where({ url: url }).del();
+    const deletedCount = await db("editors_picks").where({ url: url }).del();
 
     if (deletedCount > 0) {
-      const editorspicks = await db("editorspicks").select("url");
-      console.log("picks", editorspicks);
-      res.status(200).json(editorspicks);
+      // TODO: factor out name of tables into constants for DRY
+      const editorsPicks = await db("editors_picks").select("url");
+      console.log("picks", editorsPicks);
+      res.status(200).json(editorsPicks);
     } else {
       res.status(404).json({
         message: "Editor pick not found in database.",

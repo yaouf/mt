@@ -10,7 +10,7 @@ export default async function getNotifications(
   res: NextApiResponse<Notification[] | ResponseData>,
 ) {
   try {
-    const picks = await db("editorspicks").select("url");
+    const picks = await db("editors_picks").select("url");
     res.status(200).json(picks);
   } catch (error) {
     console.error("Error fetching editor's picks from the database:", error);
