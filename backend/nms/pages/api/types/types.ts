@@ -15,10 +15,6 @@ export type Device = {
   "Breaking News": boolean;
   "University News": boolean;
   "Metro": boolean;
-  "Sports": boolean;
-  "Arts and Culture": boolean;
-  "Science and Research": boolean;
-  "Opinions": boolean;
   expoPushToken: string;
 };
 

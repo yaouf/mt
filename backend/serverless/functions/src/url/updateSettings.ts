@@ -28,10 +28,6 @@ export const updateSettings = onRequest(async (request, response) => {
       "Breaking News": Joi.boolean(),
       "University News": Joi.boolean(),
       "Metro": Joi.boolean(),
-      "Opinions": Joi.boolean(),
-      "Arts and Culture": Joi.boolean(),
-      "Sports": Joi.boolean(),
-      "Science and Research": Joi.boolean(),
       isPushEnabled: Joi.boolean(),
     });
 
@@ -54,10 +50,6 @@ export const updateSettings = onRequest(async (request, response) => {
     const breakingNews = validBody["Breaking News"];
     const universityNews = validBody["University News"];
     const metro = validBody["Metro"];
-    const opinions = validBody["Opinions"];
-    const artsAndCulture = validBody["Arts and Culture"];
-    const sports = validBody["Sports"];
-    const scienceAndResearch = validBody["Science and Research"];
     const isPushEnabled = validBody["isPushEnabled"];
 
     // Define the type of updateData
@@ -65,10 +57,6 @@ export const updateSettings = onRequest(async (request, response) => {
       "Breaking News"?: boolean;
       "University News"?: boolean;
       "Metro"?: boolean;
-      "Opinions"?: boolean;
-      "Arts and Culture"?: boolean;
-      "Sports"?: boolean;
-      "Science and Research"?: boolean;
       "isPushEnabled"?: boolean;
     };
     
@@ -83,18 +71,6 @@ export const updateSettings = onRequest(async (request, response) => {
     }
     if (metro !== undefined) {
       updateData["Metro"] = metro;
-    }
-    if (opinions !== undefined) {
-      updateData["Opinions"] = opinions;
-    }
-    if (artsAndCulture !== undefined) {
-      updateData["Arts and Culture"] = artsAndCulture;
-    }
-    if (sports !== undefined) {
-      updateData["Sports"] = sports;
-    }
-    if (scienceAndResearch !== undefined) {
-      updateData["Science and Research"] = scienceAndResearch;
     }
     if (isPushEnabled !== undefined) {
       updateData["isPushEnabled"] = isPushEnabled;

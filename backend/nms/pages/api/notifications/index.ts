@@ -11,7 +11,7 @@ export default async function getNotifications(
 ) {
   try {
     // Sorts in reverse chronological order
-    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions","url", "isUid").orderBy("time", "desc");
+    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "url", "isUid").orderBy("time", "desc");
     res.status(200).json(notifications);
   } catch (error) {
     console.error("Error fetching notifications from the database:", error);

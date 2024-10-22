@@ -57,10 +57,6 @@ const NotificationTable = ({
     if (notification["Breaking News"]) tags.push("Breaking News");
     if (notification["University News"]) tags.push("University News");
     if (notification["Metro"]) tags.push("Metro");
-    if (notification["Sports"]) tags.push("Sports");
-    if (notification["Arts and Culture"]) tags.push("Arts and Culture");
-    if (notification["Science and Research"]) tags.push("Science and Research");
-    if (notification["Opinions"]) tags.push("Opinions");
     return tags.join(", ");
   };
 
