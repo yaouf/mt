@@ -44,7 +44,7 @@ export const viewSettings = onRequest(async (request, response) => {
     const dbParams = { environment, dbUrl };
     const settings = await db(dbParams)("devices")
     .where("id", deviceId)
-    .select("University News", "Metro", "Breaking News")
+    .select("University News", "Metro", "Breaking News", "Opinions", "Arts and Culture", "Sports", "Science and Research", "isPushEnabled")
     .first();
 
     // Check if the device's settings exist. If not, assume the device doesn't exist
