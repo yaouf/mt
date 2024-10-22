@@ -38,7 +38,9 @@ export default async function getNotification(
       } 
       res.status(200).json(notification[0]);
     } else {
-      const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions", "url", "isUid");
+      // TODO: is this being reached, given we have index.ts?
+      // Sorts in reverse chronological order
+      const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions", "url", "isUid").orderBy("time", "desc");
       res.status(200).json(notifications);
     }
   } catch (error) {
