@@ -44,7 +44,7 @@ const config: { [key: string]: Knex.Config } = {
     connection: env.DB_URL,
     pool: {
       min: 2,
-      max: 10,
+      max: 20,
     },
     migrations: {
       directory: "./data/migrations",
