@@ -18,6 +18,7 @@ import { MenuItem } from "src/types/other";
 import {
   getFocusedRouteNameFromRoute,
 } from "@react-navigation/native";
+import SectionPrefScreen from "./menu/SectionPrefScreen";
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -100,6 +101,13 @@ function HomeStackScreen({ navigation, route }) {
         <HomeStack.Screen
           name="Article"
           component={ArticleScreen}
+          options={{ 
+            headerShown: false,
+          }}
+        />
+        <HomeStack.Screen
+          name="SectionPref"
+          component={SectionPrefScreen}
           options={{ 
             headerShown: false,
           }}

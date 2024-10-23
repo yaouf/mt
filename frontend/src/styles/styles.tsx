@@ -122,6 +122,7 @@ export const text = StyleSheet.create({
     fontSize: 16,
     overflow: "hidden",
     maxWidth: "100%",
+    paddingRight: 10
   },
   normal: {
     color: varTextColor,

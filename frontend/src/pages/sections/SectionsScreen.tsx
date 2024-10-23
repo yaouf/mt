@@ -108,7 +108,9 @@ function SectionsScreen({
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-    
+            scrollIndicatorInsets={{ right: 4 }}
+            contentContainerStyle={{ paddingRight: 20 }}
+            style={{ marginRight: -20 }}
           />
         </View>
       </View>
