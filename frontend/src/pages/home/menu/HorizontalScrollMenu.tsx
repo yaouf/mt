@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import {
   ScrollView,
   Text,
@@ -10,8 +10,6 @@ import { menuItems } from "src/code/setup";
 import { menuStyles } from "src/styles/sectionMenu";
 import { NavProp } from "src/types/navStacks";
 import { MenuContext } from "../HomeStackScreen";
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import SectionPrefScreen from "./SectionPrefScreen";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
@@ -30,18 +28,6 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
       accessibilityLabel="Section menu"
       accessibilityHint="Scroll horizontally to view different BDH sections"
     >
-      <TouchableOpacity
-        key={1}
-        style={menuStyles.menuItem}
-        onPress={() => navigation.push("SectionPref")}
-        accessible={true}
-        accessibilityRole="button"
-        accessibilityLabel="Filter options"
-      >
-        <Ionicons name="filter-outline" size={24} color="black" />
-      </TouchableOpacity>
-
-      
       {currSection === "all" ? (
         <View 
           style={menuStyles.menuItem}
