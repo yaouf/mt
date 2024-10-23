@@ -138,9 +138,10 @@ function ArticleScreen({
                               .replaceAll("<p>", "")
                               .replaceAll("</p>", "")
                               .replaceAll("&nbsp;", " ")
-                          : ""}
+                              .replaceAll("<br>", "")
+                      : ""}
                         {article.dominantMedia.authors.length > 0 &&
-                          " Media by " +
+                          "Media by " +
                             article.dominantMedia.authors
                               .map((mediaAuthor) => mediaAuthor.name)
                               .join(", ") +

@@ -20,7 +20,7 @@ function SavedArticlesPreview({ navigation }: NavProp) {
 
   return (
     <View style={baseStyles.container}>
-      <Text style={{ ...text.sectionHeader1, marginTop: 16 }}>
+      <Text style={{ ...text.sectionHeader1, marginTop: 16, paddingBottom: 15.5}}>
         Saved Articles
       </Text>
       {Object.keys(savedArticles).length > 0 ? (
