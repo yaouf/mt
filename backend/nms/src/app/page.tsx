@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Notification } from "../types";
 import AuthWrapper from "./AuthWrapper";
-import EditorsPicks from "./EditorsPicks";
+import EditorsPicks from "./editorsPicks";
 import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
@@ -12,6 +12,10 @@ export default function Home() {
   const [scheduledNotifications, setScheduledNotifications] = useState<Notification[]>([]);    
   const [editorsPicks, setEditorsPicks] = useState([] as any[]); // New state for editor's picks
   const [deviceCount, setDeviceCount] = useState<string>("Loading..."); // New state for device count
+  const [metroCount, setMetroCount] = useState<string>("Loading..."); 
+  const [breakingCount, setBreakingCount] = useState<string>("Loading..."); 
+  const [universityCount, setUniversityCount] = useState<string>("Loading..."); 
+  const [ntfEnabled, setNtfEnabled] = useState<string>("Loading..."); 
 
   useEffect(() => {
     const fetchNotifications = async () => {
@@ -44,6 +48,48 @@ export default function Home() {
   },[]);
 
   useEffect(() => {
+    const fetchNotfEnabled = async () => {
+      try{
+        const response = await fetch("/api/devices/notificationEnabled");        
+        const data = await response.json();
+        setNtfEnabled(data.count.toString());
+      }
+      catch(error){
+        console.error("Error fetching device count for notifications enabled:", error);
+      }
+    };
+    fetchNotfEnabled();
+  },[]);
+
+  useEffect(() => {
+    const fetchMetroDevices = async () => {
+      try{
+        const response = await fetch("/api/devices/metroNotifications");        
+        const data = await response.json();
+        setMetroCount(data.count.toString());
+      }
+      catch(error){
+        console.error("Error fetching device count for notifications metro:", error);
+      }
+    };
+    fetchMetroDevices();
+  },[]);
+
+  useEffect(() => {
+    const fetchUniCount = async () => {
+      try{
+        const response = await fetch("/api/devices/universityNotifications");        
+        const data = await response.json();
+        setUniversityCount(data.count.toString());
+      }
+      catch(error){
+        console.error("Error fetching device count for university news:", error);
+      }
+    };
+    fetchUniCount();
+  },[]);
+
+  useEffect(() => {
     const fetchEditorsPicks = async () => {
       const response = await fetch("/api/editors-picks");
       const data = await response.json();
@@ -51,6 +97,20 @@ export default function Home() {
     };
     fetchEditorsPicks();
   }, []);
+
+  useEffect(() => {
+    const fetchBreakingCount = async () => {
+      try{
+        const response = await fetch("/api/devices/breakingNotifications");        
+        const data = await response.json();
+        setBreakingCount(data.count.toString());
+      }
+      catch(error){
+        console.error("Error fetching device count for breaking notifications:", error);
+      }
+    };
+    fetchBreakingCount();
+  },[]);
 
   return (
     <AuthWrapper>
@@ -77,8 +137,24 @@ export default function Home() {
         <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
           <p className="text-gray-700 flex">
             <span className="font-bold mr-2">Total devices</span> 
-            <span className="text-gray-700">
+            <span className="text-gray-700" >
               {deviceCount}
+            </span>
+            <span className="font-bold mr-2">Devices notf enabled</span> 
+            <span className="text-gray-700">
+              {ntfEnabled}
+            </span>
+            <span className="font-bold mr-2">Devices metro</span> 
+            <span className="text-gray-700">
+              {metroCount}
+            </span>
+            <span className="font-bold mr-2">Devices breaking</span> 
+            <span className="text-gray-700">
+              {breakingCount}
+            </span>
+            <span className="font-bold mr-2">Devices university</span> 
+            <span className="text-gray-700">
+              {universityCount}
             </span>
           </p>
         </div>
