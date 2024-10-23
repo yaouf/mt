@@ -51,7 +51,7 @@ function BdhApp() {
 
     const checkAppVersion = async () => {
       const currentVersion = Constants.expoConfig?.version ?? "";
-      const TARGET_VERSION = "1.0.13";
+      const TARGET_VERSION = "1.1.0";
       const storedVersion = await AsyncStorage.getItem("appVersion");
 
       if (storedVersion !== currentVersion && currentVersion === TARGET_VERSION) {
