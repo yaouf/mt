@@ -45,6 +45,7 @@ export const createDevice = async (
   };
 
   try {
+    // TODO: use envalid to ensure endpoints are defined. 
     const response = await fetch(
       process.env.EXPO_PUBLIC_CREATE_DEVICE_ENDPOINT ?? "",
       requestOptions

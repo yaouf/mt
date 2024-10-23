@@ -14,11 +14,11 @@ import {
   View,
 } from "react-native";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
-import { formatDates } from "src/code/formatDates";
-import { handleBookmark } from "src/code/helpers";
 import { articleStyles } from "src/styles/article";
 import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
+import { formatDates } from "src/utils/formatDates";
+import { handleBookmark } from "src/utils/helpers";
 import { baseStyles } from "../../styles/styles";
 import { SavedContext } from "../Nav";
 import BottomBar from "./BottomBar";

@@ -14,7 +14,7 @@ import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
 import { font2, text } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
-import { setUpDevice } from "../code/setup";
+import { setUpDevice } from "../utils/setupDevice";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 

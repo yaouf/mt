@@ -8,11 +8,11 @@ import {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { setAsync } from "src/code/helpers";
 import { menuStyles } from "src/styles/sectionMenu";
 import { baseStyles, text, varGray1, varRed } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
+import { setAsync } from "src/utils/helpers";
 import { MenuContext } from "../HomeStackScreen";
 
 function SectionPrefScreen({ navigation }: NavProp) {

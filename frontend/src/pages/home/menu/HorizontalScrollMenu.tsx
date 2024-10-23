@@ -5,10 +5,10 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { setAsync } from "src/code/helpers";
-import { menuItems } from "src/code/setup";
 import { menuStyles } from "src/styles/sectionMenu";
 import { NavProp } from "src/types/navStacks";
+import { setAsync } from "src/utils/helpers";
+import { menuItems } from "src/utils/setupDevice";
 import { MenuContext } from "../HomeStackScreen";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {

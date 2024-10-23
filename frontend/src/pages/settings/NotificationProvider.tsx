@@ -9,7 +9,7 @@ import React, {
   useState,
 } from "react";
 import { AppState, AppStateStatus, Platform } from "react-native";
-import { setAsync } from "src/code/helpers";
+import { setAsync } from "src/utils/helpers";
 
 interface NotificationContextType {
   systemPermissionStatus: string;
