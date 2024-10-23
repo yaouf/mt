@@ -132,7 +132,7 @@ const NotificationTable = ({
         isOpen={isConfirmationModalOpen}
         onClose={() => setIsConfirmationModalOpen(false)}
         onConfirm={onConfirmDelete}
-        message="Are you sure you want to delete this notification?"
+        message="You are in production. Are you sure you want to delete this notification?"
       />
     </div>
   );
