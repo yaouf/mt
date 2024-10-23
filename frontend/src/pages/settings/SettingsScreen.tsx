@@ -76,12 +76,14 @@ function SettingsScreen({ navigation }: NavProp) {
         setOpinions(opinionsNotifs === "true");
 
         const id = await AsyncStorage.getItem("deviceID");
+        // FIXME: why is this null first time?
         console.log("this is the device id in the settingsscreen", id);
         if (id) {
           setDeviceID(id);
         } else {
           console.log("Device ID is not being set in settings screen");
         }
+        // TODO: if deviceID is null or "", go to onboarding screen
         console.log("Device ID in settings:", deviceID);
 
         await checkPermissions(); // Check system permissions everytime app loads
