@@ -3,9 +3,9 @@ import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import { useContext, useEffect, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
-import { handleBookmark } from "src/code/helpers";
 import { articleStyles } from "src/styles/article";
 import { ArticleDetailProps } from "src/types/other";
+import { handleBookmark } from "src/utils/helpers";
 import { SavedContext } from "../Nav";
 import { shareArticle } from "./ShareArticle";
 

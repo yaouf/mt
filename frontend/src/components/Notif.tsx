@@ -1,11 +1,11 @@
 import * as Notifications from "expo-notifications";
 import { Dispatch, SetStateAction, useContext } from "react";
 import { Alert, Linking, Switch, Text, View } from "react-native";
-import { setAsync } from "src/code/helpers";
-import { updateSettings } from "src/code/serverlessAPIs";
+import { updateSettings } from "src/api/backendAPIs";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { fyp } from "src/styles/pages";
 import { text } from "src/styles/styles";
+import { setAsync } from "src/utils/helpers";
 
 type NotifProps = {
   title: string;

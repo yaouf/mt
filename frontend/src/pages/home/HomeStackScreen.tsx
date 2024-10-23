@@ -9,10 +9,10 @@ import {
   useEffect,
   useState,
 } from "react";
-import { getAsync } from "src/code/helpers";
-import { menuItems } from "src/code/setup";
 import { HomeStackProps } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
+import { getAsync } from "src/utils/helpers";
+import { menuItems } from "src/utils/setupDevice";
 import ArticleScreen from "../article/ArticleScreen";
 import SectionsScreen from "../sections/SectionsScreen";
 import Staff from "../staff/Staff";

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator } from "react-native";
-import { SectionGroupProps } from "src/types/navStacks";
-import { Article } from "src/types/data";
-import { fetchSectionHome } from "src/code/fetchContent";
+import { ActivityIndicator, View } from "react-native";
+import { fetchSectionHome } from "src/api/fetchContent";
+import HorizontalCard from "src/components/cards/HorizontalCard";
+import LargeSectionCard from "src/components/cards/LargeSectionCard";
+import Divider from "src/components/Divider";
 import SectionHeader from "src/components/SectionHeader";
 import { baseStyles, varGray1 } from "src/styles/styles";
-import HorizontalCard from "src/components/cards/HorizontalCard";
-import Divider from "src/components/Divider";
-import LargeSectionCard from "src/components/cards/LargeSectionCard";
+import { Article } from "src/types/data";
+import { SectionGroupProps } from "src/types/navStacks";
 
 /**
  * Section with all small cards

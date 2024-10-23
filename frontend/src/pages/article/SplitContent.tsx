@@ -1,17 +1,17 @@
-import React, { useMemo, useCallback, useState, useRef } from 'react';
-import { View, Image, Text, StyleSheet } from "react-native";
-import { articleStyles } from "src/styles/article";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import * as WebBrowser from "expo-web-browser";
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Image, StyleSheet, Text, View } from "react-native";
 import {
   HTMLContentModel,
   HTMLElementModel,
   RenderHTML,
 } from "react-native-render-html";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Article } from "src/types/data";
-import { fetchArticle } from "src/code/fetchContent";
 import WebView from "react-native-webview";
-import * as WebBrowser from "expo-web-browser";
+import { fetchArticle } from "src/api/fetchContent";
+import { articleStyles } from "src/styles/article";
+import { Article } from "src/types/data";
 
 const IframeRenderer = React.memo(
   ({ tnode }: any) => {

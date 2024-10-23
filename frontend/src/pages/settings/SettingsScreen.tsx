@@ -4,12 +4,7 @@ import { ScrollView, Text, View } from "react-native";
 import Divider from "src/components/Divider";
 import Notif from "src/components/Notif";
 import { settings } from "src/styles/pages";
-import {
-  baseStyles,
-  font2,
-  text,
-  varTextColor
-} from "src/styles/styles";
+import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
@@ -56,7 +51,9 @@ function SettingsScreen({ navigation }: NavProp) {
         const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
         setBreaking(breakingNotifs === "true");
 
-        const universityNewsNotifs = await AsyncStorage.getItem("universityNewsNotifs");
+        const universityNewsNotifs = await AsyncStorage.getItem(
+          "universityNewsNotifs"
+        );
         setUniversityNews(universityNewsNotifs === "true");
 
         const metroNotifs = await AsyncStorage.getItem("metroNotifs");
@@ -65,10 +62,14 @@ function SettingsScreen({ navigation }: NavProp) {
         const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
         setSports(sportsNotifs === "true");
 
-        const artsAndCultureNotifs = await AsyncStorage.getItem("artsAndCultureNotifs");
+        const artsAndCultureNotifs = await AsyncStorage.getItem(
+          "artsAndCultureNotifs"
+        );
         setArtsAndCulture(artsAndCultureNotifs === "true");
 
-        const scienceAndResearchNotifs = await AsyncStorage.getItem("scienceAndResearchNotifs");
+        const scienceAndResearchNotifs = await AsyncStorage.getItem(
+          "scienceAndResearchNotifs"
+        );
         setScienceAndResearch(scienceAndResearchNotifs === "true");
 
         const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
@@ -81,18 +82,24 @@ function SettingsScreen({ navigation }: NavProp) {
         } else {
           console.log("Device ID is not being set in settings screen");
         }
+        console.log("Device ID in settings:", deviceID);
 
         await checkPermissions(); // Check system permissions everytime app loads
       } catch (err) {
         console.log(err);
-      } 
+      }
     };
 
     load();
   }, []);
 
-  console.log("statussss", systemPermissionStatus, breaking, universityNews, metro);
-  console.log("Device ID in settings:", deviceID);
+  console.log(
+    "statussss",
+    systemPermissionStatus,
+    breaking,
+    universityNews,
+    metro
+  );
 
   const support = [
     // { id: 1, title: "Manage Account", link: "" }, // TODO: once make accounts and stuff, addd this
@@ -200,7 +207,6 @@ function SettingsScreen({ navigation }: NavProp) {
       <Divider />
 
       <View>
-
         <Text
           style={{
             ...settings.smallHeading,
@@ -211,7 +217,10 @@ function SettingsScreen({ navigation }: NavProp) {
           Support
         </Text>
         {support.map((link, i) => (
-          <View key={`support-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
+          <View
+            key={`support-${i}`}
+            style={{ paddingHorizontal: 4, marginBottom: 12 }}
+          >
             <SettingsLink title={link.title} link={link.link} />
           </View>
         ))}
@@ -228,7 +237,10 @@ function SettingsScreen({ navigation }: NavProp) {
           More BDH
         </Text>
         {links.map((link, i) => (
-          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
+          <View
+            key={`more-bdh-${i}`}
+            style={{ paddingHorizontal: 4, marginBottom: 12 }}
+          >
             <SettingsLink title={link.title} link={link.link} />
           </View>
         ))}

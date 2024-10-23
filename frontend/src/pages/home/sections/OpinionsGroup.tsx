@@ -1,12 +1,12 @@
-import SmallCard from "src/components/cards/SmallCard";
 import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator } from "react-native";
-import { SectionGroupProps } from "src/types/navStacks";
-import { Article } from "src/types/data";
-import { fetchSectionHome } from "src/code/fetchContent";
+import { ActivityIndicator, View } from "react-native";
+import { fetchSectionHome } from "src/api/fetchContent";
+import SmallCard from "src/components/cards/SmallCard";
+import Divider from "src/components/Divider";
 import OpinionsHeader from "src/components/OpinionsHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";
-import Divider from "src/components/Divider";
+import { Article } from "src/types/data";
+import { SectionGroupProps } from "src/types/navStacks";
 
 /**
  * Section with all small cards

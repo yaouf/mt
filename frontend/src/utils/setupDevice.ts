@@ -1,8 +1,8 @@
 import * as Notifications from "expo-notifications";
 import { Dispatch, SetStateAction } from "react";
+import { createDevice } from "../api/backendAPIs";
 import { MenuItem } from "../types/other";
 import { setAsync } from "./helpers";
-import { createDevice } from "./serverlessAPIs";
 
 // for the horizontal section menu
 // TODO: are we including post, multimedia, special projects ... and what order
@@ -69,6 +69,7 @@ export const setUpDevice = async (
         scienceAndResearch as boolean,
         token
       );
+      console.log("deviceID after createDevice", deviceID);
       console.log("push token", token);
     } else {
       setBreaking(false);
@@ -102,7 +103,7 @@ export const setUpDevice = async (
   } catch (error) {
     console.log("error creating device", error);
   }
-
+  console.log("deviceID in setUpDevice", deviceID);
   setAsync("deviceID", deviceID);
   setAsync("savedArticles", JSON.stringify({}));
   setAsync("sectionMenu", JSON.stringify(menuItems));

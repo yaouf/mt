@@ -17,10 +17,10 @@ import {
 } from "react";
 import { HoldMenuProvider } from "react-native-hold-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { fetchArticle } from "src/code/fetchContent";
-import { getAsync } from "src/code/helpers";
+import { fetchArticle } from "src/api/fetchContent";
 import Header from "src/components/Header";
 import { Article } from "src/types/data";
+import { getAsync } from "src/utils/helpers";
 import HomeStackScreen from "./home/HomeStackScreen";
 import SearchStackScreen from "./search/SearchStackScreen";
 import { NotificationProvider } from "./settings/NotificationProvider";
