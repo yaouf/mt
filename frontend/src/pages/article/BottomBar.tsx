@@ -46,7 +46,7 @@ function BottomBar(props: ArticleDetailProps) {
           accessibilityLabel="Back Button"
           accessibilityHint="Press to go back to the previous screen"
         >
-          <Ionicons name="arrow-back" size={24} color="#1C1B1F" />
+          <Ionicons name="arrow-back" size={28} color="#1C1B1F" />
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => handleNotification()}>
           <Image
@@ -76,9 +76,9 @@ function BottomBar(props: ArticleDetailProps) {
           accessibilityHint="Press to bookmark or unbookmark the article"
         >
           {saved ? (
-            <Ionicons name="bookmark" size={24} color="#1C1B1F" />
+            <Ionicons name="bookmark" size={28} color="#1C1B1F" />
           ) : (
-            <Ionicons name="bookmark-outline" size={24} color="#1C1B1F" />
+            <Ionicons name="bookmark-outline" size={28} color="#1C1B1F" />
           )}
         </TouchableOpacity>
         <TouchableOpacity
