@@ -61,20 +61,13 @@ export const updateSettings = onRequest(async (request, response) => {
     };
     
     // Construct update object based on what's provided in the request body
-    // TODO: make this cleaner
-    const updateData: UpdateData = {};
-    if (breakingNews !== undefined) {
-      updateData["Breaking News"] = breakingNews;
-    }
-    if (universityNews !== undefined) {
-      updateData["University News"] = universityNews;
-    }
-    if (metro !== undefined) {
-      updateData["Metro"] = metro;
-    }
-    if (isPushEnabled !== undefined) {
-      updateData["isPushEnabled"] = isPushEnabled;
-    }
+    // TODO: Code would be a lot cleaner if columns were camel case
+    const updateData: UpdateData = {
+      ...(breakingNews !== undefined ? { "Breaking News": breakingNews } : {}),
+      ...(universityNews !== undefined ? { "University News": universityNews } : {}),
+      ...(metro !== undefined ? { "Metro": metro } : {}),
+      ...(isPushEnabled !== undefined ? { "isPushEnabled": isPushEnabled } : {}),
+    };
 
     // Get the device ID from the request body
     const deviceId = validBody.deviceId; 
