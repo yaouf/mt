@@ -28,6 +28,18 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
       accessibilityLabel="Section menu"
       accessibilityHint="Scroll horizontally to view different BDH sections"
     >
+      {/* <TouchableOpacity
+        key={1}
+        style={menuStyles.menuItem}
+        onPress={() => navigation.push("SectionPref")}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Filter options"
+      >
+        <Ionicons name="filter-outline" size={24} color="black" />
+      </TouchableOpacity> */}
+
+      
       {currSection === "all" ? (
         <View 
           style={menuStyles.menuItem}
