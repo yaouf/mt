@@ -1,22 +1,25 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Animated } from "react-native";
-import Onboarding from "./onboarding/Onboarding";
-import Nav from "./pages/Nav";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NotificationProvider } from "./pages/settings/NotificationProvider";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Onboarding from "./onboarding/Onboarding";
+import Nav from "./pages/Nav";
+import { NotificationProvider } from "./pages/settings/NotificationProvider";
 
 const fullStack = createStackNavigator();
 
 const linking = {
-  prefixes: ['com.browndailyherald.thebrowndailyherald"://', 'https://browndailyherald.com'],  // custom app scheme and web domain
+  prefixes: [
+    'com.browndailyherald.thebrowndailyherald"://',
+    "https://browndailyherald.com",
+  ], // custom app scheme and web domain
   config: {
     screens: {
-      HomeScreen: 'home',
-      Article: 'article/:slug',  // handles the article slug from deep link
+      HomeScreen: "home",
+      Article: "article/:slug", // handles the article slug from deep link
     },
   },
 };
@@ -44,7 +47,24 @@ function BdhApp() {
         console.log("err while setting up notifications", err);
       }
     };
-    load();
+    // load();
+
+    const checkAppVersion = async () => {
+      const currentVersion = Constants.expoConfig?.version ?? "";
+      const TARGET_VERSION = "1.0.13";
+      const storedVersion = await AsyncStorage.getItem("appVersion");
+
+      if (storedVersion !== currentVersion && currentVersion === TARGET_VERSION) {
+        console.log("app version is out of date");
+        await AsyncStorage.clear();
+        await AsyncStorage.setItem("hasOnboarded", "false");
+        await AsyncStorage.setItem("appVersion", currentVersion);
+      }
+    };
+    // check app version first to see if we need to show the update screen, then load onboarding or main app
+    checkAppVersion().then(() => {
+      load();
+    });
 
     // Trigger the fade-in animation
     Animated.timing(fadeAnim, {
@@ -53,25 +73,6 @@ function BdhApp() {
       useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
-
-  useEffect(() => {
-    const notificationListener = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        console.log("Notification received:", notification);
-      }
-    );
-
-    const responseListener =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("Notification response received:", response);
-      });
-
-    // Returning cleanup function for removing listeners
-    return () => {
-      notificationListener.remove();
-      responseListener.remove();
-    };
-  }, []);
 
   return (
     <NotificationProvider>
