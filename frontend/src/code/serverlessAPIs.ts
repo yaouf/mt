@@ -10,6 +10,10 @@ export const createDevice = async (
   breaking: boolean,
   universityNews: boolean,
   metro: boolean,
+  opinions: boolean,
+  artsAndCulture: boolean,
+  sports: boolean,
+  scienceAndResearch: boolean,
   expoPushToken: string
 ): Promise<string> => {
   const body = JSON.stringify({
@@ -17,6 +21,10 @@ export const createDevice = async (
     "Breaking News": breaking,
     "University News": universityNews,
     "Metro": metro,
+    "Opinions": opinions,
+    "Arts and Culture": artsAndCulture,
+    "Sports": sports,
+    "Science and Research": scienceAndResearch,
     expoPushToken: expoPushToken,
     isPushEnabled: true,
   });
@@ -79,13 +87,21 @@ export const updateSettings = async (
   deviceId: string,
   breaking?: boolean,
   universityNews?: boolean,
-  metro?: boolean
+  metro?: boolean,
+  opinions?: boolean,
+  artsAndCulture?: boolean,
+  sports?: boolean,
+  scienceAndResearch?: boolean
 ) => {
   const body = JSON.stringify({
     deviceId: deviceId,
     "Breaking News": breaking,
     "University News": universityNews,
     "Metro": metro,
+    "Opinions": opinions,
+    "Arts and Culture": artsAndCulture,
+    "Sports": sports,
+    "Science and Research": scienceAndResearch,
   });
 
   console.log("updating settings for device", deviceId);

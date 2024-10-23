@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { AppState, Platform, AppStateStatus } from "react-native";
+import { AppState, AppStateStatus, Platform } from "react-native";
 import { setAsync } from "src/code/helpers";
 
 interface NotificationContextType {
@@ -22,6 +22,14 @@ interface NotificationContextType {
   setUniversityNews: Dispatch<SetStateAction<boolean>>;
   metro: boolean;
   setMetro: Dispatch<SetStateAction<boolean>>;
+  sports: boolean;
+  setSports: Dispatch<SetStateAction<boolean>>;
+  artsAndCulture: boolean;
+  setArtsAndCulture: Dispatch<SetStateAction<boolean>>;
+  scienceAndResearch: boolean;
+  setScienceAndResearch: Dispatch<SetStateAction<boolean>>;
+  opinions: boolean;
+  setOpinions: Dispatch<SetStateAction<boolean>>;
   deviceID: string;
   setDeviceID: Dispatch<SetStateAction<string>>;
 }
@@ -43,6 +51,14 @@ export const NotificationContext = createContext<NotificationContextType>({
   setUniversityNews: () => {},
   metro: true,
   setMetro: () => {},
+  sports: true,
+  setSports: () => {},
+  artsAndCulture: true,
+  setArtsAndCulture: () => {},
+  scienceAndResearch: true,
+  setScienceAndResearch: () => {},
+  opinions: true,
+  setOpinions: () => {},
   deviceID: "",
   setDeviceID: () => {},
 });
@@ -56,6 +72,10 @@ export const NotificationProvider = ({ children }) => {
   const [universityNews, setUniversityNews] = useState(true);
   const [metro, setMetro] = useState(true);
   const [breaking, setBreaking] = useState(true);
+  const [sports, setSports] = useState(true);
+  const [artsAndCulture, setArtsAndCulture] = useState(true);
+  const [scienceAndResearch, setScienceAndResearch] = useState(true);
+  const [opinions, setOpinions] = useState(true);
 
   // Device ID & push token
   const [deviceID, setDeviceID] = useState("");
@@ -131,6 +151,14 @@ export const NotificationProvider = ({ children }) => {
         setUniversityNews,
         metro,
         setMetro,
+        sports,
+        setSports,
+        artsAndCulture,
+        setArtsAndCulture,
+        scienceAndResearch,
+        setScienceAndResearch,
+        opinions,
+        setOpinions,
         deviceID,
         setDeviceID,
       }}
