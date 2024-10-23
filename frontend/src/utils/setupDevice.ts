@@ -60,13 +60,13 @@ export const setUpDevice = async (
       setAsync("sportsNotifs", JSON.stringify(sports));
       setAsync("scienceAndResearchNotifs", JSON.stringify(scienceAndResearch));
       deviceID = await createDevice(
-        breaking as boolean,
-        universityNews as boolean,
-        metro as boolean,
-        opinions as boolean,
-        artsAndCulture as boolean,
-        sports as boolean,
-        scienceAndResearch as boolean,
+        breaking ?? false,
+        universityNews ?? false,
+        metro ?? false,
+        opinions ?? false,
+        artsAndCulture ?? false,
+        sports ?? false,
+        scienceAndResearch ?? false,
         token
       );
       console.log("deviceID after createDevice", deviceID);
