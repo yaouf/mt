@@ -136,26 +136,37 @@ export default function Home() {
       <div className="flex justify-center py-3">
         <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
           <p className="text-gray-700 flex">
+          <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
             <span className="font-bold mr-2">Total devices</span> 
             <span className="text-gray-700" >
               {deviceCount}
             </span>
-            <span className="font-bold mr-2">Devices notf enabled</span> 
+            </div>
+            <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
+            <span className="font-bold mr-2">Devices notifications</span> 
             <span className="text-gray-700">
               {ntfEnabled}
             </span>
+            </div>
+            <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
+
             <span className="font-bold mr-2">Devices metro</span> 
             <span className="text-gray-700">
               {metroCount}
             </span>
-            <span className="font-bold mr-2">Devices breaking</span> 
+            </div>
+            <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
+            <span className="font-bold mr-2">Devices Breaking</span> 
             <span className="text-gray-700">
               {breakingCount}
             </span>
-            <span className="font-bold mr-2">Devices university</span> 
+            </div>
+            <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
+            <span className="font-bold mr-2">Devices University</span> 
             <span className="text-gray-700">
               {universityCount}
             </span>
+          </div>
           </p>
         </div>
       </div>
