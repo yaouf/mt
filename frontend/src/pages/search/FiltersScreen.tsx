@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Switch, StyleSheet, TouchableOpacity } from "react-native";
 import SectionFilters from "./SectionFilters";
 import { Ionicons } from "@expo/vector-icons";
 import { SearchStackProps } from "src/types/navStacks";
 
-function FiltersScreen({
-  route,
-  navigation,
-}: 
-  SearchStackProps<"Filters\">;
-) {
+function FiltersScreen({ route, navigation }) {
   const [sortOption, setSortOption] = useState("newest");
-  const searchType = route.params.searchMode 
-  const search
-  
-    // const [searchMode, setS] = useState("Article");
+  const { searchType, setSearchType } = route.params;
+  const [searchMode, setSearchMode] = useState("Article");
+
+  useEffect(() => {
+    setSearchType(searchMode);
+    console.log("after searchMode:", searchMode);
+    console.log("after searchType:", searchType);
+  }, [searchMode, searchType]);
+
+  // const [searchMode, setS] = useState("Article");
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sort by</Text>
@@ -48,37 +49,39 @@ function FiltersScreen({
       <Text style={styles.header}>Type</Text>
       <TouchableOpacity
         style={styles.optionContainer}
-        onPress={() => setSearchType("Article")}
+        onPress={() => setSearchMode("Article")}
       >
         <Text style={styles.optionText}>Article</Text>
         <View
           style={[
             styles.radioCircle,
-            searchType === "Article" ? styles.selected : null,
+            searchMode === "Article" ? styles.selected : {},
           ]}
         />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.optionContainer}
-        onPress={() => setSearchType("Writer")}
+        onPress={() => {
+          setSearchMode("Writer");
+        }}
       >
         <Text style={styles.optionText}>Writer</Text>
         <View
           style={[
             styles.radioCircle,
-            searchType === "Writer" ? styles.selected : null,
+            searchMode === "Writer" ? styles.selected : {},
           ]}
         />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.optionContainer}
-        onPress={() => setSearchType("Photographer")}
+        onPress={() => setSearchMode("Photographer")}
       >
         <Text style={styles.optionText}>Photographer</Text>
         <View
           style={[
             styles.radioCircle,
-            searchType === "Photographer" ? styles.selected : null,
+            searchMode === "Photographer" ? styles.selected : {},
           ]}
         />
       </TouchableOpacity>
