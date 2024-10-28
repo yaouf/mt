@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Notification } from "../types";
 import AuthWrapper from "./AuthWrapper";
-import EditorsPicks from "./editorsPicks";
+import EditorsPicks from "./EditorsPicks";
 import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
