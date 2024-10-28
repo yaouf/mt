@@ -6,6 +6,7 @@ import Notif from "src/components/Notif";
 import { settings } from "src/styles/pages";
 import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
+import { getAsync } from "src/utils/helpers";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
 import SettingsLink from "./SettingsLink";
@@ -48,7 +49,7 @@ function SettingsScreen({ navigation }: NavProp) {
   useEffect(() => {
     const load = async () => {
       try {
-        const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
+        const breakingNotifs = await getAsync("breakingNotifs");
         setBreaking(breakingNotifs === "true");
 
         const universityNewsNotifs = await AsyncStorage.getItem(
@@ -56,10 +57,10 @@ function SettingsScreen({ navigation }: NavProp) {
         );
         setUniversityNews(universityNewsNotifs === "true");
 
-        const metroNotifs = await AsyncStorage.getItem("metroNotifs");
+        const metroNotifs = await getAsync("metroNotifs");
         setMetro(metroNotifs === "true");
 
-        const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
+        const sportsNotifs = await getAsync("sportsNotifs");
         setSports(sportsNotifs === "true");
 
         const artsAndCultureNotifs = await AsyncStorage.getItem(
@@ -72,10 +73,10 @@ function SettingsScreen({ navigation }: NavProp) {
         );
         setScienceAndResearch(scienceAndResearchNotifs === "true");
 
-        const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
+        const opinionsNotifs = await getAsync("opinionsNotifs");
         setOpinions(opinionsNotifs === "true");
 
-        const id = await AsyncStorage.getItem("deviceID");
+        const id = await getAsync("deviceID");
         // FIXME: why is this null first time?
         console.log("this is the device id in the settingsscreen", id);
         if (id) {
