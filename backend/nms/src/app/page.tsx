@@ -1,5 +1,6 @@
 "use client";
 
+import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { Notification } from "../types";
 import AuthWrapper from "./AuthWrapper";
@@ -8,6 +9,13 @@ import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
 const isProduction = process.env.NODE_ENV === "production";
+const isAdmin = (user: User) => {
+  if (isProduction) {
+    return user.email === "techadmin@browndailyherald.com";
+  }
+  return user.email === "admin@example.com";
+}
+
 export default function Home() {
   const [scheduledNotifications, setScheduledNotifications] = useState<
     Notification[]
@@ -101,7 +109,7 @@ export default function Home() {
               setScheduledNotifications={setScheduledNotifications}
             />
 
-            {user.email === "admin@example.com" && (
+            {isAdmin(user) && (
               <>
                 <NotificationForm
                   setScheduledNotifications={setScheduledNotifications}
