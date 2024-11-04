@@ -17,7 +17,7 @@ export default async function getDevices(
 
     const devices = await db("devices")
       .select("*")
-      .orderBy("id", "asc")
+      .orderBy("expoPushToken", "asc")
       .offset(offset)
       .limit(devicesPerPage)
       .where(true); 

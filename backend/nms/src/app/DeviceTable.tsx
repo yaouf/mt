@@ -9,7 +9,7 @@ interface DeviceTableProps {
   const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
 const [devices, setDevices] = useState<Device[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const DEVICES_PER_PAGE = 10;
+  const DEVICES_PER_PAGE = 30;
 
   
   useEffect(() => {
