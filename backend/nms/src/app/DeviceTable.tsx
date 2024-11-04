@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Device } from '../../pages/api/types/types';
+
 interface DeviceTableProps {
     deviceCount: number; 
   }
@@ -14,7 +15,7 @@ const [devices, setDevices] = useState<Device[]>([]);
   useEffect(() => {
     const fetchDevices = async () => {
       try {
-        const response = await fetch(`/api/devices/index?page=${currentPage}perPage=${DEVICES_PER_PAGE}`);        
+        const response = await fetch(`/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}`);        
         const data = await response.json();
         setDevices(data);
       } catch (error) {
