@@ -17,8 +17,10 @@ export default async function getDevices(
 
     const devices = await db("devices")
       .select("*")
+      .orderBy("id", "asc")
       .offset(offset)
-      .limit(devicesPerPage); 
+      .limit(devicesPerPage)
+      .where(true); 
 
     res.status(200).json(devices);
   } catch (error) {
