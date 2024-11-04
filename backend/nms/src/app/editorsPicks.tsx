@@ -1,12 +1,7 @@
 import { useState } from "react";
-import ConfirmationModal from "./ConfirmationModal";
 
 const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const [url, setUrl] = useState("");
-
-  const isProduction = process.env.NODE_ENV === "production";
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [urlToDelete, setUrlToDelete] = useState<string | null>("");
 
   const handleAddPick = async () => {
     if (!url) {
@@ -35,17 +30,6 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
     }
   };
 
-  const handleDeleteClick = (url: string) => {
-    if (isProduction) {
-      // In production, show confirmation modal
-      setUrlToDelete(url);
-      setIsConfirmationModalOpen(true);
-    } else {
-      // In other environments, proceed with deletion directly
-      handleDeletePick(url);
-    }
-  };
-
   const handleDeletePick = async (url) => {
     try {
       const response = await fetch(`/api/editors-picks/delete`, {
@@ -70,19 +54,10 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
       console.error('Error deleting editor\'s pick:', error);
     }
   };
-
-  const onConfirmDelete = () => {
-    if (urlToDelete) {
-      handleDeletePick(urlToDelete);
-      setUrlToDelete(null);
-      setIsConfirmationModalOpen(false);
-    }
-  };
   
   return (
     <div className="container mx-auto px-8 py-2"> 
-      {/* eslint-disable-next-line react/no-unescaped-entities */}
-      <h2 className="text-2xl font-bold mb-4">Editor&apos;s Picks</h2>
+      <h2 className="text-2xl font-bold mb-4">Editor's Picks</h2>
       <table className="min-w-full border border-gray-300 mt-4"> 
         <thead>
           <tr>
@@ -98,7 +73,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
               </td>
               <td className="py-2 px-4 border-b">
                 <button 
-                  onClick={() => handleDeleteClick(pick.url)} 
+                  onClick={() => handleDeletePick(pick.url)} 
                   className="bg-red-500 text-white px-4 py-2 rounded-md"
                 >
                   Delete
@@ -122,16 +97,8 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         onClick={handleAddPick} 
         className="bg-blue-500 text-white px-4 py-2 rounded-md transition transform duration-200 hover:bg-blue-600 hover:scale-105" 
       >
-        Add Editor&apos;s Pick
+        Add Editor's Pick
       </button>
-      {isProduction && (
-        <ConfirmationModal
-          isOpen={isConfirmationModalOpen}
-          onClose={() => setIsConfirmationModalOpen(false)}
-          onConfirm={onConfirmDelete}
-          message="You are in production. Are you sure you want to delete this editor's pick?"
-        />
-      )}
     </div>
   );
 };
