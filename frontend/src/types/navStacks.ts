@@ -30,6 +30,7 @@ export type SettingsStackProps = {
 export type OnboardParams = {
   WelcomeScreen: undefined;
   PushNotifs: { parentNav: StackNavigationProp<any, any> };
+  MainApp: undefined;
 };
 
 /**
