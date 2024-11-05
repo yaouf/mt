@@ -63,7 +63,7 @@ function PushNotifsScreen({
       ).then((id) => setDeviceID(id));
     });
 
-    route.params.parentNav.push("MainApp");
+    navigation.push("MainApp");
   };
 
   console.log("sports", sports, artsAndCulture, scienceAndResearch, opinions);
@@ -158,7 +158,7 @@ function PushNotifsScreen({
               systemPermissionStatus
             )
               .then((id) => setDeviceID(id))
-              .then(() => route.params.parentNav.push("MainApp"));
+              .then(() => navigation.push("MainApp"));
           }}
           accessible={true}
           accessibilityRole="button"
