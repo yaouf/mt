@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useEffect } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Divider from "src/components/Divider";
-import Notif from "src/components/Notif";
+import Notif from "src/components/NotifToggle";
 import { settings } from "src/styles/pages";
 import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
@@ -47,34 +47,64 @@ function SettingsScreen({ navigation }: NavProp) {
 
   // on first load, get data from async storage
   useEffect(() => {
+    // TODO 1: maybe do these checks before loading notif components?
+    // log all react context
+    console.log("react context in settings screen", {
+      breaking,
+      universityNews,
+      metro,
+      opinions,
+      artsAndCulture,
+      sports,
+      scienceAndResearch,
+    });
     const load = async () => {
+      console.log(
+        "notification settings in settings screen",
+        systemPermissionStatus,
+        breaking,
+        universityNews,
+        metro,
+        opinions,
+        artsAndCulture,
+        sports,
+        scienceAndResearch
+      );
+
       try {
         const breakingNotifs = await getAsync("breakingNotifs");
         setBreaking(breakingNotifs === "true");
+        console.log("breakingNotifs", breakingNotifs);
 
         const universityNewsNotifs = await AsyncStorage.getItem(
           "universityNewsNotifs"
         );
         setUniversityNews(universityNewsNotifs === "true");
+        console.log("universityNewsNotifs", universityNewsNotifs);
 
         const metroNotifs = await getAsync("metroNotifs");
         setMetro(metroNotifs === "true");
+        console.log("metroNotifs", metroNotifs);
 
         const sportsNotifs = await getAsync("sportsNotifs");
         setSports(sportsNotifs === "true");
+        console.log("sportsNotifs", sportsNotifs);
 
         const artsAndCultureNotifs = await AsyncStorage.getItem(
           "artsAndCultureNotifs"
         );
         setArtsAndCulture(artsAndCultureNotifs === "true");
+        console.log("artsAndCultureNotifs", artsAndCultureNotifs);
 
         const scienceAndResearchNotifs = await AsyncStorage.getItem(
           "scienceAndResearchNotifs"
         );
         setScienceAndResearch(scienceAndResearchNotifs === "true");
+        console.log("scienceAndResearchNotifs", scienceAndResearchNotifs);
 
         const opinionsNotifs = await getAsync("opinionsNotifs");
         setOpinions(opinionsNotifs === "true");
+        console.log("opinionsNotifs", opinionsNotifs);
 
         const id = await AsyncStorage.getItem("deviceID");
         // FIXME: why is this null first time?
@@ -95,14 +125,6 @@ function SettingsScreen({ navigation }: NavProp) {
 
     load();
   }, []);
-
-  console.log(
-    "statussss",
-    systemPermissionStatus,
-    breaking,
-    universityNews,
-    metro
-  );
 
   const support = [
     // { id: 1, title: "Manage Account", link: "" }, // TODO: once make accounts and stuff, addd this
@@ -155,6 +177,7 @@ function SettingsScreen({ navigation }: NavProp) {
 
       <View style={baseStyles.container}>
         <Text style={text.sectionHeader1}>Stay Updated</Text>
+
         <View style={{ rowGap: 16, marginTop: 4 }}>
           <Notif
             title="Breaking News"
