@@ -13,7 +13,10 @@ import { validateApiKey, validateUuidV4 } from "../utils";
  */
 export const viewSettings = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
-
+  const environment = envars.environment.value();
+  const dbUrl = envars.dbUrl.value();
+  const dbParams = { environment, dbUrl };
+  const newDb = db(dbParams);
   try {
 
     // logger.info("Getting user settings", { structuredData: true });
@@ -39,13 +42,13 @@ export const viewSettings = onRequest(async (request, response) => {
     }  
     logger.info("Device ID received", { deviceId });
     // Get the device settings in device tables
-    const environment = envars.environment.value();
-    const dbUrl = envars.dbUrl.value();
-    const dbParams = { environment, dbUrl };
-    const settings = await db(dbParams)("devices")
+    const settings = await newDb("devices")
     .where("id", deviceId)
     .select("University News", "Metro", "Breaking News", "Opinions", "Arts and Culture", "Sports", "Science and Research", "isPushEnabled")
     .first();
+
+    await newDb.destroy();
+
 
     // Check if the device's settings exist. If not, assume the device doesn't exist
     if (!settings) {
