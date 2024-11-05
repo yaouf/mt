@@ -18,7 +18,7 @@ import { setUpDevice } from "../utils/setupDevice";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 
-function PushNotifsScreen({
+function PushNotifsOnboardingScreen({
   route,
   navigation,
 }: StackScreenProps<OnboardParams, "PushNotifs">) {
@@ -213,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PushNotifsScreen;
+export default PushNotifsOnboardingScreen;
