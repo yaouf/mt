@@ -16,7 +16,7 @@ type NotifProps = {
   asyncName?: string;
 };
 
-function Notif({
+function NotifToggle({
   title,
   description,
   value,
@@ -101,7 +101,7 @@ function Notif({
     ? value
     : systemPermissionStatus === "granted" && value;
 
-  console.log("value for toggle title", title, toggleValue);
+  console.log("value for toggle title in NotifToggle", title, toggleValue);
 
   return (
     <View style={fyp.toggleRow}>
@@ -124,4 +124,4 @@ function Notif({
   );
 }
 
-export default Notif;
+export default NotifToggle;

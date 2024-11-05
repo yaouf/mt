@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useEffect } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Divider from "src/components/Divider";
-import Notif from "src/components/NotifToggle";
+import NotifToggle from "src/components/NotifToggle";
 import { settings } from "src/styles/pages";
 import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
@@ -179,49 +179,49 @@ function SettingsScreen({ navigation }: NavProp) {
         <Text style={text.sectionHeader1}>Stay Updated</Text>
 
         <View style={{ rowGap: 16, marginTop: 4 }}>
-          <Notif
+          <NotifToggle
             title="Breaking News"
             description="Urgent and developing coverage"
             value={breaking}
             setValue={setBreaking}
             asyncName="breakingNotifs"
           />
-          <Notif
+          <NotifToggle
             title="University News"
             description="The latest on Brown and the campus community"
             value={universityNews}
             setValue={setUniversityNews}
             asyncName="universityNewsNotifs"
           />
-          <Notif
+          <NotifToggle
             title="Metro"
             description="Updates from Providence and beyond"
             value={metro}
             setValue={setMetro}
             asyncName="metroNotifs"
           />
-          <Notif
+          <NotifToggle
             title="Sports"
             description="Game coverage and exclusives"
             value={sports}
             setValue={setSports}
             asyncName="sportsNotifs"
           />
-          <Notif
+          <NotifToggle
             title="Arts and Culture"
             description="Events and reviews from our critics"
             value={artsAndCulture}
             setValue={setArtsAndCulture}
             asyncName="artsAndCultureNotifs"
           />
-          <Notif
+          <NotifToggle
             title="Science and Research"
             description="The cutting edge of research"
             value={scienceAndResearch}
             setValue={setScienceAndResearch}
             asyncName="scienceAndResearchNotifs"
           />
-          <Notif
+          <NotifToggle
             title="Opinions"
             description="Columns, op-eds and editorials"
             value={opinions}
