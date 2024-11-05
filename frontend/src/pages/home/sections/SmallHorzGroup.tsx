@@ -48,32 +48,41 @@ function SmallHorzGroup(props: SectionGroupProps) {
         <View style={{ overflow: "visible" }}>
           <View>
             {/* // first as large card, second as small card TODO: can we always assume at least 2?? */}
-            {articles.slice(0, 1).map((article: Article, i) => (
-              <View><LargeSectionCard
-                article={article}
-                navigation={props.navigation}
-                key={`news-home-${i}`}
-              /><Divider /></View>
+            {articles?.slice(0, 1).map((article: Article, i) => (
+              <View key={`news-home-${i}`}>
+                <LargeSectionCard
+                  article={article}
+                  navigation={props.navigation}
+                  key={`news-home-${i}`}
+                />
+                <Divider />
+              </View>
             ))}
-            {articles.slice(1, 2).map((article: Article, i) => (
-              <View><LargeSectionCard
-                article={article}
-                navigation={props.navigation}
-                key={`news-home-${i}`}
-              /><Divider /></View>
+            {articles?.slice(1, 2).map((article: Article, i) => (
+              <View key={`news-home-${i}`}>
+                <LargeSectionCard
+                  article={article}
+                  navigation={props.navigation}
+                  key={`news-home-${i}`}
+                />
+                <Divider />
+              </View>
             ))}
           </View>
           <View style={{}}>
-            {articles.slice(2).map(
+            {articles?.slice(2).map(
               (
                 article: Article,
                 i // rest as horizontal
               ) => (
-                <View style={{}}><HorizontalCard
-                  article={article}
-                  navigation={props.navigation}
-                  key={`news-home-${i + 2}`}
-                /><Divider /></View>
+                <View key={`news-home-${i + 2}`} style={{}}>
+                  <HorizontalCard
+                    article={article}
+                    navigation={props.navigation}
+                    key={`news-home-${i + 2}`}
+                  />
+                  <Divider />
+                </View>
               )
             )}
           </View>

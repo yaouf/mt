@@ -48,12 +48,15 @@ function OpinionsGroup(props: SectionGroupProps) {
         <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
       ) : (
         <View style={layout.grid}>
-          {articles.map((article: Article, i) => (
-            <View><SmallCard
-              article={article}
-              navigation={props.navigation}
-              key={`${props.slug}-home-${i}`}
-            /><Divider /></View>
+          {articles?.map((article: Article, i) => (
+            <View key={`${props.slug}-home-${i}`}>
+              <SmallCard
+                article={article}
+                navigation={props.navigation}
+                key={`${props.slug}-home-${i}`}
+              />
+              <Divider />
+            </View>
           ))}
         </View>
       )}
