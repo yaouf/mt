@@ -41,10 +41,13 @@ function BdhApp() {
     const load = async () => {
       try {
         const deviceId = await AsyncStorage.getItem("deviceID");
+        console.log("deviceId", deviceId);
         const onboarded = await AsyncStorage.getItem("hasOnboarded");
         if (onboarded === "true" && deviceId) {
+          console.log("onboarded is true");
           setHasOnboarded(true);
         } else {
+          console.log("onboarded is false");
           setHasOnboarded(false);
         }
       } catch (err) {
@@ -60,8 +63,11 @@ function BdhApp() {
 
       if (storedVersion !== currentVersion && currentVersion === TARGET_VERSION) {
         console.log("app version is out of date");
-        // await AsyncStorage.clear();
+        await AsyncStorage.clear();
+        // log all async storage keys
+        console.log("all async storage keys", await AsyncStorage.getAllKeys());
         setAsync("hasOnboarded", "false");
+        setHasOnboarded(false);
         setAsync("appVersion", currentVersion);
       }
     };

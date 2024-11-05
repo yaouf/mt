@@ -56,13 +56,16 @@ function Notif({
 
   const toggle = async () => {
     if (onboarding) {
+      console.log("onboarding toggle", !value);
       setValue((previousState: boolean) => !previousState);
     } else {
       // update system permission status (on device and in backend)
       if (systemPermissionStatus === "granted") {
-        updateBackend(!value); // TODO: is this the right value even if toggle quickly??
-        setValue((previousState: boolean) => !previousState);
-        setAsync(asyncName as string, JSON.stringify(!value));
+        console.log("new value in toggle", !value);
+        const newValue = !value;
+        setValue(newValue);
+        setAsync(asyncName as string, JSON.stringify(newValue));
+        updateBackend(newValue); // TODO: is this the right value even if toggle quickly??
       } else if (systemPermissionStatus === "denied") {
         Alert.alert(
           "Enable Notifications",
@@ -97,6 +100,8 @@ function Notif({
   const toggleValue = onboarding
     ? value
     : systemPermissionStatus === "granted" && value;
+
+  console.log("value for toggle title", title, toggleValue);
 
   return (
     <View style={fyp.toggleRow}>

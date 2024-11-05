@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Notif from "src/components/Notif";
+import NotifToggle from "src/components/NotifToggle";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
 import { font2, text } from "src/styles/styles";
@@ -81,49 +81,49 @@ function PushNotifsScreen({
 
             <View style={styles.notifContainer}>
               {/* TODO: factor out duplicate descriptions between this and settingsscreen */}
-              <Notif
+              <NotifToggle
                 title="Breaking News"
                 description="Urgent and developing coverage"
                 value={breaking}
                 setValue={setBreaking}
                 onboarding={true}
               />
-              <Notif
+              <NotifToggle
                 title="University News"
                 description="The latest on Brown and the campus community"
                 value={universityNews}
                 setValue={setUniversityNews}
                 onboarding={true}
               />
-              <Notif
+              <NotifToggle
                 title="Metro"
                 description="Updates from Providence and beyond"
                 value={metro}
                 setValue={setMetro}
                 onboarding={true}
               />
-              <Notif
+              <NotifToggle
                 title="Sports"
                 description="Game coverage and exclusives"
                 value={sports}
                 setValue={setSports}
                 onboarding={true}
               />
-              <Notif
+              <NotifToggle
                 title="Arts and Culture"
                 description="Events and reviews from our critics"
                 value={artsAndCulture}
                 setValue={setArtsAndCulture}
                 onboarding={true}
               />
-              <Notif
+              <NotifToggle
                 title="Science and Research"
                 description="The cutting edge of research"
                 value={scienceAndResearch}
                 setValue={setScienceAndResearch}
                 onboarding={true}
               />
-              <Notif
+              <NotifToggle
                 title="Opinions"
                 description="Columns, op-eds and editorials"
                 value={opinions}
