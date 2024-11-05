@@ -6,7 +6,7 @@ import { Image, TouchableOpacity, View } from "react-native";
 import { articleStyles } from "src/styles/article";
 import { ArticleDetailProps } from "src/types/other";
 import { handleBookmark } from "src/utils/helpers";
-import { SavedContext } from "../Nav";
+import { SavedContext } from "../BottomNavigator";
 import { shareArticle } from "./ShareArticle";
 
 /**

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { View, FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { baseStyles } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
-import { SavedContext } from "../Nav";
+import { SavedContext } from "../BottomNavigator";
 import FavArticle from "./FavArticle";
 
 function SavedArticles({ navigation }: NavProp) {

@@ -20,7 +20,7 @@ import { HomeStackProps } from "src/types/navStacks";
 import { formatDates } from "src/utils/formatDates";
 import { handleBookmark } from "src/utils/helpers";
 import { baseStyles } from "../../styles/styles";
-import { SavedContext } from "../Nav";
+import { SavedContext } from "../BottomNavigator";
 import BottomBar from "./BottomBar";
 import SplitArticle from "./SplitContent";
 

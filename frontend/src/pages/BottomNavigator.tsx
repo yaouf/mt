@@ -96,9 +96,9 @@ Notifications.setNotificationHandler({
 });
 
 /**
- * @returns Main screens of the app
+ * @returns Main screens of the app accessible from the bottom tab navigator
  */
-export default function Nav() {
+export default function BottomNavigator() {
   const [savedArticles, setSavedArticles] = useState<Object>({});
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();

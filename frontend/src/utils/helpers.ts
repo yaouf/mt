@@ -1,7 +1,7 @@
 import { trackEvent } from "@aptabase/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dispatch, SetStateAction } from "react";
-import { SavedArticleDict } from "src/pages/Nav";
+import { SavedArticleDict } from "src/pages/BottomNavigator";
 
 /**
  * sets an item in Async storage to the given value
