@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Constants from "expo-constants";
@@ -7,7 +8,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import Onboarding from "./onboarding/Onboarding";
 import Nav from "./pages/Nav";
 import { NotificationProvider } from "./pages/settings/NotificationProvider";
-import { getAsync, setAsync } from "./utils/helpers";
+import { setAsync } from "./utils/helpers";
 
 const fullStack = createStackNavigator();
 
@@ -39,9 +40,12 @@ function BdhApp() {
   useEffect(() => {
     const load = async () => {
       try {
-        const onboarded = await getAsync("hasOnboarded");
-        if (onboarded === "true") {
+        const deviceId = await AsyncStorage.getItem("deviceID");
+        const onboarded = await AsyncStorage.getItem("hasOnboarded");
+        if (onboarded === "true" && deviceId) {
           setHasOnboarded(true);
+        } else {
+          setHasOnboarded(false);
         }
       } catch (err) {
         console.log("err while setting up notifications", err);
@@ -52,7 +56,7 @@ function BdhApp() {
     const checkAppVersion = async () => {
       const currentVersion = Constants.expoConfig?.version ?? "";
       const TARGET_VERSION = "1.1.0";
-      const storedVersion = await getAsync("appVersion");
+      const storedVersion = await AsyncStorage.getItem("appVersion");
 
       if (storedVersion !== currentVersion && currentVersion === TARGET_VERSION) {
         console.log("app version is out of date");
