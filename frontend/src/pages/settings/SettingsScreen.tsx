@@ -76,7 +76,7 @@ function SettingsScreen({ navigation }: NavProp) {
         const opinionsNotifs = await getAsync("opinionsNotifs");
         setOpinions(opinionsNotifs === "true");
 
-        const id = await getAsync("deviceID");
+        const id = await AsyncStorage.getItem("deviceID");
         // FIXME: why is this null first time?
         console.log("this is the device id in the settingsscreen", id);
         if (id) {
