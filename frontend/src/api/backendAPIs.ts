@@ -126,6 +126,8 @@ export const updateSettings = async (
 
   if (response.status !== 200) {
     console.log("response code:", response.status);
+    console.log("response message:", response.statusText);
+    console.log("response body:", await response.text());
   } else {
     console.log("success");
   }

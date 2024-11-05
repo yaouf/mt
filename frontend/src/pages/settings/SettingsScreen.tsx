@@ -6,7 +6,6 @@ import NotifToggle from "src/components/NotifToggle";
 import { settings } from "src/styles/pages";
 import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
-import { getAsync } from "src/utils/helpers";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
 import SettingsLink from "./SettingsLink";
@@ -42,7 +41,6 @@ function SettingsScreen({ navigation }: NavProp) {
     setDeviceID,
     checkPermissions,
     systemPermissionStatus,
-    setSystemPermissionStatus,
   } = useContext(NotificationContext);
 
   // on first load, get data from async storage
@@ -72,37 +70,44 @@ function SettingsScreen({ navigation }: NavProp) {
       );
 
       try {
-        const breakingNotifs = await getAsync("breakingNotifs");
+        const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
+        console.log("Calling setState in settings screen with value", breakingNotifs === "true", "for breakingNotifs");
         setBreaking(breakingNotifs === "true");
         console.log("breakingNotifs", breakingNotifs);
 
         const universityNewsNotifs = await AsyncStorage.getItem(
           "universityNewsNotifs"
         );
+        console.log("Calling setState in settings screen with value", universityNewsNotifs === "true", "for universityNewsNotifs");
         setUniversityNews(universityNewsNotifs === "true");
         console.log("universityNewsNotifs", universityNewsNotifs);
 
-        const metroNotifs = await getAsync("metroNotifs");
+        const metroNotifs = await AsyncStorage.getItem("metroNotifs");
+        console.log("Calling setState in settings screen with value", metroNotifs === "true", "for metroNotifs");
         setMetro(metroNotifs === "true");
         console.log("metroNotifs", metroNotifs);
 
-        const sportsNotifs = await getAsync("sportsNotifs");
+        const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
+        console.log("Calling setState in settings screen with value", sportsNotifs === "true", "for sportsNotifs");
         setSports(sportsNotifs === "true");
         console.log("sportsNotifs", sportsNotifs);
 
         const artsAndCultureNotifs = await AsyncStorage.getItem(
           "artsAndCultureNotifs"
         );
+        console.log("Calling setState in settings screen with value", artsAndCultureNotifs === "true", "for artsAndCultureNotifs");
         setArtsAndCulture(artsAndCultureNotifs === "true");
         console.log("artsAndCultureNotifs", artsAndCultureNotifs);
 
         const scienceAndResearchNotifs = await AsyncStorage.getItem(
           "scienceAndResearchNotifs"
         );
+        console.log("Calling setState in settings screen with value", scienceAndResearchNotifs === "true", "for scienceAndResearchNotifs");
         setScienceAndResearch(scienceAndResearchNotifs === "true");
         console.log("scienceAndResearchNotifs", scienceAndResearchNotifs);
 
-        const opinionsNotifs = await getAsync("opinionsNotifs");
+        const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
+        console.log("Calling setState in settings screen with value", opinionsNotifs === "true", "for opinionsNotifs");
         setOpinions(opinionsNotifs === "true");
         console.log("opinionsNotifs", opinionsNotifs);
 
@@ -115,9 +120,9 @@ function SettingsScreen({ navigation }: NavProp) {
           console.log("Device ID is not being set in settings screen");
         }
         // TODO: if deviceID is null or "", go to onboarding screen
-        console.log("Device ID in settings:", deviceID);
+        console.log("Device ID from context in settings before update:", deviceID);
 
-        await checkPermissions(); // Check system permissions everytime app loads
+        checkPermissions(); // Check system permissions everytime app loads
       } catch (err) {
         console.log(err);
       }

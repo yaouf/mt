@@ -56,7 +56,7 @@ function NotifToggle({
 
   const toggle = async () => {
     if (onboarding) {
-      console.log("onboarding toggle", !value);
+      console.log("calling setState in onboarding toggle", !value);
       setValue((previousState: boolean) => !previousState);
     } else {
       // update system permission status (on device and in backend)
