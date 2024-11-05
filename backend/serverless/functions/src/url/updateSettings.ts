@@ -18,6 +18,8 @@ export const updateSettings = onRequest(async (request, response) => {
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
 
+  const newDb = db(dbParams);
+
 
   try {
     logger.info("Updating user settings", { structuredData: true }, request.body);
@@ -104,7 +106,7 @@ export const updateSettings = onRequest(async (request, response) => {
     const deviceId = validBody.deviceId; 
 
     // First, check if the device exists
-    const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
+    const deviceExists = await newDb("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
       logger.error("Device not found. Are you sure field \"deviceId\" is correct?", { deviceId });
@@ -113,7 +115,10 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Update device settings in device table
-    const res = await db(dbParams)("devices").where("id", deviceId).update(updateData);
+    const res = await newDb("devices").where("id", deviceId).update(updateData);
+
+    await newDb.destroy();
+
     // log the result of the update
     logger.info(res);
     // Log the result of update - For logging purposes, might query again or just log the update was successful
