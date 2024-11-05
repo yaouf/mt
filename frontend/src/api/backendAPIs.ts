@@ -1,30 +1,32 @@
 import { Platform } from "react-native";
 
 // wrap in try catch when call!!
-
+type NotificationSettings = {
+  breaking: boolean;
+  universityNews: boolean;
+  metro: boolean;
+  opinions: boolean;
+  artsAndCulture: boolean;
+  sports: boolean;
+  scienceAndResearch: boolean;
+};
 /**
  * Constructs JSON Body that contains device info and push token to send a POST
  * request to APi endpoint
  */
 export const createDevice = async (
-  breaking: boolean,
-  universityNews: boolean,
-  metro: boolean,
-  opinions: boolean,
-  artsAndCulture: boolean,
-  sports: boolean,
-  scienceAndResearch: boolean,
+  notificationSettings: NotificationSettings,
   expoPushToken: string
 ): Promise<string> => {
   const body = JSON.stringify({
     deviceType: Platform.OS,
-    "Breaking News": breaking,
-    "University News": universityNews,
-    "Metro": metro,
-    "Opinions": opinions,
-    "Arts and Culture": artsAndCulture,
-    "Sports": sports,
-    "Science and Research": scienceAndResearch,
+    "Breaking News": notificationSettings.breaking,
+    "University News": notificationSettings.universityNews,
+    "Metro": notificationSettings.metro,
+    "Opinions": notificationSettings.opinions,
+    "Arts and Culture": notificationSettings.artsAndCulture,
+    "Sports": notificationSettings.sports,
+    "Science and Research": notificationSettings.scienceAndResearch,
     expoPushToken: expoPushToken,
     isPushEnabled: true,
   });

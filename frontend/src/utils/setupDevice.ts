@@ -60,17 +60,28 @@ export const setUpDevice = async (
       setAsync("sportsNotifs", JSON.stringify(sports));
       setAsync("scienceAndResearchNotifs", JSON.stringify(scienceAndResearch));
       deviceID = await createDevice(
-        breaking ?? false,
-        universityNews ?? false,
-        metro ?? false,
-        opinions ?? false,
-        artsAndCulture ?? false,
-        sports ?? false,
-        scienceAndResearch ?? false,
+        {
+          breaking: breaking ?? false,
+          universityNews: universityNews ?? false,
+          metro: metro ?? false,
+          opinions: opinions ?? false,
+          artsAndCulture: artsAndCulture ?? false,
+          sports: sports ?? false,
+          scienceAndResearch: scienceAndResearch ?? false,
+        },
         token
       );
       console.log("deviceID after createDevice", deviceID);
       console.log("push token", token);
+      console.log("notif settings", {
+        breaking: breaking ?? false,
+        universityNews: universityNews ?? false,
+        metro: metro ?? false,
+        opinions: opinions ?? false,
+        artsAndCulture: artsAndCulture ?? false,
+        sports: sports ?? false,
+        scienceAndResearch: scienceAndResearch ?? false,
+      });
     } else {
       setBreaking(false);
       setUniversityNews(false);
@@ -87,14 +98,15 @@ export const setUpDevice = async (
       setAsync("sportsNotifs", JSON.stringify(false));
       setAsync("scienceAndResearchNotifs", JSON.stringify(false));
       deviceID = await createDevice(
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
+        {
+          breaking: false,
+          universityNews: false,
+          metro: false,
+          opinions: false,
+          artsAndCulture: false,
+          sports: false,
+          scienceAndResearch: false,
+        },
         token
       );
       console.log("deviceID being set in line 65 of setup.ts", deviceID);
