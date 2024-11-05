@@ -1,6 +1,6 @@
-import { NavProp, OnboardParams } from "../types/navStacks";
 import { createStackNavigator } from "@react-navigation/stack";
-import PushNotifsScreen from "./PushNotifsScreen";
+import { NavProp, OnboardParams } from "../types/navStacks";
+import PushNotifsOnboardingScreen from "./PushNotifsOnboardingScreen";
 import WelcomeScreen from "./WelcomeScreen";
 
 const onboardingStack = createStackNavigator<OnboardParams>();
@@ -16,7 +16,7 @@ function Onboarding({ navigation }: NavProp) {
       />
       <onboardingStack.Screen
         name="PushNotifs"
-        component={PushNotifsScreen}
+        component={PushNotifsOnboardingScreen}
         initialParams={{ parentNav: navigation }}
         options={{ headerShown: false }}
       />
