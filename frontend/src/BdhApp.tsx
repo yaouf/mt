@@ -36,7 +36,7 @@ const MyTheme = {
 function BdhApp() {
   const [hasOnboarded, setHasOnboarded] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initialize animated value
-
+  const [isUpdate, setIsUpdate] = useState(false);
   useEffect(() => {
     const load = async () => {
       try {
@@ -63,12 +63,15 @@ function BdhApp() {
 
       if (storedVersion !== currentVersion && currentVersion === TARGET_VERSION) {
         console.log("app version is out of date");
-        await AsyncStorage.clear();
+        // await AsyncStorage.clear();
         // log all async storage keys
         console.log("all async storage keys", await AsyncStorage.getAllKeys());
         setAsync("hasOnboarded", "false");
         setHasOnboarded(false);
-        setAsync("appVersion", currentVersion);
+        // setAsync("appVersion", currentVersion);
+        setIsUpdate(true);
+      } else {
+        setIsUpdate(false);
       }
     };
     // check app version first to see if we need to show the update screen, then load onboarding or main app
@@ -100,6 +103,7 @@ function BdhApp() {
                   name="Onboarding"
                   component={Onboarding}
                   options={{ headerShown: false }}
+                  initialParams={{ isUpdate }}
                 />
                 <fullStack.Screen
                   name="MainApp"

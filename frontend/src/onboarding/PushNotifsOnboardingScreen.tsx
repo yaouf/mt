@@ -1,5 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRoute } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
-import { useContext } from "react";
+import Constants from "expo-constants";
+import { useContext, useEffect } from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -14,6 +17,7 @@ import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
 import { font2, text } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
+import { setAsync } from "src/utils/helpers";
 import { setUpDevice } from "../utils/setupDevice";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
@@ -42,6 +46,8 @@ function PushNotifsOnboardingScreen({
     requestPermission,
   } = useContext(NotificationContext);
 
+  const { isUpdate } = useRoute().params as { isUpdate: boolean };
+
   const saveNotifPreferences = async () => {
     requestPermission().then((status) => {
       setUpDevice(
@@ -60,11 +66,55 @@ function PushNotifsOnboardingScreen({
         artsAndCulture,
         sports,
         scienceAndResearch
-      ).then((id) => setDeviceID(id));
+      )
+        .then((id) => setDeviceID(id))
+        .then(() =>
+          setAsync("appVersion", Constants.expoConfig?.version ?? "")
+        );
     });
 
     navigation.push("MainApp");
   };
+
+  useEffect(() => {
+    async function updateNotifPreferences() {
+      const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
+      const universityNewsNotifs = await AsyncStorage.getItem(
+        "universityNewsNotifs"
+      );
+      const metroNotifs = await AsyncStorage.getItem("metroNotifs");
+      const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
+      const artsAndCultureNotifs = await AsyncStorage.getItem(
+        "artsAndCultureNotifs"
+      );
+      const scienceAndResearchNotifs = await AsyncStorage.getItem(
+        "scienceAndResearchNotifs"
+      );
+      const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
+
+      console.log(
+        "notifPrefs",
+        breakingNotifs,
+        universityNewsNotifs,
+        metroNotifs,
+        sportsNotifs,
+        artsAndCultureNotifs,
+        scienceAndResearchNotifs,
+        opinionsNotifs
+      );
+
+      setBreaking(breakingNotifs === "true");
+      setUniversityNews(universityNewsNotifs === "true");
+      setMetro(metroNotifs === "true");
+      setSports(sportsNotifs === "true");
+      setArtsAndCulture(artsAndCultureNotifs === "true");
+      setScienceAndResearch(scienceAndResearchNotifs === "true");
+      setOpinions(opinionsNotifs === "true");
+    }
+    if (isUpdate) {
+      updateNotifPreferences();
+    }
+  }, []);
 
   console.log("sports", sports, artsAndCulture, scienceAndResearch, opinions);
 
@@ -73,10 +123,13 @@ function PushNotifsOnboardingScreen({
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.contentContainer}>
           <View>
-            <Text style={styles.title}>Welcome.</Text>
+            <Text style={styles.title}>
+              {isUpdate ? "New Sections." : "Welcome."}
+            </Text>
             <Text style={styles.description}>
-              Turn on alerts for the topics that interest you and we'll keep you
-              updated.
+              {isUpdate
+                ? "Update your notification preferences."
+                : "Turn on alerts for the topics that interest you and we'll keep you updated."}
             </Text>
 
             <View style={styles.notifContainer}>
@@ -158,6 +211,9 @@ function PushNotifsOnboardingScreen({
               systemPermissionStatus
             )
               .then((id) => setDeviceID(id))
+              .then(() =>
+                setAsync("appVersion", Constants.expoConfig?.version ?? "")
+              )
               .then(() => navigation.push("MainApp"));
           }}
           accessible={true}
