@@ -26,8 +26,8 @@ const [devices, setDevices] = useState<Device[]>([]);
   }, [currentPage]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   return (
+    
     <div className="container mx-auto p-5 mt-14">
       <h1 className="text-2xl font-bold mb-4">Device List</h1>
       <table className="min-w-full bg-white border border-gray-300">
@@ -38,6 +38,8 @@ const [devices, setDevices] = useState<Device[]>([]);
             <th className="py-2 px-4 border-b text-center">University News</th>
             <th className="py-2 px-4 border-b text-center">Metro</th>
             <th className="py-2 px-4 border-b text-left">Expo Push Token</th>
+            <th className="py-2 px-4 border-b text-left">Date created</th>
+
           </tr>
         </thead>
         <tbody>
@@ -48,6 +50,8 @@ const [devices, setDevices] = useState<Device[]>([]);
               <td className="py-2 px-4 border-b text-center">{device["University News"] ? 'Yes' : 'No'}</td>
               <td className="py-2 px-4 border-b text-center">{device["Metro"] ? 'Yes' : 'No'}</td>
               <td className="py-2 px-4 border-b text-left">{device.expoPushToken}</td>
+              <td className="py-2 px-4 border-b text-left">{device.dateCreated}</td>
+
             </tr>
           ))}
         </tbody>

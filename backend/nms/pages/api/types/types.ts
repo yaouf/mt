@@ -16,6 +16,7 @@ export type Device = {
   "University News": boolean;
   "Metro": boolean;
   expoPushToken: string;
+  dateCreated: string;
 };
 
 export interface EditorPick {

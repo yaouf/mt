@@ -19,7 +19,7 @@ export default async function getDevices(
       .select("*")
       .offset(offset)
       .limit(devicesPerPage); 
-
+    console.log("the returned devices:",devices);
     res.status(200).json(devices);
   } catch (error) {
     console.error("Error fetching devices from the database:", error);
