@@ -11,7 +11,7 @@ export default async function getNotificationsEnabled(
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("*").where("isPushEnabled", true);
+    const result = await db("devices").count("* as count").where("isPushEnabled", true);
     
     const { count } = result[0];
     // console.log("notification enabled devices", count);

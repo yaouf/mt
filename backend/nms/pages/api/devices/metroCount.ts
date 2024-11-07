@@ -11,7 +11,7 @@ export default async function getMetroDevices(
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("*").where("Metro", true);
+    const result = await db("devices").count("* as count").where("Metro", true);
     
     const { count } = result[0];
     // console.log("metro enabled devices", count);

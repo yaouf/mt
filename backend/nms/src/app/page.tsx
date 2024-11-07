@@ -255,11 +255,11 @@ export default function Home() {
                 />
               </>
             )}
-            <div className="flex justify-center py-10"></div>
+            {/* <div className="flex justify-center py-10"></div>
             <EditorsPicks
               editorsPicks={editorsPicks} // Pass the editorsPicks state
               setEditorsPicks={setEditorsPicks} // Pass the state setter function
-            />
+            /> */}
 
             <DeviceTable deviceCount={deviceCount} />
           </main>
