@@ -11,7 +11,7 @@ export default async function getDeviceCount(
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("*");
+    const result = await db("devices").count("* as count");
     
     const { count } = result[0];
     console.log("count", count);

@@ -11,7 +11,7 @@ export default async function getBreakingNotifications(
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("*").where("Breaking News", true);
+    const result = await db("devices").count("* as count").where("Breaking News", true);
     console.log("result", result);
     const { count } = result[0];
     console.log("breaking news enabled devices", count);
