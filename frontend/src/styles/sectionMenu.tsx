@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { font1, font2, font3, varGray1, varTextColor } from "./styles";
+import { font2, varGray1, varTextColor } from "./styles";
 
 export const menuStyles = StyleSheet.create({
   header: {
@@ -33,6 +33,7 @@ export const menuStyles = StyleSheet.create({
     fontSize: 16,
     fontFamily: font2,
     textTransform: "uppercase",
+    paddingLeft: 16,
   },
   descriptionText: {
     flex: 1, // takes up remaining space

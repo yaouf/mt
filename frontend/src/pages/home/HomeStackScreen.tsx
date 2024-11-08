@@ -18,6 +18,7 @@ import SectionsScreen from "../sections/SectionsScreen";
 import Staff from "../staff/Staff";
 import HomeScreen from "./HomeScreen";
 import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
+import SectionPrefScreen from "./menu/SectionPrefScreen";
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -105,13 +106,13 @@ function HomeStackScreen({ navigation, route }) {
           }}
         />
         {/* Not including in release yet, since not sure people will use it */}
-        {/* <HomeStack.Screen
+        <HomeStack.Screen
           name="SectionPref"
           component={SectionPrefScreen}
           options={{ 
             headerShown: false,
           }}
-        /> */}
+        />
         <HomeStack.Screen
           name="Section"
           component={SectionsScreen}
