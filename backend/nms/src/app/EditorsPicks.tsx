@@ -57,7 +57,6 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   
   return (
     <div className="container mx-auto px-8 py-2"> 
-      {/* eslint-disable-next-line react/no-unescaped-entities */}
       <h2 className="text-2xl font-bold mb-4">Editor&apos;s Picks</h2>
       <table className="min-w-full border border-gray-300 mt-4"> 
         <thead>

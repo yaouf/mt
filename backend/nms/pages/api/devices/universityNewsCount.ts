@@ -6,19 +6,19 @@ type ResponseData = {
   message?: string;
 };
 
-export default async function getDeviceCount(
+export default async function getMetroDevices(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("* as count");
+    const result = await db("devices").count("* as count").where("University News", true);
     
     const { count } = result[0];
-    console.log("count", count);
+    // console.log("university news enabled devices", count);
 
     res.status(200).json({ count });
   } catch (error) {
-    console.error("Error fetching device count from the database:", error);
+    console.error("Error fetching device count for university news from the database:", error);
     res.status(500).json({ message: error.message });
   }
 }
