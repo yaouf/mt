@@ -75,32 +75,17 @@ export const updateSettings = onRequest(async (request, response) => {
     };
     
     // Construct update object based on what's provided in the request body
-    // TODO: make this cleaner
-    const updateData: UpdateData = {};
-    if (breakingNews !== undefined) {
-      updateData["Breaking News"] = breakingNews;
-    }
-    if (universityNews !== undefined) {
-      updateData["University News"] = universityNews;
-    }
-    if (metro !== undefined) {
-      updateData["Metro"] = metro;
-    }
-    if (opinions !== undefined) {
-      updateData["Opinions"] = opinions;
-    }
-    if (artsAndCulture !== undefined) {
-      updateData["Arts and Culture"] = artsAndCulture;
-    }
-    if (sports !== undefined) {
-      updateData["Sports"] = sports;
-    }
-    if (scienceAndResearch !== undefined) {
-      updateData["Science and Research"] = scienceAndResearch;
-    }
-    if (isPushEnabled !== undefined) {
-      updateData["isPushEnabled"] = isPushEnabled;
-    }
+    // TODO: Code would be a lot cleaner if columns were camel case
+    const updateData: UpdateData = {
+      ...(breakingNews !== undefined ? { "Breaking News": breakingNews } : {}),
+      ...(universityNews !== undefined ? { "University News": universityNews } : {}),
+      ...(metro !== undefined ? { "Metro": metro } : {}),
+      ...(opinions !== undefined ? { "Opinions": opinions } : {}),
+      ...(artsAndCulture !== undefined ? { "Arts and Culture": artsAndCulture } : {}),
+      ...(sports !== undefined ? { "Sports": sports } : {}),
+      ...(scienceAndResearch !== undefined ? { "Science and Research": scienceAndResearch } : {}),
+      ...(isPushEnabled !== undefined ? { "isPushEnabled": isPushEnabled } : {}),
+    };
 
     // Get the device ID from the request body
     const deviceId = validBody.deviceId; 

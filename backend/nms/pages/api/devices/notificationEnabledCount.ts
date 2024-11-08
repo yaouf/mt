@@ -6,19 +6,19 @@ type ResponseData = {
   message?: string;
 };
 
-export default async function getDeviceCount(
+export default async function getNotificationsEnabled(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("* as count");
+    const result = await db("devices").count("* as count").where("isPushEnabled", true);
     
     const { count } = result[0];
-    console.log("count", count);
+    // console.log("notification enabled devices", count);
 
     res.status(200).json({ count });
   } catch (error) {
-    console.error("Error fetching device count from the database:", error);
+    console.error("Error fetching device count for notifications enabled from the database:", error);
     res.status(500).json({ message: error.message });
   }
 }
