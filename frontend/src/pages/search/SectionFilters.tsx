@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 
 const sections = [
@@ -15,14 +15,29 @@ const sections = [
   "Columns",
 ];
 
-function SectionFilters() {
-  const [selectedSections, setSelectedSections] = useState([]);
+type SectionFiltersProps = {
+  selectedSections: string[];
+  setSelectedSections: Dispatch<SetStateAction<string[]>>;
+};
 
-  const toggleSection = (section) => {
-    if (selectedSections.includes(section)) {
-      setSelectedSections(selectedSections.filter((s) => s !== section));
+function SectionFilters({
+  selectedSections,
+  setSelectedSections,
+}: SectionFiltersProps) {
+  const [tempSelectedSections, setTempSelectedSections] =
+    useState<string[]>(selectedSections);
+
+  useEffect(() => {
+    setSelectedSections(tempSelectedSections);
+  }, [tempSelectedSections]);
+
+  const toggleSection = (section: string) => {
+    if (tempSelectedSections.includes(section)) {
+      setTempSelectedSections(
+        tempSelectedSections.filter((s) => s !== section)
+      );
     } else {
-      setSelectedSections([...selectedSections, section]);
+      setTempSelectedSections([...tempSelectedSections, section]);
     }
   };
 
@@ -33,7 +48,7 @@ function SectionFilters() {
           key={index}
           style={[
             styles.button,
-            selectedSections.includes(section) ? styles.selected : null,
+            tempSelectedSections.includes(section) ? styles.selected : {},
           ]}
           onPress={() => toggleSection(section)}
         >

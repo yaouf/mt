@@ -29,7 +29,7 @@ function LargeCard({ article, navigation }: CardProps) {
 
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
-  if (article.dominantMedia.attachment_uuid) {
+  if (article.dominantMedia) {
     img_uri =
       "https://snworksceo.imgix.net/bdh/" +
       article.dominantMedia.attachment_uuid +
@@ -53,32 +53,44 @@ function LargeCard({ article, navigation }: CardProps) {
           />
           <View style={styles.text}>
             {breaking ? (
-              <View style={styles.breakingBox}
+              <View
+                style={styles.breakingBox}
                 accessibilityLabel="Section: Breaking News."
               >
                 <Text style={styles.breaking}>Breaking News</Text>
               </View>
             ) : (
-              <Text style={styles.section}
-                accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
+              <Text
+                style={styles.section}
+                accessibilityLabel={`Section: ${all_tags[0].replace(
+                  "&;",
+                  "&"
+                )}.`}
               >
                 {all_tags[0].replace("&;", "&")}
               </Text>
             )}
-            <Text style={styles.title}
+            <Text
+              style={styles.title}
               accessibilityLabel={`Headline: ${article.headline}.`}
             >
               {article.headline}
             </Text>
-            <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail"
+            <Text
+              style={styles.subhead}
+              numberOfLines={6}
+              ellipsizeMode="tail"
               accessibilityLabel={`Subtitle: ${article.subhead}`}
             >
               {article.subhead}
             </Text>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
-                <Text style={styles.published}
-                  accessibilityLabel={`Published on ${formatDates(article.published_at)}`}
+                <Text
+                  style={styles.published}
+                  accessibilityLabel={`Published on ${formatDates(
+                    article.published_at
+                  )}`}
                 >
                   {formatDates(article.published_at)}
                 </Text>
@@ -102,7 +114,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "700",
     lineHeight: 28,
-    marginBottom: 8, 
+    marginBottom: 8,
   },
   subhead: {
     alignSelf: "stretch",
@@ -112,7 +124,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     lineHeight: 22,
     fontStyle: "italic",
-    marginBottom: 12, 
+    marginBottom: 12,
   },
   card: {
     display: "flex",

@@ -6,18 +6,13 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { formatDates } from "../../code/formatDates";
-import {
-  font1,
-  font3,
-  varTextColor,
-  varGray1,
-} from "../../styles/styles";
+import { font1, font3, varTextColor, varGray1 } from "../../styles/styles";
 import { CardProps } from "src/types/navStacks";
 
 function HorizontalCard({ article, navigation }: CardProps) {
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
-  if (article.dominantMedia.attachment_uuid) {
+  if (article.dominantMedia) {
     img_uri =
       "https://snworksceo.imgix.net/bdh/" +
       article.dominantMedia.attachment_uuid +
@@ -33,25 +28,26 @@ function HorizontalCard({ article, navigation }: CardProps) {
         <View style={styles.card}>
           <View style={styles.content}>
             <View style={styles.imageWrapper}>
-            <Image
-              source={{
-                uri: img_uri,
-              }}
-              style={styles.image}
-            />
+              <Image
+                source={{
+                  uri: img_uri,
+                }}
+                style={styles.image}
+              />
             </View>
             <View style={styles.text}>
               <View style={styles.innerText}>
                 <Text
-                  style={styles.title} numberOfLines={4} ellipsizeMode="tail"
+                  style={styles.title}
+                  numberOfLines={4}
+                  ellipsizeMode="tail"
                 >
                   {article.headline}
                 </Text>
-                <Text style={styles.published}
-                >
+                <Text style={styles.published}>
                   {formatDates(article.published_at)}
                 </Text>
-                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -79,7 +75,6 @@ const styles = StyleSheet.create({
     // shadowOpacity: 0.08,
     // shadowRadius: 29.949,
     overflow: "visible",
-
   },
   content: {
     display: "flex",
@@ -92,11 +87,11 @@ const styles = StyleSheet.create({
     // paddingRight: 21.133,
     // paddingBottom: 34.62,
     // paddingLeft: 24.38,
-    flex: 1
+    flex: 1,
   },
-  image:{
+  image: {
     height: 85,
-    aspectRatio: 1
+    aspectRatio: 1,
   },
   text: {
     flex: 3,
@@ -120,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     lineHeight: 22,
     fontStyle: "italic",
-    marginBottom: 12, 
+    marginBottom: 12,
   },
 
   section: {

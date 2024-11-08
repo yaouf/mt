@@ -1,5 +1,6 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Article } from "./data";
+import { Dispatch, SetStateAction } from "react";
 
 /**
  * format is the name of the screens used in that stack
@@ -16,7 +17,11 @@ export type HomeStackProps = {
 
 export type SearchStackProps = {
   SearchScreen: undefined;
-  FilterScreen: { searchType: string };
+  FilterScreen: {
+    searchType: string;
+    selectedSections: string[];
+    setSelectedSections: Dispatch<SetStateAction<string[]>>;
+  };
   Article: { data: Article };
 };
 

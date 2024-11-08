@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { View, Text, Switch, StyleSheet, TouchableOpacity } from "react-native";
 import SectionFilters from "./SectionFilters";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,8 +6,9 @@ import { SearchStackProps } from "src/types/navStacks";
 
 function FiltersScreen({ route, navigation }) {
   const [sortOption, setSortOption] = useState("newest");
-  const { searchType, setSearchType } = route.params;
-  const [searchMode, setSearchMode] = useState("Article");
+  const { searchType, setSearchType, selectedSections, setSelectedSections } =
+    route.params;
+  const [searchMode, setSearchMode] = useState(searchType);
 
   useEffect(() => {
     setSearchType(searchMode);
@@ -44,7 +45,10 @@ function FiltersScreen({ route, navigation }) {
         />
       </TouchableOpacity>
       <Text style={styles.header}>Sections</Text>
-      <SectionFilters />
+      <SectionFilters
+        selectedSections={selectedSections}
+        setSelectedSections={setSelectedSections}
+      />
 
       <Text style={styles.header}>Type</Text>
       <TouchableOpacity

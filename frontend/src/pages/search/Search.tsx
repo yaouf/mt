@@ -30,6 +30,7 @@ function Search({ navigation }: NavProp) {
   const [articles, setArticles] = useState<Article[]>([]);
   const animatedWidth = useRef(new Animated.Value(0)).current;
   const [searchType, setSearchType] = useState("Article");
+  const [selectedSections, setSelectedSections] = useState<string[]>([]);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -41,9 +42,23 @@ function Search({ navigation }: NavProp) {
       } else {
         queryUrl = `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`;
       }
+      // if (selectedSections.length > 0) {
+      //   const sectionsQuery = selectedSections
+      //     .map((section) => `section=${section}`)
+      //     .join("&");
+      //   queryUrl += `&${sectionsQuery}`;
+      // }
+      // if (selectedSections.length > 0) {
+      //   queryUrl += `&section=${selectedSections[0]}`;
+      // }
       const response = await fetch(queryUrl);
       const jsonString = await response.text();
       const resultObject = JSON.parse(jsonString);
+      if (selectedSections.length > 0) {
+        resultObject.items = resultObject.items.filter((article: any) =>
+          selectedSections.includes(article?.tags[0]?.name)
+        );
+      }
       const articleList: Article[] = resultObject.items;
 
       setArticles(articleList);
@@ -111,7 +126,12 @@ function Search({ navigation }: NavProp) {
           />
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("Filters", { searchType, setSearchType })
+              navigation.navigate("Filters", {
+                searchType,
+                setSearchType,
+                selectedSections,
+                setSelectedSections,
+              })
             }
           >
             <MaterialIcons

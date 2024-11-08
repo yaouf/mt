@@ -6,7 +6,7 @@ import { font1, varTextColor } from "../../styles/styles";
 function ImageCard({ article, navigation }: CardProps) {
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
-  if (article.dominantMedia.attachment_uuid) {
+  if (article.dominantMedia) {
     img_uri =
       "https://snworksceo.imgix.net/bdh/" +
       article.dominantMedia.attachment_uuid +
