@@ -1,5 +1,7 @@
-import { useContext } from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import React, { useContext } from "react";
 import {
+  PixelRatio,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -20,6 +22,12 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
     setAsync("sectionMenu", JSON.stringify(menuItems));
   }
 
+  const textSizeMultiplier = PixelRatio.getFontScale();
+  console.log("textSizeMultiplier", textSizeMultiplier);
+  const calculatedIconSize = 24 * Math.sqrt(textSizeMultiplier);
+  console.log("calculatedIconSize", calculatedIconSize);
+
+
   return (
     <ScrollView
       horizontal
@@ -28,7 +36,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
       accessibilityLabel="Section menu"
       accessibilityHint="Scroll horizontally to view different BDH sections"
     >
-      {/* <TouchableOpacity
+      <TouchableOpacity
         key={1}
         style={menuStyles.menuItem}
         onPress={() => navigation.push("SectionPref")}
@@ -36,8 +44,8 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         accessibilityRole="button"
         accessibilityLabel="Filter options"
       >
-        <Ionicons name="filter-outline" size={24} color="black" />
-      </TouchableOpacity> */}
+        <Ionicons name="filter-outline" size={calculatedIconSize} color="black" />
+      </TouchableOpacity>
 
       
       {currSection === "all" ? (

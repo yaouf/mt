@@ -9,7 +9,7 @@ import {
 } from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { menuStyles } from "src/styles/sectionMenu";
-import { baseStyles, text, varGray1, varRed } from "src/styles/styles";
+import { baseStyles, text, varGray1 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
 import { setAsync } from "src/utils/helpers";
@@ -45,14 +45,14 @@ function SectionPrefScreen({ navigation }: NavProp) {
   const renderItem = ({ item, drag }: RenderItemParams<MenuItem>) => {
     return (
       <TouchableOpacity onLongPress={drag} delayLongPress={100} style={[menuStyles.rowItem, {height: itemHeight}]}>
-        <TouchableOpacity onPress={() => remove(item)}>
+        {/* <TouchableOpacity onPress={() => remove(item)}>
           <Feather
             name="minus-circle"
             size={24}
             color={varRed}
             style={menuStyles.icon}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text style={menuStyles.rowText}>{item.title}</Text>
         <Ionicons
           name="reorder-three-outline"
@@ -105,17 +105,16 @@ function SectionPrefScreen({ navigation }: NavProp) {
         <View>
         <Text style={[{ marginBottom: 12}, text.sectionHeader3]} onLayout={handleSpacing}>Favorite Sections</Text>
           <Text style={[menuStyles.descriptionText]}>
-            Add and reorder topics to customize the menu on your Top Stories
-            page.
+            Add and reorder sections to customize your home page.
           </Text>
-
+          {/* TODO: do we need a lock icon? */}
           <View style={[menuStyles.rowItem, {height: itemHeight}]}>
-            <MaterialIcons
+            {/* <MaterialIcons
               name="lock-outline"
               size={24}
               color={varGray1}
               style={menuStyles.icon}
-            />
+            /> */}
             <Text style={[menuStyles.rowText, { color: varGray1 }]}>ALL</Text>
           </View>
           <NestableDraggableFlatList
