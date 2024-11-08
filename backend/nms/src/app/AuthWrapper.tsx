@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import { auth } from "./firebase";
 import LoginForm from "./LoginForm";
 
-export default function AuthWrapper({ children }: { children: React.ReactNode }) {
+export default function AuthWrapper({
+  children,
+}: {
+  children: (user: any) => React.ReactNode;
+}) {
   const [user, setUser] = useState(null as any);
 
   useEffect(() => {
@@ -25,5 +29,5 @@ export default function AuthWrapper({ children }: { children: React.ReactNode })
     return <LoginForm setUser={setUser} />;
   }
 
-  return <>{children}</>;
+  return <>{children(user)}</>;
 }
