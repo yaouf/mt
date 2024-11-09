@@ -42,13 +42,24 @@ function SectionPrefScreen({ navigation }: NavProp) {
     navigation.pop();
   };
 
+  const hasChanges = () => {
+    if (preferences.length !== sectionMenu.length) return true;
+    return preferences.some(
+      (pref, index) => pref.slug !== sectionMenu[index].slug
+    );
+  };
+
   const renderItem = ({ item, drag }: RenderItemParams<MenuItem>) => {
     return (
-      <TouchableOpacity onLongPress={drag} delayLongPress={100} style={[menuStyles.rowItem, {height: itemHeight}]}>
+      <TouchableOpacity
+        onLongPress={drag}
+        delayLongPress={100}
+        style={[menuStyles.rowItem, { height: itemHeight }]}
+      >
         {/* <TouchableOpacity onPress={() => remove(item)}>
           <Feather
             name="minus-circle"
-            size={24}
+            size={32}
             color={varRed}
             style={menuStyles.icon}
           />
@@ -56,7 +67,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
         <Text style={menuStyles.rowText}>{item.title}</Text>
         <Ionicons
           name="reorder-three-outline"
-          size={24}
+          size={32}
           color="#1C1B1F"
           style={menuStyles.icon}
         />
@@ -67,51 +78,91 @@ function SectionPrefScreen({ navigation }: NavProp) {
   const [marginBottom, setMarginBottom] = useState(0);
   const [itemHeight, setItemHeight] = useState(0);
 
-  const handleSpacing = (event: { nativeEvent: { layout: { height: number } } }) => {
+  const handleSpacing = (event: {
+    nativeEvent: { layout: { height: number } };
+  }) => {
     handleMarginBottom(event);
     handleItemHeight(event);
-    };
+  };
 
-    const handleMarginBottom = (event: { nativeEvent: { layout: { height: number } } }) => {
-      const { height } = event.nativeEvent.layout;
-      setMarginBottom((-.00000027978270723040324 * height ** 5) + (.00011976263557865468 * height ** 4) - (.018384847987277304 * height ** 3) + (1.2097381613026015 * height ** 2) - (29.877768847139869 * height) + 228.83862884458455)
-    };
-    
-    const handleItemHeight = (event: { nativeEvent: { layout: { height: number } } }) => {
-      const { height } = event.nativeEvent.layout;
-      setItemHeight(height * 40/22);
-    };
+  const handleMarginBottom = (event: {
+    nativeEvent: { layout: { height: number } };
+  }) => {
+    const { height } = event.nativeEvent.layout;
+    setMarginBottom(
+      -0.00000027978270723040324 * height ** 5 +
+        0.00011976263557865468 * height ** 4 -
+        0.018384847987277304 * height ** 3 +
+        1.2097381613026015 * height ** 2 -
+        29.877768847139869 * height +
+        228.83862884458455
+    );
+  };
 
+  const handleItemHeight = (event: {
+    nativeEvent: { layout: { height: number } };
+  }) => {
+    const { height } = event.nativeEvent.layout;
+    setItemHeight((height * 40) / 22);
+  };
 
   return (
-    <GestureHandlerRootView style={[baseStyles.container, {marginBottom: marginBottom}]}>
-      <View style={[{marginTop: 12, flexWrap: "wrap"}, menuStyles.header]}>
-        <TouchableOpacity onPress={() => navigation.pop()}>
-          <MaterialIcons name="close" size={24} color="#1C1B1F" />
+    <GestureHandlerRootView
+      style={[baseStyles.container, { marginBottom: marginBottom }]}
+    >
+      <View style={[{ marginTop: 12, flexWrap: "wrap" }, menuStyles.header]}>
+        <TouchableOpacity
+          onPress={() => navigation.pop()}
+          accessible={true}
+          accessibilityLabel="Close Section Prefences Menu"
+          accessibilityHint="Close the section preferences screen without saving new preferences"
+        >
+          <MaterialIcons name="close" size={32} color="#1C1B1F" />
         </TouchableOpacity>
 
-        <Text style={[menuStyles.otherText, { fontSize: 20, fontWeight: 600 }]}>Section Preferences</Text>
+        <Text style={[menuStyles.otherText, { fontSize: 20, fontWeight: 600 }]}>
+          Section Preferences
+        </Text>
 
-        <TouchableOpacity onPress={applyChanges}>
-          <Text style={[menuStyles.otherText, { fontWeight: 400, paddingTop: 4}]}>Apply</Text>
+        <TouchableOpacity
+          onPress={applyChanges}
+          disabled={!hasChanges()}
+          accessible={true}
+          accessibilityLabel="Apply Section Preferences"
+          accessibilityHint="Apply new section preferences"
+        >
+          <MaterialIcons
+            name="check"
+            size={32}
+            color={hasChanges() ? "#1C1B1F" : varGray1}
+          />
         </TouchableOpacity>
       </View>
 
-      <View style={{ height: 1, backgroundColor: 'black', marginVertical: 5 }} />
+      <View
+        style={{ height: 1, backgroundColor: "black", marginVertical: 5 }}
+      />
 
-      <NestableScrollContainer style={[menuStyles.contentContainer, { marginRight: -20 }]} 
-                    scrollIndicatorInsets={{ right: 4 }}
-                    contentContainerStyle={{ paddingRight: 20 }}>
+      <NestableScrollContainer
+        style={[menuStyles.contentContainer, { marginRight: -20 }]}
+        scrollIndicatorInsets={{ right: 4 }}
+        contentContainerStyle={{ paddingRight: 20 }}
+      >
         <View>
-        <Text style={[{ marginBottom: 12}, text.sectionHeader3]} onLayout={handleSpacing}>Favorite Sections</Text>
+          <Text
+            style={[{ marginBottom: 12 }, text.sectionHeader3]}
+            onLayout={handleSpacing}
+          >
+            Favorite Sections
+          </Text>
           <Text style={[menuStyles.descriptionText]}>
             Add and reorder sections to customize your home page.
           </Text>
           {/* TODO: do we need a lock icon? */}
-          <View style={[menuStyles.rowItem, {height: itemHeight}]}>
+          <View style={[menuStyles.rowItem, { height: itemHeight }]}>
             {/* <MaterialIcons
               name="lock-outline"
-              size={24}
+              size={32}
               color={varGray1}
               style={menuStyles.icon}
             /> */}
@@ -123,22 +174,29 @@ function SectionPrefScreen({ navigation }: NavProp) {
             keyExtractor={(item) => item.id.toString()}
             renderItem={renderItem}
             scrollEnabled={true}
+            accessibilityLabel="Favorite Sections"
+            accessibilityHint="Drag and drop sections to reorder them"
           />
         </View>
 
         <View>
           {removed.length > 0 && (
-            <Text style={[{ marginBottom: 12, marginTop: 16}, text.sectionHeader3]}>Removed Sections</Text>
+            <Text
+              style={[{ marginBottom: 12, marginTop: 16 }, text.sectionHeader3]}
+            >
+              Removed Sections
+            </Text>
           )}
           {removed.map((item) => (
             <TouchableOpacity
               onPress={() => add(item)}
-              style={[menuStyles.rowItem, {height: itemHeight}]}
+              style={[menuStyles.rowItem, { height: itemHeight }]}
               key={`section-${item.id}`}
+              accessible={true}
             >
               <Feather
                 name="plus-circle"
-                size={24}
+                size={32}
                 color="#249607"
                 style={menuStyles.icon}
               />
@@ -149,12 +207,12 @@ function SectionPrefScreen({ navigation }: NavProp) {
 
         <TouchableOpacity
           onPress={() => {
-            setPreferences(original);
+            setPreferences([...original]);
             setRemoved([]);
           }}
-          style={[menuStyles.rowItem, menuStyles.reset, {height: itemHeight}]}
+          style={[menuStyles.rowItem, menuStyles.reset, { height: itemHeight }]}
         >
-          <Text style={menuStyles.otherText}>Reset Sections</Text>
+          <Text style={menuStyles.otherText}>Reset to Default</Text>
         </TouchableOpacity>
       </NestableScrollContainer>
     </GestureHandlerRootView>
