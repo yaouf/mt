@@ -1,13 +1,15 @@
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback, useEffect, useState } from "react";
 import {
-    Dimensions,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { font2 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 
@@ -46,7 +48,7 @@ function UpdateScreen({ navigation }: NavProp) {
   }
 
   return (
-    <View onLayout={onLayoutRootView} style={styles.container}>
+    <SafeAreaView onLayout={onLayoutRootView} style={styles.container}>
       <View style={styles.topSection}>
         <Image
           source={require("assets/logo-black.png")}
@@ -55,13 +57,21 @@ function UpdateScreen({ navigation }: NavProp) {
           accessibilityHint="Brown Daily Herald Logo"
         />
       </View>
-      <View style={styles.middleSection}>
-        <Text style={styles.title}>Welcome Back!</Text>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.middleSection}
+        showsVerticalScrollIndicator={false}
+      >
+         <Text style={styles.title}>Welcome Back!</Text>
         <Text style={styles.description}>
-          We've added new notification preferences. Continue to update your
-          existing preferences.
+          We've made some exciting updates:
         </Text>
-      </View>
+        <View style={styles.bulletList}>
+          <Text style={styles.bulletPoint}>• New notification preferences for sections</Text>
+          <Text style={styles.bulletPoint}>• Customizable home page to reorder sections for your interests</Text>
+          <Text style={styles.bulletPoint}>• Bug fixes and performance improvements</Text>
+        </View>
+      </ScrollView>
       <View style={styles.bottomSection}>
         {showButton && (
           <TouchableOpacity
@@ -74,7 +84,7 @@ function UpdateScreen({ navigation }: NavProp) {
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -87,45 +97,70 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     paddingHorizontal: "5%",
+    height: "100%",
+    flexDirection: "column",
   },
   topSection: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    paddingTop: screenHeight * 0.05,
+    // paddingBottom: 0.01 * screenHeight,
+    // paddingTop: screenHeight * 0.02,
   },
-  middleSection: {
-    marginTop: screenHeight * 0.2,
+  scrollView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    paddingHorizontal: "7%",
+    width: "100%",
+
+  },
+  
+  middleSection: {
+    marginTop: screenHeight * 0.05,
+    // flex: 1,
+    // justifyContent: "center",
+    alignItems: "flex-start",
     width: "100%",
   },
   bottomSection: {
-    flex: 1,
+    // flex: 1,
     width: "100%",
     alignItems: "center",
-    justifyContent: "flex-start",
-    paddingBottom: screenHeight * 0.3,
+    justifyContent: "center",
+    paddingVertical: screenHeight * 0.02,
   },
   title: {
     fontFamily: font2,
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "700",
     color: "#000",
     marginTop: 0.0 * screenHeight,
   },
   description: {
     fontFamily: font2,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "400",
     color: "#000",
     marginTop: 0.01 * screenHeight,
     marginBottom: 16,
   },
+  bulletList: {
+    width: '100%',
+    marginTop: 18,
+  },
+  bulletPoint: {
+    fontFamily: font2,
+    fontSize: 18,
+    fontWeight: "400",
+    color: "#000",
+    marginBottom: 24,
+  },
+  bold: {
+    fontWeight: "700",
+  },
   img: {
-    width: "100%",
+    // width: "100%",
+    height: 70,
     // height: "15%",
     // marginTop: screenHeight * 0.05,
     // marginBottom: screenHeight * 0.05,
