@@ -69,6 +69,7 @@ function UpdateScreen({ navigation }: NavProp) {
         <View style={styles.bulletList}>
           <Text style={styles.bulletPoint}>• New notification preferences for sections</Text>
           <Text style={styles.bulletPoint}>• Customizable home page to reorder sections for your interests</Text>
+          <Text style={styles.bulletPoint}>• Double-tap in article view to save for later</Text>
           <Text style={styles.bulletPoint}>• Bug fixes and performance improvements</Text>
         </View>
       </ScrollView>
