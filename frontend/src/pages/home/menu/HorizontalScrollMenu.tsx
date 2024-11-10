@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import {
   PixelRatio,
   ScrollView,
@@ -17,6 +17,8 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
     useContext(MenuContext);
 
+    const scrollViewRef = useRef<ScrollView>(null);
+
   if (!sectionMenu) {
     setSectionMenu(menuItems);
     setAsync("sectionMenu", JSON.stringify(menuItems));
@@ -27,9 +29,28 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
   const calculatedIconSize = 24* Math.sqrt(textSizeMultiplier);
   console.log("calculatedIconSize", calculatedIconSize);
 
+  useEffect(() => {
+    // Need to wait for layout to complete before scrolling
+    setTimeout(() => {
+      const allButton = currSection === "all" ? 1 : 0;
+      const currentIndex = sectionMenu.findIndex(item => item.slug === currSection);
+      
+      // Calculate approximate position (may need to adjust these values later)
+      const itemWidth = 80; // Approximate width of each menu item
+      const scrollPosition = (currentIndex + allButton) * itemWidth;
+      
+      scrollViewRef.current?.scrollTo({
+        x: scrollPosition,
+        animated: true
+      });
+    }, 100);
+  }, [currSection]);
+
+
 
   return (
     <ScrollView
+      ref={scrollViewRef}
       horizontal
       showsHorizontalScrollIndicator={false}
       style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
