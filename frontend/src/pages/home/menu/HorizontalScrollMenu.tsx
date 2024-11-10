@@ -24,7 +24,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
   const textSizeMultiplier = PixelRatio.getFontScale();
   console.log("textSizeMultiplier", textSizeMultiplier);
-  const calculatedIconSize = 24 * Math.sqrt(textSizeMultiplier);
+  const calculatedIconSize = 24* Math.sqrt(textSizeMultiplier);
   console.log("calculatedIconSize", calculatedIconSize);
 
 
@@ -38,7 +38,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
     >
       <TouchableOpacity
         key={1}
-        style={menuStyles.menuItem}
+        style={[menuStyles.menuItem, { paddingLeft: 20 }]}
         onPress={() => navigation.push("SectionPref")}
         accessible={true}
         accessibilityRole="button"
