@@ -173,6 +173,7 @@ export const articleStyles = StyleSheet.create({
     alignItems: "flex-end",
     flexDirection: "row",
     gap: 30,
+    paddingHorizontal: 5,
   },
   icon: {
     width: 28,
