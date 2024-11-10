@@ -14,7 +14,7 @@ import { shareArticle } from "./ShareArticle";
  * share, save, (notifications for this section / author in a future version)
  */
 // TODO: rename to BottomArticleBar
-function BottomBar(props: ArticleDetailProps) {
+function BottomArticleBar(props: ArticleDetailProps) {
   const navigation = useNavigation();
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
@@ -97,4 +97,4 @@ function BottomBar(props: ArticleDetailProps) {
   );
 }
 
-export default BottomBar;
+export default BottomArticleBar;

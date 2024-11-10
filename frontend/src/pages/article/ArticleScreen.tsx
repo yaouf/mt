@@ -21,7 +21,7 @@ import { formatDates } from "src/utils/formatDates";
 import { handleBookmark } from "src/utils/helpers";
 import { baseStyles } from "../../styles/styles";
 import { SavedContext } from "../BottomNavigator";
-import BottomBar from "./BottomBar";
+import BottomArticleBar from "./BottomArticleBar";
 import SplitArticle from "./SplitContent";
 
 function ArticleScreen({
@@ -196,7 +196,7 @@ function ArticleScreen({
           transform: [{ translateY }],
         }}
       >
-        <BottomBar
+        <BottomArticleBar
           published_at={article.published_at}
           slug={article.slug}
           uuid={article.uuid}
