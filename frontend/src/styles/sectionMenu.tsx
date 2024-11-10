@@ -56,7 +56,7 @@ export const menuStyles = StyleSheet.create({
   },
   menuItemText: {
     fontSize: 14,
-    fontWeight: 500,
+    fontWeight: "500",
     textTransform: "uppercase",
     fontFamily: font2,
     color: varGray1,
@@ -64,7 +64,7 @@ export const menuStyles = StyleSheet.create({
   },
   menuItemSelected: {
     fontSize: 14,
-    fontWeight: 600,
+    fontWeight: "600",
     textTransform: "uppercase",
     fontFamily: font2,
     color: varTextColor,
