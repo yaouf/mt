@@ -71,7 +71,9 @@ export const menuStyles = StyleSheet.create({
     paddingTop: 5,
   },
   menuItem: {
-    paddingHorizontal: 16,
+    // paddingHorizontal: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
     paddingVertical: 10,
   },
   contentContainer: {

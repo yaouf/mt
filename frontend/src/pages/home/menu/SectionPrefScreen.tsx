@@ -116,6 +116,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
           accessible={true}
           accessibilityLabel="Close Section Prefences Menu"
           accessibilityHint="Close the section preferences screen without saving new preferences"
+          style={{ paddingHorizontal: 10 }}
         >
           <MaterialIcons name="close" size={28} color="#1C1B1F" />
         </TouchableOpacity>
@@ -130,6 +131,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
           accessible={true}
           accessibilityLabel="Apply Section Preferences"
           accessibilityHint="Apply new section preferences"
+          style={{ paddingHorizontal: 10 }}
         >
           <MaterialIcons
             name="check"
