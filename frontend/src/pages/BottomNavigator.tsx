@@ -50,7 +50,7 @@ export const SavedContext = createContext<SavedContextType>({
  * @param isUid - Boolean indicating if the URL contains a UID.
  * @returns An object containing the extracted parts.
  */
-function parseArticleUrl(url: string, isUid: boolean) {
+export function parseArticleUrl(url: string, isUid: boolean) {
   try {
     const parsedUrl = new URL(url);
     const pathSegments = parsedUrl.pathname.split("/").filter(Boolean);
@@ -79,6 +79,7 @@ function parseArticleUrl(url: string, isUid: boolean) {
       };
     }
   } catch (error) {
+    console.error("tried parsing article with", url, "and isUid", isUid);
     console.error("Error parsing URL:", error);
     return null;
   }
@@ -131,45 +132,44 @@ export default function BottomNavigator() {
   const response = Notifications.useLastNotificationResponse();
 
   useEffect(() => {
-    
     const listener = async () => {
-    if (response) {
-      console.log(response);
-      console.log("response in listener", response);
+      if (response) {
+        console.log(response);
+        console.log("response in listener", response);
 
-      const setArticle = async (article: Article) => {
-        // navigation.navigate("Article", {data: article});
-      };
+        const setArticle = async (article: Article) => {
+          // navigation.navigate("Article", {data: article});
+        };
 
-      const parsedArticle = parseArticleUrl(
-        response.notification.request.content.data.url,
-        response.notification.request.content.data.isUid
-      );
-
-      if (parsedArticle?.slug && parsedArticle?.publicationDate) {
-        console.log("parsedArticle", parsedArticle);
-        const fetchedArticle = await fetchArticle(
-          parsedArticle.slug,
-          parsedArticle.publicationDate,
-          setArticle
+        const parsedArticle = parseArticleUrl(
+          response.notification.request.content.data.url,
+          response.notification.request.content.data.isUid
         );
-        navigation.navigate("Article", { data: fetchedArticle });
-        trackEvent("notification_clicked", {
-          action: response.actionIdentifier,
-          slug: parsedArticle.slug,
-          date: parsedArticle.publicationDate,
-        });
-      } else {
-        console.log(
-          "Notification data does not contain a valid slug or publication date"
-        );
-        // TODO: handle UUID case
+
+        if (parsedArticle?.slug && parsedArticle?.publicationDate) {
+          console.log("parsedArticle", parsedArticle);
+          const fetchedArticle = await fetchArticle(
+            parsedArticle.slug,
+            parsedArticle.publicationDate,
+            setArticle
+          );
+          navigation.navigate("Article", { data: fetchedArticle });
+          trackEvent("notification_clicked", {
+            action: response.actionIdentifier,
+            slug: parsedArticle.slug,
+            date: parsedArticle.publicationDate,
+          });
+        } else {
+          console.log(
+            "Notification data does not contain a valid slug or publication date"
+          );
+          // TODO: handle UUID case
+        }
       }
-    }
-  }
+    };
 
-  listener();
-}, [response]);
+    listener();
+  }, [response]);
 
   console.log(
     "Title",

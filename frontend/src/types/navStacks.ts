@@ -17,6 +17,7 @@ export type HomeStackProps = {
 export type SearchStackProps = {
   SearchScreen: undefined;
   Article: { data: Article };
+  FilterScreen: undefined;
 };
 
 export type SettingsStackProps = {
