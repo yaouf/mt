@@ -59,7 +59,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
         {/* <TouchableOpacity onPress={() => remove(item)}>
           <Feather
             name="minus-circle"
-            size={32}
+            size={28}
             color={varRed}
             style={menuStyles.icon}
           />
@@ -67,7 +67,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
         <Text style={menuStyles.rowText}>{item.title}</Text>
         <Ionicons
           name="reorder-three-outline"
-          size={32}
+          size={28}
           color="#1C1B1F"
           style={menuStyles.icon}
         />
@@ -117,7 +117,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
           accessibilityLabel="Close Section Prefences Menu"
           accessibilityHint="Close the section preferences screen without saving new preferences"
         >
-          <MaterialIcons name="close" size={32} color="#1C1B1F" />
+          <MaterialIcons name="close" size={28} color="#1C1B1F" />
         </TouchableOpacity>
 
         <Text style={[menuStyles.otherText, { fontSize: 20, fontWeight: 600 }]}>
@@ -133,7 +133,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
         >
           <MaterialIcons
             name="check"
-            size={32}
+            size={28}
             color={hasChanges() ? "#1C1B1F" : varGray1}
           />
         </TouchableOpacity>
@@ -162,7 +162,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
           <View style={[menuStyles.rowItem, { height: itemHeight }]}>
             {/* <MaterialIcons
               name="lock-outline"
-              size={32}
+              size={28}
               color={varGray1}
               style={menuStyles.icon}
             /> */}
@@ -196,7 +196,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
             >
               <Feather
                 name="plus-circle"
-                size={32}
+                size={28}
                 color="#249607"
                 style={menuStyles.icon}
               />
