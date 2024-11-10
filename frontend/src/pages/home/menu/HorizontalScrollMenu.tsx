@@ -52,6 +52,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
     <ScrollView
       ref={scrollViewRef}
       horizontal
+      ref={scrollViewRef}
       showsHorizontalScrollIndicator={false}
       style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
       accessibilityLabel="Section menu"
@@ -70,7 +71,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
       
       {currSection === "all" ? (
-        <View 
+        <View
           style={menuStyles.menuItem}
           accessible={true}
           accessibilityRole="button"
@@ -85,7 +86,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
           style={menuStyles.menuItem}
           onPress={() => {
             // TODO: should this also be navigate?
-            navigation.popToTop();
+            navigation.navigate("HomeScreen", { slug: "all" });
             setCurrSection("all");
           }}
           accessible={true}
@@ -99,7 +100,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
       {sectionMenu.map((menuItem) =>
         menuItem.slug === currSection ? (
-          <View 
+          <View
             key={menuItem.id}
             style={menuStyles.menuItem}
             accessible={true}

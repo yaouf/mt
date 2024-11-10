@@ -10,7 +10,7 @@ import OpinionsGroup from "./sections/OpinionsGroup";
 import SmallHorzGroup from "./sections/SmallHorzGroup";
 import Top from "./sections/Top";
 
-interface Section_Type {
+export interface Section_Type {
   id: number;
   component: React.ReactNode;
 }
@@ -36,7 +36,7 @@ function HomeScreen({ navigation }: NavProp) {
       console.warn(e);
     } finally {
       setTopLoaded(true);
-      trackEvent("homescreen", {})
+      trackEvent("homescreen", {});
     }
   };
 
@@ -46,7 +46,7 @@ function HomeScreen({ navigation }: NavProp) {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchTop();  // Re-run the fetchTop function to reload top stories
+    await fetchTop(); // Re-run the fetchTop function to reload top stories
     setRefreshing(false);
   };
 
@@ -148,8 +148,7 @@ function HomeScreen({ navigation }: NavProp) {
         renderItem={({ item }) => item.component}
         keyExtractor={(item) => item.id.toString()}
         ItemSeparatorComponent={() => (
-          <View style={{ marginHorizontal: 16 }}>
-          </View>
+          <View style={{ marginHorizontal: 16 }}></View>
         )}
         initialNumToRender={1}
         refreshControl={

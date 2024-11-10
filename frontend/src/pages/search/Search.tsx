@@ -1,19 +1,24 @@
 import { trackEvent } from "@aptabase/react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   FlatList,
+  RefreshControl,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { fetchEditorsPicks, fetchSectionHome } from "src/api/fetchContent";
 import { Article } from "src/types/data";
 import { NavProp } from "src/types/navStacks";
 import HorizontalCard from "../../components/cards/HorizontalCard";
 import { varGray1, varTextColor } from "../../styles/styles";
+import { Section_Type } from "../home/HomeScreen";
+import EditorsPick from "../home/sections/EditorsPick";
+import MostPopular from "../home/sections/MostPopular";
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -92,9 +97,87 @@ function Search({ navigation }: NavProp) {
     outputRange: ["100%", "80%"],
   });
 
+  const [top, setTop] = useState<string[]>([]);
+  const [topLoaded, setTopLoaded] = useState(false);
+  const [topStories, setTopStories] = useState<Article[]>();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchTop = async () => {
+    try {
+      const data: Article[] = await fetchSectionHome("homepage", 5);
+      const top: string[] = data.map((a) => a.uuid);
+      setTop(top);
+      setTopStories(data);
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      setTopLoaded(true);
+      trackEvent("homescreen", {});
+    }
+  };
+
+  const [editorsPicks, setEditorsPicks] = useState<Article[]>([]);
+  useEffect(() => {
+    fetchEditorsPicks()
+      .then((articles) => {
+        setEditorsPicks(articles);
+      })
+      .catch((error) => {
+        console.error("Failed to load editor's picks:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchTop();
+    // fetchEditorsPicks();
+  }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await fetchTop();
+    setRefreshing(false);
+  };
+
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (topLoaded) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [topLoaded]);
+
+  // if (!topLoaded) {
+  //   return null;
+  // }
+
+  const sections: Section_Type[] = [
+    {
+      id: 1,
+      component: (
+        <EditorsPick topStories={editorsPicks} navigation={navigation} />
+      ),
+    },
+    {
+      id: 2,
+      component: (
+        <MostPopular topStories={topStories} navigation={navigation} />
+      ),
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
+        {/* <TouchableOpacity
+          onPress={() => navigation.push("FilterScreen")}
+          accessibilityLabel="Open filter drawer"
+        >
+          <MaterialIcons
+            name="tune"
+            size={20}
+            color={varGray1}
+            style={styles.searchIcon}
+            accessible={false}
+          />
+        </TouchableOpacity> */}
         <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
           <MaterialIcons
             name="search"
@@ -136,10 +219,22 @@ function Search({ navigation }: NavProp) {
       </View>
 
       {!searchCompleted && !loading && (
-        <View style={styles.instructionContainer}>
-          <Text style={styles.instructionText}>
-            Search for an article to get started.
-          </Text>
+        <View accessibilityLabel="Home Screen">
+          {topLoaded && editorsPicks.length > 0 && (
+            <FlatList
+              data={sections}
+              renderItem={({ item }) => item.component}
+              keyExtractor={(item) => item.id.toString()}
+              ItemSeparatorComponent={() => (
+              <View style={{ marginHorizontal: 16 }}></View>
+            )}
+            initialNumToRender={1}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            accessibilityLabel="Section Headers List"
+            />
+          )}
         </View>
       )}
 
