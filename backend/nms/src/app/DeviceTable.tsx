@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Device } from '../../pages/api/types/types';
 
-interface DeviceTableProps {
-    deviceCount: number; 
-  }
 
 
-  const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
+
+  const DeviceTable: React.FC = ({ }) => {
+  const [deviceCount, setDeviceCount] = useState<number>(0);
 const [devices, setDevices] = useState<Device[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -16,9 +15,10 @@ const [devices, setDevices] = useState<Device[]>([]);
   useEffect(() => {
     const fetchDevices = async () => {
       try {
-        const response = await fetch(`/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}`);        
+        const response = await fetch(`/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}${search ? `&search=${encodeURIComponent(search)}` : ''}`);        
         const data = await response.json();
-        setDevices(data);
+        setDevices(data.devices);
+        setDeviceCount(parseInt(data.totalDevices));
       } catch (error) {
         console.error("Error fetching devices:", error);
       }
