@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import {
   Image,
+  LayoutChangeEvent,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { Tag } from "src/types/data";
@@ -18,6 +21,7 @@ import {
 } from "../../styles/styles";
 
 function SearchCard({ article, navigation }: CardProps) {
+  const { fontScale } = useWindowDimensions();
   const all_tags = article.tags?.map((t: Tag) => t.name) || [];
   let breaking = false;
 
@@ -37,6 +41,26 @@ function SearchCard({ article, navigation }: CardProps) {
       article.dominantMedia.extension;
   }
 
+  const onLayoutHandler = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout;
+    console.log(height);
+  };
+
+  const SUBHEADER_LINES = 4;
+  const TITLE_LINES = 3;
+  const INITIAL_CARD_HEIGHT = 400;
+  const [cardHeight, setCardHeight] = useState(INITIAL_CARD_HEIGHT);
+
+  useEffect(() => {
+    console.log("fontScale", fontScale);
+    // Adjust height calculation based on fontScale
+    const scaledHeight = INITIAL_CARD_HEIGHT * fontScale;
+    console.log("newHeight", scaledHeight);
+    if (scaledHeight !== cardHeight) {
+      setCardHeight(scaledHeight);
+    }
+  }, [fontScale]); // Add fontScale as a dependency
+
   return (
     <View>
       <TouchableWithoutFeedback
@@ -44,46 +68,57 @@ function SearchCard({ article, navigation }: CardProps) {
         accessibilityRole="button"
         accessibilityHint={`Double tap to open article`}
       >
-        <View style={styles.card}>
+        <View
+          style={[styles.card, { height: cardHeight }]}
+          onLayout={onLayoutHandler}
+        >
           <Image
             source={{
               uri: img_uri,
             }}
             style={styles.image}
           />
-          <View style={styles.text}>
-            {breaking ? (
-              <View
-                style={styles.breakingBox}
-                accessibilityLabel="Section: Breaking News."
-              >
-                <Text style={styles.breaking}>Breaking News</Text>
-              </View>
-            ) : (
+          <View style={styles.bottomTextArea}>
+            <View style={styles.titlesContainer}>
+              {breaking ? (
+                <View
+                  style={styles.breakingBox}
+                  accessibilityLabel="Section: Breaking News."
+                >
+                  <Text style={styles.breaking}>Breaking News</Text>
+                </View>
+              ) : (
+                <Text
+                  style={styles.section}
+                  accessibilityLabel={`Section: ${all_tags[0].replace(
+                    "&;",
+                    "&"
+                  )}.`}
+                >
+                  {all_tags[0].replace("&;", "&")}
+                </Text>
+              )}
               <Text
-                style={styles.section}
-                accessibilityLabel={`Section: ${all_tags[0].replace(
-                  "&;",
-                  "&"
-                )}.`}
+                style={styles.title}
+                accessibilityLabel={`Headline: ${article.headline}.`}
+                numberOfLines={Math.floor(
+                  TITLE_LINES * 1.2 * Math.sqrt(fontScale)
+                )}
+                ellipsizeMode="tail"
               >
-                {all_tags[0].replace("&;", "&")}
+                {article.headline}
               </Text>
-            )}
-            <Text
-              style={styles.title}
-              accessibilityLabel={`Headline: ${article.headline}.`}
-            >
-              {article.headline}
-            </Text>
-            <Text
-              style={styles.subhead}
-              numberOfLines={6}
-              ellipsizeMode="tail"
-              accessibilityLabel={`Subtitle: ${article.subhead}`}
-            >
-              {article.subhead}
-            </Text>
+              <Text
+                style={styles.subhead}
+                numberOfLines={Math.floor(
+                  SUBHEADER_LINES * 1.2 * Math.sqrt(fontScale)
+                )}
+                ellipsizeMode="tail"
+                accessibilityLabel={`Subtitle: ${article.subhead}`}
+              >
+                {article.subhead}
+              </Text>
+            </View>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
                 <Text
@@ -91,6 +126,8 @@ function SearchCard({ article, navigation }: CardProps) {
                   accessibilityLabel={`Published on ${formatDates(
                     article.published_at
                   )}`}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
                 >
                   {formatDates(article.published_at)}
                 </Text>
@@ -132,8 +169,10 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     flexDirection: "column",
     alignItems: "stretch",
-    borderRadius: 0,
-    backgroundColor: "#FFF",
+    borderRadius: 10,
+    backgroundColor: "#f2f2f2",
+    // height: cardHeight,
+    // shadow looks bad
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,
@@ -143,7 +182,7 @@ const styles = StyleSheet.create({
     // shadowRadius: 29.949,
     // elevation: 3,
     marginTop: 16,
-    overflow: "visible",
+    overflow: "hidden",
     // marginVertical: 12,
   },
   section: {
@@ -178,22 +217,31 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
   },
-  text: {
+  bottomTextArea: {
     display: "flex",
+    flex: 1,
     flexDirection: "column",
+    justifyContent: "space-between",
     paddingTop: 12,
     paddingBottom: 8,
-    paddingHorizontal: 0,
+    paddingHorizontal: 16,
     alignItems: "flex-start",
     alignSelf: "stretch",
     gap: 4,
   },
   bottom: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
     alignSelf: "stretch",
+  },
+  titlesContainer: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    gap: 6,
   },
   publishedSection: {
     display: "flex",
