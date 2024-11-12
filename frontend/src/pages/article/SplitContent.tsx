@@ -1,8 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as WebBrowser from "expo-web-browser";
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useMemo, useRef, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
 import {
   HTMLContentModel,
   HTMLElementModel,
@@ -12,6 +17,10 @@ import WebView from "react-native-webview";
 import { fetchArticle } from "src/api/fetchContent";
 import { articleStyles } from "src/styles/article";
 import { Article } from "src/types/data";
+
+const adUnitId = __DEV__
+  ? TestIds.BANNER
+  : "ca-app-pub-8731315434789018/9601202667";
 
 const IframeRenderer = React.memo(
   ({ tnode }: any) => {
@@ -49,7 +58,8 @@ const IframeRenderer = React.memo(
       />
     );
   },
-  (prevProps, nextProps) => prevProps.tnode.attributes.src === nextProps.tnode.attributes.src
+  (prevProps, nextProps) =>
+    prevProps.tnode.attributes.src === nextProps.tnode.attributes.src
 );
 
 type SplitArticleType = {
@@ -64,55 +74,61 @@ function SplitArticle({ content }: SplitArticleType) {
   const [article, setArticle] = useState<Article | undefined>();
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const customHTMLElementModels = useMemo(() => ({
-    iframe: HTMLElementModel.fromCustomModel({
-      tagName: "iframe",
-      mixedUAStyles: {
-        width: "100%",
-      },
-      contentModel: HTMLContentModel.block,
+  const customHTMLElementModels = useMemo(
+    () => ({
+      iframe: HTMLElementModel.fromCustomModel({
+        tagName: "iframe",
+        mixedUAStyles: {
+          width: "100%",
+        },
+        contentModel: HTMLContentModel.block,
+      }),
+      a: HTMLElementModel.fromCustomModel({
+        tagName: "a",
+        mixedUAStyles: articleStyles.hyperlink,
+        contentModel: HTMLContentModel.textual,
+      }),
     }),
-    a: HTMLElementModel.fromCustomModel({
-      tagName: "a",
-      mixedUAStyles: articleStyles.hyperlink,
-      contentModel: HTMLContentModel.textual,
-    }),
-  }), []);
+    []
+  );
 
-  const handleLinkPress = useCallback(async (
-    event: any,
-    href: string
-  ) => {
-    const articleBaseURL = "https://www.browndailyherald.com/article/";
-    if (href.startsWith(articleBaseURL)) {
-      try {
-        const seg = href.split("/");
-        const slug = seg.pop();
-        const month = seg.pop();
-        const year = seg.pop();
-        const date = year + "-" + month;
+  const handleLinkPress = useCallback(
+    async (event: any, href: string) => {
+      const articleBaseURL = "https://www.browndailyherald.com/article/";
+      if (href.startsWith(articleBaseURL)) {
+        try {
+          const seg = href.split("/");
+          const slug = seg.pop();
+          const month = seg.pop();
+          const year = seg.pop();
+          const date = year + "-" + month;
 
-        if (!slug || !year || !month) {
-          throw new Error("Invalid URL format");
+          if (!slug || !year || !month) {
+            throw new Error("Invalid URL format");
+          }
+
+          const fetchedArticle = await fetchArticle(slug, date, setArticle);
+          setArticle(fetchedArticle);
+          navigation.push("Article", { data: fetchedArticle });
+        } catch (error) {
+          console.error("Error fetching article:", error);
         }
-
-        const fetchedArticle = await fetchArticle(slug, date, setArticle);
-        setArticle(fetchedArticle);
-        navigation.push("Article", { data: fetchedArticle });
-      } catch (error) {
-        console.error("Error fetching article:", error);
+      } else {
+        await WebBrowser.openBrowserAsync(href);
       }
-    } else {
-      await WebBrowser.openBrowserAsync(href);
-    }
-  }, [navigation]);
+    },
+    [navigation]
+  );
 
   const renderers = useMemo(() => ({ iframe: IframeRenderer }), []);
-  const renderersProps = useMemo(() => ({
-    a: {
-      onPress: handleLinkPress,
-    },
-  }), [handleLinkPress]);
+  const renderersProps = useMemo(
+    () => ({
+      a: {
+        onPress: handleLinkPress,
+      },
+    }),
+    [handleLinkPress]
+  );
 
   // Split content by paragraphs
   const splitContent = useMemo(() => {
@@ -133,28 +149,36 @@ function SplitArticle({ content }: SplitArticleType) {
   }, [source.html]);
 
   // Function to render ads as components
-  const renderAdComponent = useCallback(() => (
-    <View style={articleStyles.advert}>
-      <Image
+  const renderAdComponent = useCallback(
+    () => (
+      <View style={articleStyles.advert}>
+        {/* <Image
         source={{
           uri: "https://www.peacemakersnetwork.org/wp-content/uploads/2019/09/placeholder.jpg",
         }}
         style={articleStyles.adImage}
-      />
-      <Text style={articleStyles.adAuthor}>Advertisement</Text>
-    </View>
-  ), []);
+      /> */}
+        <Text style={articleStyles.adText}>Advertisement</Text>
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.MEDIUM_RECTANGLE}
+          onAdFailedToLoad={(error) =>
+            console.error("Ad failed to load:", error)
+          }
+        />
+      </View>
+    ),
+    []
+  );
 
   // Render content with ads inserted at placeholder positions
   return (
     <View style={articleStyles.articleBodyWrapper}>
       <View style={articleStyles.articleBody}>
         {splitContent.map((paragraph, index) => {
-          // if (paragraph === "<!-- ADVERTISEMENT_PLACEHOLDER -->") {
-          //   // Render ad component when encountering placeholder
-          //   return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
-          // }
-
+          if (paragraph === "<!-- ADVERTISEMENT_PLACEHOLDER -->") {
+            return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
+          }
           // Render normal paragraph content
           return (
             <RenderHTML
@@ -175,7 +199,7 @@ function SplitArticle({ content }: SplitArticleType) {
 
 const styles = StyleSheet.create({
   webView: {
-    width: '100%',
+    width: "100%",
     marginVertical: 10,
   },
 });

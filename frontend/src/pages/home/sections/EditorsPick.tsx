@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { View, ActivityIndicator, Text, ScrollView } from "react-native";
-import { Article } from "src/types/data";
-import { baseStyles, varGray1 } from "src/styles/styles";
-import Divider from "src/components/Divider";
 import { StackNavigationProp } from "@react-navigation/stack";
-import SmallPhotoCardTop from "src/components/cards/SmallPhotoCardTop";
-import LargeSectionCard from "src/components/cards/LargeSectionCard";
-import LargeCard from "src/components/cards/LargeCard";
+import React from "react";
+import { ActivityIndicator, ScrollView, Text, View } from "react-native";
 import SearchCard from "src/components/cards/SearchCard";
-import { fetchEditorsPicks } from "src/code/fetchContent";
+import { baseStyles, varGray1 } from "src/styles/styles";
+import { Article } from "src/types/data";
 
 type TopProps = {
   navigation: StackNavigationProp<any, any>;
@@ -40,7 +35,7 @@ function EditorsPicksComponent(props: TopProps) {
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{
-            paddingLeft: 10,
+            // paddingLeft: 10,
             paddingBottom: 30,
             overflow: "visible",
           }}

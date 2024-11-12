@@ -1,7 +1,7 @@
 import { trackEvent } from "@aptabase/react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { default as React, useContext, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Image,
