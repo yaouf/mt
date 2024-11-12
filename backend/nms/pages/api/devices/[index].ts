@@ -17,9 +17,11 @@ export default async function getDevices(
 
     const devices = await db("devices")
       .select("*")
+      .orderBy("expoPushToken", "asc")
       .offset(offset)
-      .limit(devicesPerPage); 
-    console.log("the returned devices:",devices);
+      .limit(devicesPerPage)
+      .where(true); 
+
     res.status(200).json(devices);
   } catch (error) {
     console.error("Error fetching devices from the database:", error);

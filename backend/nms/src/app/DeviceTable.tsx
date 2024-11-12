@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Device } from '../../pages/api/types/types';
+
 interface DeviceTableProps {
     deviceCount: number; 
   }
@@ -8,13 +9,14 @@ interface DeviceTableProps {
   const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
 const [devices, setDevices] = useState<Device[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const DEVICES_PER_PAGE = 10;
+  const [search, setSearch] = useState("");
+  const DEVICES_PER_PAGE = 30;
 
   
   useEffect(() => {
     const fetchDevices = async () => {
       try {
-        const response = await fetch(`/api/devices/index?page=${currentPage}perPage=${DEVICES_PER_PAGE}`);        
+        const response = await fetch(`/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}`);        
         const data = await response.json();
         setDevices(data);
       } catch (error) {
@@ -30,6 +32,8 @@ const [devices, setDevices] = useState<Device[]>([]);
     
     <div className="container mx-auto p-5 mt-14">
       <h1 className="text-2xl font-bold mb-4">Device List</h1>
+      <input type="text" placeholder="Expo Push Token" className="border border-gray-300 p-2 rounded-md" value = {search}
+      onChange={(e) => setSearch(e.target.value)}/>
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
