@@ -29,6 +29,12 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("Metro").notNullable();
         table.string("url").nullable();
         table.string("status").notNullable();
+        table.boolean("isUid").notNullable();
+      })
+    ).then(() =>
+      knex.schema.createTable("editorspicks", table => {
+        table.increments("id").primary();
+        table.string("url").notNullable().unique();
       })
     );
 }
@@ -36,5 +42,6 @@ export async function up(knex: Knex): Promise<void> {
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.dropTableIfExists("users");
   await knex.schema.dropTableIfExists("devices");
+  await knex.schema.dropTableIfExists("editorspicks");
   return knex.schema.dropTableIfExists("notifications");
 }

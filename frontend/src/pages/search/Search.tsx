@@ -1,26 +1,25 @@
 import { useRef, useState, useEffect } from "react";
-import { View, TextInput, FlatList, Image, Text, Button } from "react-native";
-import { varGray1 } from "../../styles/styles";
+import { View, TextInput, FlatList, Image, Text, TouchableOpacity, StyleSheet, Animated, Dimensions } from "react-native";
+import { varGray1, varTextColor } from "../../styles/styles";
 import { search } from "src/styles/search";
-import { MaterialIcons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { NavProp } from "src/types/navStacks";
 import HorizontalCard from "../../components/cards/HorizontalCard";
 import { Article } from "src/types/data";
-import {trackEvent} from "@aptabase/react-native";
+import { trackEvent } from "@aptabase/react-native";
+
+const { width: screenWidth } = Dimensions.get('window');
 
 function Search({ navigation }: NavProp) {
   const textInputRef = useRef<TextInput>(null);
-
   const [searchActivated, setSearchActivated] = useState(false);
   const [text, onChangeText] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
+  const animatedWidth = useRef(new Animated.Value(0)).current;
 
   const handleSearch = async () => {
-    setSearchActivated(false);
     setLoading(true);
     trackEvent("search", {text});
     try {
@@ -32,8 +31,8 @@ function Search({ navigation }: NavProp) {
       const articleList: Article[] = resultObject.items;
 
       setArticles(articleList);
-      setLoading(false)
-      setSearchCompleted(true); // Hide the logo when search is completed
+      setLoading(false);
+      setSearchCompleted(true);
     } catch (error) {
       setLoading(false);
       console.error("Error" + error);
@@ -44,85 +43,168 @@ function Search({ navigation }: NavProp) {
     setSearchActivated(false);
     textInputRef.current?.clear();
     textInputRef.current?.blur();
-    setSearchCompleted(false); // Show the logo again if search is canceled
+    setSearchCompleted(false);
+    onChangeText("");
+    Animated.timing(animatedWidth, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
   };
 
-  return (
-    
-    <View>
+  const handleClearText = () => {
+    onChangeText("");
+    textInputRef.current?.focus();
+  };
 
-      <View style={search.searchbar}>
-        <MaterialIcons
-          name="search"
-          size={24}
-          color={varGray1}
-          style={{ marginHorizontal: 8 }}
-        />
-        <TextInput
-          onChangeText={onChangeText}
-          ref={textInputRef}
-          value={text}
-          placeholder="Search"
-          autoFocus={true}
-          style={search.searchText}
-          onFocus={() => setSearchActivated(true)}
-          onSubmitEditing={handleSearch} // Handle search on submit
-        />
+  const handleFocus = () => {
+    setSearchActivated(true);
+    Animated.timing(animatedWidth, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const inputWidth = animatedWidth.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['100%', '80%'],
+  });
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
+          <MaterialIcons
+            name="search"
+            size={20}
+            color={varGray1}
+            style={styles.searchIcon}
+            accessible={false}
+          />
+          <TextInput
+            onChangeText={onChangeText}
+            ref={textInputRef}
+            value={text}
+            placeholder="Search"
+            style={styles.input}
+            onFocus={handleFocus}
+            onSubmitEditing={handleSearch}
+            accessibilityLabel="Search input"
+            accessibilityHint="Enter keywords to search for articles"
+          />
+          {text.length > 0 && (
+            <TouchableOpacity onPress={handleClearText} accessibilityLabel="Clear search text">
+              <Ionicons name="close-circle" size={20} color={varGray1} />
+            </TouchableOpacity>
+          )}
+        </Animated.View>
         {searchActivated && (
           <TouchableOpacity
             onPress={handleSearchCancel}
-            style={search.searchCancel}
+            accessibilityLabel="Cancel search"
+            accessibilityHint="Clear search input and cancel search"
+            accessibilityRole="button"
           >
-            <Ionicons
-              name="close-circle-outline"
-              size={24}
-              color={varGray1}
-              style={{ marginHorizontal: 8 }}
-            />
+            <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
         )}
       </View>
       
-      <View style={search.container}>
-        {!searchCompleted && (loading ?
-          <Image
-        source={require("assets/logo-black.png")}
-        style={search.img}
-        resizeMode="contain"
-          />
-        :
-        <Text
-          style={{
-            color: "gray",
-            marginVertical: 300,
-            alignSelf: "center",
-          }}
-        >
-          Search for an article to get started.
-        </Text>
+      {!searchCompleted && !loading && (
+        <View style={styles.instructionContainer}>
+          <Text style={styles.instructionText}>
+            Search for an article to get started.
+          </Text>
+        </View>
       )}
-      </View>
       
-      <View>
-        {searchCompleted &&
-          <FlatList
-            data={articles}
-            renderItem={({ item, index }) => (
-              <HorizontalCard
-                article={item}
-                navigation={navigation}
-                key={`search-result-${index}`}
-              />
-            )}
-            ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}
-            style={{ marginTop: 16, marginBottom: 186 }}
-            initialNumToRender={8}
+      {loading && (
+        <View style={styles.loadingContainer}>
+          <Image
+            source={require("assets/logo-black.png")}
+            style={search.img}
+            resizeMode="contain"
+            accessible={false}
           />
-      }
-      </View>
+        </View>
+      )}
       
+      {searchCompleted && (
+        <FlatList
+          data={articles}
+          renderItem={({ item, index }) => (
+            <HorizontalCard
+              article={item}
+              navigation={navigation}
+              key={`search-result-${index}`}
+            />
+          )}
+          ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}
+          contentContainerStyle={styles.resultsContainer}
+          initialNumToRender={8}
+        />
+      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flex: 1,
+  },
+  searchIcon: {
+    marginRight: 5,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 8,
+  },
+  cancelText: {
+    color: varTextColor,
+    fontSize: 16,
+    marginLeft: 10,
+    flexShrink: 1,
+  },
+  instructionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  instructionText: {
+    color: "gray",
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  resultsContainer: {
+    paddingHorizontal: 15,
+    paddingTop: 16,
+  },
+});
 
 export default Search;

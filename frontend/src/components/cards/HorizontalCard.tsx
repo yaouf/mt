@@ -47,7 +47,8 @@ function HorizontalCard({ article, navigation }: CardProps) {
                 >
                   {article.headline}
                 </Text>
-                <Text style={styles.published}>
+                <Text style={styles.published}
+                >
                   {formatDates(article.published_at)}
                 </Text>
                 </View>
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     flexWrap: "nowrap",
     fontFamily: font1,
-    fontSize: 16,
+    fontSize: 18,
     fontStyle: "normal",
     fontWeight: "700",
     lineHeight: 18,

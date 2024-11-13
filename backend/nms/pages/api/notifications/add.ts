@@ -30,15 +30,17 @@ export default async function addNotification(
     const title = data.title;
     const body = data.body;
     const tags = data.tags;
-    const slug = data.slug;
-    const mediaType = data.mediaType;
-    const publicationDate = data.publicationDate;
-    const domain = data.domain;
+    // const slug = data.slug;
+    // const mediaType = data.mediaType;
+    // const publicationDate = data.publicationDate;
+    // const domain = data.domain;
 
-    const uid = data.uid;
+    // const uid = data.uid;
+    const url = data.url;
+    const isUid = data.isUid;
 
     // Validate required fields
-    if (!time || !title || !tags || !domain) {
+    if (!time || !title || !tags || !url) {
       // find which field is missing
       console.log(time)
       return res.status(400).json({ message: "Missing fields." });
@@ -49,18 +51,17 @@ export default async function addNotification(
     const breakingNews = tags.includes("Breaking News");
     const universityNews = tags.includes("University News");
     const metro = tags.includes("Metro");
-
-    let url: string = '';
-    let isUid: boolean = false;
+    
     // Create url from uid
-    if (uid) {
-      url = `${domain}/${uid}`;
-      isUid = true;
-    } else {
-          // Create url from slug, mediaType, and publicationDate
-    url = `${domain}/${mediaType}/${publicationDate}/${slug}`;
-    }
+    // if (isUid) {
+    //   url = `${domain}/${uid}`;
+    //   isUid = true;
+    // } else {
+    //       // Create url from slug, mediaType, and publicationDate
+    // url = `${domain}/${mediaType}/${publicationDate}/${slug}`;
+    // }
     console.log("url", url);
+    console.log("isUid", isUid);
     // Insert the notification data into the "notifications" table
     const insertedRows = await db("notifications")
       .insert({
@@ -71,6 +72,7 @@ export default async function addNotification(
         "University News": universityNews,
         "Metro": metro,
         url: url,
+        isUid: isUid,
         status: "pending",
       })
       .returning("id");
@@ -85,20 +87,21 @@ export default async function addNotification(
 
     // Calculate the delay in milliseconds
     const dateTime = new Date(time);
+    console.log("current time", Date.now(), "scheduled time", dateTime.getTime());
     const milliseconds = dateTime.getTime() - Date.now();
     console.log("milliseconds", milliseconds);
 
     // Add the notification to the queue
-    const job = await notificationQueue.add("notification",
+    const _job = await notificationQueue.add("notification",
       { jobId, time, title, body, tags, url, isUid },
       { delay: milliseconds, jobId: jobId.toString() + "_n" }
     );
-    console.log("job", job);
+    // console.log("job", job);
 
     // const scheduledNotifications = await notificationQueue.getDelayed();
     // console.log(scheduledNotifications);
 
-    const notifications = await db("notifications").select("*");
+    const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "url", "isUid");
     console.log(notifications);
     res.status(200).json(notifications);
   } catch (error) {

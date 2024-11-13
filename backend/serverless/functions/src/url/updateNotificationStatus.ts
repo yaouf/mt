@@ -5,10 +5,18 @@ import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
+/**
+ * Updates the boolean that indicates whether a device should receive push notifications.
+ * Takes a deviceId and a boolean value for isPushEnabled to update to.
+ * Called when a user subscribes or unsubscribes from push notifications in iOS Settings.
+ * NOTE: Not currently in use. 
+ */
 export const updateNotificationStatus = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
 
-  const { environment, stagingDbUrl } = envars;
+  // Call .value() in runtime 
+  const environment = envars.environment.value();
+  const dbUrl = envars.dbUrl.value();
 
     // Request body validation schema
   const schema = Joi.object({
@@ -32,7 +40,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
   // Extract ID and currentNotificationStatus from request body
   const { deviceId, isPushEnabled } = validBody;
 
-  const dbParams = { environment, stagingDbUrl };
+  const dbParams = { environment, dbUrl };
 
   try {
     // Check the current status in the database

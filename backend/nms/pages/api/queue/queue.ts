@@ -46,7 +46,7 @@ const worker = new Worker("notificationQueue", async (job) => {
   }
 
   const devices = Array.from(deviceMap.values());
-  console.log("devices", devices);
+  // console.log("devices", devices);
   // if (tags.includes("breaking-news")) {
   //   // Fetch all devices that have subscribed to breaking news alerts
   //   const breakingDevices = await db("devices").select("expoPushToken").where("breakingNewsAlerts", true) as Device[];
@@ -66,7 +66,7 @@ const worker = new Worker("notificationQueue", async (job) => {
   // Send notifications to all devices
   devices.forEach((device) => {
     // Send the notification to the device
-    console.log(`Sending notification to ${device.expoPushToken}`);
+    // console.log(`Sending notification to ${device.expoPushToken}`);
 
     // Notifcation sending
 
@@ -129,7 +129,7 @@ const worker = new Worker("notificationQueue", async (job) => {
       for (let chunk of receiptIdChunks) {
         try {
           let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
-          console.log(receipts);
+          // console.log(receipts);
 
           // Handle the receipts to determine if the notifications were successfully sent
           for (let receiptId in receipts) {

@@ -180,7 +180,7 @@ function SettingsScreen({ navigation }: NavProp) {
           More BDH
         </Text>
         {links.map((link, i) => (
-          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12, }}>
+          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
             <SettingsLink title={link.title} link={link.link} />
           </View>
         ))}
@@ -209,7 +209,7 @@ function SettingsScreen({ navigation }: NavProp) {
           style={{
             marginHorizontal: 16,
             marginVertical: 20,
-            fontSize: 12,
+            fontSize: 14,
             color: varTextColor,
             fontFamily: font2,
           }}

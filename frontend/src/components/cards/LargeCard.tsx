@@ -41,6 +41,8 @@ function LargeCard({ article, navigation }: CardProps) {
     <View>
       <TouchableWithoutFeedback
         onPress={() => navigation.push("Article", { data: article })}
+        accessibilityRole="button"
+        accessibilityHint={`Double tap to open article`}
       >
         <View style={styles.card}>
           <Image
@@ -51,23 +53,33 @@ function LargeCard({ article, navigation }: CardProps) {
           />
           <View style={styles.text}>
             {breaking ? (
-              <View style={styles.breakingBox}>
+              <View style={styles.breakingBox}
+                accessibilityLabel="Section: Breaking News."
+              >
                 <Text style={styles.breaking}>Breaking News</Text>
               </View>
             ) : (
-              <Text style={styles.section}>
+              <Text style={styles.section}
+                accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
+              >
                 {all_tags[0].replace("&;", "&")}
               </Text>
             )}
-            <Text style={styles.title}>
+            <Text style={styles.title}
+              accessibilityLabel={`Headline: ${article.headline}.`}
+            >
               {article.headline}
             </Text>
-            <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail">
+            <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail"
+              accessibilityLabel={`Subtitle: ${article.subhead}`}
+            >
               {article.subhead}
             </Text>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
-                <Text style={styles.published}>
+                <Text style={styles.published}
+                  accessibilityLabel={`Published on ${formatDates(article.published_at)}`}
+                >
                   {formatDates(article.published_at)}
                 </Text>
               </View>

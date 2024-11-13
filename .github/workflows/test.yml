@@ -2,16 +2,21 @@ name: Run Tests
 
 on:
   pull_request:
+    paths:
+      - "backend/**"
   push:
     branches:
       - develop
+    paths:
+      - "backend/**"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     env:
       DB_URL: ${{ secrets.DB_URL }}
-      NODE_ENV: development
+      NODE_ENV: test
+      ENV: test
       NEXT_PUBLIC_FB_API_KEY: ${{secrets.NEXT_PUBLIC_FB_API_KEY}}
       NEXT_PUBLIC_FB_AUTH_DOMAIN: ${{secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN}}
       NEXT_PUBLIC_FB_PROJECT_ID: ${{secrets.NEXT_PUBLIC_FB_PROJECT_ID}}

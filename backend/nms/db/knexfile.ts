@@ -9,7 +9,7 @@ console.log(rootDir);
 // if rootDir is nms, then use db/dist/dev.sqlite3
 // (since db is nested under nms)
 const startPath = rootDir.endsWith("db") ? "../" : "";
-
+console.log("env in db", env.ENV);
 const config: { [key: string]: Knex.Config } = {
   test: {
     client: "sqlite3",
@@ -39,13 +39,12 @@ const config: { [key: string]: Knex.Config } = {
       directory: "./data/migrations",
     },
   },
-
   staging: {
     client: "pg",
     connection: env.DB_URL,
     pool: {
       min: 2,
-      max: 10,
+      max: 15,
     },
     migrations: {
       directory: "./data/migrations",

@@ -101,6 +101,10 @@ function Notif({
         trackColor={{ true: "#000000", false: "grey" }}
         value={toggleValue}
         onValueChange={() => toggle()}
+        accessibilityLabel={`${title} notifications`}
+        accessibilityHint={`Toggle to enable or disable ${title} notifications`}
+        accessibilityRole="switch"
+        accessibilityState={{ checked: toggleValue }}
       />
     </View>
   );

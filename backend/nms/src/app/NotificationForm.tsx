@@ -1,8 +1,16 @@
 "use client";
 
+import moment from "moment-timezone";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { validate as isValidUUID } from "uuid";
+import ConfirmationModal from "./ConfirmationModal";
+
+const TITLE_CHAR_LIM = 43; // max notif title length for normal text size (I think).
+const BODY_CHAR_LIM = 165; // max notif body length for normal text size.
+const BANNER_DURATION = 5000; // how long the dashboard banner stays up after a notification is sent.
+
+const isProduction = process.env.NODE_ENV === "production";
 
 const NotificationForm = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
@@ -10,13 +18,17 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     title: "",
     body: "",
     tags: [] as string[],
-    slug: "",
-    mediaType: "",
-    publicationDate: "",
-    domain: "https://www.browndailyherald.com"
+    url: "",
   });
 
-  const handleInputChange = (e) => {
+  const [bannerMessage, setBannerMessage] = useState("");
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const [bannerTimeout, setBannerTimeout] =
+    useState<ReturnType<typeof setTimeout>>();
+  const [isFailed, setIsFailed] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setNewFormData((prevData) => ({
       ...prevData,
@@ -24,7 +36,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }));
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
     if (checked) {
       setNewFormData((prevData) => ({
@@ -39,56 +51,40 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     }
   };
 
-  const handleSlugChange = (e) => {
-    const { value } = e.target;
-    setNewFormData((prevData) => ({
-      ...prevData,
-      slug: value,
-    }));
+  const handleScheduleNotification = () => {
+    if (isProduction) {
+      setIsConfirmModalOpen(true);
+    } else {
+      confirmScheduleNotification();
+    }
   };
 
-  const handleMediaTypeChange = (e) => {
-    const { value } = e.target;
-    setNewFormData((prevData) => ({
-      ...prevData,
-      mediaType: value,
-    }));
-  };
-
-  const handlePublicationDateChange = (date) => {
-    // Format the date as "YYYY/MM"
-    const formattedDate = `${date.getFullYear()}/${(date.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}`;
-
-    setNewFormData((prevData) => ({
-      ...prevData,
-      publicationDate: formattedDate,
-    }));
-  };
-
-   const handleDomainChange = (e) => {
-    const { value } = e.target;
-
-   setNewFormData((prevData) => ({
-    ...prevData,
-    domain: value
-   }));
-  };
-
-  const handleScheduleNotification = async () => {
+  const confirmScheduleNotification = async () => {
     try {
-      console.log("newNotification", newFormData);
+      const userTimeZone = moment.tz.guess();
+      const localTime = newFormData.time;
+      const utcTime = moment.tz(localTime, userTimeZone).utc().format();
+
+      const lastSegment = newFormData.url.split("/").pop();
+      const isUid = isValidUUID(lastSegment);
+
+      // Update the form data with UTC time before sending it to the server
+      const updatedFormData = {
+        ...newFormData,
+        time: utcTime,
+        isUid: isUid,
+      };
+
+      console.log("newNotification", updatedFormData);
       const response = await fetch("/api/notifications/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newFormData),
+        body: JSON.stringify(updatedFormData),
       });
 
       if (response.ok) {
-        console.log("Scheduled Notification:", newFormData);
         const data = (await response.json()) as any[];
         setScheduledNotifications(data);
 
@@ -98,22 +94,54 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           title: "",
           body: "",
           tags: [],
-          slug: "",
-          mediaType: "",
-          publicationDate: "",
-          domain: "https://www.browndailyherald.com"
+          url: "",
         });
+
+        setIsFailed(false);
+        showBanner("Sent successfully!");
       } else {
         console.error("Error scheduling notification");
+        setIsFailed(true);
+        showBanner("Send failed");
       }
     } catch (error) {
       console.error("Error:", error);
+      setIsFailed(true);
+      showBanner("Send failed");
     }
+  };
+
+  const showBanner = (message) => {
+    setBannerMessage(message);
+    setBannerVisible(true);
+    clearTimeout(bannerTimeout);
+    document.documentElement.style.setProperty(
+      "--banner-duration",
+      `${BANNER_DURATION / 1000}s`
+    );
+    const timeout = setTimeout(() => {
+      setBannerVisible(false);
+    }, BANNER_DURATION); // Hide banner after X seconds
+    setBannerTimeout(timeout);
   };
 
   return (
     <div className="container mx-auto px-8 py-2">
-      <h2 className="text-2xl font-bold mb-4">Create a New Notification by Slug</h2>
+      {bannerVisible && (
+        <div
+          className={`fixed top-4 left-1/2 transform -translate-x-1/2 text-center py-2 px-4 rounded-lg shadow-lg ${
+            isFailed ? "bg-red-500 text-white" : "bg-blue-500 text-white"
+          }`}
+        >
+          <span className="font-bold">{bannerMessage}</span>
+          <div
+            className={`h-1 mt-2 rounded-full ${
+              isFailed ? "bg-red-700" : "bg-blue-700"
+            } animate-progress`}
+          ></div>
+        </div>
+      )}
+      <h2 className="text-2xl font-bold mb-4">Create a New Notification</h2>
       <form>
         {/* Input for time */}
         <div className="mb-4">
@@ -134,7 +162,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         </div>
 
         {/* Input for title */}
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="title"
@@ -147,13 +175,26 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             name="title"
             value={newFormData.title}
             onChange={handleInputChange}
-            className="border rounded-md px-3 py-2 w-full"
+            className={`border rounded-md px-3 py-2 w-full ${
+              newFormData.title.length > TITLE_CHAR_LIM
+                ? "border-red-500 focus:outline-red-500"
+                : ""
+            }`}
             placeholder="Notification title"
           />
+          <span
+            className={`absolute bottom-1 right-2 text-sm ${
+              newFormData.title.length > TITLE_CHAR_LIM
+                ? "text-red-500"
+                : "text-gray-500"
+            }`}
+          >
+            {newFormData.title.length}/{TITLE_CHAR_LIM}
+          </span>
         </div>
 
         {/* Input for body */}
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="body"
@@ -165,13 +206,27 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             name="body"
             value={newFormData.body}
             onChange={handleInputChange}
-            className="border rounded-md px-3 py-2 w-full"
+            className={`border rounded-md px-3 py-2 w-full ${
+              newFormData.body.length > BODY_CHAR_LIM
+                ? "border-red-500 focus:outline-red-500"
+                : ""
+            }`}
             placeholder="Notification body"
           />
+          <span
+            className={`absolute bottom-1 right-2 text-sm ${
+              newFormData.body.length > BODY_CHAR_LIM
+                ? "text-red-500"
+                : "text-gray-500"
+            }`}
+          >
+            {newFormData.body.length}/{BODY_CHAR_LIM}
+          </span>
         </div>
 
         {/* Checkboxes for tags */}
         <div className="mb-4">
+          {/* TODO: add htmlFor=tags to label and id=tags for label */}
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Tags
           </label>
@@ -205,7 +260,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 type="checkbox"
                 name="tags"
                 value="Metro"
-                 data-testid="metro-uid"
+                data-testid="metro-uid"
                 checked={newFormData.tags.includes("Metro")}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
@@ -215,94 +270,23 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           </div>
         </div>
 
-        {/* Input for slug */}
+        {/* Input for URL */}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="slug"
+            htmlFor="url"
           >
-            Article Slug
+            Article URL
           </label>
           <input
             type="text"
-            id="slug"
-            name="slug"
-            value={newFormData.slug}
-            onChange={handleSlugChange}
+            id="url"
+            name="url"
+            value={newFormData.url}
+            onChange={handleInputChange}
             className="border rounded-md px-3 py-2 w-full"
-            placeholder="Article slug"
+            placeholder="https://www.browndailyherald.com/article/2024/09/sydney-skybetter-named-new-faculty-director-of-brown-arts-institute"
           />
-        </div>
-
-        {/* Datepicker for article publication date */}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="articlePublicationDate"
-          >
-            Article Publication Date
-          </label>
-          <DatePicker
-            id="articlePublicationDate"
-            selected={newFormData.publicationDate}
-            onChange={handlePublicationDateChange}
-            dateFormat="yyyy/MM"
-            className="border rounded-md px-3 py-2 w-full"
-          />
-        </div>
-
-        {/* Dropdown for media type */}
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="mediaType"
-          >
-            Media Type
-          </label>
-          <select
-            id="mediaType"
-            name="mediaType"
-            value={newFormData.mediaType}
-            onChange={handleMediaTypeChange}
-            className="border rounded-md px-3 py-2 w-full"
-          >
-            <option value="">Select Media Type</option>
-            <option value="article">Article</option>
-            <option value="page">Page</option>
-            <option value="gallery">Gallery</option>
-            <option value="multimedia">Multimedia</option>
-          </select>
-        </div>
-
-        {/* Radio buttons */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Domain
-          </label>
-          <div>
-            <label className="inline-flex items-center">
-              <input
-                type="radio"
-                name="options"
-                value="https://www.browndailyherald.com"
-                checked={newFormData.domain === "https://www.browndailyherald.com"}
-                onChange={handleDomainChange}
-                className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
-              />
-              <span className="ml-2">Normal</span>
-            </label>
-            <label className="inline-flex items-center ml-4">
-              <input
-                type="radio"
-                name="options"
-                value="https://www.projects.browndailyherald.com"
-                checked={newFormData.domain === "https://www.projects.browndailyherald.com"}
-                onChange={handleDomainChange}
-                className="form-radio text-blue-500 border-gray-300 focus:ring-blue-500"
-              />
-              <span className="ml-2">Projects</span>
-            </label>
-          </div>
         </div>
 
         {/* Button to schedule notification */}
@@ -313,6 +297,16 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         >
           Schedule Notification
         </button>
+
+        {/* Modal to confirm scheduling */}
+        {isProduction && (
+          <ConfirmationModal
+            isOpen={isConfirmModalOpen}
+            onClose={() => setIsConfirmModalOpen(false)}
+            onConfirm={confirmScheduleNotification}
+            message="Are you sure you want to schedule this notification to production?"
+          />
+        )}
       </form>
     </div>
   );

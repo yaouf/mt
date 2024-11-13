@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm i && tsc",
-    "knex": "npx knex",
-    "update": "npm run build && npm run knex -- migrate:rollback && npm run knex -- migrate:latest && npm run knex -- seed:run",
+    "knex": "ENV=${ENV:-development} && npx knex --env $ENV",
+    "dangerous:update": "npm run build && npm run knex -- migrate:rollback && npm run knex -- migrate:latest && npm run knex -- seed:run",
     "new": "npm run build && npx knex migrate:make $1"
   },
   "keywords": [],

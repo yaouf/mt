@@ -62,7 +62,7 @@ function ArticleScreen({
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1}} accessibilityLabel="Article Screen">
       <ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16} // Controls how often the event is fired, 16ms is around 60fps
@@ -94,6 +94,7 @@ function ArticleScreen({
                   uri: `https://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
                 }}
                 style={articleStyles.image}
+                accessibilityLabel="Article Image"
               />
               <View style={baseStyles.container}>
                 {(article.dominantMedia.content || article.dominantMedia.authors) && (
@@ -123,6 +124,8 @@ function ArticleScreen({
                   onPress={() =>
                     navigation.navigate("Staff", { slug: author.slug })
                   }
+                  accessible={true}
+                  accessibilityHint="View Author's Profile"
                 >
                   <Text style={articleStyles.author}>
                     {author.name}
@@ -133,7 +136,7 @@ function ArticleScreen({
             </Text>
 
             <View style={articleStyles.publishedDetails}>
-              <Text style={articleStyles.publishedDetailsText}>
+              <Text style={articleStyles.publishedDetailsText} accessibilityLabel="Published Date">
                 {formatDates(article.published_at)}
               </Text>
             </View>
