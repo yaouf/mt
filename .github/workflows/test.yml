@@ -2,9 +2,13 @@ name: Run Tests
 
 on:
   pull_request:
+    paths:
+      - "backend/**"
   push:
     branches:
       - develop
+    paths:
+      - "backend/**"
 
 jobs:
   test:
