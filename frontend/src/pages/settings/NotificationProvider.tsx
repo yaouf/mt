@@ -32,6 +32,8 @@ interface NotificationContextType {
   setOpinions: Dispatch<SetStateAction<boolean>>;
   deviceID: string;
   setDeviceID: Dispatch<SetStateAction<string>>;
+  isUpdate: boolean;
+  setIsUpdate: Dispatch<SetStateAction<boolean>>;
 }
 
 /**
@@ -61,6 +63,8 @@ export const NotificationContext = createContext<NotificationContextType>({
   setOpinions: () => {},
   deviceID: "",
   setDeviceID: () => {},
+  isUpdate: false,
+  setIsUpdate: () => {},
 });
 
 export const NotificationProvider = ({ children }) => {
@@ -79,6 +83,8 @@ export const NotificationProvider = ({ children }) => {
 
   // Device ID & push token
   const [deviceID, setDeviceID] = useState("");
+
+  const [isUpdate, setIsUpdate] = useState(false);
 
   // On app startup, check the permissions of the system settings and the internal app settings
   const checkPermissions = async () => {
@@ -121,7 +127,10 @@ export const NotificationProvider = ({ children }) => {
     };
 
     // Subscribe to AppState changes
-    const subscription = AppState.addEventListener("change", handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
 
     // Initial permission check
     checkPermissions();
@@ -161,6 +170,8 @@ export const NotificationProvider = ({ children }) => {
         setOpinions,
         deviceID,
         setDeviceID,
+        isUpdate,
+        setIsUpdate,
       }}
     >
       {children}

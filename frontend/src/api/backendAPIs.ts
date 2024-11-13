@@ -22,10 +22,10 @@ export const createDevice = async (
     deviceType: Platform.OS,
     "Breaking News": notificationSettings.breaking,
     "University News": notificationSettings.universityNews,
-    "Metro": notificationSettings.metro,
-    "Opinions": notificationSettings.opinions,
+    Metro: notificationSettings.metro,
+    Opinions: notificationSettings.opinions,
     "Arts and Culture": notificationSettings.artsAndCulture,
-    "Sports": notificationSettings.sports,
+    Sports: notificationSettings.sports,
     "Science and Research": notificationSettings.scienceAndResearch,
     expoPushToken: expoPushToken,
     isPushEnabled: true,
@@ -47,7 +47,7 @@ export const createDevice = async (
   };
 
   try {
-    // TODO: use envalid to ensure endpoints are defined. 
+    // TODO: use envalid to ensure endpoints are defined.
     const response = await fetch(
       process.env.EXPO_PUBLIC_CREATE_DEVICE_ENDPOINT ?? "",
       requestOptions
@@ -100,10 +100,10 @@ export const updateSettings = async (
     deviceId: deviceId,
     "Breaking News": breaking,
     "University News": universityNews,
-    "Metro": metro,
-    "Opinions": opinions,
+    Metro: metro,
+    Opinions: opinions,
     "Arts and Culture": artsAndCulture,
-    "Sports": sports,
+    Sports: sports,
     "Science and Research": scienceAndResearch,
   });
 
@@ -121,6 +121,40 @@ export const updateSettings = async (
 
   const response = await fetch(
     process.env.EXPO_PUBLIC_UPDATE_SETTINGS_ENDPOINT ?? "",
+    requestOptions
+  );
+
+  if (response.status !== 200) {
+    console.log("response code:", response.status);
+    console.log("response message:", response.statusText);
+    console.log("response body:", await response.text());
+  } else {
+    console.log("success");
+  }
+};
+
+/**
+ * Constructs JSON Body that contains device id to get settings for
+ */
+export const viewSettings = async (deviceId: string) => {
+  const body = JSON.stringify({
+    deviceId: deviceId,
+  });
+
+  console.log("viewing settings for device", deviceId);
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": process.env.EXPO_PUBLIC_API_KEY,
+    },
+    body: body,
+    redirect: "follow",
+  };
+
+  const response = await fetch(
+    process.env.EXPO_PUBLIC_VIEW_SETTINGS_ENDPOINT ?? "",
     requestOptions
   );
 
