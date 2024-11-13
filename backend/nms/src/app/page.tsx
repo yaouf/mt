@@ -261,7 +261,7 @@ export default function Home() {
               setEditorsPicks={setEditorsPicks} // Pass the state setter function
             /> */}
 
-            <DeviceTable deviceCount={deviceCount} />
+            <DeviceTable />
           </main>
         </>
       )}
