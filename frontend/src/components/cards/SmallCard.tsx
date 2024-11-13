@@ -1,19 +1,19 @@
 import {
+  StyleProp,
   StyleSheet,
   Text,
-  View,
   TouchableWithoutFeedback,
-  StyleProp,
+  View,
   ViewStyle,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { formatDates } from "../../code/formatDates";
 import {
   font1,
   font3,
-  varTextColor,
   varGray1,
+  varTextColor,
 } from "../../styles/styles";
+import { formatDates } from "../../utils/formatDates";
 
 function SmallCard({ article, navigation }: CardProps) {
 

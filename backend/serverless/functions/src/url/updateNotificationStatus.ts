@@ -42,9 +42,11 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
 
   const dbParams = { environment, dbUrl };
 
+  const newDb = db(dbParams);
+
   try {
     // Check the current status in the database
-    const device = await db(dbParams)("devices").where("id", deviceId).first();
+    const device = await newDb("devices").where("id", deviceId).first();
     if (!device) {
       response.status(404).send("Device not found. Are you sure field \"deviceId\" is correct?");
       return;
@@ -53,7 +55,7 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     // Compare current status with the new status
     if (device.isPushEnabled !== isPushEnabled) {
       // Update the notification status in the database
-      await db(dbParams)("devices").where("id", deviceId).update({
+      await newDb("devices").where("id", deviceId).update({
         isPushEnabled,
       });
       logger.info("Notification status updated", {
@@ -65,6 +67,8 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
       // If the status is the same, inform the user no update was necessary
       response.send("No update necessary; status is already set as provided.");
     }
+
+    await db(dbParams).destroy();
   } catch (error) {
     logger.error("Error updating notification status", error);
     response.status(500).send("Error updating notification status");

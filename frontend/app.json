@@ -2,7 +2,7 @@
   "expo": {
     "name": "BDH",
     "slug": "push-notif",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
@@ -11,18 +11,14 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.browndailyherald.thebrowndailyherald",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
-            "CFBundleURLSchemes": [
-              "browndailyherald"
-            ]
+            "CFBundleURLSchemes": ["browndailyherald"]
           }
         ]
       }
@@ -44,7 +40,14 @@
     },
     "owner": "bdh-app",
     "plugins": [
-      "expo-build-properties"
+      "expo-build-properties",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-8731315434789018~9308730648",
+          "iosAppId": "ca-app-pub-8731315434789018~9308730648"
+        }
+      ]
     ]
   }
 }

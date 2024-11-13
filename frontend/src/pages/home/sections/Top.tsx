@@ -1,11 +1,11 @@
+import { StackNavigationProp } from "@react-navigation/stack";
 import { View } from "react-native";
-import LargeCard from "../../../components/cards/LargeCard";
-import { Article } from "src/types/data";
 import SmallCardTop from "src/components/cards/SmallCardTop";
 import SmallPhotoCardTop from "src/components/cards/SmallPhotoCardTop";
-import { baseStyles } from "src/styles/styles";
-import { StackNavigationProp } from "@react-navigation/stack";
 import Divider from "src/components/Divider";
+import { baseStyles } from "src/styles/styles";
+import { Article } from "src/types/data";
+import LargeCard from "../../../components/cards/LargeCard";
 
 type TopProps = {
   navigation: StackNavigationProp<any, any>;
@@ -20,32 +20,42 @@ function Top(props: TopProps) {
           article={props.topStories[0]}
           navigation={props.navigation}
           key={`top-home-0}`}
-        /><Divider />
+        />
+        <Divider />
         <View style={{}}>
           {props.topStories.slice(1, 2).map((article: Article, i) => (
-            <View><SmallPhotoCardTop
-              article={article}
-              navigation={props.navigation}
-              key={`top-home-${i + 1}`}
-            /><Divider /></View>
+            <View key={`top-home-${i + 1}`}>
+              <SmallPhotoCardTop
+                article={article}
+                navigation={props.navigation}
+                key={`top-home-${i + 1}`}
+              />
+              <Divider />
+            </View>
           ))}
         </View>
         <View style={{}}>
           {props.topStories.slice(2, 4).map((article: Article, i) => (
-            <View><SmallCardTop
-              article={article}
-              navigation={props.navigation}
-              key={`top-home-${i + 1}`}
-            /><Divider /></View>
+            <View key={`top-home-${i + 1}`}>
+              <SmallCardTop
+                article={article}
+                navigation={props.navigation}
+                key={`top-home-${i + 1}`}
+              />
+              <Divider />
+            </View>
           ))}
         </View>
         <View style={{}}>
           {props.topStories.slice(4, 5).map((article: Article, i) => (
-            <View><SmallPhotoCardTop
-              article={article}
-              navigation={props.navigation}
-              key={`top-home-${i + 1}`}
-            /><Divider /></View>
+            <View key={`top-home-${i + 1}`}>
+              <SmallPhotoCardTop
+                article={article}
+                navigation={props.navigation}
+                key={`top-home-${i + 1}`}
+              />
+              <Divider />
+            </View>
           ))}
         </View>
       </View>

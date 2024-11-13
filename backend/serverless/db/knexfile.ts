@@ -35,8 +35,10 @@ const config: { [key: string]: Knex.Config<string> } = {
     client: "pg",
     connection: dbUrl,
     pool: {
-      min: 2,
-      max: 10,
+      min: 0, // Start with no connections
+      max: 1, // Maximum one connection per instance
+      idleTimeoutMillis: 10000, // Close idle connections after 5 seconds
+      acquireTimeoutMillis: 30000, // Timeout after 5 seconds if a connection cannot be acquired
     },
     migrations: {
       directory: "./data/migrations",
@@ -58,8 +60,10 @@ const config: { [key: string]: Knex.Config<string> } = {
       }
     },
     pool: {
-      min: 2,
-      max: 10,
+      min: 0, // Start with no connections
+      max: 1, // Maximum one connection per instance
+      idleTimeoutMillis: 10000, // Close idle connections after 5 seconds
+      acquireTimeoutMillis: 30000, // Timeout after 5 seconds if a connection cannot be acquired
     },
     migrations: {
       directory: "./data/migrations",

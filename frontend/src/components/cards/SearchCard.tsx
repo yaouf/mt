@@ -1,12 +1,16 @@
+import { useEffect, useState } from "react";
 import {
   Image,
+  LayoutChangeEvent,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  useWindowDimensions,
   View,
 } from "react-native";
 import { Tag } from "src/types/data";
 import { CardProps } from "src/types/navStacks";
+import { formatDates } from "src/utils/formatDates";
 import {
   font1,
   font2,
@@ -15,10 +19,10 @@ import {
   varRed,
   varTextColor,
 } from "../../styles/styles";
-import { formatDates } from "../../utils/formatDates";
 
-function LargeCard({ article, navigation }: CardProps) {
-  const all_tags = article.tags.map((t: Tag) => t.name);
+function SearchCard({ article, navigation }: CardProps) {
+  const { fontScale } = useWindowDimensions();
+  const all_tags = article.tags?.map((t: Tag) => t.name) || [];
   let breaking = false;
 
   for (let i = 0; i < all_tags.length; i++) {
@@ -37,6 +41,26 @@ function LargeCard({ article, navigation }: CardProps) {
       article.dominantMedia.extension;
   }
 
+  const onLayoutHandler = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout;
+    console.log(height);
+  };
+
+  const SUBHEADER_LINES = 4;
+  const TITLE_LINES = 3;
+  const INITIAL_CARD_HEIGHT = 400;
+  const [cardHeight, setCardHeight] = useState(INITIAL_CARD_HEIGHT);
+
+  useEffect(() => {
+    console.log("fontScale", fontScale);
+    // Adjust height calculation based on fontScale
+    const scaledHeight = INITIAL_CARD_HEIGHT * fontScale;
+    console.log("newHeight", scaledHeight);
+    if (scaledHeight !== cardHeight) {
+      setCardHeight(scaledHeight);
+    }
+  }, [fontScale]); // Add fontScale as a dependency
+
   return (
     <View>
       <TouchableWithoutFeedback
@@ -44,41 +68,66 @@ function LargeCard({ article, navigation }: CardProps) {
         accessibilityRole="button"
         accessibilityHint={`Double tap to open article`}
       >
-        <View style={styles.card}>
+        <View
+          style={[styles.card, { height: cardHeight }]}
+          onLayout={onLayoutHandler}
+        >
           <Image
             source={{
               uri: img_uri,
             }}
             style={styles.image}
           />
-          <View style={styles.text}>
-            {breaking ? (
-              <View style={styles.breakingBox}
-                accessibilityLabel="Section: Breaking News."
+          <View style={styles.bottomTextArea}>
+            <View style={styles.titlesContainer}>
+              {breaking ? (
+                <View
+                  style={styles.breakingBox}
+                  accessibilityLabel="Section: Breaking News."
+                >
+                  <Text style={styles.breaking}>Breaking News</Text>
+                </View>
+              ) : (
+                <Text
+                  style={styles.section}
+                  accessibilityLabel={`Section: ${all_tags[0].replace(
+                    "&;",
+                    "&"
+                  )}.`}
+                >
+                  {all_tags[0].replace("&;", "&")}
+                </Text>
+              )}
+              <Text
+                style={styles.title}
+                accessibilityLabel={`Headline: ${article.headline}.`}
+                numberOfLines={Math.floor(
+                  TITLE_LINES * 1.2 * Math.sqrt(fontScale)
+                )}
+                ellipsizeMode="tail"
               >
-                <Text style={styles.breaking}>Breaking News</Text>
-              </View>
-            ) : (
-              <Text style={styles.section}
-                accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
-              >
-                {all_tags[0].replace("&;", "&")}
+                {article.headline}
               </Text>
-            )}
-            <Text style={styles.title}
-              accessibilityLabel={`Headline: ${article.headline}.`}
-            >
-              {article.headline}
-            </Text>
-            <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail"
-              accessibilityLabel={`Subtitle: ${article.subhead}`}
-            >
-              {article.subhead}
-            </Text>
+              <Text
+                style={styles.subhead}
+                numberOfLines={Math.floor(
+                  SUBHEADER_LINES * 1.2 * Math.sqrt(fontScale)
+                )}
+                ellipsizeMode="tail"
+                accessibilityLabel={`Subtitle: ${article.subhead}`}
+              >
+                {article.subhead}
+              </Text>
+            </View>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
-                <Text style={styles.published}
-                  accessibilityLabel={`Published on ${formatDates(article.published_at)}`}
+                <Text
+                  style={styles.published}
+                  accessibilityLabel={`Published on ${formatDates(
+                    article.published_at
+                  )}`}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
                 >
                   {formatDates(article.published_at)}
                 </Text>
@@ -91,18 +140,18 @@ function LargeCard({ article, navigation }: CardProps) {
   );
 }
 
-export default LargeCard;
+export default SearchCard;
 
 const styles = StyleSheet.create({
   title: {
     alignSelf: "stretch",
-    color: varTextColor,
+    overflow: "hidden",
+    flexWrap: "nowrap",
     fontFamily: font1,
-    fontSize: 22,
+    fontSize: 18,
     fontStyle: "normal",
     fontWeight: "700",
-    lineHeight: 28,
-    marginBottom: 8, 
+    lineHeight: 18,
   },
   subhead: {
     alignSelf: "stretch",
@@ -112,7 +161,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     lineHeight: 22,
     fontStyle: "italic",
-    marginBottom: 12, 
+    marginBottom: 12,
   },
   card: {
     display: "flex",
@@ -120,8 +169,10 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     flexDirection: "column",
     alignItems: "stretch",
-    borderRadius: 0,
-    backgroundColor: "#FFF",
+    borderRadius: 10,
+    backgroundColor: "#f2f2f2",
+    // height: cardHeight,
+    // shadow looks bad
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,
@@ -131,7 +182,7 @@ const styles = StyleSheet.create({
     // shadowRadius: 29.949,
     // elevation: 3,
     marginTop: 16,
-    overflow: "visible",
+    overflow: "hidden",
     // marginVertical: 12,
   },
   section: {
@@ -140,6 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: "normal",
     fontWeight: "700",
+    marginBottom: 5,
     /* lineHeight: 'normal',*/
   },
   published: {
@@ -153,7 +205,8 @@ const styles = StyleSheet.create({
   image: {
     backgroundColor: "#C9C9C9",
     display: "flex",
-    height: 250,
+    height: 150,
+    aspectRatio: 2 / 1,
     width: "100%",
     paddingTop: 59.893,
     paddingBottom: 58.055,
@@ -164,22 +217,31 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
   },
-  text: {
+  bottomTextArea: {
     display: "flex",
+    flex: 1,
     flexDirection: "column",
+    justifyContent: "space-between",
     paddingTop: 12,
     paddingBottom: 8,
-    paddingHorizontal: 0,
+    paddingHorizontal: 16,
     alignItems: "flex-start",
     alignSelf: "stretch",
     gap: 4,
   },
   bottom: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "flex-end",
     alignSelf: "stretch",
+  },
+  titlesContainer: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    gap: 6,
   },
   publishedSection: {
     display: "flex",
