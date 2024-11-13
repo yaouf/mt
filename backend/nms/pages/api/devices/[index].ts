@@ -12,15 +12,17 @@ export default async function getDevices(
 ) {
   try {
     const index = req.query.page ? parseInt(req.query.page as string, 10) : 0;
-    const devicesPerPage = req.query.perPage ? parseInt(req.query.perPage as string, 10) : 1; 
-    const offset = index * devicesPerPage; 
+    const devicesPerPage = req.query.perPage
+      ? parseInt(req.query.perPage as string, 10)
+      : 1;
+    const offset = index * devicesPerPage;
 
     const devices = await db("devices")
       .select("*")
       .orderBy("expoPushToken", "asc")
       .offset(offset)
       .limit(devicesPerPage)
-      .where(true); 
+      .where(true);
 
     res.status(200).json(devices);
   } catch (error) {
