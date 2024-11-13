@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRoute } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import Constants from "expo-constants";
 import { useContext, useEffect } from "react";
@@ -44,9 +43,9 @@ function PushNotifsOnboardingScreen({
     setDeviceID,
     systemPermissionStatus,
     requestPermission,
+    isUpdate,
+    setIsUpdate,
   } = useContext(NotificationContext);
-
-  const { isUpdate } = useRoute().params as { isUpdate: boolean };
 
   const saveNotifPreferences = async () => {
     requestPermission().then((status) => {
