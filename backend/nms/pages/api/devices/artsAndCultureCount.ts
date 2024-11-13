@@ -6,14 +6,14 @@ type ResponseData = {
   message?: string;
 };
 
-export default async function getUniversityNewsDevices(
+export default async function getArtsAndCultureDevices(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
   try {
     const result = await db("devices")
       .count("* as count")
-      .where("University News", true);
+      .where("Arts and Culture", true);
 
     const { count } = result[0];
     // console.log("university news enabled devices", count);
@@ -21,7 +21,7 @@ export default async function getUniversityNewsDevices(
     res.status(200).json({ count });
   } catch (error) {
     console.error(
-      "Error fetching device count for university news from the database:",
+      "Error fetching device count for arts and culture from the database:",
       error
     );
     res.status(500).json({ message: error.message });
