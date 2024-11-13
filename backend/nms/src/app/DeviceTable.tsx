@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Device } from '../../pages/api/types/types';
+import React, { useEffect, useState } from "react";
+import { Device } from "../../pages/api/types/types";
 
 interface DeviceTableProps {
-    deviceCount: number; 
-  }
+  deviceCount: number;
+}
 
-
-  const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
-const [devices, setDevices] = useState<Device[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
+const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
+  const [devices, setDevices] = useState<Device[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
   const DEVICES_PER_PAGE = 30;
 
-  
   useEffect(() => {
     const fetchDevices = async () => {
       try {
-        const response = await fetch(`/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}`);        
+        const response = await fetch(
+          `/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}`
+        );
         const data = await response.json();
         setDevices(data);
       } catch (error) {
@@ -38,32 +38,65 @@ const [devices, setDevices] = useState<Device[]>([]);
             <th className="py-2 px-4 border-b text-center">Breaking News</th>
             <th className="py-2 px-4 border-b text-center">University News</th>
             <th className="py-2 px-4 border-b text-center">Metro</th>
+            <th className="py-2 px-4 border-b text-center">Opinions</th>
+            <th className="py-2 px-4 border-b text-center">Arts and Culture</th>
+            <th className="py-2 px-4 border-b text-center">Sports</th>
+            <th className="py-2 px-4 border-b text-center">
+              Science and Research
+            </th>
             <th className="py-2 px-4 border-b text-left">Expo Push Token</th>
           </tr>
         </thead>
         <tbody>
           {devices.map((device) => (
             <tr key={device.expoPushToken}>
-              <td className="py-2 px-4 border-b text-left">{device.deviceType}</td>
-              <td className="py-2 px-4 border-b text-center">{device["Breaking News"] ? 'Yes' : 'No'}</td>
-              <td className="py-2 px-4 border-b text-center">{device["University News"] ? 'Yes' : 'No'}</td>
-              <td className="py-2 px-4 border-b text-center">{device["Metro"] ? 'Yes' : 'No'}</td>
-              <td className="py-2 px-4 border-b text-left">{device.expoPushToken}</td>
+              <td className="py-2 px-4 border-b text-left">
+                {device.deviceType}
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                {device["Breaking News"] ? "Yes" : "No"}
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                {device["University News"] ? "Yes" : "No"}
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                {device["Metro"] ? "Yes" : "No"}
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                {device["Opinions"] ? "Yes" : "No"}
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                {device["Arts and Culture"] ? "Yes" : "No"}
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                {device["Sports"] ? "Yes" : "No"}
+              </td>
+              <td className="py-2 px-4 border-b text-center">
+                {device["Science and Research"] ? "Yes" : "No"}
+              </td>
+              <td className="py-2 px-4 border-b text-left">
+                {device.expoPushToken}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
       <div className="mt-4">
-        {Array.from({ length: Math.ceil(deviceCount / DEVICES_PER_PAGE) }, (_, i) => (
-          <button
-            key={i + 1}
-            onClick={() => paginate(i + 1)}
-            className={`px-3 py-1 border ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-          >
-            {i + 1}
-          </button>
-        ))}
+        {Array.from(
+          { length: Math.ceil(deviceCount / DEVICES_PER_PAGE) },
+          (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => paginate(i + 1)}
+              className={`px-3 py-1 border ${
+                currentPage === i + 1 ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+            >
+              {i + 1}
+            </button>
+          )
+        )}
       </div>
     </div>
   );

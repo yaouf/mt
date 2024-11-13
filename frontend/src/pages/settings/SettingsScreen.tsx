@@ -2,14 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useContext, useEffect } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Divider from "src/components/Divider";
-import Notif from "src/components/Notif";
+import NotifToggle from "src/components/NotifToggle";
 import { settings } from "src/styles/pages";
-import {
-  baseStyles,
-  font2,
-  text,
-  varTextColor
-} from "src/styles/styles";
+import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
@@ -34,45 +29,107 @@ function SettingsScreen({ navigation }: NavProp) {
     setUniversityNews,
     metro,
     setMetro,
+    sports,
+    setSports,
+    artsAndCulture,
+    setArtsAndCulture,
+    scienceAndResearch,
+    setScienceAndResearch,
+    opinions,
+    setOpinions,
     deviceID,
     setDeviceID,
     checkPermissions,
     systemPermissionStatus,
-    setSystemPermissionStatus,
   } = useContext(NotificationContext);
 
   // on first load, get data from async storage
   useEffect(() => {
+    // TODO 1: maybe do these checks before loading notif components?
+    // log all react context
+    console.log("react context in settings screen", {
+      breaking,
+      universityNews,
+      metro,
+      opinions,
+      artsAndCulture,
+      sports,
+      scienceAndResearch,
+    });
     const load = async () => {
+      console.log(
+        "notification settings in settings screen",
+        systemPermissionStatus,
+        breaking,
+        universityNews,
+        metro,
+        opinions,
+        artsAndCulture,
+        sports,
+        scienceAndResearch
+      );
+
       try {
         const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
+        console.log("Calling setState in settings screen with value", breakingNotifs === "true", "for breakingNotifs");
         setBreaking(breakingNotifs === "true");
+        console.log("breakingNotifs", breakingNotifs);
 
-        const universityNewsNotifs = await AsyncStorage.getItem("universityNewsNotifs");
+        const universityNewsNotifs = await AsyncStorage.getItem(
+          "universityNewsNotifs"
+        );
+        console.log("Calling setState in settings screen with value", universityNewsNotifs === "true", "for universityNewsNotifs");
         setUniversityNews(universityNewsNotifs === "true");
+        console.log("universityNewsNotifs", universityNewsNotifs);
 
         const metroNotifs = await AsyncStorage.getItem("metroNotifs");
+        console.log("Calling setState in settings screen with value", metroNotifs === "true", "for metroNotifs");
         setMetro(metroNotifs === "true");
+        console.log("metroNotifs", metroNotifs);
+
+        const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
+        console.log("Calling setState in settings screen with value", sportsNotifs === "true", "for sportsNotifs");
+        setSports(sportsNotifs === "true");
+        console.log("sportsNotifs", sportsNotifs);
+
+        const artsAndCultureNotifs = await AsyncStorage.getItem(
+          "artsAndCultureNotifs"
+        );
+        console.log("Calling setState in settings screen with value", artsAndCultureNotifs === "true", "for artsAndCultureNotifs");
+        setArtsAndCulture(artsAndCultureNotifs === "true");
+        console.log("artsAndCultureNotifs", artsAndCultureNotifs);
+
+        const scienceAndResearchNotifs = await AsyncStorage.getItem(
+          "scienceAndResearchNotifs"
+        );
+        console.log("Calling setState in settings screen with value", scienceAndResearchNotifs === "true", "for scienceAndResearchNotifs");
+        setScienceAndResearch(scienceAndResearchNotifs === "true");
+        console.log("scienceAndResearchNotifs", scienceAndResearchNotifs);
+
+        const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
+        console.log("Calling setState in settings screen with value", opinionsNotifs === "true", "for opinionsNotifs");
+        setOpinions(opinionsNotifs === "true");
+        console.log("opinionsNotifs", opinionsNotifs);
 
         const id = await AsyncStorage.getItem("deviceID");
+        // FIXME: why is this null first time?
         console.log("this is the device id in the settingsscreen", id);
         if (id) {
           setDeviceID(id);
         } else {
           console.log("Device ID is not being set in settings screen");
         }
+        // TODO: if deviceID is null or "", go to onboarding screen
+        console.log("Device ID from context in settings before update:", deviceID);
 
-        await checkPermissions(); // Check system permissions everytime app loads
+        checkPermissions(); // Check system permissions everytime app loads
       } catch (err) {
         console.log(err);
-      } 
+      }
     };
 
     load();
   }, []);
-
-  console.log("statussss", systemPermissionStatus, breaking, universityNews, metro);
-  console.log("Device ID in settings:", deviceID);
 
   const support = [
     // { id: 1, title: "Manage Account", link: "" }, // TODO: once make accounts and stuff, addd this
@@ -125,34 +182,62 @@ function SettingsScreen({ navigation }: NavProp) {
 
       <View style={baseStyles.container}>
         <Text style={text.sectionHeader1}>Stay Updated</Text>
+
         <View style={{ rowGap: 16, marginTop: 4 }}>
-          <Notif
+          <NotifToggle
             title="Breaking News"
             description="Urgent and developing coverage"
             value={breaking}
             setValue={setBreaking}
             asyncName="breakingNotifs"
           />
-          <Notif
+          <NotifToggle
             title="University News"
             description="The latest on Brown and the campus community"
             value={universityNews}
             setValue={setUniversityNews}
             asyncName="universityNewsNotifs"
           />
-          <Notif
+          <NotifToggle
             title="Metro"
             description="Updates from Providence and beyond"
             value={metro}
             setValue={setMetro}
             asyncName="metroNotifs"
           />
+          <NotifToggle
+            title="Sports"
+            description="Game coverage and exclusives"
+            value={sports}
+            setValue={setSports}
+            asyncName="sportsNotifs"
+          />
+          <NotifToggle
+            title="Arts and Culture"
+            description="Events and reviews from our critics"
+            value={artsAndCulture}
+            setValue={setArtsAndCulture}
+            asyncName="artsAndCultureNotifs"
+          />
+          <NotifToggle
+            title="Science and Research"
+            description="The cutting edge of research"
+            value={scienceAndResearch}
+            setValue={setScienceAndResearch}
+            asyncName="scienceAndResearchNotifs"
+          />
+          <NotifToggle
+            title="Opinions"
+            description="Columns, op-eds and editorials"
+            value={opinions}
+            setValue={setOpinions}
+            asyncName="opinionsNotifs"
+          />
         </View>
       </View>
       <Divider />
 
       <View>
-
         <Text
           style={{
             ...settings.smallHeading,
@@ -163,7 +248,10 @@ function SettingsScreen({ navigation }: NavProp) {
           Support
         </Text>
         {support.map((link, i) => (
-          <View key={`support-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
+          <View
+            key={`support-${i}`}
+            style={{ paddingHorizontal: 4, marginBottom: 12 }}
+          >
             <SettingsLink title={link.title} link={link.link} />
           </View>
         ))}
@@ -180,7 +268,10 @@ function SettingsScreen({ navigation }: NavProp) {
           More BDH
         </Text>
         {links.map((link, i) => (
-          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
+          <View
+            key={`more-bdh-${i}`}
+            style={{ paddingHorizontal: 4, marginBottom: 12 }}
+          >
             <SettingsLink title={link.title} link={link.link} />
           </View>
         ))}

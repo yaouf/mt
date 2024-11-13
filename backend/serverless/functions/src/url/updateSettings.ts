@@ -18,6 +18,8 @@ export const updateSettings = onRequest(async (request, response) => {
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
 
+  const newDb = db(dbParams);
+
 
   try {
     logger.info("Updating user settings", { structuredData: true }, request.body);
@@ -28,6 +30,10 @@ export const updateSettings = onRequest(async (request, response) => {
       "Breaking News": Joi.boolean(),
       "University News": Joi.boolean(),
       "Metro": Joi.boolean(),
+      "Opinions": Joi.boolean(),
+      "Arts and Culture": Joi.boolean(),
+      "Sports": Joi.boolean(),
+      "Science and Research": Joi.boolean(),
       isPushEnabled: Joi.boolean(),
     });
 
@@ -50,6 +56,10 @@ export const updateSettings = onRequest(async (request, response) => {
     const breakingNews = validBody["Breaking News"];
     const universityNews = validBody["University News"];
     const metro = validBody["Metro"];
+    const opinions = validBody["Opinions"];
+    const artsAndCulture = validBody["Arts and Culture"];
+    const sports = validBody["Sports"];
+    const scienceAndResearch = validBody["Science and Research"];
     const isPushEnabled = validBody["isPushEnabled"];
 
     // Define the type of updateData
@@ -57,6 +67,10 @@ export const updateSettings = onRequest(async (request, response) => {
       "Breaking News"?: boolean;
       "University News"?: boolean;
       "Metro"?: boolean;
+      "Opinions"?: boolean;
+      "Arts and Culture"?: boolean;
+      "Sports"?: boolean;
+      "Science and Research"?: boolean;
       "isPushEnabled"?: boolean;
     };
     
@@ -66,6 +80,10 @@ export const updateSettings = onRequest(async (request, response) => {
       ...(breakingNews !== undefined ? { "Breaking News": breakingNews } : {}),
       ...(universityNews !== undefined ? { "University News": universityNews } : {}),
       ...(metro !== undefined ? { "Metro": metro } : {}),
+      ...(opinions !== undefined ? { "Opinions": opinions } : {}),
+      ...(artsAndCulture !== undefined ? { "Arts and Culture": artsAndCulture } : {}),
+      ...(sports !== undefined ? { "Sports": sports } : {}),
+      ...(scienceAndResearch !== undefined ? { "Science and Research": scienceAndResearch } : {}),
       ...(isPushEnabled !== undefined ? { "isPushEnabled": isPushEnabled } : {}),
     };
 
@@ -73,7 +91,7 @@ export const updateSettings = onRequest(async (request, response) => {
     const deviceId = validBody.deviceId; 
 
     // First, check if the device exists
-    const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
+    const deviceExists = await newDb("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
       logger.error("Device not found. Are you sure field \"deviceId\" is correct?", { deviceId });
@@ -82,7 +100,10 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Update device settings in device table
-    const res = await db(dbParams)("devices").where("id", deviceId).update(updateData);
+    const res = await newDb("devices").where("id", deviceId).update(updateData);
+
+    await newDb.destroy();
+
     // log the result of the update
     logger.info(res);
     // Log the result of update - For logging purposes, might query again or just log the update was successful

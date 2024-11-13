@@ -12,6 +12,7 @@ export const createDevice = onRequest(async (request, response) => {
   const environment = envars.environment.value();
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
+  const newDb = db(dbParams);
   logger.info("dbParams: ", dbParams);
 
   logger.info("createDevice was called with the following request body: ", { structuredData: true }, request.body);
@@ -22,12 +23,17 @@ export const createDevice = onRequest(async (request, response) => {
     // Extract device information from the request body
 
     // Schema for request body validation
+    // TODO: factor out schema and repetitive fields into a single object
     const schema = Joi.object({
       deviceType: Joi.string().required(),
       expoPushToken: Joi.string().required(),
       "Breaking News": Joi.boolean().required(),
       "University News": Joi.boolean().required(),
       "Metro": Joi.boolean().required(),
+      "Opinions": Joi.boolean().required(),
+      "Arts and Culture": Joi.boolean().required(),
+      "Sports": Joi.boolean().required(),
+      "Science and Research": Joi.boolean().required(),
       isPushEnabled: Joi.boolean().required(),
     });
 
@@ -45,24 +51,32 @@ export const createDevice = onRequest(async (request, response) => {
     const breakingNews = validBody["Breaking News"];
     const universityNews = validBody["University News"];
     const metro = validBody["Metro"];
+    const opinions = validBody["Opinions"];
+    const artsAndCulture = validBody["Arts and Culture"];
+    const sports = validBody["Sports"];
+    const scienceAndResearch = validBody["Science and Research"];
     const isPushEnabled = validBody["isPushEnabled"];
 
     // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
     // Check if the device already exists in the devices table
-    const existingDevice = await db(dbParams)("devices")
+    const existingDevice = await newDb("devices")
       .where("expoPushToken", expoPushToken)
       .first();
       // Initialize deviceId
       let deviceId: string; 
     if (existingDevice) {
       // Update the device's settings
-      await db(dbParams)("devices")
+      await newDb("devices")
         .where("expoPushToken", expoPushToken)
         .update({
           deviceType: deviceType,
           "Breaking News": breakingNews,
           "University News": universityNews,
           "Metro": metro,
+          "Opinions": opinions,
+          "Arts and Culture": artsAndCulture,
+          "Sports": sports,
+          "Science and Research": scienceAndResearch,
           isPushEnabled: isPushEnabled,
         });
         deviceId = existingDevice.id;
@@ -72,21 +86,31 @@ export const createDevice = onRequest(async (request, response) => {
           "Breaking News": breakingNews,
           "University News": universityNews,
           "Metro": metro,
+          "Opinions": opinions,
+          "Arts and Culture": artsAndCulture,
+          "Sports": sports,
+          "Science and Research": scienceAndResearch,
           isPushEnabled: isPushEnabled,
         } });
     } else {
       // Insert the device into the devices table, and return the id of the inserted row
-    const insertedRows = await db(dbParams)("devices")
+    const insertedRows = await newDb("devices")
     .insert({
       id: uuidv4(), // Generate a new UUID for the device
       deviceType: deviceType,
       "Breaking News": breakingNews,
       "University News": universityNews,
       "Metro": metro,
+      "Opinions": opinions,
+      "Arts and Culture": artsAndCulture,
+      "Sports": sports,
+      "Science and Research": scienceAndResearch,
       isPushEnabled: isPushEnabled,
       expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
     })
     .returning("id");
+
+    await newDb.destroy();
     // TODO: change expo push token to required field
     // logger.info("inserted row: ", insertedRows);
     deviceId = insertedRows[0].id;
@@ -96,13 +120,16 @@ export const createDevice = onRequest(async (request, response) => {
       "Breaking News": breakingNews,
       "University News": universityNews,
       "Metro": metro,
+      "Opinions": opinions,
+      "Arts and Culture": artsAndCulture,
+      "Sports": sports,
+      "Science and Research": scienceAndResearch,
       isPushEnabled: isPushEnabled,
     });
     }
      // Select all from devices table and log result
     //  const allDevices = await db(dbParams)("devices").select();
     // logger.info(allDevices);
-
      // Send the device ID back to the client
    response.send({
      deviceId: deviceId,

@@ -267,6 +267,54 @@ const NotificationForm = ({ setScheduledNotifications }) => {
               />
               <span className="ml-2">Metro</span>
             </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="checkbox"
+                name="tags"
+                value="Sports"
+                data-testid="sports-uid"
+                checked={newFormData.tags.includes("Sports")}
+                onChange={handleCheckboxChange}
+                className="form-checkbox"
+              />
+              <span className="ml-2">Sports</span>
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="checkbox"
+                name="tags"
+                value="Arts and Culture"
+                data-testid="arts-and-culture-uid"
+                checked={newFormData.tags.includes("Arts and Culture")}
+                onChange={handleCheckboxChange}
+                className="form-checkbox"
+              />
+              <span className="ml-2">Arts and Culture</span>
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="checkbox"
+                name="tags"
+                value="Science and Research"
+                data-testid="science-and-research-uid"
+                checked={newFormData.tags.includes("Science and Research")}
+                onChange={handleCheckboxChange}
+                className="form-checkbox"
+              />
+              <span className="ml-2">Science and Research</span>
+            </label>
+            <label className="inline-flex items-center ml-4">
+              <input
+                type="checkbox"
+                name="tags"
+                value="Opinions"
+                data-testid="opinions-uid"
+                checked={newFormData.tags.includes("Opinions")}
+                onChange={handleCheckboxChange}
+                className="form-checkbox"
+              />
+              <span className="ml-2">Opinions</span>
+            </label>
           </div>
         </div>
 

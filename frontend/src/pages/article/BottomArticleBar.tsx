@@ -3,10 +3,10 @@ import { useNavigation } from "@react-navigation/native";
 import * as Haptics from "expo-haptics";
 import { useContext, useEffect, useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
-import { handleBookmark } from "src/code/helpers";
 import { articleStyles } from "src/styles/article";
 import { ArticleDetailProps } from "src/types/other";
-import { SavedContext } from "../Nav";
+import { handleBookmark } from "src/utils/helpers";
+import { SavedContext } from "../BottomNavigator";
 import { shareArticle } from "./ShareArticle";
 
 /**
@@ -14,7 +14,7 @@ import { shareArticle } from "./ShareArticle";
  * share, save, (notifications for this section / author in a future version)
  */
 // TODO: rename to BottomArticleBar
-function BottomBar(props: ArticleDetailProps) {
+function BottomArticleBar(props: ArticleDetailProps) {
   const navigation = useNavigation();
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
@@ -46,7 +46,7 @@ function BottomBar(props: ArticleDetailProps) {
           accessibilityLabel="Back Button"
           accessibilityHint="Press to go back to the previous screen"
         >
-          <Ionicons name="arrow-back" size={24} color="#1C1B1F" />
+          <Ionicons name="arrow-back" size={28} color="#1C1B1F" />
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => handleNotification()}>
           <Image
@@ -76,9 +76,9 @@ function BottomBar(props: ArticleDetailProps) {
           accessibilityHint="Press to bookmark or unbookmark the article"
         >
           {saved ? (
-            <Ionicons name="bookmark" size={24} color="#1C1B1F" />
+            <Ionicons name="bookmark" size={28} color="#1C1B1F" />
           ) : (
-            <Ionicons name="bookmark-outline" size={24} color="#1C1B1F" />
+            <Ionicons name="bookmark-outline" size={28} color="#1C1B1F" />
           )}
         </TouchableOpacity>
         <TouchableOpacity
@@ -97,4 +97,4 @@ function BottomBar(props: ArticleDetailProps) {
   );
 }
 
-export default BottomBar;
+export default BottomArticleBar;

@@ -1,10 +1,7 @@
+import {
+  getFocusedRouteNameFromRoute,
+} from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./HomeScreen";
-import { HomeStackProps } from "src/types/navStacks";
-import ArticleScreen from "../article/ArticleScreen";
-import SectionsScreen from "../sections/SectionsScreen";
-import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
-import Staff from "../staff/Staff";
 import {
   Dispatch,
   SetStateAction,
@@ -12,12 +9,16 @@ import {
   useEffect,
   useState,
 } from "react";
-import { getAsync } from "src/code/helpers";
-import { menuItems } from "src/code/setup";
+import { HomeStackProps } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
-import {
-  getFocusedRouteNameFromRoute,
-} from "@react-navigation/native";
+import { getAsync } from "src/utils/helpers";
+import { menuItems } from "src/utils/setupDevice";
+import ArticleScreen from "../article/ArticleScreen";
+import SectionsScreen from "../sections/SectionsScreen";
+import Staff from "../staff/Staff";
+import HomeScreen from "./HomeScreen";
+import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
+import SectionPrefScreen from "./menu/SectionPrefScreen";
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -100,6 +101,14 @@ function HomeStackScreen({ navigation, route }) {
         <HomeStack.Screen
           name="Article"
           component={ArticleScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        {/* Not including in release yet, since not sure people will use it */}
+        <HomeStack.Screen
+          name="SectionPref"
+          component={SectionPrefScreen}
           options={{ 
             headerShown: false,
           }}
