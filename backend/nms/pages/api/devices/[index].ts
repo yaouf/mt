@@ -4,7 +4,7 @@ import db from "../../../dist/data/db-config";
 type ResponseData = {
   message?: string;
   devices?: any[]; // Adjust type as per your device structure
-  totalDevices?: string;
+  totalDevices?: number;
 };
 
 export default async function getDevices(
@@ -19,19 +19,29 @@ export default async function getDevices(
       : 1;
     const offset = index * devicesPerPage;
 
-    let query = await db("devices")
+    // Count query to get the total number of devices matching the search term
+    const totalDevicesResult = await db("devices")
+      .modify((queryBuilder) => {
+        if (search) {
+          queryBuilder.where("expoPushToken", "like", `%${search}%`);
+        }
+      })
+      .count("* as count")
+      .first();
+    const totalDevices = totalDevicesResult ? parseInt(totalDevicesResult.count, 10) : 0;
+
+    // Main query for pagination and search filtering
+    const devices = await db("devices")
       .select("*")
       .orderBy("expoPushToken", "asc")
+      .modify((queryBuilder) => {
+        if (search) {
+          queryBuilder.where("expoPushToken", "like", `%${search}%`);
+        }
+      })
       .offset(offset)
-      .limit(devicesPerPage)
-      .where(true);
+      .limit(devicesPerPage);
 
-    if (search) {
-      query.where("expoPushToken", "like", `%${search}%`);
-    }
-    const totalDevices = await query.clone().count("* as count").first();
-    query = query.offset(offset).limit(devicesPerPage);
-    const devices = await query;
     res.status(200).json({ totalDevices, devices });
   } catch (error) {
     console.error("Error fetching devices from the database:", error);

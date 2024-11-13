@@ -27,7 +27,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
     };
 
     fetchDevices();
-  }, [currentPage]);
+  }, [currentPage,search]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
