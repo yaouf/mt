@@ -7,7 +7,7 @@ import { Animated } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Onboarding from "./onboarding/Onboarding";
 import BottomNavigator from "./pages/BottomNavigator";
-import { NotificationProvider } from "./pages/settings/NotificationProvider";
+import { useNotification } from "./pages/settings/NotificationProvider";
 import { setAsync } from "./utils/helpers";
 
 const fullStack = createStackNavigator();
@@ -36,7 +36,7 @@ const MyTheme = {
 function BdhApp() {
   const [hasOnboarded, setHasOnboarded] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initialize animated value
-  const [isUpdate, setIsUpdate] = useState(false);
+  const { isUpdate, setIsUpdate } = useNotification();
   useEffect(() => {
     const load = async () => {
       try {
@@ -61,7 +61,10 @@ function BdhApp() {
       const TARGET_VERSION = "1.1.0";
       const storedVersion = await AsyncStorage.getItem("appVersion");
 
-      if (storedVersion !== currentVersion && currentVersion === TARGET_VERSION) {
+      if (
+        storedVersion !== currentVersion &&
+        currentVersion === TARGET_VERSION
+      ) {
         console.log("app version is out of date");
         // await AsyncStorage.clear();
         // log all async storage keys
@@ -69,8 +72,17 @@ function BdhApp() {
         setAsync("hasOnboarded", "false");
         setHasOnboarded(false);
         // setAsync("appVersion", currentVersion);
-        setIsUpdate(true);
+        // should only set isUpdate if the deviceId is set, meaning the device is registered
+        const deviceId = await AsyncStorage.getItem("deviceID");
+        console.log("deviceId", deviceId);
+        if (deviceId) {
+          // only if the device id already exists too is it an update
+          console.log("setting isUpdate to true");
+          setIsUpdate(true);
+        }
       } else {
+        // if not an update, then treat as a new install
+        console.log("setting isUpdate to false");
         setIsUpdate(false);
       }
     };
@@ -88,34 +100,33 @@ function BdhApp() {
   }, [fadeAnim]);
 
   return (
-    <NotificationProvider>
-      <NavigationContainer theme={MyTheme} linking={linking}>
-        <SafeAreaProvider>
-          <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
-            {hasOnboarded ? (
-              <BottomNavigator />
-            ) : (
-              <fullStack.Navigator
-                initialRouteName={"Onboarding"}
-                screenOptions={{ gestureEnabled: false }}
-              >
-                <fullStack.Screen
-                  name="Onboarding"
-                  component={Onboarding}
-                  options={{ headerShown: false }}
-                  initialParams={{ isUpdate }}
-                />
-                <fullStack.Screen
-                  name="MainApp"
-                  component={BottomNavigator}
-                  options={{ headerShown: false }}
-                />
-              </fullStack.Navigator>
-            )}
-          </Animated.View>
-        </SafeAreaProvider>
-      </NavigationContainer>
-    </NotificationProvider>
+    // <NotificationProvider>
+    <NavigationContainer theme={MyTheme} linking={linking}>
+      <SafeAreaProvider>
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+          {hasOnboarded ? (
+            <BottomNavigator />
+          ) : (
+            <fullStack.Navigator
+              initialRouteName={"Onboarding"}
+              screenOptions={{ gestureEnabled: false }}
+            >
+              <fullStack.Screen
+                name="Onboarding"
+                component={Onboarding}
+                options={{ headerShown: false }}
+              />
+              <fullStack.Screen
+                name="MainApp"
+                component={BottomNavigator}
+                options={{ headerShown: false }}
+              />
+            </fullStack.Navigator>
+          )}
+        </Animated.View>
+      </SafeAreaProvider>
+    </NavigationContainer>
+    // </NotificationProvider>
   );
 }
 
