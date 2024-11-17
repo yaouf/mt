@@ -5,7 +5,10 @@
   "scripts": {
     "start": "expo start --tunnel",
     "android": "expo run:android",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "doctor": "npx expo-doctor",
+    "fix": "npx expo install --fix",
+    "build": "node loadEnv.js && npx expo build --platform ios"
   },
   "dependencies": {
     "@aptabase/react-native": "^0.3.10",
