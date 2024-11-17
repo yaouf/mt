@@ -169,7 +169,7 @@ export const articleStyles = StyleSheet.create({
     padding: 18,
     justifyContent: "space-between",
     alignItems: "flex-start",
-    height: 70,
+    height: 65,
     borderTopWidth: 1,
     borderColor: "#eee",
   },
@@ -182,7 +182,7 @@ export const articleStyles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   icon: {
-    width: 28,
-    height: 28,
+    width: 26,
+    height: 26,
   },
 });
