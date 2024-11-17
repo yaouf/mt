@@ -15,7 +15,7 @@ type TopProps = {
  * @param props
  * @returns
  */
-function EditorsPicksComponent(props: TopProps) {
+function EditorsPick(props: TopProps) {
   return (
     <View style={baseStyles.container}>
       <Text
@@ -50,6 +50,7 @@ function EditorsPicksComponent(props: TopProps) {
                   width: 300,
                   marginRight: 15,
                 }}
+                key={`search-editors-${i}`}
               >
                 <SearchCard
                   article={article}
@@ -65,4 +66,4 @@ function EditorsPicksComponent(props: TopProps) {
   );
 }
 
-export default EditorsPicksComponent;
+export default EditorsPick;
