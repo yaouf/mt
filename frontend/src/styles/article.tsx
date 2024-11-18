@@ -119,8 +119,9 @@ export const articleStyles = StyleSheet.create({
     // height: 300,
     flexShrink: 0,
     backgroundColor: "#F3F3F3",
-    paddingVertical: "5%",
-    paddingRight: 50,
+    paddingTop: "2%",
+    paddingBottom: "5%",
+    paddingRight: 48,
     paddingLeft: 48,
   },
   adImage: {
