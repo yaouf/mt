@@ -1,5 +1,6 @@
 import { trackEvent } from "@aptabase/react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -126,17 +127,15 @@ function Search({ navigation }: NavProp) {
     outputRange: ["100%", "80%"],
   });
 
-  const [top, setTop] = useState<string[]>([]);
   const [topLoaded, setTopLoaded] = useState(false);
-  const [topStories, setTopStories] = useState<Article[]>();
+  const [mostPopularStories, setMostPopularStories] = useState<Article[]>();
+  const [editorsPicksStories, setEditorsPicksStories] = useState<Article[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchTop = async () => {
     try {
       const data: Article[] = await fetchSectionHome("homepage", 5);
-      const top: string[] = data.map((a) => a.uuid);
-      setTop(top);
-      setTopStories(data);
+      setMostPopularStories(data);
     } catch (e) {
       console.warn(e);
     } finally {
@@ -145,23 +144,22 @@ function Search({ navigation }: NavProp) {
     }
   };
 
-  const [editorsPicks, setEditorsPicks] = useState<Article[]>([]);
   useEffect(() => {
     if (!usingPrefetchedData) {
-    fetchEditorsPicks()
-      .then((articles) => {
+      fetchEditorsPicks()
+        .then((articles) => {
           setEditorsPicksStories(articles);
-      })
-      .catch((error) => {
-        console.error("Failed to load editor's picks:", error);
-      });
+        })
+        .catch((error) => {
+          console.error("Failed to load editor's picks:", error);
+        });
     }
   }, [usingPrefetchedData]);
 
   useEffect(() => {
     if (!usingPrefetchedData) {
-    fetchTop();
-    // fetchEditorsPicks();
+      fetchTop();
+      // fetchEditorsPicks();
     }
   }, [usingPrefetchedData]);
 
@@ -188,15 +186,22 @@ function Search({ navigation }: NavProp) {
   const sections: Section_Type[] = [
     {
       id: 1,
-      component: (
-        <EditorsPick topStories={editorsPicks} navigation={navigation} />
-      ),
+      component:
+        editorsPicksStories.length > 0 ? (
+          <EditorsPick
+            editorsPicksStories={editorsPicksStories}
+            navigation={navigation}
+          />
+        ) : null,
     },
     {
       id: 2,
-      component: (
-        <MostPopular topStories={topStories} navigation={navigation} />
-      ),
+      component: mostPopularStories ? (
+        <MostPopular
+          mostPopularStories={mostPopularStories}
+          navigation={navigation}
+        />
+      ) : null,
     },
   ];
 
@@ -256,20 +261,20 @@ function Search({ navigation }: NavProp) {
       </View>
 
       {!searchCompleted && !loading && (
-        <View accessibilityLabel="Home Screen">
-          {topLoaded && editorsPicks.length > 0 && (
+        <View accessibilityLabel="Search Results">
+          {topLoaded && (
             <FlatList
-              data={sections}
+              data={sections.filter((section) => section.component !== null)}
               renderItem={({ item }) => item.component}
               keyExtractor={(item) => item.id.toString()}
               ItemSeparatorComponent={() => (
-              <View style={{ marginHorizontal: 16 }}></View>
-            )}
-            initialNumToRender={1}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-            accessibilityLabel="Section Headers List"
+                <View style={{ marginHorizontal: 16 }}></View>
+              )}
+              initialNumToRender={1}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              accessibilityLabel="Section Headers List"
             />
           )}
         </View>
