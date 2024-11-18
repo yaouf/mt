@@ -1,14 +1,14 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import Divider from "src/components/Divider";
-import { baseStyles, varGray1 } from "src/styles/styles";
+import { baseStyles } from "src/styles/styles";
 import { Article } from "src/types/data";
 
 type TopProps = {
   navigation: StackNavigationProp<any, any>;
-  topStories: Article[];
+  mostPopularStories: Article[] | undefined;
 };
 
 /**
@@ -16,44 +16,43 @@ type TopProps = {
  * @param props
  * @returns
  */
-function MostPopular(props: TopProps) {
+function MostPopular(props: Readonly<TopProps>) {
   return (
-    <View style={baseStyles.container}>
-      <Text
-        style={{
-          fontWeight: "600",
-          color: "#323232",
-          fontSize: 17.5,
-        }}
-      >
-        Most Popular
-      </Text>
-      {props.topStories == undefined ? (
-        <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
-      ) : (
-        <View
-          style={{ overflow: "visible", paddingTop: 30, paddingBottom: 50 }}
-        >
-          <View style={{}}>
-            {props.topStories?.map(
-              (
-                article: Article,
-                i // rest as horizontal
-              ) => (
-                <View style={{}} key={`search-popular-${i}`}>
+    <>
+      {props.mostPopularStories && props.mostPopularStories.length > 0 && (
+        <View style={[baseStyles.container, { paddingVertical: 15 }]}>
+          <Text
+            style={{
+              fontWeight: "600",
+              color: "#323232",
+              fontSize: 17.5,
+            }}
+          >
+            Most Popular
+          </Text>
+          <View
+            style={{ overflow: "visible", paddingTop: 15, paddingBottom: 50 }}
+          >
+            <View style={{}}>
+              {props.mostPopularStories?.map((article, index) => (
+                <View style={{}} key={`search-popular-${article.id}`}>
+                  {/* Actually a vertical card */}
                   <HorizontalCard
                     article={article}
                     navigation={props.navigation}
-                    key={`search-popular-${i}`}
+                    key={`search-popular-${article.id}`}
                   />
-                  <Divider />
+                  {props.mostPopularStories &&
+                    index !== props.mostPopularStories.length - 1 && (
+                      <Divider />
+                    )}
                 </View>
-              )
-            )}
+              ))}
+            </View>
           </View>
         </View>
       )}
-    </View>
+    </>
   );
 }
 
