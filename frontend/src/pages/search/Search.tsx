@@ -45,6 +45,35 @@ function Search({ navigation }: NavProp) {
   const [articles, setArticles] = useState<Article[]>([]);
   const animatedWidth = useRef(new Animated.Value(0)).current;
 
+  const [usingPrefetchedData, setUsingPrefetchedData] = useState(true);
+
+  useEffect(() => {
+    const loadPrefetchedData = async () => {
+      try {
+        // Try to load prefetched data
+        const prefetchedEditorsPicks = await AsyncStorage.getItem(
+          "prefetchedEditorsPicks"
+        );
+        const prefetchedPopularStories = await AsyncStorage.getItem(
+          "prefetchedPopularStories"
+        );
+
+        if (prefetchedEditorsPicks && prefetchedPopularStories) {
+          setEditorsPicksStories(JSON.parse(prefetchedEditorsPicks));
+          setMostPopularStories(JSON.parse(prefetchedPopularStories));
+          setTopLoaded(true);
+        } else {
+          setUsingPrefetchedData(false);
+        }
+      } catch (error) {
+        console.error("Error loading prefetched data:", error);
+        setUsingPrefetchedData(false);
+      }
+    };
+
+    loadPrefetchedData();
+  }, []);
+
   const handleSearch = async () => {
     setLoading(true);
     trackEvent("search", { text });
@@ -118,23 +147,31 @@ function Search({ navigation }: NavProp) {
 
   const [editorsPicks, setEditorsPicks] = useState<Article[]>([]);
   useEffect(() => {
+    if (!usingPrefetchedData) {
     fetchEditorsPicks()
       .then((articles) => {
-        setEditorsPicks(articles);
+          setEditorsPicksStories(articles);
       })
       .catch((error) => {
         console.error("Failed to load editor's picks:", error);
       });
-  }, []);
+    }
+  }, [usingPrefetchedData]);
 
   useEffect(() => {
+    if (!usingPrefetchedData) {
     fetchTop();
     // fetchEditorsPicks();
-  }, []);
+    }
+  }, [usingPrefetchedData]);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await fetchTop();
+    setUsingPrefetchedData(false);
+    const editorsPicks = await fetchEditorsPicks();
+    setEditorsPicksStories(editorsPicks);
+    const top = await fetchSectionHome("homepage", 5);
+    setMostPopularStories(top);
     setRefreshing(false);
   };
 
