@@ -19,7 +19,6 @@ import HorizontalCard from "../../components/cards/HorizontalCard";
 import { varGray1, varTextColor } from "../../styles/styles";
 import { Section_Type } from "../home/HomeScreen";
 import EditorsPick from "../home/sections/EditorsPick";
-import MostPopular from "../home/sections/MostPopular";
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -194,15 +193,15 @@ function Search({ navigation }: NavProp) {
           />
         ) : null,
     },
-    {
-      id: 2,
-      component: mostPopularStories ? (
-        <MostPopular
-          mostPopularStories={mostPopularStories}
-          navigation={navigation}
-        />
-      ) : null,
-    },
+    // {
+    //   id: 2,
+    //   component: mostPopularStories ? (
+    //     <MostPopular
+    //       mostPopularStories={mostPopularStories}
+    //       navigation={navigation}
+    //     />
+    //   ) : null,
+    // },
   ];
 
   return (
