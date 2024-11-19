@@ -31,7 +31,7 @@ function MostPopular(props: Readonly<TopProps>) {
             Most Popular
           </Text>
           <View
-            style={{ overflow: "visible", paddingTop: 15, paddingBottom: 50 }}
+            style={{ overflow: "visible", paddingTop: 15, paddingBottom: 60 }}
           >
             <View style={{}}>
               {props.mostPopularStories?.map((article, index) => (
