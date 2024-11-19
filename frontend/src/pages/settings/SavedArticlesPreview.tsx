@@ -1,11 +1,11 @@
-import { useContext } from "react";
-import { SavedContext } from "../Nav";
-import { Text, TouchableOpacity, View } from "react-native";
-import { NavProp } from "src/types/navStacks";
-import FavArticle from "./FavArticle";
-import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
 import { Ionicons } from "@expo/vector-icons";
+import { useContext } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { settings } from "src/styles/pages";
+import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
+import { NavProp } from "src/types/navStacks";
+import { SavedContext } from "../BottomNavigator";
+import FavArticle from "./FavArticle";
 
 /* 
         onPress={() => {

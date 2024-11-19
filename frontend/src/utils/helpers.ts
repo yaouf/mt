@@ -1,7 +1,7 @@
+import { trackEvent } from "@aptabase/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dispatch, SetStateAction } from "react";
-import { SavedArticleDict } from "src/pages/Nav";
-import { trackEvent } from "@aptabase/react-native";
+import { SavedArticleDict } from "src/pages/BottomNavigator";
 
 /**
  * sets an item in Async storage to the given value
@@ -27,7 +27,7 @@ export async function getAsync(key: string) {
       return JSON.parse(storedItem);
     }
   } catch (error) {
-    console.error("Error loading data: ", error);
+    console.error("Error loading data: ", error, "for key: ", key);
   }
 }
 
