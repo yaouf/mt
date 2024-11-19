@@ -44,7 +44,7 @@ function EditorsPick(props: Readonly<TopProps>) {
               showsHorizontalScrollIndicator={false}
               snapToAlignment="start"
               snapToInterval={315}
-              decelerationRate={0.85}
+              decelerationRate={0}
               contentContainerStyle={{
                 // paddingLeft: 10,x
                 paddingBottom: 15,
