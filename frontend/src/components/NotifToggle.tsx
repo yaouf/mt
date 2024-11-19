@@ -1,11 +1,11 @@
 import * as Notifications from "expo-notifications";
 import { Dispatch, SetStateAction, useContext } from "react";
 import { Alert, Linking, Switch, Text, View } from "react-native";
-import { setAsync } from "src/code/helpers";
-import { updateSettings } from "src/code/serverlessAPIs";
+import { updateSettings } from "src/api/backendAPIs";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { fyp } from "src/styles/pages";
 import { text } from "src/styles/styles";
+import { setAsync } from "src/utils/helpers";
 
 type NotifProps = {
   title: string;
@@ -16,7 +16,7 @@ type NotifProps = {
   asyncName?: string;
 };
 
-function Notif({
+function NotifToggle({
   title,
   description,
   value,
@@ -33,12 +33,85 @@ function Notif({
 
   const updateBackend = (newVal: boolean) => {
     try {
+      // TODO: refactor this to be cleaner, maybe take in an object of all the notifs to update
+      // Still keep all new notif preferences so that settings stay in sync
       if (asyncName === "breakingNotifs") {
-        updateSettings(deviceID, newVal, undefined, undefined);
+        updateSettings(
+          deviceID,
+          newVal,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined
+        );
       } else if (asyncName === "universityNewsNotifs") {
-        updateSettings(deviceID, undefined, newVal, undefined);
+        updateSettings(
+          deviceID,
+          undefined,
+          newVal,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined
+        );
       } else if (asyncName === "metroNotifs") {
-        updateSettings(deviceID, undefined, undefined, newVal);
+        updateSettings(
+          deviceID,
+          undefined,
+          undefined,
+          newVal,
+          undefined,
+          undefined,
+          undefined,
+          undefined
+        );
+      } else if (asyncName === "opinionsNotifs") {
+        updateSettings(
+          deviceID,
+          undefined,
+          undefined,
+          undefined,
+          newVal,
+          undefined,
+          undefined,
+          undefined
+        );
+      } else if (asyncName === "artsAndCultureNotifs") {
+        updateSettings(
+          deviceID,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          newVal,
+          undefined,
+          undefined
+        );
+      } else if (asyncName === "sportsNotifs") {
+        updateSettings(
+          deviceID,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          newVal,
+          undefined
+        );
+      } else if (asyncName === "scienceAndResearchNotifs") {
+        updateSettings(
+          deviceID,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          newVal
+        );
       }
     } catch (error) {
       console.log("error updating settings", error);
@@ -47,13 +120,16 @@ function Notif({
 
   const toggle = async () => {
     if (onboarding) {
+      console.log("calling setState in onboarding toggle", !value);
       setValue((previousState: boolean) => !previousState);
     } else {
       // update system permission status (on device and in backend)
       if (systemPermissionStatus === "granted") {
-        updateBackend(!value); // TODO: is this the right value even if toggle quickly??
-        setValue((previousState: boolean) => !previousState);
-        setAsync(asyncName as string, JSON.stringify(!value));
+        console.log("new value in toggle", !value);
+        const newValue = !value;
+        setValue(newValue);
+        setAsync(asyncName as string, JSON.stringify(newValue));
+        updateBackend(newValue); // TODO: is this the right value even if toggle quickly??
       } else if (systemPermissionStatus === "denied") {
         Alert.alert(
           "Enable Notifications",
@@ -89,9 +165,11 @@ function Notif({
     ? value
     : systemPermissionStatus === "granted" && value;
 
+  console.log("value for toggle title in NotifToggle", title, toggleValue);
+
   return (
     <View style={fyp.toggleRow}>
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Text style={text.sectionHeader3}>{title}</Text>
         <Text style={text.notifSmall} ellipsizeMode="tail">
           {description}
@@ -110,4 +188,4 @@ function Notif({
   );
 }
 
-export default Notif;
+export default NotifToggle;

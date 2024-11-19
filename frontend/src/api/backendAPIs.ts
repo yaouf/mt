@@ -1,22 +1,32 @@
 import { Platform } from "react-native";
 
 // wrap in try catch when call!!
-
+type NotificationSettings = {
+  breaking: boolean;
+  universityNews: boolean;
+  metro: boolean;
+  opinions: boolean;
+  artsAndCulture: boolean;
+  sports: boolean;
+  scienceAndResearch: boolean;
+};
 /**
  * Constructs JSON Body that contains device info and push token to send a POST
  * request to APi endpoint
  */
 export const createDevice = async (
-  breaking: boolean,
-  universityNews: boolean,
-  metro: boolean,
+  notificationSettings: NotificationSettings,
   expoPushToken: string
 ): Promise<string> => {
   const body = JSON.stringify({
     deviceType: Platform.OS,
-    "Breaking News": breaking,
-    "University News": universityNews,
-    "Metro": metro,
+    "Breaking News": notificationSettings.breaking,
+    "University News": notificationSettings.universityNews,
+    Metro: notificationSettings.metro,
+    Opinions: notificationSettings.opinions,
+    "Arts and Culture": notificationSettings.artsAndCulture,
+    Sports: notificationSettings.sports,
+    "Science and Research": notificationSettings.scienceAndResearch,
     expoPushToken: expoPushToken,
     isPushEnabled: true,
   });
@@ -37,6 +47,7 @@ export const createDevice = async (
   };
 
   try {
+    // TODO: use envalid to ensure endpoints are defined.
     const response = await fetch(
       process.env.EXPO_PUBLIC_CREATE_DEVICE_ENDPOINT ?? "",
       requestOptions
@@ -79,13 +90,21 @@ export const updateSettings = async (
   deviceId: string,
   breaking?: boolean,
   universityNews?: boolean,
-  metro?: boolean
+  metro?: boolean,
+  opinions?: boolean,
+  artsAndCulture?: boolean,
+  sports?: boolean,
+  scienceAndResearch?: boolean
 ) => {
   const body = JSON.stringify({
     deviceId: deviceId,
     "Breaking News": breaking,
     "University News": universityNews,
-    "Metro": metro,
+    Metro: metro,
+    Opinions: opinions,
+    "Arts and Culture": artsAndCulture,
+    Sports: sports,
+    "Science and Research": scienceAndResearch,
   });
 
   console.log("updating settings for device", deviceId);
@@ -107,6 +126,42 @@ export const updateSettings = async (
 
   if (response.status !== 200) {
     console.log("response code:", response.status);
+    console.log("response message:", response.statusText);
+    console.log("response body:", await response.text());
+  } else {
+    console.log("success");
+  }
+};
+
+/**
+ * Constructs JSON Body that contains device id to get settings for
+ */
+export const viewSettings = async (deviceId: string) => {
+  const body = JSON.stringify({
+    deviceId: deviceId,
+  });
+
+  console.log("viewing settings for device", deviceId);
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": process.env.EXPO_PUBLIC_API_KEY,
+    },
+    body: body,
+    redirect: "follow",
+  };
+
+  const response = await fetch(
+    process.env.EXPO_PUBLIC_VIEW_SETTINGS_ENDPOINT ?? "",
+    requestOptions
+  );
+
+  if (response.status !== 200) {
+    console.log("response code:", response.status);
+    console.log("response message:", response.statusText);
+    console.log("response body:", await response.text());
   } else {
     console.log("success");
   }

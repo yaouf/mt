@@ -12,7 +12,15 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_ENV": "production",
+        "EXPO_PUBLIC_API_KEY": "${EXPO_PUBLIC_API_KEY}",
+        "EXPO_PUBLIC_CREATE_DEVICE_ENDPOINT": "${EXPO_PUBLIC_CREATE_DEVICE_ENDPOINT}",
+        "EXPO_PUBLIC_EDITOR_PICKS_URL": "${EXPO_PUBLIC_EDITOR_PICKS_URL}",
+        "EXPO_PUBLIC_UPDATE_SETTINGS_ENDPOINT": "${EXPO_PUBLIC_UPDATE_SETTINGS_ENDPOINT}",
+        "EXPO_PUBLIC_VIEW_SETTINGS_ENDPOINT": "${EXPO_PUBLIC_VIEW_SETTINGS_ENDPOINT}"
+      }
     }
   },
   "submit": {
