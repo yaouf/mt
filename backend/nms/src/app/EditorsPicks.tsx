@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 // TODO: having EditorsPick and EditorsPicks is confusing.
 const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const [url, setUrl] = useState("");
+  const [startindex, setStartIndex] = useState<number | null>(null);
+  
+
   const handleAddPick = async () => {
     if (!url) {
       console.error("URL cannot be empty");
@@ -52,6 +55,26 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
     }
   };
 
+  function handleDragOver(event: React.DragEvent<HTMLTableRowElement>): void {
+    event.preventDefault();
+  }
+  
+  function handleDragStart(index: number): void {
+    setStartIndex(index);
+  };
+
+  function handleDrop(index: any): void {
+    if (index == null || index === startindex) {
+      return;
+    }
+    const newPicks = [...editorsPicks];
+    if (startindex !== null) {
+      [newPicks[startindex], newPicks[index]] = [newPicks[index], newPicks[startindex]];
+      setEditorsPicks(newPicks);
+    }
+    setStartIndex(null);
+  }
+
   return (
     <div className="container mx-auto px-8 py-2">
       <h2 className="text-2xl font-bold mb-4">Editor&apos;s Picks</h2>
@@ -64,7 +87,13 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         </thead>
         <tbody>
           {editorsPicks.map((pick, index) => (
-            <tr key={index} className="hover:bg-gray-50">
+            <tr 
+            key={index} 
+            draggable="true"
+            onDragStart={() => handleDragStart(index)}
+              onDragOver={handleDragOver}
+              onDrop={() => handleDrop(index)}
+            className="hover:bg-gray-50">
               <td className="py-2 px-4 border-b">
                 <a
                   href={pick.url}
