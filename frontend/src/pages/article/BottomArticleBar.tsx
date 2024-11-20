@@ -13,12 +13,15 @@ import { shareArticle } from "./ShareArticle";
  * action bar at the bottom of each article
  * share, save, (notifications for this section / author in a future version)
  */
+<<<<<<< HEAD
 // TODO: rename to BottomArticleBar
+=======
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
 function BottomArticleBar(props: ArticleDetailProps) {
   const navigation = useNavigation();
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
-  // TODO: if deviceId does not exist, go through onboarding again. 
+  // TODO: if deviceId does not exist, go through onboarding again.
   // TODO: make the bottom bar buttons larger
   useEffect(() => {
     setSaved(props.uuid in savedArticles);
@@ -46,7 +49,11 @@ function BottomArticleBar(props: ArticleDetailProps) {
           accessibilityLabel="Back Button"
           accessibilityHint="Press to go back to the previous screen"
         >
+<<<<<<< HEAD
           <Ionicons name="arrow-back" size={28} color="#1C1B1F" />
+=======
+          <Ionicons name="arrow-back" size={26} color="#1C1B1F" />
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={() => handleNotification()}>
           <Image
@@ -76,9 +83,15 @@ function BottomArticleBar(props: ArticleDetailProps) {
           accessibilityHint="Press to bookmark or unbookmark the article"
         >
           {saved ? (
+<<<<<<< HEAD
             <Ionicons name="bookmark" size={28} color="#1C1B1F" />
           ) : (
             <Ionicons name="bookmark-outline" size={28} color="#1C1B1F" />
+=======
+            <Ionicons name="bookmark" size={26} color="#1C1B1F" />
+          ) : (
+            <Ionicons name="bookmark-outline" size={26} color="#1C1B1F" />
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
           )}
         </TouchableOpacity>
         <TouchableOpacity

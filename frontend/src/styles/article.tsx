@@ -119,8 +119,14 @@ export const articleStyles = StyleSheet.create({
     // height: 300,
     flexShrink: 0,
     backgroundColor: "#F3F3F3",
+<<<<<<< HEAD
     paddingVertical: "5%",
     paddingRight: 50,
+=======
+    paddingTop: "2%",
+    paddingBottom: "5%",
+    paddingRight: 48,
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
     paddingLeft: 48,
   },
   adImage: {
@@ -169,7 +175,11 @@ export const articleStyles = StyleSheet.create({
     padding: 18,
     justifyContent: "space-between",
     alignItems: "flex-start",
+<<<<<<< HEAD
     height: 70,
+=======
+    height: 65,
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
     borderTopWidth: 1,
     borderColor: "#eee",
   },
@@ -182,7 +192,12 @@ export const articleStyles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   icon: {
+<<<<<<< HEAD
     width: 28,
     height: 28,
+=======
+    width: 26,
+    height: 26,
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
   },
 });

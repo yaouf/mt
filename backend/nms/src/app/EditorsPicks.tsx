@@ -1,10 +1,9 @@
 import { SetStateAction, useState } from "react";
-// TODO: having EditorsPick and EditorsPicks is confusing.
+// TODO: having EditorsPick and EditorsPicks is confusing.// TODO: having EditorsPick and EditorsPicks is confusing.
 const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const [url, setUrl] = useState("");
   const [startindex, setStartIndex] = useState<number | null>(null);
   
-
   const handleAddPick = async () => {
     if (!url) {
       console.error("URL cannot be empty");
@@ -22,8 +21,8 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
 
       if (response.ok) {
         const data = await response.json();
-        setEditorsPicks((prev) => [...prev, data]);
-        setUrl("");
+        setEditorsPicks((prev) => [...prev, data]); 
+        setUrl(""); 
       } else {
         console.error("Error adding editor's pick");
       }
@@ -35,7 +34,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const handleDeletePick = async (url) => {
     try {
       const response = await fetch(`/api/editors-picks/delete`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
           "Content-Type": "application/json",
         },
@@ -44,14 +43,15 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
       // Log the response to see if the deletion was successful
       console.log("Delete response:", response);
 
+
       if (response.ok) {
         // Filter out the deleted pick from the state
-        setEditorsPicks(editorsPicks.filter((pick) => pick.url !== url));
+        setEditorsPicks(editorsPicks.filter(pick => pick.url !== url));
       } else {
-        console.error("Failed to delete editor's pick");
+        console.error('Failed to delete editor\'s pick');
       }
     } catch (error) {
-      console.error("Error deleting editor's pick:", error);
+      console.error('Error deleting editor\'s pick:', error);
     }
   };
 
@@ -105,8 +105,8 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
                 </a>
               </td>
               <td className="py-2 px-4 border-b">
-                <button
-                  onClick={() => handleDeletePick(pick.url)}
+                <button 
+                  onClick={() => handleDeletePick(pick.url)} 
                   className="bg-red-500 text-white px-4 py-2 rounded-md"
                 >
                   Delete

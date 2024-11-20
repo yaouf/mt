@@ -62,16 +62,38 @@ function UpdateScreen({ navigation }: NavProp) {
         contentContainerStyle={styles.middleSection}
         showsVerticalScrollIndicator={false}
       >
+<<<<<<< HEAD
          <Text style={styles.title}>Welcome Back!</Text>
+=======
+        <Text style={styles.title}>Welcome Back!</Text>
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
         <Text style={styles.description}>
           We've made some exciting updates:
         </Text>
         <View style={styles.bulletList}>
+<<<<<<< HEAD
           <Text style={styles.bulletPoint}>• New notification preferences for sections</Text>
           <Text style={styles.bulletPoint}>• Customizable home page to reorder sections for your interests</Text>
           <Text style={styles.bulletPoint}>• Editor's Picks and Most Popular sections in search</Text>
           <Text style={styles.bulletPoint}>• Double-tap in article view to save for later</Text>
           <Text style={styles.bulletPoint}>• Bug fixes and performance improvements</Text>
+=======
+          <Text style={styles.bulletPoint}>
+            • New notification preferences for sections
+          </Text>
+          <Text style={styles.bulletPoint}>
+            • Customizable home page to reorder sections for your interests
+          </Text>
+          <Text style={styles.bulletPoint}>
+            • Editor's Picks sections in search
+          </Text>
+          <Text style={styles.bulletPoint}>
+            • Double-tap in article view to save for later
+          </Text>
+          <Text style={styles.bulletPoint}>
+            • Bug fixes and performance improvements
+          </Text>
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
         </View>
       </ScrollView>
       <View style={styles.bottomSection}>
@@ -114,9 +136,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: "7%",
     width: "100%",
+<<<<<<< HEAD
 
   },
   
+=======
+  },
+
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
   middleSection: {
     marginTop: screenHeight * 0.05,
     // flex: 1,
@@ -147,7 +174,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   bulletList: {
+<<<<<<< HEAD
     width: '100%',
+=======
+    width: "100%",
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
     marginTop: 18,
   },
   bulletPoint: {

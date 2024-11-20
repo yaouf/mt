@@ -14,10 +14,8 @@ export default async function getDevices(
   try {
     const search = req.query.search ? (req.query.search as string) : "";
     const index = req.query.page ? parseInt(req.query.page as string, 10) : 0;
-    const devicesPerPage = req.query.perPage
-      ? parseInt(req.query.perPage as string, 10)
-      : 1;
-    const offset = index * devicesPerPage;
+    const devicesPerPage = req.query.perPage ? parseInt(req.query.perPage as string, 10) : 1; 
+    const offset = index * devicesPerPage; 
 
     // Count query to get the total number of devices matching the search term
     const totalDevicesResult = await db("devices")
@@ -40,7 +38,8 @@ export default async function getDevices(
         }
       })
       .offset(offset)
-      .limit(devicesPerPage);
+      .limit(devicesPerPage)
+      .where(true);
 
     res.status(200).json({ totalDevices, devices });
   } catch (error) {

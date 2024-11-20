@@ -20,7 +20,11 @@ import { Article } from "src/types/data";
 
 const adUnitId = __DEV__
   ? TestIds.BANNER
+<<<<<<< HEAD
   : "ca-app-pub-8731315434789018/9601202667";
+=======
+  : "ca-app-pub-8731315434789018/5986330638";
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
 
 const IframeRenderer = React.memo(
   ({ tnode }: any) => {

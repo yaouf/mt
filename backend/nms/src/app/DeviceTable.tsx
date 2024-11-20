@@ -14,9 +14,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
     const fetchDevices = async () => {
       try {
         const response = await fetch(
-          `/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}${
-            search ? `&search=${encodeURIComponent(search)}` : ""
-          }`
+          `/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}`
         );
         const data = await response.json();
         setDevices(data.devices);

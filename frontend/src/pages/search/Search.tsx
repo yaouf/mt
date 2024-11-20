@@ -1,5 +1,9 @@
 import { trackEvent } from "@aptabase/react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+<<<<<<< HEAD
+=======
+import AsyncStorage from "@react-native-async-storage/async-storage";
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
 import { useEffect, useRef, useState } from "react";
 import {
   Animated,
@@ -18,7 +22,10 @@ import HorizontalCard from "../../components/cards/HorizontalCard";
 import { varGray1, varTextColor } from "../../styles/styles";
 import { Section_Type } from "../home/HomeScreen";
 import EditorsPick from "../home/sections/EditorsPick";
+<<<<<<< HEAD
 import MostPopular from "../home/sections/MostPopular";
+=======
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -44,6 +51,35 @@ function Search({ navigation }: NavProp) {
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
   const animatedWidth = useRef(new Animated.Value(0)).current;
+
+  const [usingPrefetchedData, setUsingPrefetchedData] = useState(true);
+
+  useEffect(() => {
+    const loadPrefetchedData = async () => {
+      try {
+        // Try to load prefetched data
+        const prefetchedEditorsPicks = await AsyncStorage.getItem(
+          "prefetchedEditorsPicks"
+        );
+        const prefetchedPopularStories = await AsyncStorage.getItem(
+          "prefetchedPopularStories"
+        );
+
+        if (prefetchedEditorsPicks && prefetchedPopularStories) {
+          setEditorsPicksStories(JSON.parse(prefetchedEditorsPicks));
+          setMostPopularStories(JSON.parse(prefetchedPopularStories));
+          setTopLoaded(true);
+        } else {
+          setUsingPrefetchedData(false);
+        }
+      } catch (error) {
+        console.error("Error loading prefetched data:", error);
+        setUsingPrefetchedData(false);
+      }
+    };
+
+    loadPrefetchedData();
+  }, []);
 
   const handleSearch = async () => {
     setLoading(true);
@@ -97,17 +133,27 @@ function Search({ navigation }: NavProp) {
     outputRange: ["100%", "80%"],
   });
 
+<<<<<<< HEAD
   const [top, setTop] = useState<string[]>([]);
   const [topLoaded, setTopLoaded] = useState(false);
   const [topStories, setTopStories] = useState<Article[]>();
+=======
+  const [topLoaded, setTopLoaded] = useState(false);
+  const [mostPopularStories, setMostPopularStories] = useState<Article[]>();
+  const [editorsPicksStories, setEditorsPicksStories] = useState<Article[]>([]);
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchTop = async () => {
     try {
       const data: Article[] = await fetchSectionHome("homepage", 5);
+<<<<<<< HEAD
       const top: string[] = data.map((a) => a.uuid);
       setTop(top);
       setTopStories(data);
+=======
+      setMostPopularStories(data);
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
     } catch (e) {
       console.warn(e);
     } finally {
@@ -116,6 +162,7 @@ function Search({ navigation }: NavProp) {
     }
   };
 
+<<<<<<< HEAD
   const [editorsPicks, setEditorsPicks] = useState<Article[]>([]);
   useEffect(() => {
     fetchEditorsPicks()
@@ -135,6 +182,34 @@ function Search({ navigation }: NavProp) {
   const onRefresh = async () => {
     setRefreshing(true);
     await fetchTop();
+=======
+  useEffect(() => {
+    if (!usingPrefetchedData) {
+      fetchEditorsPicks()
+        .then((articles) => {
+          setEditorsPicksStories(articles);
+        })
+        .catch((error) => {
+          console.error("Failed to load editor's picks:", error);
+        });
+    }
+  }, [usingPrefetchedData]);
+
+  useEffect(() => {
+    if (!usingPrefetchedData) {
+      fetchTop();
+      // fetchEditorsPicks();
+    }
+  }, [usingPrefetchedData]);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setUsingPrefetchedData(false);
+    const editorsPicks = await fetchEditorsPicks();
+    setEditorsPicksStories(editorsPicks);
+    const top = await fetchSectionHome("homepage", 5);
+    setMostPopularStories(top);
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
     setRefreshing(false);
   };
 
@@ -151,6 +226,7 @@ function Search({ navigation }: NavProp) {
   const sections: Section_Type[] = [
     {
       id: 1,
+<<<<<<< HEAD
       component: (
         <EditorsPick topStories={editorsPicks} navigation={navigation} />
       ),
@@ -161,6 +237,25 @@ function Search({ navigation }: NavProp) {
         <MostPopular topStories={topStories} navigation={navigation} />
       ),
     },
+=======
+      component:
+        editorsPicksStories.length > 0 ? (
+          <EditorsPick
+            editorsPicksStories={editorsPicksStories}
+            navigation={navigation}
+          />
+        ) : null,
+    },
+    // {
+    //   id: 2,
+    //   component: mostPopularStories ? (
+    //     <MostPopular
+    //       mostPopularStories={mostPopularStories}
+    //       navigation={navigation}
+    //     />
+    //   ) : null,
+    // },
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
   ];
 
   return (
@@ -219,6 +314,7 @@ function Search({ navigation }: NavProp) {
       </View>
 
       {!searchCompleted && !loading && (
+<<<<<<< HEAD
         <View accessibilityLabel="Home Screen">
           {topLoaded && editorsPicks.length > 0 && (
             <FlatList
@@ -233,6 +329,22 @@ function Search({ navigation }: NavProp) {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             accessibilityLabel="Section Headers List"
+=======
+        <View accessibilityLabel="Search Results">
+          {topLoaded && (
+            <FlatList
+              data={sections.filter((section) => section.component !== null)}
+              renderItem={({ item }) => item.component}
+              keyExtractor={(item) => item.id.toString()}
+              ItemSeparatorComponent={() => (
+                <View style={{ marginHorizontal: 16 }}></View>
+              )}
+              initialNumToRender={1}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+              accessibilityLabel="Section Headers List"
+>>>>>>> e481223bbba4271bc6fd087b618c40700b3d6db4
             />
           )}
         </View>
