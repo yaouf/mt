@@ -17,7 +17,11 @@ import {
 } from "react";
 import { HoldMenuProvider } from "react-native-hold-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { fetchArticle } from "src/api/fetchContent";
+import {
+  fetchArticle,
+  fetchEditorsPicks,
+  fetchSectionHome,
+} from "src/api/fetchContent";
 import Header from "src/components/Header";
 import { Article } from "src/types/data";
 import { getAsync } from "src/utils/helpers";
@@ -106,6 +110,37 @@ export default function BottomNavigator() {
   const [notification, setNotification] = useState<
     Notifications.Notification | undefined
   >(undefined);
+
+  const [searchContentPrefetched, setSearchContentPrefetched] = useState(false);
+
+  const prefetchSearchContent = async () => {
+    if (!searchContentPrefetched) {
+      try {
+        // Prefetch editors picks
+        const editorsPicks = await fetchEditorsPicks();
+        // Prefetch most popular stories
+        const popularStories = await fetchSectionHome("homepage", 5);
+
+        // Store prefetched data in AsyncStorage for quick access
+        await AsyncStorage.setItem(
+          "prefetchedEditorsPicks",
+          JSON.stringify(editorsPicks)
+        );
+        await AsyncStorage.setItem(
+          "prefetchedPopularStories",
+          JSON.stringify(popularStories)
+        );
+
+        setSearchContentPrefetched(true);
+      } catch (error) {
+        console.error("Error prefetching search content:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    prefetchSearchContent();
+  }, []);
 
   useEffect(() => {
     const load = async () => {
