@@ -1,5 +1,5 @@
 import type { Knex } from "knex";
-
+// TODO: we really only need one db folder. Delete the one in serverless and use this instead. 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema
     .createTable("devices", table => {

@@ -4,8 +4,10 @@ import { User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { Notification } from "../types";
 import AuthWrapper from "./AuthWrapper";
+import DeviceCounts from "./DeviceCounts";
 import DeviceTable from "./DeviceTable";
 import EditorsPicks from "./EditorsPicks";
+import EnvVars from "./EnvVars";
 import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
@@ -26,6 +28,13 @@ export default function Home() {
   const [metroCount, setMetroCount] = useState<string>("Loading...");
   const [breakingCount, setBreakingCount] = useState<string>("Loading...");
   const [universityCount, setUniversityCount] = useState<string>("Loading...");
+  const [sportsCount, setSportsCount] = useState<string>("Loading...");
+  const [artsAndCultureCount, setArtsAndCultureCount] =
+    useState<string>("Loading...");
+  const [scienceAndResearchCount, setScienceAndResearchCount] =
+    useState<string>("Loading...");
+  const [opinionsCount, setOpinionsCount] = useState<string>("Loading...");
+
   const [ntfEnabled, setNtfEnabled] = useState<string>("Loading...");
 
   useEffect(() => {
@@ -130,112 +139,66 @@ export default function Home() {
     fetchBreakingCount();
   }, []);
 
+  useEffect(() => {
+    const fetchSportsCount = async () => {
+      try {
+        const response = await fetch("/api/devices/sportsCount");
+        const data = await response.json();
+        setSportsCount(data.count.toString());
+      } catch (error) {
+        console.error(
+          "Error fetching device count for sports notifications:",
+          error
+        );
+      }
+    };
+    fetchSportsCount();
+  }, []);
+
+  useEffect(() => {
+    const fetchArtsAndCultureCount = async () => {
+      const response = await fetch("/api/devices/artsAndCultureCount");
+      const data = await response.json();
+      setArtsAndCultureCount(data.count.toString());
+    };
+    fetchArtsAndCultureCount();
+  }, []);
+
+  useEffect(() => {
+    const fetchScienceAndResearchCount = async () => {
+      const response = await fetch("/api/devices/scienceAndResearchCount");
+      const data = await response.json();
+      setScienceAndResearchCount(data.count.toString());
+    };
+    fetchScienceAndResearchCount();
+  }, []);
+
+  useEffect(() => {
+    const fetchOpinionsCount = async () => {
+      const response = await fetch("/api/devices/opinionsCount");
+      const data = await response.json();
+      setOpinionsCount(data.count.toString());
+    };
+    fetchOpinionsCount();
+  }, []);
+
   return (
     <AuthWrapper>
       {(user) => (
         <>
-          {/* Display environment variables */}
-          <div className="flex justify-center py-3">
-            <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
-              <h2 className="text-lg font-semibold text-black mb-2">
-                Environment Variables
-              </h2>
-              <p className="text-gray-700 flex">
-                <span className="font-bold mr-2">NODE_ENV</span>
-                <span
-                  className={`${
-                    isProduction ? "text-red-500" : "text-gray-700"
-                  }`}
-                >
-                  {process.env.NODE_ENV}
-                </span>
-              </p>
-              <p className="text-gray-700 flex">
-                <span className="font-bold mr-2">NEXT_PUBLIC_ENV</span>
-                <span
-                  className={`${
-                    isProduction ? "text-red-500" : "text-gray-700"
-                  }`}
-                >
-                  {process.env.NEXT_PUBLIC_ENV}
-                </span>
-              </p>
-            </div>
-          </div>
+          <EnvVars isProduction={isProduction} />
 
-          {/* <div className="flex justify-center py-3">
-            <div className="flex flex-col items-start space-y-2 px-5 md:px-20 py-3 border border-gray-300 rounded-md bg-gray-50">
-              <p className="text-gray-700 flex">
-                <span className="font-bold mr-2">Total devices</span>
-                <span className="text-gray-700">{deviceCount}</span>
-              </p>
-            </div>
-          </div> */}
-
-          <div className="flex justify-center py-3">
-            <div className="w-full max-w-3xl p-6 bg-white border border-gray-300 rounded-lg shadow-sm">
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">
-                Notifications by Type
-              </h2>
-
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="px-6 py-3 text-left text-md font-semibold text-gray-700">
-                        Type
-                      </th>
-                      <th className="px-6 py-3 text-right text-md font-semibold text-gray-700">
-                        Count
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-md font-medium text-gray-800">
-                        Total Devices
-                      </td>
-                      <td className="px-6 py-4 text-md text-gray-700 text-right">
-                        {deviceCount}
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-md font-medium text-gray-800">
-                        Notifications Enabled
-                      </td>
-                      <td className="px-6 py-4 text-md text-gray-700 text-right">
-                        {ntfEnabled}
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-md font-medium text-gray-800">
-                        Metro
-                      </td>
-                      <td className="px-6 py-4 text-md text-gray-700 text-right">
-                        {metroCount}
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-md font-medium text-gray-800">
-                        Breaking News
-                      </td>
-                      <td className="px-6 py-4 text-md text-gray-700 text-right">
-                        {breakingCount}
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-md font-medium text-gray-800">
-                        University News
-                      </td>
-                      <td className="px-6 py-4 text-md text-gray-700 text-right">
-                        {universityCount}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+          <DeviceCounts
+            deviceCount={deviceCount}
+            ntfEnabled={ntfEnabled}
+            metroCount={metroCount}
+            breakingCount={breakingCount}
+            universityCount={universityCount}
+            sportsCount={sportsCount}
+            artsAndCultureCount={artsAndCultureCount}
+            scienceAndResearchCount={scienceAndResearchCount}
+            opinionsCount={opinionsCount}
+          />
 
           <main className="flex min-h-screen flex-col items-center justify-between md:px-20 py-3">
             <NotificationTable
@@ -255,11 +218,6 @@ export default function Home() {
                 />
               </>
             )}
-            {/* <div className="flex justify-center py-10"></div>
-            <EditorsPicks
-              editorsPicks={editorsPicks} // Pass the editorsPicks state
-              setEditorsPicks={setEditorsPicks} // Pass the state setter function
-            /> */}
 
             <DeviceTable deviceCount={deviceCount} />
           </main>

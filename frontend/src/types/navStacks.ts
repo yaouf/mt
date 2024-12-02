@@ -17,6 +17,7 @@ export type HomeStackProps = {
 export type SearchStackProps = {
   SearchScreen: undefined;
   Article: { data: Article };
+  FilterScreen: undefined;
 };
 
 export type SettingsStackProps = {
@@ -29,7 +30,9 @@ export type SettingsStackProps = {
 
 export type OnboardParams = {
   WelcomeScreen: undefined;
+  UpdateScreen: { update: boolean };
   PushNotifs: { parentNav: StackNavigationProp<any, any> };
+  MainApp: undefined;
 };
 
 /**
