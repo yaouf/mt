@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Device } from "../../pages/api/types/types";
 
-interface DeviceTableProps {
-  deviceCount: number;
-}
+interface DeviceTableProps {}
 
-const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
+const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
+  const [search, setSearch] = useState("");
+  const [deviceCount, setDeviceCount] = useState<number>(0);
   const [devices, setDevices] = useState<Device[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const DEVICES_PER_PAGE = 30;
@@ -14,23 +14,33 @@ const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
     const fetchDevices = async () => {
       try {
         const response = await fetch(
-          `/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}`
+          `/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}${
+            search ? `&search=${encodeURIComponent(search)}` : ""
+          }`
         );
         const data = await response.json();
-        setDevices(data);
+        setDevices(data.devices);
+        setDeviceCount(parseInt(data.totalDevices));
       } catch (error) {
         console.error("Error fetching devices:", error);
       }
     };
 
     fetchDevices();
-  }, [currentPage]);
+  }, [currentPage,search]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
     
     <div className="container mx-auto p-5 mt-14">
       <h1 className="text-2xl font-bold mb-4">Device List</h1>
+      <input
+        type="text"
+        placeholder="Expo Push Token"
+        className="border border-gray-300 p-2 rounded-md"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr className="bg-gray-200">
@@ -46,7 +56,6 @@ const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
             </th>
             <th className="py-2 px-4 border-b text-left">Expo Push Token</th>
             <th className="py-2 px-4 border-b text-left">Date created</th>
-
           </tr>
         </thead>
         <tbody>
