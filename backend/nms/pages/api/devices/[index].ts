@@ -22,8 +22,7 @@ export default async function getDevices(
       .orderBy("expoPushToken", "asc")
       .offset(offset)
       .limit(devicesPerPage)
-      .where(true);
-
+      .where(true); 
     res.status(200).json(devices);
   } catch (error) {
     console.error("Error fetching devices from the database:", error);

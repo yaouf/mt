@@ -27,8 +27,8 @@ const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
   }, [currentPage]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   return (
+    
     <div className="container mx-auto p-5 mt-14">
       <h1 className="text-2xl font-bold mb-4">Device List</h1>
       <table className="min-w-full bg-white border border-gray-300">
@@ -45,6 +45,8 @@ const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
               Science and Research
             </th>
             <th className="py-2 px-4 border-b text-left">Expo Push Token</th>
+            <th className="py-2 px-4 border-b text-left">Date created</th>
+
           </tr>
         </thead>
         <tbody>
@@ -77,6 +79,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({ deviceCount }) => {
               <td className="py-2 px-4 border-b text-left">
                 {device.expoPushToken}
               </td>
+              <td className="py-2 px-4 border-b text-left">{device.dateCreated}</td>
             </tr>
           ))}
         </tbody>

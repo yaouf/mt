@@ -20,6 +20,7 @@ export type Device = {
   "Science and Research": boolean;
   "Opinions": boolean;
   expoPushToken: string;
+  dateCreated: string;
 };
 
 export interface EditorPick {
