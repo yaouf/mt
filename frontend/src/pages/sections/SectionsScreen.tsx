@@ -2,7 +2,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, RefreshControl, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { fetchSection } from "src/code/fetchContent";
+import { fetchSection } from "src/api/fetchContent";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
 import SmallCard from "src/components/cards/SmallCard";
@@ -108,7 +108,9 @@ function SectionsScreen({
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-    
+            // scrollIndicatorInsets={{ right: 4 }}
+            // contentContainerStyle={{ paddingRight: 20 }}
+            // style={{ marginRight: -20 }}
           />
         </View>
       </View>

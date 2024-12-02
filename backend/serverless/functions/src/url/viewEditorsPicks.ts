@@ -13,6 +13,7 @@ export const viewEditorsPicks = onRequest(async (request, response) => {
   const environment = envars.environment.value();
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
+  const newDb = db(dbParams);
   logger.info("dbParams: ", dbParams);
 
   logger.info("Viewing editors picks", { structuredData: true });
@@ -20,7 +21,10 @@ export const viewEditorsPicks = onRequest(async (request, response) => {
   try {
     // Get the editors picks from the editors_picks table
     // TODO: Change table name to editors_picks
-    const result = await db(dbParams)("editorspicks").select("url");
+    const result = await newDb("editorspicks").select("url");
+
+    await newDb.destroy();
+
 
     logger.info(`Editors picks: ${result}`);
 

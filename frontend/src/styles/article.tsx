@@ -1,5 +1,12 @@
 import { StyleSheet } from "react-native";
-import { font1, font2, font3, varTextColor, varGray1, varTextSecondaryColor } from "./styles";
+import {
+  font1,
+  font2,
+  font3,
+  varGray1,
+  varTextColor,
+  varTextSecondaryColor,
+} from "./styles";
 
 const fontsizeHeader = 16; // figma says 12.456??
 //spacing is also a little weird in the header with the fonts rn
@@ -12,13 +19,13 @@ export const articleStyles = StyleSheet.create({
   mediaCaption: {
     color: varGray1,
     fontFamily: font1,
-    fontSize: fontsizeHeader-2,
+    fontSize: fontsizeHeader - 2,
     fontStyle: "normal",
     fontWeight: "400",
     marginTop: 12,
     marginBottom: 22,
     alignSelf: "flex-start",
-    marginLeft: -15
+    marginLeft: -15,
   },
   headingContainer: {
     display: "flex",
@@ -67,7 +74,7 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
-    marginTop: 3
+    marginTop: 3,
   },
   articleBody: {
     width: "100%",
@@ -75,7 +82,7 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     paddingBottom: 10,
-    marginLeft: -3
+    marginLeft: -3,
   },
   text: {
     color: varTextColor,
@@ -104,35 +111,42 @@ export const articleStyles = StyleSheet.create({
     lineHeight: 24,
   },
   advert: {
-    width: "auto",
-    height: 280,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    // height: 300,
     flexShrink: 0,
     backgroundColor: "#F3F3F3",
-    paddingTop: 36,
-    paddingRight: 50,
-    paddingBottom: 55,
+    paddingTop: "2%",
+    paddingBottom: "5%",
+    paddingRight: 48,
     paddingLeft: 48,
   },
   adImage: {
     display: "flex",
     width: 292,
-    height: 190,
-    paddingTop: 65.219,
-    paddingBottom: 63.457,
-    paddingRight: 146.282,
-    paddingLeft: 150.393,
+    // height: 190,
+    // paddingTop: 65.219,
+    // paddingBottom: 63.457,
+    // paddingRight: 146.282,
+    // paddingLeft: 150.393,
     justifyContent: "flex-end",
     alignItems: "center",
     flexShrink: 0,
     backgroundColor: "#C9C9C9",
   },
-  adAuthor: {
+  adText: {
     color: varGray1,
     fontFamily: font1,
     fontSize: fontsizeHeader,
     fontStyle: "normal",
     fontWeight: "400",
     textAlign: "center",
+
+    // paddingTop: "5%",
+    paddingBottom: 10,
     // lineHeight: "normal",
   },
   readMoreHeading: {
@@ -156,19 +170,20 @@ export const articleStyles = StyleSheet.create({
     padding: 18,
     justifyContent: "space-between",
     alignItems: "flex-start",
-    height: 60,
+    height: 65,
     borderTopWidth: 1,
     borderColor: "#eee",
   },
-    actions: {
+  actions: {
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "flex-end",
     flexDirection: "row",
-    gap: 10,
+    gap: 30,
+    paddingHorizontal: 5,
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 26,
+    height: 26,
   },
 });

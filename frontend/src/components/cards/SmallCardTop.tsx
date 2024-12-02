@@ -1,22 +1,22 @@
 import {
-    StyleSheet,
-    Text,
-    View,
-    TouchableWithoutFeedback,
-    StyleProp,
-    ViewStyle,
-  } from "react-native";
-  import { CardProps } from "src/types/navStacks";
-  import { formatDates } from "../../code/formatDates";
-  import { Tag } from "src/types/data";
-  import {
-    font1,
-    font2,
-    font3,
-    varTextColor,
-    varGray1,
-    varRed,
-  } from "../../styles/styles";
+  StyleProp,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+  ViewStyle,
+} from "react-native";
+import { Tag } from "src/types/data";
+import { CardProps } from "src/types/navStacks";
+import {
+  font1,
+  font2,
+  font3,
+  varGray1,
+  varRed,
+  varTextColor,
+} from "../../styles/styles";
+import { formatDates } from "../../utils/formatDates";
   
   function SmallCardTop({ article, navigation }: CardProps) {
     const all_tags = article.tags.map((t: Tag) => t.name);

@@ -3,8 +3,8 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "build:db": "cd ../db && npm run build",
-    "dangerous:update:db": "cd ../db && npm run build && npm run dangerous:update",
+    "build:db": "npm --prefix ../db run build",
+    "dangerous:update:db": "npm --prefix ../db run build && npm --prefix ../db run dangerous:update",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
