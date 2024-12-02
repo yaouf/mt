@@ -219,7 +219,7 @@ export default function Home() {
               </>
             )}
 
-            <DeviceTable deviceCount={deviceCount} />
+            <DeviceTable />
           </main>
         </>
       )}
