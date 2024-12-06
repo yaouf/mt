@@ -5,7 +5,7 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { menuStyles } from "src/styles/sectionMenu";
 import { NavProp } from "src/types/navStacks";
@@ -17,7 +17,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
     useContext(MenuContext);
 
-    const scrollViewRef = useRef<ScrollView>(null);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   if (!sectionMenu) {
     setSectionMenu(menuItems);
@@ -26,27 +26,27 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
   const textSizeMultiplier = PixelRatio.getFontScale();
   console.log("textSizeMultiplier", textSizeMultiplier);
-  const calculatedIconSize = 24* Math.sqrt(textSizeMultiplier);
+  const calculatedIconSize = 24 * Math.sqrt(textSizeMultiplier);
   console.log("calculatedIconSize", calculatedIconSize);
 
   useEffect(() => {
     // Need to wait for layout to complete before scrolling
     setTimeout(() => {
       const allButton = currSection === "all" ? 1 : 0;
-      const currentIndex = sectionMenu.findIndex(item => item.slug === currSection);
-      
+      const currentIndex = sectionMenu.findIndex(
+        (item) => item.slug === currSection
+      );
+
       // Calculate approximate position (may need to adjust these values later)
       const itemWidth = 80; // Approximate width of each menu item
       const scrollPosition = (currentIndex + allButton) * itemWidth;
-      
+
       scrollViewRef.current?.scrollTo({
         x: scrollPosition,
-        animated: true
+        animated: true,
       });
     }, 100);
   }, [currSection]);
-
-
 
   return (
     <ScrollView
@@ -66,10 +66,13 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         accessibilityRole="button"
         accessibilityLabel="Filter options"
       >
-        <Ionicons name="filter-outline" size={calculatedIconSize} color="black" />
+        <Ionicons
+          name="filter-outline"
+          size={calculatedIconSize}
+          color="black"
+        />
       </TouchableOpacity>
 
-      
       {currSection === "all" ? (
         <View
           style={menuStyles.menuItem}
