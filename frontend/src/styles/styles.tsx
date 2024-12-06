@@ -1,18 +1,43 @@
+import * as Font from "expo-font";
 import { Platform, StyleSheet } from "react-native";
 
 /**
  * file for base styles, fonts, layouts, text, etc
  */
 
+export const loadFonts = async () => {
+  await Font.loadAsync({
+    Georgia: {
+      uri: Platform.select({
+        web: "Georgia",
+        ios: "Georgia",
+        default: "Georgia",
+      }),
+      display: Font.FontDisplay.SWAP, // Add display strategy for web
+    },
+    Helvetica: {
+      uri: Platform.select({
+        web: "Helvetica Neue",
+        ios: "Helvetica Neue",
+        default: "Helvetica",
+      }),
+      display: Font.FontDisplay.SWAP,
+    },
+    "Helvetica-Condensed": {
+      uri: Platform.select({
+        web: "Helvetica Neue",
+        ios: "Helvetica Neue",
+        default: "Helvetica",
+      }),
+      display: Font.FontDisplay.SWAP,
+    },
+  });
+};
+
 export const font1 = "Georgia";
-// export const font2 = "Roboto Flex";
-// export const font3 = "Roboto Condensed";
-
-// for now until load fonts:
-export const font2 = Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif";
+export const font2 = Platform.OS === "ios" ? "Helvetica" : "Helvetica";
 export const font3 =
-  Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif-condensed";
-
+  Platform.OS === "ios" ? "Helvetica" : "Helvetica-Condensed";
 // to use in place of black
 export const varTextColor = "#020202";
 export const varTextSecondaryColor = "#333";
@@ -41,12 +66,12 @@ export const layout = StyleSheet.create({
   vStack: {
     rowGap: 0,
     marginTop: 0,
-    overflow: "visible"
+    overflow: "visible",
   },
   recentArticlesStack: {
     rowGap: 10,
     marginTop: 0,
-    overflow: "visible"
+    overflow: "visible",
   },
   grid: {
     flexDirection: "row",
@@ -69,7 +94,7 @@ export const text = StyleSheet.create({
     fontWeight: "800",
     fontSize: 26,
     fontFamily: font3,
-    paddingTop: 10
+    paddingTop: 10,
   },
   resetSectionsButton: {
     // main section headers
@@ -77,7 +102,7 @@ export const text = StyleSheet.create({
     fontWeight: "800",
     fontSize: 20,
     fontFamily: font3,
-    paddingTop: 0
+    paddingTop: 0,
   },
   sectionHeader2: {
     // with added padding for settings
@@ -155,5 +180,4 @@ export const settingsText = StyleSheet.create({
     ...text.normal,
     fontSize: 18,
   },
-  // ... other styles ...
 });

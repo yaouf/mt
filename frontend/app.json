@@ -11,14 +11,18 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.browndailyherald.thebrowndailyherald",
       "infoPlist": {
         "CFBundleURLTypes": [
           {
-            "CFBundleURLSchemes": ["browndailyherald"]
+            "CFBundleURLSchemes": [
+              "browndailyherald"
+            ]
           }
         ]
       }
@@ -39,6 +43,9 @@
       }
     },
     "owner": "bdh-app",
-    "plugins": ["expo-build-properties"]
+    "plugins": [
+      "expo-build-properties",
+      "expo-font"
+    ]
   }
 }
