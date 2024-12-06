@@ -169,7 +169,7 @@ function NotifToggle({
 
   return (
     <View style={fyp.toggleRow}>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingRight: 64 }}>
         <Text style={text.sectionHeader3}>{title}</Text>
         <Text style={text.notifSmall} ellipsizeMode="tail">
           {description}

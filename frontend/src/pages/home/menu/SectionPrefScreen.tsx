@@ -194,7 +194,6 @@ function SectionPrefScreen({ navigation }: NavProp) {
               onPress={() => add(item)}
               style={[menuStyles.rowItem, { height: itemHeight }]}
               key={`section-${item.id}`}
-              accessible={true}
             >
               <Feather
                 name="plus-circle"

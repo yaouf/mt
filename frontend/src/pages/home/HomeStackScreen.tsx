@@ -1,6 +1,4 @@
-import {
-  getFocusedRouteNameFromRoute,
-} from "@react-navigation/native";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
   Dispatch,
@@ -105,11 +103,10 @@ function HomeStackScreen({ navigation, route }) {
             headerShown: false,
           }}
         />
-        {/* Not including in release yet, since not sure people will use it */}
         <HomeStack.Screen
           name="SectionPref"
           component={SectionPrefScreen}
-          options={{ 
+          options={{
             headerShown: false,
           }}
         />

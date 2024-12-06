@@ -14,12 +14,12 @@ function SavedArticles({ navigation }: NavProp) {
   }));
 
   return (
-    <View style={baseStyles.container}>
+    <View style={[baseStyles.container, { marginTop: 20 }]}>
       <FlatList
         data={savedArticleArray}
-        style={{height: "100%"}}
+        style={{ height: "100%" }}
         keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <View style={{height: 10}} />}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         renderItem={({ item }) => (
           <FavArticle
             slug={item.slug}
