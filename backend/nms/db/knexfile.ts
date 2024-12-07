@@ -14,8 +14,7 @@ const config: { [key: string]: Knex.Config } = {
   test: {
     client: "sqlite3",
     connection: {
-      filename:
-        startPath + "dist/dev.sqlite3",
+      filename: startPath + "dist/dev.sqlite3",
     },
     useNullAsDefault: true,
     seeds: {
@@ -28,8 +27,7 @@ const config: { [key: string]: Knex.Config } = {
   development: {
     client: "sqlite3",
     connection: {
-      filename:
-        startPath + "dist/dev.sqlite3",
+      filename: startPath + "dist/dev.sqlite3",
     },
     useNullAsDefault: true,
     seeds: {
@@ -60,10 +58,10 @@ const config: { [key: string]: Knex.Config } = {
       port: 1433,
       database: env.DB_NAME,
       user: env.DB_USER,
-      password: env.DB_PASSWORD, 
+      password: env.DB_PASSWORD,
       options: {
-        encrypt: true
-      }
+        encrypt: true,
+      },
     },
     pool: {
       min: 2,
@@ -75,7 +73,7 @@ const config: { [key: string]: Knex.Config } = {
     seeds: {
       directory: "./data/seeds",
     },
-  }
+  },
 };
 
 export default config;

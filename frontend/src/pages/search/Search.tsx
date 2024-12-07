@@ -13,12 +13,12 @@ import {
   View,
 } from "react-native";
 import { fetchEditorsPicks, fetchSectionHome } from "src/api/fetchContent";
-import { Article } from "src/types/data";
+import { Article, EditorsPickArticle } from "src/types/data";
 import { NavProp } from "src/types/navStacks";
 import HorizontalCard from "../../components/cards/HorizontalCard";
 import { varGray1, varTextColor } from "../../styles/styles";
 import { Section_Type } from "../home/HomeScreen";
-import EditorsPick from "../home/sections/EditorsPick";
+import EditorsPicks from "../home/sections/EditorsPicks";
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -128,7 +128,9 @@ function Search({ navigation }: NavProp) {
 
   const [topLoaded, setTopLoaded] = useState(false);
   const [mostPopularStories, setMostPopularStories] = useState<Article[]>();
-  const [editorsPicksStories, setEditorsPicksStories] = useState<Article[]>([]);
+  const [editorsPicksStories, setEditorsPicksStories] = useState<
+    EditorsPickArticle[]
+  >([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const fetchTop = async () => {
@@ -187,7 +189,7 @@ function Search({ navigation }: NavProp) {
       id: 1,
       component:
         editorsPicksStories.length > 0 ? (
-          <EditorsPick
+          <EditorsPicks
             editorsPicksStories={editorsPicksStories}
             navigation={navigation}
           />

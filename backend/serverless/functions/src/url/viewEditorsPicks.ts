@@ -6,7 +6,7 @@ import { validateApiKey } from "../utils";
 
 /**
  * Gets the editors picks from the editors_picks table.
- * Used by BDH app for search page. 
+ * Used by BDH app for search page.
  */
 export const viewEditorsPicks = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
@@ -19,18 +19,18 @@ export const viewEditorsPicks = onRequest(async (request, response) => {
   logger.info("Viewing editors picks", { structuredData: true });
 
   try {
-    // Get the editors picks from the editors_picks table
-    // TODO: Change table name to editors_picks
-    const result = await newDb("editorspicks").select("url");
+    const result = await newDb("editorspicks")
+      .select("url", "rank")
+      .orderBy("rank", "asc");
 
     await newDb.destroy();
 
-
     logger.info(`Editors picks: ${result}`);
-
-    // Send the editors picks back to the client
     response.status(200).send(result);
   } catch (error) {
+    // TODO: add destroy to all function calls even if there is an error
+    await newDb.destroy();
+
     logger.error("Error getting editors picks:", error);
     response.status(500).send("Error: " + error);
   }
