@@ -10,7 +10,6 @@ type ResponseData =
   | EditorPick
   | EditorPick[];
 
-
 export default async function addEditorPick(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
@@ -25,23 +24,27 @@ export default async function addEditorPick(
 
     const url = data.url;
 
-    console.log("url", url);
+    // Get the current highest rank
+    const maxRankResult = await db("editorspicks")
+      .max("rank as maxRank")
+      .first();
+    const newRank = (maxRankResult?.maxRank || 0) + 1;
+
     // Insert the editor's pick data into the table
     const insertedRows = await db("editorspicks")
       .insert({
         url: url,
+        rank: newRank,
       })
-      .returning("url");
-    console.log("insertedRows", insertedRows);
+      .returning(["url", "rank"]);
 
     // Create a new editor's pick
     const newPick: EditorPick = {
       url: url,
+      rank: newRank,
     };
 
-    // Respond with the new pick
     res.status(201).json(newPick);
-    
   } catch (error) {
     console.error("Error adding editors pick to the database:", error);
     res.status(500).json({ message: error.message });

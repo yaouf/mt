@@ -1,6 +1,12 @@
 import { Dispatch, SetStateAction } from "react";
 import { parseArticleUrl } from "src/pages/BottomNavigator";
-import { Article, Author, Media } from "src/types/data";
+import {
+  Article,
+  Author,
+  EditorsPick,
+  EditorsPickArticle,
+  Media,
+} from "src/types/data";
 
 export async function fetchSectionHome(
   section: string,
@@ -125,7 +131,7 @@ export async function fetchAuthor(
   }
 }
 
-export async function fetchEditorsPicks(): Promise<Article[]> {
+export async function fetchEditorsPicks(): Promise<EditorsPickArticle[]> {
   try {
     // Fetch the initial list of editor's picks URLs
     const requestOptions = {
@@ -136,14 +142,13 @@ export async function fetchEditorsPicks(): Promise<Article[]> {
       },
     };
 
-    
-// TODO: this should be an env variable
+    // TODO: this should be an env variable
     const response = await fetch(
       process.env.EXPO_PUBLIC_EDITOR_PICKS_URL,
       requestOptions
     );
     console.log(response);
-    const urls: { url: string }[] = await response.json();
+    const urls: EditorsPick[] = await response.json();
 
     // Array to store the fetched articles
     const articles: Article[] = [];
@@ -179,7 +184,6 @@ export async function fetchEditorsPicks(): Promise<Article[]> {
     }
     console.log(articles);
     return articles;
-
   } catch (error) {
     console.error("Failed to fetch editor's picks:", error);
     throw new Error("Failed to fetch editor's picks");

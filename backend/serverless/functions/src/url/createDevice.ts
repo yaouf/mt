@@ -114,6 +114,7 @@ export const createDevice = onRequest(async (request, response) => {
         }
       );
     } else {
+      const dateCreated = new Date();
       // Insert the device into the devices table, and return the id of the inserted row
       const insertedRows = await newDb("devices")
         .insert({
@@ -128,6 +129,7 @@ export const createDevice = onRequest(async (request, response) => {
           "Science and Research": scienceAndResearch ?? false,
           isPushEnabled: isPushEnabled ?? false,
           expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
+          dateCreated: dateCreated,
         })
         .returning("id");
 
@@ -150,6 +152,7 @@ export const createDevice = onRequest(async (request, response) => {
           Sports: sports,
           "Science and Research": scienceAndResearch,
           isPushEnabled: isPushEnabled,
+          dateCreated: dateCreated,
         }
       );
     }
@@ -157,6 +160,7 @@ export const createDevice = onRequest(async (request, response) => {
     //  const allDevices = await db(dbParams)("devices").select();
     // logger.info(allDevices);
     // Send the device ID back to the client
+    // TODO: add dateCreated to response
     response.send({
       deviceId: deviceId,
     });

@@ -9,11 +9,11 @@ import {
 } from "react-native";
 import SearchCard from "src/components/cards/SearchCard";
 import { baseStyles, varGray1 } from "src/styles/styles";
-import { Article } from "src/types/data";
+import { EditorsPickArticle } from "src/types/data";
 
 type TopProps = {
   navigation: StackNavigationProp<any, any>;
-  editorsPicksStories: Article[];
+  editorsPicksStories: EditorsPickArticle[];
 };
 
 /**
@@ -21,7 +21,11 @@ type TopProps = {
  * @param props
  * @returns
  */
-function EditorsPick(props: Readonly<TopProps>) {
+function EditorsPicks(props: Readonly<TopProps>) {
+  const sortedArticles = [...props.editorsPicksStories].sort(
+    (a, b) => a.rank - b.rank
+  );
+
   return (
     <>
       {props.editorsPicksStories && props.editorsPicksStories.length > 0 && (
@@ -51,7 +55,7 @@ function EditorsPick(props: Readonly<TopProps>) {
                 overflow: "visible",
               }}
             >
-              {props.editorsPicksStories?.map((article, index) => (
+              {sortedArticles?.map((article, index) => (
                 <View
                   style={[
                     styles.cardContainer,
@@ -85,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditorsPick;
+export default EditorsPicks;
