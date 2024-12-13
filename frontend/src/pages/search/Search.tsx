@@ -17,7 +17,6 @@ import { NavProp } from "src/types/navStacks";
 import HorizontalCard from "../../components/cards/HorizontalCard";
 import { Article } from "src/types/data";
 import { trackEvent } from "@aptabase/react-native";
-import FiltersScreen from "../../pages/search/FiltersScreen";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -31,34 +30,34 @@ function Search({ navigation }: NavProp) {
   const animatedWidth = useRef(new Animated.Value(0)).current;
   const [searchType, setSearchType] = useState("Article");
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [sortType, setSortType] = useState("date");
 
   const handleSearch = async () => {
     setLoading(true);
     trackEvent("search", { text });
     try {
-      let queryUrl = "";
+      let queryUrl = "https://www.browndailyherald.com/search.json?a=1";
       if (searchType === "Writer" || searchType === "Photographer") {
-        queryUrl = `https://www.browndailyherald.com/search.json?a=1&o=date&au=${text}`;
-      } else {
-        queryUrl = `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`;
+        queryUrl += `&au=${text}`;
+      } else if (searchType === "Article") {
+        queryUrl += `&s=${text}&ty=article`;
       }
       // if (selectedSections.length > 0) {
       //   const sectionsQuery = selectedSections
       //     .map((section) => `section=${section}`)
       //     .join("&");
-      //   queryUrl += `&${sectionsQuery}`;
+      //   queryUrl += `&tg=${selectedSections[0]}`;
       // }
-      // if (selectedSections.length > 0) {
-      //   queryUrl += `&section=${selectedSections[0]}`;
-      // }
+      if (selectedSections.length > 0) {
+        queryUrl += `&tg=${selectedSections[0]}`;
+      }
+
+      if (sortType == "date") {
+        queryUrl += `&o=date`;
+      }
       const response = await fetch(queryUrl);
       const jsonString = await response.text();
       const resultObject = JSON.parse(jsonString);
-      if (selectedSections.length > 0) {
-        resultObject.items = resultObject.items.filter((article: any) =>
-          selectedSections.includes(article?.tags[0]?.name)
-        );
-      }
       const articleList: Article[] = resultObject.items;
 
       setArticles(articleList);
@@ -131,6 +130,8 @@ function Search({ navigation }: NavProp) {
                 setSearchType,
                 selectedSections,
                 setSelectedSections,
+                sortType,
+                setSortType,
               })
             }
           >

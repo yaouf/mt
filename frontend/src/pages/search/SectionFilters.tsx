@@ -7,7 +7,6 @@ const sections = [
   "Science",
   "Sports",
   "Opinion",
-  "Post-magazine",
   "Projects",
   "Multimedia",
   "University News",
@@ -37,7 +36,7 @@ function SectionFilters({
         tempSelectedSections.filter((s) => s !== section)
       );
     } else {
-      setTempSelectedSections([...tempSelectedSections, section]);
+      setTempSelectedSections([section]);
     }
   };
 

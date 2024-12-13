@@ -5,10 +5,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { SearchStackProps } from "src/types/navStacks";
 
 function FiltersScreen({ route, navigation }) {
-  const [sortOption, setSortOption] = useState("newest");
-  const { searchType, setSearchType, selectedSections, setSelectedSections } =
-    route.params;
+  const {
+    searchType,
+    setSearchType,
+    selectedSections,
+    setSelectedSections,
+    sortType,
+    setSortType,
+  } = route.params;
   const [searchMode, setSearchMode] = useState(searchType);
+  const [sortOption, setSortOption] = useState(sortType);
 
   useEffect(() => {
     setSearchType(searchMode);
@@ -16,31 +22,36 @@ function FiltersScreen({ route, navigation }) {
     console.log("after searchType:", searchType);
   }, [searchMode, searchType]);
 
-  // const [searchMode, setS] = useState("Article");
+  useEffect(() => {
+    setSortType(sortOption);
+    console.log("after searchMode:", sortOption);
+    console.log("after searchType:", sortType);
+  }, [sortOption, sortType]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sort by</Text>
       <TouchableOpacity
         style={styles.optionContainer}
-        onPress={() => setSortOption("newest")}
+        onPress={() => setSortOption("date")}
       >
-        <Text style={styles.optionText}>Newest</Text>
+        <Text style={styles.optionText}>Date</Text>
         <View
           style={[
             styles.radioCircle,
-            sortOption === "newest" ? styles.selected : null,
+            sortOption === "date" ? styles.selected : {},
           ]}
         />
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.optionContainer}
-        onPress={() => setSortOption("oldest")}
+        onPress={() => setSortOption("title")}
       >
-        <Text style={styles.optionText}>Oldest</Text>
+        <Text style={styles.optionText}>Title</Text>
         <View
           style={[
             styles.radioCircle,
-            sortOption === "oldest" ? styles.selected : null,
+            sortOption === "title" ? styles.selected : {},
           ]}
         />
       </TouchableOpacity>

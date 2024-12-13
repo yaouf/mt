@@ -19,8 +19,11 @@ export type SearchStackProps = {
   SearchScreen: undefined;
   FilterScreen: {
     searchType: string;
+    setSearchType: Dispatch<SetStateAction<string>>;
     selectedSections: string[];
     setSelectedSections: Dispatch<SetStateAction<string[]>>;
+    sortType: string;
+    setSortType: Dispatch<SetStateAction<string>>;
   };
   Article: { data: Article };
 };
