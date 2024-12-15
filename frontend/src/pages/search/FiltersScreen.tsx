@@ -1,5 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { View, Text, Switch, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Switch,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import SectionFilters from "./SectionFilters";
 import { Ionicons } from "@expo/vector-icons";
 import { SearchStackProps } from "src/types/navStacks";
@@ -29,78 +36,88 @@ function FiltersScreen({ route, navigation }) {
   }, [sortOption, sortType]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Sort by</Text>
+    <>
       <TouchableOpacity
-        style={styles.optionContainer}
-        onPress={() => setSortOption("date")}
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
       >
-        <Text style={styles.optionText}>Date</Text>
-        <View
-          style={[
-            styles.radioCircle,
-            sortOption === "date" ? styles.selected : {},
-          ]}
-        />
+        <Ionicons name="arrow-back" size={20} color="black" />
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.optionContainer}
-        onPress={() => setSortOption("title")}
-      >
-        <Text style={styles.optionText}>Title</Text>
-        <View
-          style={[
-            styles.radioCircle,
-            sortOption === "title" ? styles.selected : {},
-          ]}
+      <ScrollView style={styles.container}>
+        <Text style={styles.header}>Sort by</Text>
+        <TouchableOpacity
+          style={styles.optionContainer}
+          onPress={() => setSortOption("date")}
+        >
+          <Text style={styles.optionText}>Date</Text>
+          <View
+            style={[
+              styles.radioCircle,
+              sortOption === "date" ? styles.selected : {},
+            ]}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionContainer}
+          onPress={() => setSortOption("title")}
+        >
+          <Text style={styles.optionText}>Title</Text>
+          <View
+            style={[
+              styles.radioCircle,
+              sortOption === "title" ? styles.selected : {},
+            ]}
+          />
+        </TouchableOpacity>
+        <Text style={styles.header}>Sections</Text>
+        <SectionFilters
+          selectedSections={selectedSections}
+          setSelectedSections={setSelectedSections}
         />
-      </TouchableOpacity>
-      <Text style={styles.header}>Sections</Text>
-      <SectionFilters
-        selectedSections={selectedSections}
-        setSelectedSections={setSelectedSections}
-      />
 
-      <Text style={styles.header}>Type</Text>
-      <TouchableOpacity
-        style={styles.optionContainer}
-        onPress={() => setSearchMode("Article")}
-      >
-        <Text style={styles.optionText}>Article</Text>
-        <View
-          style={[
-            styles.radioCircle,
-            searchMode === "Article" ? styles.selected : {},
-          ]}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.optionContainer}
-        onPress={() => {
-          setSearchMode("Writer");
-        }}
-      >
-        <Text style={styles.optionText}>Writer</Text>
-        <View
-          style={[
-            styles.radioCircle,
-            searchMode === "Writer" ? styles.selected : {},
-          ]}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.optionContainer}
-        onPress={() => setSearchMode("Photographer")}
-      >
-        <Text style={styles.optionText}>Photographer</Text>
-        <View
-          style={[
-            styles.radioCircle,
-            searchMode === "Photographer" ? styles.selected : {},
-          ]}
-        />
-      </TouchableOpacity>
-    </View>
+        <Text style={styles.header}>Type</Text>
+        <TouchableOpacity
+          style={styles.optionContainer}
+          onPress={() => setSearchMode("Article")}
+        >
+          <Text style={styles.optionText}>Article</Text>
+          <View
+            style={[
+              styles.radioCircle,
+              searchMode === "Article" ? styles.selected : {},
+            ]}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionContainer}
+          onPress={() => {
+            setSearchMode("Writer");
+          }}
+        >
+          <Text style={styles.optionText}>Writer</Text>
+          <View
+            style={[
+              styles.radioCircle,
+              searchMode === "Writer" ? styles.selected : {},
+            ]}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionContainer}
+          onPress={() => setSearchMode("Photographer")}
+        >
+          <Text style={[styles.optionText, { paddingBottom: 10 }]}>
+            Photographer
+          </Text>
+          <View
+            style={[
+              styles.radioCircle,
+              searchMode === "Photographer" ? styles.selected : {},
+            ]}
+          />
+        </TouchableOpacity>
+      </ScrollView>
+    </>
   );
 }
 
@@ -108,6 +125,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    marginBottom: 20,
   },
   header: {
     fontSize: 18,
@@ -137,6 +155,10 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     backgroundColor: "#000",
+  },
+  backButton: {
+    marginTop: 15,
+    marginLeft: 15,
   },
 });
 
