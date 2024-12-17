@@ -42,3 +42,5 @@ config.debug.php
 #build folders
 ios/
 android/
+
+.yarn/
