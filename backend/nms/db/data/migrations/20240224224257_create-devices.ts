@@ -1,5 +1,5 @@
 import type { Knex } from "knex";
-
+// TODO: we really only need one db folder. Delete the one in serverless and use this instead. 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema
     .createTable("devices", table => {
@@ -31,11 +31,17 @@ export async function up(knex: Knex): Promise<void> {
         table.string("status").notNullable();
         table.boolean("isUid").notNullable();
       })
+    ).then(() =>
+      knex.schema.createTable("editorspicks", table => {
+        table.increments("id").primary();
+        table.string("url").notNullable().unique();
+      })
     );
 }
 
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.dropTableIfExists("users");
   await knex.schema.dropTableIfExists("devices");
+  await knex.schema.dropTableIfExists("editorspicks");
   return knex.schema.dropTableIfExists("notifications");
 }

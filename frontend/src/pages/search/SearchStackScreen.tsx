@@ -1,8 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { SearchStackProps } from "src/types/navStacks";
-import SearchScreen from "./SearchScreen";
 import ArticleScreen from "../article/ArticleScreen";
 import FiltersScreen from "./FiltersScreen";
+import SearchScreen from "./SearchScreen";
 
 const SearchStack = createStackNavigator<SearchStackProps>();
 
@@ -20,7 +20,7 @@ function SearchStackScreen() {
         options={{ headerShown: false }}
       />
       <SearchStack.Screen
-        name="Filters"
+        name="FiltersScreen"
         component={FiltersScreen}
         options={{ headerShown: false, title: "Filters" }}
       />

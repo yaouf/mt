@@ -2,7 +2,7 @@ import { StackScreenProps } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, RefreshControl, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { fetchSection } from "src/code/fetchContent";
+import { fetchSection } from "src/api/fetchContent";
 import HorizontalCard from "src/components/cards/HorizontalCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
 import SmallCard from "src/components/cards/SmallCard";
@@ -23,7 +23,6 @@ function SectionsScreen({
   const [title, setTitle] = useState();
   const [pages, setPages] = useState();
   const [refreshing, setRefreshing] = useState(false);
-
 
   useEffect(() => {
     setSection(undefined);
@@ -51,11 +50,14 @@ function SectionsScreen({
   const renderCards = (index: number) => {
     if (index === 0) {
       return (
-        <View><LargeSectionCard
-          article={section[0]}
-          navigation={navigation}
-          key={`${slug}-0}`}
-        /><Divider /></View>
+        <View>
+          <LargeSectionCard
+            article={section[0]}
+            navigation={navigation}
+            key={`${slug}-0}`}
+          />
+          <Divider />
+        </View>
       );
     } else if (index === 1 || (cards === "small" && (index + 1) % 2 === 0)) {
       cards = "horizontal";
@@ -63,11 +65,13 @@ function SectionsScreen({
         <View style={layout.vStack}>
           {section.slice(index, index + 2).map((article, i) => (
             <View>
-            <SmallCard
-              article={article}
-              navigation={navigation}
-              key={`${slug}-small-${index}-${i}`}
-            /><Divider /></View>
+              <SmallCard
+                article={article}
+                navigation={navigation}
+                key={`${slug}-small-${index}-${i}`}
+              />
+              <Divider />
+            </View>
           ))}
         </View>
       );
@@ -76,11 +80,14 @@ function SectionsScreen({
       return (
         <View style={layout.vStack}>
           {section.slice(index, index + 2).map((article, i) => (
-            <View><HorizontalCard
-              article={article}
-              navigation={navigation}
-              key={`${slug}-horizontal-${index}-${i}`}
-            /><Divider /></View>
+            <View>
+              <HorizontalCard
+                article={article}
+                navigation={navigation}
+                key={`${slug}-horizontal-${index}-${i}`}
+              />
+              <Divider />
+            </View>
           ))}
         </View>
       );
@@ -95,7 +102,6 @@ function SectionsScreen({
     setRefreshing(false);
   };
 
-
   return (
     <View>
       <View style={baseStyles.container}>
@@ -108,7 +114,9 @@ function SectionsScreen({
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-    
+            scrollIndicatorInsets={{ right: 4 }}
+            contentContainerStyle={{ paddingRight: 20 }}
+            style={{ marginRight: -20 }}
           />
         </View>
       </View>

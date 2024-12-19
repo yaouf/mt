@@ -64,13 +64,17 @@ describe("adding, getting, and deleting notifications", () => {
           {
             body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
             "Breaking News": 1,
+            "University News": 0,
             Metro: 0,
+            Sports: 0,
+            "Arts and Culture": 0,
+            "Science and Research": 0,
+            "Opinions": 0,
             id: 1,
             url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
             status: "pending",
             time: "2060-03-20T14:27:00.601256+00:00",
             title: "Breaking News",
-            "University News": 0,
             isUid: 0,
           },
         ]); // ◄ Passes!
@@ -96,12 +100,16 @@ describe("adding, getting, and deleting notifications", () => {
             expect.objectContaining({
               body: "An advisory committee's recommendation on divestment will remain confidential until the Corporation votes on it this month, President Paxson says.",
               "Breaking News": 1,
+              "University News": 0,
+              Sports: 0,
+              "Arts and Culture": 0,
+              "Science and Research": 0,
+              "Opinions": 0,
               Metro: 0,
               id: 1,
               url: "https://www.browndailyherald.com/article/2024/10/divestment-recommendation-will-remain-confidential-until-after-corporation-votes-paxson-says",
               time: "2060-03-20T14:27:00.601256+00:00",
               title: "Breaking News",
-              "University News": 0,
               isUid: 0,
             }),
           ])
@@ -145,6 +153,10 @@ describe("adding, getting, and deleting notifications", () => {
             time: "2060-03-20T14:27:00.601256+00:00",
             title: "Breaking News",
             "University News": 0,
+            Sports: 0,
+            "Arts and Culture": 0,
+            "Science and Research": 0,
+            "Opinions": 0,
           },
           {
             body: "World",
@@ -157,6 +169,10 @@ describe("adding, getting, and deleting notifications", () => {
             time: "2060-03-20T14:27:00.601256+00:00",
             title: "Second",
             "University News": 0,
+            Sports: 0,
+            "Arts and Culture": 0,
+            "Science and Research": 0,
+            "Opinions": 0,
           },
         ]); // ◄ Passes!
       },
@@ -188,6 +204,10 @@ describe("adding, getting, and deleting notifications", () => {
               time: "2060-03-20T14:27:00.601256+00:00",
               title: "Breaking News",
               "University News": 0,
+              Sports: 0,
+              "Arts and Culture": 0,
+              "Science and Research": 0,
+              "Opinions": 0,
             }),
             expect.objectContaining({
               body: "World",
@@ -199,6 +219,10 @@ describe("adding, getting, and deleting notifications", () => {
               time: "2060-03-20T14:27:00.601256+00:00",
               title: "Second",
               "University News": 0,
+              Sports: 0,
+              "Arts and Culture": 0,
+              "Science and Research": 0,
+              "Opinions": 0,
             }),
           ])
         ); // ◄ Passes!
@@ -232,6 +256,10 @@ describe("adding, getting, and deleting notifications", () => {
             time: "2060-03-20T14:27:00.601256+00:00",
             title: "Second",
             "University News": 0,
+            Sports: 0,
+            "Arts and Culture": 0,
+            "Science and Research": 0,
+            "Opinions": 0,
           })
         ); // ◄ Passes!
       },
@@ -264,6 +292,10 @@ describe("adding, getting, and deleting notifications", () => {
             time: "2060-03-20T14:27:00.601256+00:00",
             title: "Breaking News",
             "University News": 0,
+            Sports: 0,
+            "Arts and Culture": 0,
+            "Science and Research": 0,
+            "Opinions": 0,
           })
         ); // ◄ Passes!
       },
@@ -317,6 +349,10 @@ describe("adding, getting, and deleting notifications", () => {
               time: "2060-03-20T14:27:00.601256+00:00",
               title: "Second",
               "University News": 0,
+              Sports: 0,
+              "Arts and Culture": 0,
+              "Science and Research": 0,
+              "Opinions": 0,
             }),
           ])
         ); // ◄ Passes!

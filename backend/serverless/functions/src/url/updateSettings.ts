@@ -5,35 +5,61 @@ import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
+/**
+ * Updates the settings for a device.
+ * Takes a deviceId and an object with the keys "Breaking News", "University News", "Metro", and "isPushEnabled"
+ * and their corresponding boolean values to update to.
+ * Called when a user changes their push notification settings in the app.
+ */
 export const updateSettings = onRequest(async (request, response) => {
-    if (!validateApiKey(request, response)) return;
+  if (!validateApiKey(request, response)) return;
 
-  const { environment, stagingDbUrl } = envars;
-  const dbParams = { environment, stagingDbUrl };
+  const environment = envars.environment.value();
+  const dbUrl = envars.dbUrl.value();
+  const dbParams = { environment, dbUrl };
 
+  const newDb = db(dbParams);
 
   try {
-    logger.info("Updating user settings", { structuredData: true });
+    logger.info(
+      "Updating user settings",
+      { structuredData: true },
+      request.body
+    );
 
     // Request body validation schema
     const schema = Joi.object({
       deviceId: Joi.string().required(),
-      "Breaking News": Joi.boolean(),
-      "University News": Joi.boolean(),
-      "Metro": Joi.boolean(),
-      isPushEnabled: Joi.boolean(),
+      "Breaking News": Joi.boolean().optional(),
+      "University News": Joi.boolean().optional(),
+      Metro: Joi.boolean().optional(),
+      Opinions: Joi.boolean().optional(),
+      "Arts and Culture": Joi.boolean().optional(),
+      Sports: Joi.boolean().optional(),
+      "Science and Research": Joi.boolean().optional(),
+      isPushEnabled: Joi.boolean().optional(),
     });
 
     // Validate request body
     const { error, value: validBody } = schema.validate(request.body);
     if (error) {
-      response.status(400).send("Request body validation error: " + error.message);
+      logger.error("Request body validation error: " + error.message);
+      response
+        .status(400)
+        .send("Request body validation error: " + error.message);
       return;
     }
 
     // Validate deviceId, make sure its uuid v4
-    if (!validateUuidV4(validBody.deviceId)) { 
-      response.status(400).send("Request body validation error: \"deviceId\" is not a valid UUID v4.");
+    if (!validateUuidV4(validBody.deviceId)) {
+      logger.error(
+        'Request body validation error: "deviceId" is not a valid UUID v4.'
+      );
+      response
+        .status(400)
+        .send(
+          'Request body validation error: "deviceId" is not a valid UUID v4.'
+        );
       return;
     }
 
@@ -41,49 +67,72 @@ export const updateSettings = onRequest(async (request, response) => {
     const breakingNews = validBody["Breaking News"];
     const universityNews = validBody["University News"];
     const metro = validBody["Metro"];
+    const opinions = validBody["Opinions"];
+    const artsAndCulture = validBody["Arts and Culture"];
+    const sports = validBody["Sports"];
+    const scienceAndResearch = validBody["Science and Research"];
     const isPushEnabled = validBody["isPushEnabled"];
 
     // Define the type of updateData
     type UpdateData = {
       "Breaking News"?: boolean;
       "University News"?: boolean;
-      "Metro"?: boolean;
-      "isPushEnabled"?: boolean;
+      Metro?: boolean;
+      Opinions?: boolean;
+      "Arts and Culture"?: boolean;
+      Sports?: boolean;
+      "Science and Research"?: boolean;
+      isPushEnabled?: boolean;
     };
-    
+
     // Construct update object based on what's provided in the request body
-    // TODO: make this cleaner
-    const updateData: UpdateData = {};
-    if (breakingNews !== undefined) {
-      updateData["Breaking News"] = breakingNews;
-    }
-    if (universityNews !== undefined) {
-      updateData["University News"] = universityNews;
-    }
-    if (metro !== undefined) {
-      updateData["Metro"] = metro;
-    }
-    if (isPushEnabled !== undefined) {
-      updateData["isPushEnabled"] = isPushEnabled;
-    }
+    // TODO: Code would be a lot cleaner if columns were camel case
+    const updateData: UpdateData = {
+      ...(breakingNews !== undefined ? { "Breaking News": breakingNews } : {}),
+      ...(universityNews !== undefined
+        ? { "University News": universityNews }
+        : {}),
+      ...(metro !== undefined ? { Metro: metro } : {}),
+      ...(opinions !== undefined ? { Opinions: opinions } : {}),
+      ...(artsAndCulture !== undefined
+        ? { "Arts and Culture": artsAndCulture }
+        : {}),
+      ...(sports !== undefined ? { Sports: sports } : {}),
+      ...(scienceAndResearch !== undefined
+        ? { "Science and Research": scienceAndResearch }
+        : {}),
+      ...(isPushEnabled !== undefined ? { isPushEnabled: isPushEnabled } : {}),
+    };
 
     // Get the device ID from the request body
-    const deviceId = validBody.deviceId; 
+    const deviceId = validBody.deviceId;
 
     // First, check if the device exists
-    const deviceExists = await db(dbParams)("devices").where("id", deviceId).first();
+    const deviceExists = await newDb("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
-      response.status(404).send("Device not found. Are you sure field \"deviceId\" is correct?");
+      logger.error(
+        'Device not found. Are you sure field "deviceId" is correct?',
+        { deviceId }
+      );
+      response
+        .status(404)
+        .send('Device not found. Are you sure field "deviceId" is correct?');
       return;
     }
 
     // Update device settings in device table
-    const res = await db(dbParams)("devices").where("id", deviceId).update(updateData);
+    const res = await newDb("devices").where("id", deviceId).update(updateData);
+
+    await newDb.destroy();
+
     // log the result of the update
     logger.info(res);
     // Log the result of update - For logging purposes, might query again or just log the update was successful
-    logger.info("Device settings updated", { deviceId, updates: updateData });
+    logger.info("Device settings updated for deviceId: ", {
+      deviceId,
+      updates: updateData,
+    });
 
     response.send("Settings updated!");
     return;

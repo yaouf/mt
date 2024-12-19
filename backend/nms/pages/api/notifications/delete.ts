@@ -43,7 +43,7 @@ export default async function deleteNotification(
     const deletedCount = await db("notifications").where({ id: jobId }).del();
 
     if (deletedCount > 0) {
-      const notifications = await db("notifications").select("*");
+      const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions", "url", "isUid");
       console.log(notifications);
       res.status(200).json(notifications);
     } else {

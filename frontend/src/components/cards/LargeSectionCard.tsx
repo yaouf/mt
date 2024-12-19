@@ -2,19 +2,19 @@ import {
   Image,
   StyleSheet,
   Text,
-  View,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { CardProps } from "src/types/navStacks";
 import { Tag } from "src/types/data";
-import { formatDates } from "../../code/formatDates";
+import { CardProps } from "src/types/navStacks";
 import {
   font1,
   font2,
   font3,
-  varTextColor,
   varGray1,
+  varTextColor,
 } from "../../styles/styles";
+import { formatDates } from "../../utils/formatDates";
 
 function LargeCard({ article, navigation }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);

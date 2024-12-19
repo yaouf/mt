@@ -2,12 +2,12 @@ import {
   Image,
   StyleSheet,
   Text,
-  View,
   TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import { formatDates } from "../../code/formatDates";
-import { font1, font3, varTextColor, varGray1 } from "../../styles/styles";
 import { CardProps } from "src/types/navStacks";
+import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
+import { formatDates } from "../../utils/formatDates";
 
 function HorizontalCard({ article, navigation }: CardProps) {
   let img_uri =

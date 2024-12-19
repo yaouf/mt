@@ -1,14 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
-import { View, ScrollView, Image, Text, TouchableOpacity, SafeAreaView, Animated, NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { baseStyles } from "../../styles/styles";
-import { formatDates } from "src/code/formatDates";
-import SplitArticle from "./SplitContent";
+import { trackEvent } from "@aptabase/react-native";
+import { StackScreenProps } from "@react-navigation/stack";
+import * as Haptics from "expo-haptics";
+import { default as React, useContext, useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Image,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { State, TapGestureHandler } from "react-native-gesture-handler";
 import { articleStyles } from "src/styles/article";
-import BottomBar from "./BottomBar";
 import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
-import { StackScreenProps } from "@react-navigation/stack";
-import { trackEvent } from "@aptabase/react-native";
+import { formatDates } from "src/utils/formatDates";
+import { handleBookmark } from "src/utils/helpers";
+import { baseStyles } from "../../styles/styles";
+import { SavedContext } from "../BottomNavigator";
+import BottomArticleBar from "./BottomArticleBar";
+import SplitArticle from "./SplitContent";
 
 function ArticleScreen({
   route,
@@ -18,6 +32,8 @@ function ArticleScreen({
   const [isBottomBarVisible, setBottomBarVisible] = useState(true);
   const scrollOffset = useRef(0);
   const translateY = useRef(new Animated.Value(0)).current; // Animated value for translateY
+  const { savedArticles, setSavedArticles } = useContext(SavedContext);
+  const [saved, setSaved] = useState<boolean>(article.uuid in savedArticles);
 
   useEffect(() => {
     trackEvent("article", {
@@ -44,119 +60,144 @@ function ArticleScreen({
       return;
     }
 
-    let direction = 'up';
+    let direction = "up";
 
     if (currentOffset > scrollOffset.current) {
-      direction = 'down';
+      direction = "down";
     } else if (currentOffset < scrollOffset.current) {
-      direction = 'up';
+      direction = "up";
     }
 
     // Show BottomBar when scrolling up, hide when scrolling down
     if (direction) {
-      setBottomBarVisible(direction === 'up');
+      setBottomBarVisible(direction === "up");
     }
 
     // Update the offset for the next event
     scrollOffset.current = currentOffset;
   };
 
+  // Handle double-tap gesture
+  const onDoubleTap = (event) => {
+    if (event.nativeEvent.state === State.END) {
+      Haptics.selectionAsync();
+      handleBookmark(
+        saved,
+        article.slug,
+        article.published_at,
+        article.uuid,
+        savedArticles,
+        setSavedArticles,
+        setSaved
+      );
+    }
+  };
+
   return (
-    <SafeAreaView style={{flex: 1}} accessibilityLabel="Article Screen">
-      <ScrollView
-        onScroll={handleScroll}
-        scrollEventThrottle={16} // Controls how often the event is fired, 16ms is around 60fps
-      >
-        <View style={baseStyles.container}>
-          <View style={articleStyles.headingContainer}>
-            <Text style={articleStyles.title}>
-              {article.headline}
-            </Text>
-            {article.subhead ? (
-              <Text style={articleStyles.lead}>{article.subhead}</Text>
-            ) : (
-              <View style={{ height: 0, marginBottom: 7.422 }} /> // Placeholder for gap
-            )}
-            <View
-              style={{
-                height: 1,
-                backgroundColor: "white",
-                width: "100%",
-                marginBottom: -15
-              }}
-            />
-          </View>
-
-          {article.dominantMedia.authors && (
-            <View>
-              <Image
-                source={{
-                  uri: `https://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
-                }}
-                style={articleStyles.image}
-                accessibilityLabel="Article Image"
-              />
-              <View style={baseStyles.container}>
-                {(article.dominantMedia.content || article.dominantMedia.authors) && (
-                  <Text style={articleStyles.mediaCaption}>
-                    {article.dominantMedia.content
-                      ? article.dominantMedia.content
-                          .replaceAll("\n", " ")
-                          .replaceAll("<p>", "")
-                          .replaceAll("</p>", "")
-                          .replaceAll("&nbsp;", " ")
-                      : ""}
-                    {article.dominantMedia.authors.length > 0 &&
-                      " Media by " +
-                        article.dominantMedia.authors.map((mediaAuthor) => mediaAuthor.name).join(", ") +
-                        " | The Brown Daily Herald"}
-                  </Text>
+    <SafeAreaView style={{ flex: 1 }} accessibilityLabel="Article Screen">
+      <TapGestureHandler onHandlerStateChange={onDoubleTap} numberOfTaps={2}>
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            onScroll={handleScroll}
+            scrollEventThrottle={16} // Controls how often the event is fired, 16ms is around 60fps
+          >
+            <View style={baseStyles.container}>
+              <View style={articleStyles.headingContainer}>
+                <Text style={articleStyles.title}>{article.headline}</Text>
+                {article.subhead ? (
+                  <Text style={articleStyles.lead}>{article.subhead}</Text>
+                ) : (
+                  <View style={{ height: 0, marginBottom: 7.422 }} /> // Placeholder for gap
                 )}
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: "white",
+                    width: "100%",
+                    marginBottom: -15,
+                  }}
+                />
               </View>
-            </View>
-          )}
 
-          <View>
-            <Text style={articleStyles.author}>
-              {article.authors.map((author, i) => (
-                <TouchableOpacity
-                  key={author.slug}
-                  onPress={() =>
-                    navigation.navigate("Staff", { slug: author.slug })
-                  }
-                  accessible={true}
-                  accessibilityHint="View Author's Profile"
-                >
-                  <Text style={articleStyles.author}>
-                    {author.name}
-                    {i < article.authors.length - 1 ? ", " : ""}
+              {article.dominantMedia.authors && (
+                <View>
+                  <Image
+                    source={{
+                      uri: `https://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
+                    }}
+                    style={articleStyles.image}
+                    accessibilityLabel="Article Image"
+                  />
+                  <View style={baseStyles.container}>
+                    {(article.dominantMedia.content ||
+                      article.dominantMedia.authors) && (
+                      <Text style={articleStyles.mediaCaption}>
+                        {article.dominantMedia.content
+                          ? article.dominantMedia.content
+                              .replaceAll("\n", " ")
+                              .replaceAll("<p>", "")
+                              .replaceAll("</p>", "")
+                              .replaceAll("&nbsp;", " ")
+                              .replaceAll("<br>", "")
+                      : ""}
+                        {article.dominantMedia.authors.length > 0 &&
+                          "Media by " +
+                            article.dominantMedia.authors
+                              .map((mediaAuthor) => mediaAuthor.name)
+                              .join(", ") +
+                            " | The Brown Daily Herald"}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              )}
+
+              <View>
+                <Text style={articleStyles.author}>
+                  {article.authors.map((author, i) => (
+                    <TouchableOpacity
+                      key={author.slug}
+                      onPress={() =>
+                        navigation.navigate("Staff", { slug: author.slug })
+                      }
+                      accessible={true}
+                      accessibilityHint="View Author's Profile"
+                    >
+                      <Text style={articleStyles.author}>
+                        {author.name}
+                        {i < article.authors.length - 1 ? ", " : ""}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </Text>
+
+                <View style={articleStyles.publishedDetails}>
+                  <Text
+                    style={articleStyles.publishedDetailsText}
+                    accessibilityLabel="Published Date"
+                  >
+                    {formatDates(article.published_at)}
                   </Text>
-                </TouchableOpacity>
-              ))}
-            </Text>
+                </View>
+              </View>
 
-            <View style={articleStyles.publishedDetails}>
-              <Text style={articleStyles.publishedDetailsText} accessibilityLabel="Published Date">
-                {formatDates(article.published_at)}
-              </Text>
+              <SplitArticle content={article.content} />
             </View>
-          </View>
-
-          <SplitArticle content={article.content} />
+            <View style={{ height: 80 }}></View>
+          </ScrollView>
         </View>
-        <View style={{ height: 80 }}></View>
-      </ScrollView>
+      </TapGestureHandler>
 
       {/* Animate the BottomBar */}
       <Animated.View
         style={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
-          width: '100%',
+          width: "100%",
           transform: [{ translateY }],
         }}
       >
-        <BottomBar
+        <BottomArticleBar
           published_at={article.published_at}
           slug={article.slug}
           uuid={article.uuid}

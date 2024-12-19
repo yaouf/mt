@@ -1,5 +1,14 @@
 // types for data fetched from the api for articles, authors, etc
 
+export interface EditorsPick {
+  url: string;
+  rank: number;
+}
+
+export interface EditorsPickArticle extends Article {
+  rank: number;
+}
+
 export interface Article {
   id: string;
   headline: string;
@@ -52,4 +61,3 @@ export interface Tag {
   slug: string;
   ceo_id: string;
 }
-
