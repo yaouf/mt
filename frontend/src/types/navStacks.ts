@@ -1,4 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
+import { Dispatch, SetStateAction } from "react";
 import { Article } from "./data";
 
 /**
@@ -16,8 +17,15 @@ export type HomeStackProps = {
 
 export type SearchStackProps = {
   SearchScreen: undefined;
+  FiltersScreen: {
+    searchType: string;
+    setSearchType: Dispatch<SetStateAction<string>>;
+    selectedSections: string[];
+    setSelectedSections: Dispatch<SetStateAction<string[]>>;
+    sortType: string;
+    setSortType: Dispatch<SetStateAction<string>>;
+  };
   Article: { data: Article };
-  FilterScreen: undefined;
 };
 
 export type SettingsStackProps = {

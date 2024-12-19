@@ -44,6 +44,9 @@ function Search({ navigation }: NavProp) {
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
   const animatedWidth = useRef(new Animated.Value(0)).current;
+  const [searchType, setSearchType] = useState("Article");
+  const [selectedSections, setSelectedSections] = useState<string[]>([]);
+  const [sortType, setSortType] = useState("date");
 
   const [usingPrefetchedData, setUsingPrefetchedData] = useState(true);
 
@@ -78,9 +81,26 @@ function Search({ navigation }: NavProp) {
     setLoading(true);
     trackEvent("search", { text });
     try {
-      const response = await fetch(
-        `https://www.browndailyherald.com/search.json?a=1&o=date&s=${text}&ty=article`
-      );
+      let queryUrl = "https://www.browndailyherald.com/search.json?a=1";
+      if (searchType === "Writer" || searchType === "Photographer") {
+        queryUrl += `&au=${text}`;
+      } else if (searchType === "Article") {
+        queryUrl += `&s=${text}&ty=article`;
+      }
+      // if (selectedSections.length > 0) {
+      //   const sectionsQuery = selectedSections
+      //     .map((section) => `section=${section}`)
+      //     .join("&");
+      //   queryUrl += `&tg=${selectedSections[0]}`;
+      // }
+      if (selectedSections.length > 0) {
+        queryUrl += `&tg=${selectedSections[0]}`;
+      }
+
+      if (sortType == "date") {
+        queryUrl += `&o=date`;
+      }
+      const response = await fetch(queryUrl);
       const jsonString = await response.text();
       const resultObject = JSON.parse(jsonString);
       const articleList: Article[] = resultObject.items;
@@ -240,6 +260,26 @@ function Search({ navigation }: NavProp) {
             accessibilityLabel="Search input"
             accessibilityHint="Enter keywords to search for articles"
           />
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("FiltersScreen", {
+                searchType,
+                setSearchType,
+                selectedSections,
+                setSelectedSections,
+                sortType,
+                setSortType,
+              })
+            }
+          >
+            <MaterialIcons
+              name="tune"
+              size={20}
+              color={varGray1}
+              style={styles.searchIcon}
+              accessible={false}
+            />
+          </TouchableOpacity>
           {text.length > 0 && (
             <TouchableOpacity
               onPress={handleClearText}

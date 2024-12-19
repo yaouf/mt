@@ -16,8 +16,9 @@ import { MenuContext } from "../HomeStackScreen";
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
     useContext(MenuContext);
-
   const scrollViewRef = useRef<ScrollView>(null);
+  // const itemRef = useRef<View>(null);
+  const itemPositions = useRef<{ [key: string]: number }>({});
 
   if (!sectionMenu) {
     setSectionMenu(menuItems);
@@ -118,8 +119,26 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
             key={menuItem.id}
             style={menuStyles.menuItem}
             onPress={() => {
+              if (
+                menuItem.title == "Sports" ||
+                menuItem.title == "Arts & Culture" ||
+                menuItem.title == "Science & Research"
+              ) {
+                const xPosition = itemPositions.current[menuItem.slug] || 0;
+                scrollViewRef.current?.scrollTo({
+                  x: xPosition - 10,
+                  animated: true,
+                });
+              }
               navigation.navigate("Section", { slug: menuItem.slug });
               setCurrSection(menuItem.slug);
+              // itemRef.current?.measureLayout(
+              //   scrollViewRef.current as any,
+              //   (x, y, width, height) => {
+              //     console.log(x);
+              //     scrollViewRef.current?.scrollTo({ x, animated: true });
+              //   }
+              // );
             }}
             accessible={true}
             accessibilityRole="button"
