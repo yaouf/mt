@@ -1,0 +1,69 @@
+diff --git a/frontend/app.json b/frontend/app.json
+index 635b0e3a..0ee84da7 100644
+--- a/frontend/app.json
++++ b/frontend/app.json
+@@ -39,6 +39,15 @@
+       }
+     },
+     "owner": "bdh-app",
+-    "plugins": ["expo-build-properties"]
++    "plugins": [
++      "expo-build-properties",
++      [
++        "react-native-google-mobile-ads",
++        {
++          "androidAppId": "ca-app-pub-8731315434789018~9308730648",
++          "iosAppId": "ca-app-pub-8731315434789018~9308730648"
++        }
++      ]
++    ]
+   }
+ }
+diff --git a/frontend/src/pages/article/SplitContent.tsx b/frontend/src/pages/article/SplitContent.tsx
+index e91ccaa7..1998eb38 100644
+--- a/frontend/src/pages/article/SplitContent.tsx
++++ b/frontend/src/pages/article/SplitContent.tsx
+@@ -3,11 +3,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
+ import * as WebBrowser from "expo-web-browser";
+ import React, { useCallback, useMemo, useRef, useState } from "react";
+ import { StyleSheet, Text, View } from "react-native";
+-// import {
+-//   BannerAd,
+-//   BannerAdSize,
+-//   TestIds,
+-// } from "react-native-google-mobile-ads";
++import {
++  BannerAd,
++  BannerAdSize,
++  TestIds,
++} from "react-native-google-mobile-ads";
+ import {
+   HTMLContentModel,
+   HTMLElementModel,
+@@ -18,9 +18,9 @@ import { fetchArticle } from "src/api/fetchContent";
+ import { articleStyles } from "src/styles/article";
+ import { Article } from "src/types/data";
+ 
+-// const adUnitId = __DEV__
+-//   ? TestIds.BANNER
+-//   : "ca-app-pub-8731315434789018/9601202667";
++const adUnitId = __DEV__
++  ? TestIds.BANNER
++  : "ca-app-pub-8731315434789018/9601202667";
+ 
+ const IframeRenderer = React.memo(
+   ({ tnode }: any) => {
+@@ -159,6 +159,13 @@ function SplitArticle({ content }: SplitArticleType) {
+         style={articleStyles.adImage}
+       /> */}
+         <Text style={articleStyles.adText}>Advertisement</Text>
++        <BannerAd
++          unitId={adUnitId}
++          size={BannerAdSize.MEDIUM_RECTANGLE}
++          onAdFailedToLoad={(error) =>
++            console.error("Ad failed to load:", error)
++          }
++        />
+       </View>
+     ),
+     []
