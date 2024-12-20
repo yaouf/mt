@@ -14,6 +14,11 @@ import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
 // TODO: if reach the end of the list, load the next page of content
 // (another api call but with page= page+ 1 unless page=last page)
 
+/**
+ * Renders vertical list of articles for a section (e.g. "University News", "Metro")
+ * @param param0
+ * @returns
+ */
 function SectionsScreen({
   route,
   navigation,
@@ -29,7 +34,7 @@ function SectionsScreen({
     setTitle(undefined);
     setPages(undefined);
 
-    fetchSection(slug, 1, setSection).then((resp) => {
+    fetchSection(slug, /* page number */ 1, setSection).then((resp) => {
       setTitle(resp[0]);
       setPages(resp[1]);
       console.log(`loaded ${slug}`);
