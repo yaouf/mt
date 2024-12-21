@@ -76,7 +76,7 @@ export async function fetchSection(
   section: string,
   page: number,
   setStories: Dispatch<SetStateAction<Article[] | undefined>>
-): Promise<Array<string | number>> {
+): Promise<[string, number, Article[]]> {
   try {
     // Fetch a response using the Search.JSON URL Link (Currently restricted to basic searches)
     const response = await fetch(
@@ -87,11 +87,10 @@ export async function fetchSection(
 
     const sectionName: string = resultObject.section.title;
     const lastPage: number = resultObject.pagination.last;
-
     const articleList: Article[] = resultObject.articles; // List of articles
 
     setStories(articleList);
-    return [sectionName, lastPage];
+    return [sectionName, lastPage, articleList];
   } catch (error) {
     console.log(error);
     throw new Error(`Failed to fetch section ${section}`);

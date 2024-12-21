@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { fetchSectionHome } from "src/api/fetchContent";
-import HorizontalCard from "src/components/cards/HorizontalCard";
+import ImageCard from "src/components/cards/HorizontalCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
 import Divider from "src/components/Divider";
 import SectionHeader from "src/components/SectionHeader";
@@ -76,7 +76,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
                 i // rest as horizontal
               ) => (
                 <View key={`news-home-${i + 2}`} style={{}}>
-                  <HorizontalCard
+                  <ImageCard
                     article={article}
                     navigation={props.navigation}
                     key={`news-home-${i + 2}`}
