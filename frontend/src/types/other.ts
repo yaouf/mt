@@ -12,3 +12,8 @@ export type ArticleDetailProps = {
   uuid: string;
   large?: boolean;
 };
+
+// for staff page bottom bar and share context menu
+export type StaffDetailProps = {
+  slug: string;
+};

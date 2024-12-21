@@ -5,7 +5,7 @@ import { FlatList } from "react-native-gesture-handler";
 import { fetchSection } from "src/api/fetchContent";
 import ImageCard from "src/components/cards/HorizontalCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
-import NoImageCard from "src/components/cards/SmallCard";
+import NoImageCard from "src/components/cards/NoImageCard";
 import Divider from "src/components/Divider";
 import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";

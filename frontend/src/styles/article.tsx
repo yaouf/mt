@@ -186,4 +186,31 @@ export const articleStyles = StyleSheet.create({
     width: 26,
     height: 26,
   },
+  authorRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 12,
+    marginLeft: 2,
+  },
+  authorImagesContainer: {
+    flexDirection: "row",
+    gap: 5,
+    marginRight: 15,
+  },
+  authorImage: {
+    width: 48,
+    height: 48,
+    borderRadius: 50,
+  },
+  authorTextContainer: {
+    flexDirection: "column",
+    gap: 4,
+    justifyContent: "center",
+  },
+  publishedDetailsText: {
+    color: varGray1,
+    fontFamily: font3,
+    fontSize: fontsizeHeader,
+    fontWeight: "400",
+  },
 });

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { parseArticleUrl } from "src/pages/BottomNavigator";
+import { parseArticleUrl } from "src/pages/MainTabNavigator";
 import {
   Article,
   Author,

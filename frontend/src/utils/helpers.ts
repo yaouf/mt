@@ -1,7 +1,7 @@
 import { trackEvent } from "@aptabase/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Dispatch, SetStateAction } from "react";
-import { SavedArticleDict } from "src/pages/BottomNavigator";
+import { SavedArticleDict } from "src/pages/MainTabNavigator";
 
 /**
  * sets an item in Async storage to the given value
@@ -61,7 +61,7 @@ export function handleBookmark(
     // not currently saved, so save now
     const newSaved = { slug: slug, date: date };
     savedArticles[uuid] = newSaved;
-    trackEvent("savedarticle", {uuid});
+    trackEvent("savedarticle", { uuid });
   } else {
     console.log("removing");
 

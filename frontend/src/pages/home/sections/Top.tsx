@@ -13,6 +13,10 @@ type TopProps = {
 };
 
 function Top(props: TopProps) {
+  // Early return if no stories
+  if (!props.topStories || props.topStories.length === 0) {
+    return null;
+  }
   return (
     <View style={baseStyles.container}>
       <View style={{ overflow: "visible" }}>

@@ -23,6 +23,7 @@ import {
   fetchSectionHome,
 } from "src/api/fetchContent";
 import Header from "src/components/Header";
+import { NO_NAV_BAR_SCREENS } from "src/consts/consts";
 import { Article } from "src/types/data";
 import { getAsync } from "src/utils/helpers";
 import HomeStackScreen from "./home/HomeStackScreen";
@@ -103,7 +104,7 @@ Notifications.setNotificationHandler({
 /**
  * @returns Main screens of the app accessible from the bottom tab navigator
  */
-export default function BottomNavigator() {
+export default function MainTabNavigator() {
   const [savedArticles, setSavedArticles] = useState<Object>({});
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
@@ -267,10 +268,12 @@ export default function BottomNavigator() {
                     paddingBottom: 2,
                     paddingRight: 20,
                     paddingLeft: 20,
-                    display: routeName === "Article" ? "none" : "flex",
+                    display: NO_NAV_BAR_SCREENS.includes(routeName)
+                      ? "none"
+                      : "flex",
                   },
                   tabBarShowLabel: false,
-                  headerShown: routeName === "Article" ? false : true, // TODO: simplify this logic with !== "Article"
+                  headerShown: !NO_NAV_BAR_SCREENS.includes(routeName),
                 };
               }}
             >

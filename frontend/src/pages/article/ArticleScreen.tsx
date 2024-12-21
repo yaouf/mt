@@ -1,7 +1,13 @@
 import { trackEvent } from "@aptabase/react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
-import { default as React, useContext, useEffect, useRef, useState } from "react";
+import {
+  default as React,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Animated,
   Image,
@@ -20,7 +26,7 @@ import { HomeStackProps } from "src/types/navStacks";
 import { formatDates } from "src/utils/formatDates";
 import { handleBookmark } from "src/utils/helpers";
 import { baseStyles } from "../../styles/styles";
-import { SavedContext } from "../BottomNavigator";
+import { SavedContext } from "../MainTabNavigator";
 import BottomArticleBar from "./BottomArticleBar";
 import SplitArticle from "./SplitContent";
 
@@ -139,7 +145,7 @@ function ArticleScreen({
                               .replaceAll("</p>", "")
                               .replaceAll("&nbsp;", " ")
                               .replaceAll("<br>", "")
-                      : ""}
+                          : ""}
                         {article.dominantMedia.authors.length > 0 &&
                           "Media by " +
                             article.dominantMedia.authors
@@ -151,33 +157,77 @@ function ArticleScreen({
                   </View>
                 </View>
               )}
+              <View style={{ flexDirection: "column" }}>
+                <View style={articleStyles.authorRow}>
+                  {/* Author images column */}
+                  {/* Only render image container if there are images to show */}
+                  {article.authors.some((author) => {
+                    try {
+                      const metadata =
+                        typeof author.metadata === "string"
+                          ? JSON.parse(author.metadata)
+                          : author.metadata;
+                      return metadata && metadata.length > 0;
+                    } catch {
+                      return false;
+                    }
+                  }) && (
+                    <View style={articleStyles.authorImagesContainer}>
+                      {article.authors.map((author, i) => {
+                        let metadata = [];
+                        if (author.metadata) {
+                          try {
+                            metadata =
+                              typeof author.metadata === "string"
+                                ? JSON.parse(author.metadata)
+                                : author.metadata;
+                          } catch (error) {
+                            console.error(
+                              `Failed to parse metadata for author ${i}:`,
+                              error
+                            );
+                          }
+                        }
+                        return (
+                          metadata.length > 0 && (
+                            <Image
+                              key={i}
+                              source={{ uri: metadata[0].value }}
+                              style={articleStyles.authorImage}
+                              accessibilityLabel="Staff member's profile picture"
+                            />
+                          )
+                        );
+                      })}
+                    </View>
+                  )}
 
-              <View>
-                <Text style={articleStyles.author}>
-                  {article.authors.map((author, i) => (
-                    <TouchableOpacity
-                      key={author.slug}
-                      onPress={() =>
-                        navigation.navigate("Staff", { slug: author.slug })
-                      }
-                      accessible={true}
-                      accessibilityHint="View Author's Profile"
+                  {/* Author names and date column */}
+                  <View style={articleStyles.authorTextContainer}>
+                    <Text style={articleStyles.author}>
+                      {article.authors.map((author, i) => (
+                        <TouchableOpacity
+                          key={author.slug}
+                          onPress={() =>
+                            navigation.navigate("Staff", { slug: author.slug })
+                          }
+                          accessible={true}
+                          accessibilityHint="View Author's Profile"
+                        >
+                          <Text style={articleStyles.author}>
+                            {author.name}
+                            {i < article.authors.length - 1 ? ", " : ""}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </Text>
+                    <Text
+                      style={articleStyles.publishedDetailsText}
+                      accessibilityLabel="Published Date"
                     >
-                      <Text style={articleStyles.author}>
-                        {author.name}
-                        {i < article.authors.length - 1 ? ", " : ""}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </Text>
-
-                <View style={articleStyles.publishedDetails}>
-                  <Text
-                    style={articleStyles.publishedDetailsText}
-                    accessibilityLabel="Published Date"
-                  >
-                    {formatDates(article.published_at)}
-                  </Text>
+                      {formatDates(article.published_at)}
+                    </Text>
+                  </View>
                 </View>
               </View>
 

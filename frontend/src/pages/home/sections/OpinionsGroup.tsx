@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { fetchSectionHome } from "src/api/fetchContent";
-import NoImageCard from "src/components/cards/SmallCard";
+import NoImageCard from "src/components/cards/NoImageCard";
 import Divider from "src/components/Divider";
 import OpinionsHeader from "src/components/OpinionsHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";

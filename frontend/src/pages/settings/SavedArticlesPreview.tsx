@@ -4,7 +4,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { settings } from "src/styles/pages";
 import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
-import { SavedContext } from "../BottomNavigator";
+import { SavedContext } from "../MainTabNavigator";
 import FavArticle from "./FavArticle";
 
 /* 

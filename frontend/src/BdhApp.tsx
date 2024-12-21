@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Animated } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Onboarding from "./onboarding/Onboarding";
-import BottomNavigator from "./pages/BottomNavigator";
+import MainTabNavigator from "./pages/MainTabNavigator";
 import { useNotification } from "./pages/settings/NotificationProvider";
 import { setAsync } from "./utils/helpers";
 
@@ -105,7 +105,7 @@ function BdhApp() {
       <SafeAreaProvider>
         <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
           {hasOnboarded ? (
-            <BottomNavigator />
+            <MainTabNavigator />
           ) : (
             <fullStack.Navigator
               initialRouteName={"Onboarding"}
@@ -118,7 +118,7 @@ function BdhApp() {
               />
               <fullStack.Screen
                 name="MainApp"
-                component={BottomNavigator}
+                component={MainTabNavigator}
                 options={{ headerShown: false }}
               />
             </fullStack.Navigator>
