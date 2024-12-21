@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { fetchSectionHome } from "src/api/fetchContent";
-import SmallCard from "src/components/cards/SmallCard";
+import NoImageCard from "src/components/cards/SmallCard";
 import Divider from "src/components/Divider";
 import OpinionsHeader from "src/components/OpinionsHeader";
 import { baseStyles, layout, varGray1 } from "src/styles/styles";
@@ -50,7 +50,7 @@ function OpinionsGroup(props: SectionGroupProps) {
         <View style={layout.grid}>
           {articles?.map((article: Article, i) => (
             <View key={`${props.slug}-home-${i}`}>
-              <SmallCard
+              <NoImageCard
                 article={article}
                 navigation={props.navigation}
                 key={`${props.slug}-home-${i}`}

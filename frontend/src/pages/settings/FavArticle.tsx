@@ -2,7 +2,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 import { fetchArticle } from "src/api/fetchContent";
-import HorizontalCard from "src/components/cards/HorizontalCard";
+import ImageCard from "src/components/cards/HorizontalCard";
 import { varGray1 } from "src/styles/styles";
 import { Article } from "src/types/data";
 
@@ -26,7 +26,7 @@ function FavArticle(props: FavArticleProps) {
   }
 
   return (
-    <HorizontalCard
+    <ImageCard
       article={article}
       navigation={props.navigation}
       key={`saved-${props.slug}`}

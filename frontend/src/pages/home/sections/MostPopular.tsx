@@ -1,7 +1,7 @@
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { Text, View } from "react-native";
-import HorizontalCard from "src/components/cards/HorizontalCard";
+import ImageCard from "src/components/cards/HorizontalCard";
 import Divider from "src/components/Divider";
 import { baseStyles } from "src/styles/styles";
 import { Article } from "src/types/data";
@@ -37,7 +37,7 @@ function MostPopular(props: Readonly<TopProps>) {
               {props.mostPopularStories?.map((article, index) => (
                 <View style={{}} key={`search-popular-${article.id}`}>
                   {/* Actually a vertical card */}
-                  <HorizontalCard
+                  <ImageCard
                     article={article}
                     navigation={props.navigation}
                     key={`search-popular-${article.id}`}

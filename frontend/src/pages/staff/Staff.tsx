@@ -4,7 +4,7 @@ import { ActivityIndicator, Image, Text, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { fetchAuthor } from "src/api/fetchContent";
 import Divider from "src/components/Divider";
-import HorizontalCard from "src/components/cards/HorizontalCard";
+import ImageCard from "src/components/cards/HorizontalCard";
 import { articleStyles } from "src/styles/article";
 import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
 import { Article, Author, Media } from "src/types/data";
@@ -28,11 +28,17 @@ function Staff({
   }, []);
 
   if (!author || !articles || !media || !posts) {
-    return <ActivityIndicator color={varGray1} style={{ flex: 1 }} accessibilityLabel="Loading staff information" />;
+    return (
+      <ActivityIndicator
+        color={varGray1}
+        style={{ flex: 1 }}
+        accessibilityLabel="Loading staff information"
+      />
+    );
   }
 
   return (
-    <ScrollView 
+    <ScrollView
       style={baseStyles.container}
       accessibilityLabel="Staff member details"
       accessibilityHint="Scroll to view staff member's information, articles, and media"
@@ -57,7 +63,9 @@ function Staff({
             />
           )}
           <View style={{ flex: 1 }}>
-            <Text style={text.sectionHeader1} accessibilityRole="header">{author.name}</Text>
+            <Text style={text.sectionHeader1} accessibilityRole="header">
+              {author.name}
+            </Text>
             {author.tagline !== "" && (
               <Text
                 style={{
@@ -76,7 +84,7 @@ function Staff({
         {author.bio !== "" && (
           <View accessible={true}>
             <Divider marginTop={0} marginBottom={8} />
-            <Text 
+            <Text
               style={{ ...articleStyles.articleBody, marginTop: 8 }}
               accessibilityLabel="Staff member's biography"
             >
@@ -92,11 +100,13 @@ function Staff({
       {articles.length > 0 && (
         <View accessibilityLabel="Recent articles section">
           <Divider marginTop={10} marginBottom={10} />
-          <Text style={text.sectionHeader1} accessibilityRole="header">Recent Articles</Text>
-          <View style={{height: 10}}></View>
+          <Text style={text.sectionHeader1} accessibilityRole="header">
+            Recent Articles
+          </Text>
+          <View style={{ height: 10 }}></View>
           <View style={layout.recentArticlesStack}>
             {articles.map((article: Article, i) => (
-              <HorizontalCard
+              <ImageCard
                 article={article}
                 navigation={navigation}
                 key={`sports-home-${i + 2}`}
@@ -109,7 +119,9 @@ function Staff({
       {media.length > 0 && (
         <View accessibilityLabel="Media section">
           <Divider marginTop={18} marginBottom={8} />
-          <Text style={text.sectionHeader1} accessibilityRole="header">Media</Text>
+          <Text style={text.sectionHeader1} accessibilityRole="header">
+            Media
+          </Text>
           <View
             style={{
               flexDirection: "row",

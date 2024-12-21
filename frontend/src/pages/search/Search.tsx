@@ -15,7 +15,7 @@ import {
 import { fetchEditorsPicks, fetchSectionHome } from "src/api/fetchContent";
 import { Article, EditorsPickArticle } from "src/types/data";
 import { NavProp } from "src/types/navStacks";
-import HorizontalCard from "../../components/cards/HorizontalCard";
+import ImageCard from "../../components/cards/HorizontalCard";
 import { varGray1, varTextColor } from "../../styles/styles";
 import { Section_Type } from "../home/HomeScreen";
 import EditorsPicks from "../home/sections/EditorsPicks";
@@ -334,7 +334,7 @@ function Search({ navigation }: NavProp) {
           <FlatList
             data={articles}
             renderItem={({ item, index }) => (
-              <HorizontalCard
+              <ImageCard
                 article={item}
                 navigation={navigation}
                 key={`search-result-${index}`}

@@ -3,103 +3,151 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, RefreshControl, Text, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import { fetchSection } from "src/api/fetchContent";
-import HorizontalCard from "src/components/cards/HorizontalCard";
+import ImageCard from "src/components/cards/HorizontalCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
-import SmallCard from "src/components/cards/SmallCard";
+import NoImageCard from "src/components/cards/SmallCard";
 import Divider from "src/components/Divider";
 import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
 import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
 
-// TODO: if reach the end of the list, load the next page of content
+// If reaches the end of the list, loads the next page of content
 // (another api call but with page= page+ 1 unless page=last page)
 
+type ArticleGroup = {
+  type: "large" | "noImage" | "image";
+  articles: Article[];
+  id: string;
+};
+
+/**
+ * Renders vertical list of articles for a section (e.g. "University News", "Metro")
+ * @param param0
+ * @returns
+ */
 function SectionsScreen({
   route,
   navigation,
 }: StackScreenProps<HomeStackProps, "Section">) {
   const slug = route.params.slug;
-  const [section, setSection] = useState<Article[]>();
-  const [title, setTitle] = useState();
-  const [pages, setPages] = useState();
+  const [section, setSection] = useState<Article[]>([]);
+  const [rows, setRows] = useState<ArticleGroup[]>([]);
+  const [title, setTitle] = useState<string>();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState<number>();
   const [refreshing, setRefreshing] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
+  // Convert articles array into vertical groups for efficient rendering
   useEffect(() => {
-    setSection(undefined);
-    setTitle(undefined);
-    setPages(undefined);
+    const newGroups: ArticleGroup[] = [];
+    if (section.length > 0) {
+      // First article gets its own group
+      newGroups.push({
+        type: "large",
+        articles: [section[0]],
+        id: `${slug}-group-0`,
+      });
 
-    fetchSection(slug, 1, setSection).then((resp) => {
-      setTitle(resp[0]);
-      setPages(resp[1]);
-      console.log(`loaded ${slug}`);
-    });
+      // Rest of the articles alternate between noImage and image pairs
+      // Each group contains 2 articles displayed vertically
+      let isNoImage = true;
+      for (let i = 1; i < section.length; i += 2) {
+        const pair = section.slice(i, i + 2);
+        if (pair.length === 2) {
+          newGroups.push({
+            type: isNoImage ? "noImage" : "image",
+            articles: pair,
+            id: `${slug}-group-${i}`,
+          });
+          isNoImage = !isNoImage;
+        }
+      }
+    }
+    setRows(newGroups);
+  }, [section, slug]);
+
+  const loadPage = async (page: number, shouldAppend = false) => {
+    try {
+      const [sectionTitle, lastPageNum, newArticles] = await fetchSection(
+        slug,
+        page,
+        (articles) => {
+          if (shouldAppend && articles) {
+            setSection((prev) => [...prev, ...articles]);
+          } else if (articles) {
+            setSection(articles);
+          }
+        }
+      );
+
+      if (!shouldAppend) {
+        setTitle(sectionTitle as string);
+      }
+      setLastPage(lastPageNum as number);
+      setCurrentPage(page);
+    } catch (error) {
+      console.error("Error loading page:", error);
+    }
+  };
+
+  // Loads the first page of content when the screen is loaded
+  useEffect(() => {
+    setSection([]);
+    setTitle(undefined);
+    setLastPage(undefined);
+    setCurrentPage(1);
+    loadPage(1);
   }, [slug]);
 
-  if (!section) {
-    return <ActivityIndicator color={varGray1} style={{ flex: 1 }} />;
-  }
+  // Loads more content when the user reaches the end of the list
+  const loadMore = async () => {
+    // If already loading more or no more pages or already on last page, don't load more
+    if (isLoadingMore || !lastPage || currentPage >= lastPage) return;
 
-  // switch every 4
-  // small 1,2,3,4
-  // horz 5,6,7,8
-  // small 9,10,11,12 ...
+    setIsLoadingMore(true);
+    await loadPage(currentPage + 1, true);
+    setIsLoadingMore(false);
+  };
 
-  let cards = "small";
+  // Refreshes the list when the user pulls down to refresh
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await loadPage(1);
+    setRefreshing(false);
+  };
 
-  const renderCards = (index: number) => {
-    if (index === 0) {
+  const renderGroup = ({ item }: { item: ArticleGroup }) => {
+    if (item.type === "large") {
       return (
         <View>
           <LargeSectionCard
-            article={section[0]}
+            article={item.articles[0]}
             navigation={navigation}
-            key={`${slug}-0}`}
           />
           <Divider />
         </View>
       );
-    } else if (index === 1 || (cards === "small" && (index + 1) % 2 === 0)) {
-      cards = "horizontal";
-      return (
-        <View style={layout.vStack}>
-          {section.slice(index, index + 2).map((article, i) => (
-            <View>
-              <SmallCard
-                article={article}
-                navigation={navigation}
-                key={`${slug}-small-${index}-${i}`}
-              />
-              <Divider />
-            </View>
-          ))}
-        </View>
-      );
-    } else if (cards === "horizontal" && (index + 1) % 2 === 0) {
-      cards = "small";
-      return (
-        <View style={layout.vStack}>
-          {section.slice(index, index + 2).map((article, i) => (
-            <View>
-              <HorizontalCard
-                article={article}
-                navigation={navigation}
-                key={`${slug}-horizontal-${index}-${i}`}
-              />
-              <Divider />
-            </View>
-          ))}
-        </View>
-      );
-    } else {
-      return null; // render only every 4
     }
+
+    const CardComponent = item.type === "noImage" ? NoImageCard : ImageCard;
+
+    return (
+      <View style={layout.vStack}>
+        {item.articles.map((article, i) => (
+          <View key={`${item.id}-${i}`}>
+            <CardComponent article={article} navigation={navigation} />
+            <Divider />
+          </View>
+        ))}
+      </View>
+    );
   };
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await fetchSection(slug, 1, setSection);
-    setRefreshing(false);
+  // Renders a loading indicator at the bottom of the list when loading more content
+  const renderFooter = () => {
+    if (!isLoadingMore) return null;
+    return <ActivityIndicator color={varGray1} style={{ padding: 20 }} />;
   };
 
   return (
@@ -107,13 +155,19 @@ function SectionsScreen({
       <View style={baseStyles.container}>
         <View>
           <FlatList
-            data={section}
-            keyExtractor={(item, index) => `${slug}-${index}`}
-            renderItem={({ item, index }) => renderCards(index)}
+            data={rows}
+            keyExtractor={(item) => item.id}
+            renderItem={renderGroup}
             ListHeaderComponent={<Text style={text.bigTitle}>{title}</Text>}
+            ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
+            removeClippedSubviews={true} // Added to reduce memory usage
+            maxToRenderPerBatch={3} // Added to reduce memory usage
+            windowSize={3} // Added to reduce memory usage
+            onEndReached={loadMore} // function to load more content
+            onEndReachedThreshold={1} // threshold that determines when to load more
             scrollIndicatorInsets={{ right: 4 }}
             contentContainerStyle={{ paddingRight: 20 }}
             style={{ marginRight: -20 }}

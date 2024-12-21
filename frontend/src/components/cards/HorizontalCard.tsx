@@ -9,7 +9,7 @@ import { CardProps } from "src/types/navStacks";
 import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 
-function HorizontalCard({ article, navigation }: CardProps) {
+function ImageCard({ article, navigation }: CardProps) {
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
   if (article.dominantMedia) {
@@ -56,7 +56,7 @@ function HorizontalCard({ article, navigation }: CardProps) {
   );
 }
 
-export default HorizontalCard;
+export default ImageCard;
 
 const styles = StyleSheet.create({
   card: {

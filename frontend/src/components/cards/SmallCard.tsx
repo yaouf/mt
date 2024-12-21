@@ -7,17 +7,11 @@ import {
   ViewStyle,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import {
-  font1,
-  font3,
-  varGray1,
-  varTextColor,
-} from "../../styles/styles";
+import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 
-function SmallCard({ article, navigation }: CardProps) {
-
-  let cardSize: StyleProp<ViewStyle> = { minWidth: "100%",};
+function NoImageCard({ article, navigation }: CardProps) {
+  let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
 
   return (
     <View style={cardSize}>
@@ -27,19 +21,23 @@ function SmallCard({ article, navigation }: CardProps) {
       >
         <View style={styles.card}>
           <View style={styles.text}>
-            <Text style={styles.title}>
-              {article.headline}
-            </Text>
-            {article.subhead && article.subhead.trim() !== '' && (
-            <Text style={styles.subhead}>
-              {article.subhead}
-            </Text>
-          )}
-            <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end"}}>
-          <Text style={styles.published}>
-                  {formatDates(article.published_at)}
-          </Text>
-          </View>
+            <Text style={styles.title}>{article.headline}</Text>
+            {article.subhead && article.subhead.trim() !== "" && (
+              <Text style={styles.subhead}>{article.subhead}</Text>
+            )}
+            <View
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                flexDirection: "row",
+                alignItems: "flex-end",
+              }}
+            >
+              <Text style={styles.published}>
+                {formatDates(article.published_at)}
+              </Text>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -47,14 +45,14 @@ function SmallCard({ article, navigation }: CardProps) {
   );
 }
 
-export default SmallCard;
+export default NoImageCard;
 
 const styles2 = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    },
+  },
   touchableItem: {
     width: 200,
     height: 200,
@@ -144,7 +142,7 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     lineHeight: 22,
     fontStyle: "italic",
-    marginBottom: 12, 
+    marginBottom: 12,
   },
   publishedSection: {
     display: "flex",
