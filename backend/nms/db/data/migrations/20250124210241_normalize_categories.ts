@@ -1,4 +1,14 @@
 import type { Knex } from "knex";
+/**
+ * This migration normalizes the category data model by:
+ * 1. Creating a dedicated categories table to store unique category names
+ * 2. Creating a device_preferences junction table to track which devices are subscribed to which categories
+ * 3. Creating a notification_categories junction table to track which notifications belong to which categories
+ * 4. Seeding the categories table with the initial set of known categories
+ *
+ * This replaces the previous data model where categories were stored as boolean columns on each device and notification.
+ * This new data model is more efficient since the categories are stored in a single table and referenced by foreign keys.
+ */
 
 export async function up(knex: Knex): Promise<void> {
   // 1) CREATE categories TABLE
@@ -43,7 +53,7 @@ export async function up(knex: Knex): Promise<void> {
     table.primary(["notification_id", "category_id"]);
   });
 
-  // 4) SEED categories with your known categories
+  // 4) SEED categories with the known categories
   const categoryNames = [
     "Breaking News",
     "University News",
@@ -67,7 +77,7 @@ export async function up(knex: Knex): Promise<void> {
   // 5) MIGRATE existing device booleans -> device_preferences
   type DeviceRow = {
     id: string;
-    // The columns are spelled EXACTLY as in your existing schema
+    // The columns are spelled EXACTLY as in the existing schema
     "Breaking News": boolean;
     "University News": boolean;
     Metro: boolean;
@@ -113,7 +123,9 @@ export async function up(knex: Knex): Promise<void> {
     Opinions: boolean;
   };
 
-  const notifications: NotificationRow[] = await knex<NotificationRow>("notifications").select("*");
+  const notifications: NotificationRow[] = await knex<NotificationRow>(
+    "notifications"
+  ).select("*");
 
   for (const notification of notifications) {
     for (const catName of categoryNames) {
@@ -141,7 +153,6 @@ export async function up(knex: Knex): Promise<void> {
 export async function down(knex: Knex): Promise<void> {
   // This "down" tries to revert to the previous structure (booleans on devices/notifications).
   // If you need to fully recover data, you'd have to re-insert booleans from these join tables.
-  // In a real production environment, carefully consider how you restore data.
 
   // 1) Add back old boolean columns to devices
   await knex.schema.alterTable("devices", (table) => {
