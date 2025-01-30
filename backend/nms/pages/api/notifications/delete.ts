@@ -44,7 +44,6 @@ export default async function getNotification(
     // Delete the notification from the job queue
     const job = await notificationQueue.getJob(jobId.toString() + "_n");
     console.log(notificationQueue.getActive())
-    console.log("Job:", job);
     if (job) {
       console.log("Job deleted from queue.");
       await job.remove();
