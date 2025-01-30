@@ -78,7 +78,7 @@ export default async function getNotification(
     }
 
     const notificationCategories = categories.map((category) => ({
-      notification_id: notificationId,
+      notification_id: notificationId.id,
       category_id: category.id,
     }));
 

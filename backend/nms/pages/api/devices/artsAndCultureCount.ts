@@ -13,7 +13,13 @@ export default async function getArtsAndCultureDevices(
   try {
     const result = await db("devices")
       .count("* as count")
-      .where("Arts and Culture", true);
+      .join("device_preferences", "devices.id", "device_preferences.device_id")
+      .join("categories", "device_preferences.category_id", "categories.id")
+      .where("categories.name", "Arts and Culture")
+      .andWhere("devices.is_push_enabled", true);
+    // const result = await db("devices")
+    //   .count("* as count")
+    //   .where("Arts and Culture", true);
 
     const { count } = result[0];
     // console.log("university news enabled devices", count);

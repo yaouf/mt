@@ -38,7 +38,7 @@ const worker = new Worker("notificationQueue", async (job) => {
   for (let tag of tags) {
     console.log("tag", tag);
     const devices = (await db("devices")
-      .select("expoPushToken")
+      .select("expo_push_token")
       .where(tag, true)) as Device[];
     for (let device of devices) {
       deviceMap.set(device.expoPushToken, device);

@@ -13,7 +13,13 @@ export default async function getScienceAndResearchDevices(
   try {
     const result = await db("devices")
       .count("* as count")
-      .where("Science and Research", true);
+      .join("device_preferences", "devices.id", "device_preferences.device_id")
+      .join("categories", "device_preferences.category_id", "categories.id")
+      .where("categories.name", "Science and Research")
+      .andWhere("devices.is_push_enabled", true);
+    // const result = await db("devices")
+    //   .count("* as count")
+    //   .where("Science and Research", true);
 
     const { count } = result[0];
     // console.log("university news enabled devices", count);

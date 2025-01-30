@@ -11,7 +11,13 @@ export default async function getBreakingNotifications(
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("* as count").where("Breaking News", true);
+    const result = await db("devices")
+      .count("* as count")
+      .join("device_preferences", "devices.id", "device_preferences.device_id")
+      .join("categories", "device_preferences.category_id", "categories.id")
+      .where("categories.name", "Breaking News")
+      .andWhere("devices.is_push_enabled", true);
+    // const result = await db("devices").count("* as count").where("Breaking News", true);
     console.log("result", result);
     const { count } = result[0];
     console.log("breaking news enabled devices", count);

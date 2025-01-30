@@ -13,7 +13,13 @@ export default async function getSportsDevices(
   try {
     const result = await db("devices")
       .count("* as count")
-      .where("Sports", true);
+      .join("device_preferences", "devices.id", "device_preferences.device_id")
+      .join("categories", "device_preferences.category_id", "categories.id")
+      .where("categories.name", "Sports")
+      .andWhere("devices.is_push_enabled", true);
+    // const result = await db("devices")
+    //   .count("* as count")
+    //   .where("Sports", true);
 
     const { count } = result[0];
     // console.log("university news enabled devices", count);

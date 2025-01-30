@@ -23,7 +23,7 @@ export default async function getDevices(
     const totalDevicesResult = await db("devices")
       .modify((queryBuilder) => {
         if (search) {
-          queryBuilder.where("expoPushToken", "like", `%${search}%`);
+          queryBuilder.where("expo_push_token", "like", `%${search}%`);
         }
       })
       .count("* as count")
@@ -33,10 +33,10 @@ export default async function getDevices(
     // Main query for pagination and search filtering
     const devices = await db("devices")
       .select("*")
-      .orderBy("expoPushToken", "asc")
+      .orderBy("expo_push_token", "asc")
       .modify((queryBuilder) => {
         if (search) {
-          queryBuilder.where("expoPushToken", "like", `%${search}%`);
+          queryBuilder.where("expo_push_token", "like", `%${search}%`);
         }
       })
       .offset(offset)
