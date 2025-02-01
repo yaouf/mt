@@ -1,15 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-import { EditorPick } from "../types/types";
-
-type ResponseData = {
-  message?: string;
-  picks?: EditorPick[];
-};
+import { ResponseData, EditorPick } from "../types/types";
 
 export default async function updateEditorPickRanks(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData | EditorPick[]>
 ) {
   try {
     const picks: EditorPick[] = req.body;
@@ -23,7 +18,7 @@ export default async function updateEditorPickRanks(
       }
     });
 
-    res.status(200).json({ picks });
+    res.status(200).json(picks);
   } catch (error) {
     console.error("Error updating editor pick ranks:", error);
     res.status(500).json({ message: error.message });

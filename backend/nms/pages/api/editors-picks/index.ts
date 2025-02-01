@@ -1,14 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-import { EditorPick } from "../types/types";
-
-type ResponseData = {
-  message: string;
-};
+import { EditorPick, ResponseData } from "../types/types";
 
 export default async function getEditorsPicks(
-  req: NextApiRequest,
-  res: NextApiResponse<EditorPick[] | ResponseData>
+  _req: NextApiRequest,
+  res: NextApiResponse<ResponseData | EditorPick[]>
 ) {
   try {
     const picks = await db("editors_picks")

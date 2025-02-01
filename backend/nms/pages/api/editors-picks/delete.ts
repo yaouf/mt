@@ -1,13 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-
-type ResponseData = {
-  message?: string;
-};
+import { EditorPick, ResponseData } from "../types/types";
 
 export default async function deleteEditorPick(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData | EditorPick[]>
 ) {
   try {
     let data: any;
