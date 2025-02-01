@@ -2,12 +2,19 @@ export type ResponseData = {
   message: string;
 };
 
-export type Notification = {
+export type RequestData = {
   jobId: number;
+};
+
+export type Notification = {
+  id: number;
   time: string;
   title: string;
   body: string;
-  tags: string[];
+  url: string;
+  status: string;
+  is_uid: boolean;
+  categories?: string[];
 };
 
 export type Device = {
