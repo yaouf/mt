@@ -1,6 +1,7 @@
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/solid";
 import { useCallback, useState } from "react";
 import { EditorPick } from "../../pages/api/types/types";
+
 // TODO: having EditorsPick and EditorsPicks is confusing.
 const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const [url, setUrl] = useState("");
@@ -48,8 +49,21 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
       console.log("Delete response:", response);
 
       if (response.ok) {
-        // Filter out the deleted pick from the state
-        setEditorsPicks(editorsPicks.filter((pick) => pick.url !== url));
+        // Find and delete the pick from the state
+        const deletedPickIndex = editorsPicks.findIndex((pick) => pick.url === url);
+        const updatedPicks = editorsPicks.filter((pick) => pick.url !== url);
+
+        // Update the ranks of the remaining picks
+        const newPicksWithUpdatedRanks = updatedPicks.map((pick, index) => {
+          // If the pick's rank is above the deleted pick's rank, decrease the rank
+          return {
+            ...pick,
+            rank: index < deletedPickIndex ? pick.rank : pick.rank - 1,
+          };
+        });
+
+        // Set the new state
+        setEditorsPicks(newPicksWithUpdatedRanks);
       } else {
         console.error("Failed to delete editor's pick");
       }
@@ -97,6 +111,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
           }))
         ),
       });
+      console.log("Update ranks response:", response);
 
       if (!response.ok) {
         console.error("Failed to update ranks");
