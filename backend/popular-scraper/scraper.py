@@ -23,14 +23,19 @@ headers = {
 response = requests.get(url, headers=headers)
 soup = BeautifulSoup(response.text, 'html.parser')
 
-# Find all popular articles
-popular_articles = soup.find_all('article', class_='art-hed')
-# Extract and print the links and titles
-for article in popular_articles:
-    link = article.find('a')
-    if link:
-        title = link.text.strip()
-        url = link['href']
-        print(f"Title: {title}")
-        print(f"URL: {url}")
-        print("-" * 50)
+# Find the "Popular" section
+popular_section = soup.find('div', class_='subheader', string='Popular')
+if popular_section:
+    # Get the container that follows the Popular header
+    popular_container = popular_section.find_parent('div').find_next_sibling('div')
+    # Find all articles within this container
+    popular_articles = popular_container.find_all('article')
+    
+    for article in popular_articles:
+        link = article.find('a')
+        if link:
+            title = link.text.strip()
+            url = link['href']
+            print(f"Title: {title}")
+            print(f"URL: {url}")
+            print("-" * 50)
