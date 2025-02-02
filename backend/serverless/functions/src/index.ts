@@ -10,9 +10,17 @@
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
+import "./db"; // Initialize database connection
 import { createDevice } from "./url/createDevice";
 import { updateNotificationStatus } from "./url/updateNotificationStatus";
 import { updateSettings } from "./url/updateSettings";
 import { viewEditorsPicks } from "./url/viewEditorsPicks";
 import { viewSettings } from "./url/viewSettings";
-export { createDevice, updateNotificationStatus, updateSettings, viewEditorsPicks, viewSettings };
+
+export {
+  createDevice,
+  updateNotificationStatus,
+  updateSettings,
+  viewEditorsPicks,
+  viewSettings,
+};

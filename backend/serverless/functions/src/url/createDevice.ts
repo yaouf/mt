@@ -2,26 +2,17 @@ import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
 import { v4 as uuidv4 } from "uuid";
-import db from "../../../db/dist/data/db-config";
-import envars from "../envars";
+import db from "../db";
 import { validateApiKey } from "../utils";
 
 export const createDevice = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
-
-  const environment = envars.environment.value();
-  const dbUrl = envars.dbUrl.value();
-  const dbParams = { environment, dbUrl };
-  const newDb = db(dbParams);
-  logger.info("dbParams: ", dbParams);
 
   logger.info(
     "createDevice was called with the following request body: ",
     { structuredData: true },
     request.body
   );
-  // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, universityNewsAlerts, expoPushToken? (optional)
-  // Assume info above is in request body as json. If any required fields are missing, return an error status code
 
   try {
     // Extract device information from the request body
@@ -64,11 +55,11 @@ export const createDevice = onRequest(async (request, response) => {
     const scienceAndResearch = validBody["Science and Research"];
     const isPushEnabled = validBody["isPushEnabled"];
 
-    // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
-    // Check if the device already exists in the devices table
-    const existingDevice = await newDb("devices")
+    // Use the shared db instance
+    const existingDevice = await db("devices")
       .where("expoPushToken", expoPushToken)
       .first();
+
     // Initialize deviceId
     let deviceId: string;
     if (existingDevice) {
@@ -91,7 +82,7 @@ export const createDevice = onRequest(async (request, response) => {
       );
 
       // Update the device's settings
-      await newDb("devices")
+      await db("devices")
         .where("expoPushToken", expoPushToken)
         .update(filteredUpdateFields);
       deviceId = existingDevice.id;
@@ -116,7 +107,7 @@ export const createDevice = onRequest(async (request, response) => {
     } else {
       const dateCreated = new Date();
       // Insert the device into the devices table, and return the id of the inserted row
-      const insertedRows = await newDb("devices")
+      const insertedRows = await db("devices")
         .insert({
           id: uuidv4(), // Generate a new UUID for the device
           deviceType: deviceType,
@@ -133,7 +124,6 @@ export const createDevice = onRequest(async (request, response) => {
         })
         .returning("id");
 
-      await newDb.destroy();
       // TODO: change expo push token to required field
       // logger.info("inserted row: ", insertedRows);
       deviceId = insertedRows[0].id;
