@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../db/data/db-config";
+import corsMiddleware from "../../../config/cors";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 
 type ResponseData = {
   message?: string;
@@ -7,7 +9,7 @@ type ResponseData = {
   totalDevices?: number;
 };
 
-export default async function getDevices(
+async function getDevicesHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
@@ -47,4 +49,13 @@ export default async function getDevices(
     console.error("Error fetching devices from the database:", error);
     res.status(500).json({ message: error.message });
   }
+}
+
+export default async function getDevices(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, getDevicesHelper);
+  });
 }

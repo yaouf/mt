@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
+import db from "../../../db/data/db-config";
 import { EditorPick } from "../types/types";
+import { authMiddleware } from "../../../middleware/authMiddleware";
+import corsMiddleware from "../../../config/cors";
 
 type ResponseData =
   | {
@@ -10,7 +12,7 @@ type ResponseData =
   | EditorPick
   | EditorPick[];
 
-export default async function addEditorPick(
+async function addEditorPickHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
@@ -49,4 +51,13 @@ export default async function addEditorPick(
     console.error("Error adding editors pick to the database:", error);
     res.status(500).json({ message: error.message });
   }
+}
+
+export default async function addEditorPick(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, addEditorPickHelper);
+  });
 }

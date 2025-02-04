@@ -1,13 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
+import db from "../../../db/data/db-config";
 import { EditorPick } from "../types/types";
+import { authMiddleware } from "../../../middleware/authMiddleware";
+import corsMiddleware from "../../../config/cors";
 
 type ResponseData = {
   message?: string;
   picks?: EditorPick[];
 };
 
-export default async function updateEditorPickRanks(
+async function updateEditorPickRanksHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
@@ -29,3 +31,12 @@ export default async function updateEditorPickRanks(
     res.status(500).json({ message: error.message });
   }
 } 
+
+export default async function updateEditorPickRanks(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, updateEditorPickRanksHelper);
+  });
+}

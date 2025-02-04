@@ -1,12 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../db/data/db-config";
+import corsMiddleware from "../../../config/cors";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 
 type ResponseData = {
   count?: string;
   message?: string;
 };
 
-export default async function getDeviceCount(
+async function getDeviceCountHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
@@ -27,4 +29,13 @@ export default async function getDeviceCount(
     console.error("Error fetching device count from the database:", error);
     res.status(500).json({ message: error.message });
   }
+}
+
+export default async function getDeviceCount(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, getDeviceCountHelper);
+  });
 }
