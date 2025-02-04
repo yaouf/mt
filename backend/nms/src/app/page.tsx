@@ -69,7 +69,7 @@ export default function Home() {
   useEffect(() => {
     const fetchNotfEnabled = async () => {
       try {
-        const response = await fetch("/api/devices/notificationEnabledCount");
+        const response = await fetch("/api/devices/count?search=isPushEnabled");
         const data = await response.json();
         setNtfEnabled(data.count.toString());
       } catch (error) {
@@ -85,7 +85,7 @@ export default function Home() {
   useEffect(() => {
     const fetchMetroDevices = async () => {
       try {
-        const response = await fetch("/api/devices/metroCount");
+        const response = await fetch("/api/devices/count?search=Metro");
         const data = await response.json();
         setMetroCount(data.count.toString());
       } catch (error) {
@@ -101,7 +101,7 @@ export default function Home() {
   useEffect(() => {
     const fetchUniCount = async () => {
       try {
-        const response = await fetch("/api/devices/universityNewsCount");
+        const response = await fetch("/api/devices/count?search=University News");
         const data = await response.json();
         setUniversityCount(data.count.toString());
       } catch (error) {
@@ -126,7 +126,7 @@ export default function Home() {
   useEffect(() => {
     const fetchBreakingCount = async () => {
       try {
-        const response = await fetch("/api/devices/breakingNewsCount");
+        const response = await fetch("/api/devices/count?search=Breaking News");
         const data = await response.json();
         setBreakingCount(data.count.toString());
       } catch (error) {
@@ -142,7 +142,7 @@ export default function Home() {
   useEffect(() => {
     const fetchSportsCount = async () => {
       try {
-        const response = await fetch("/api/devices/sportsCount");
+        const response = await fetch("/api/devices/count?search=Sports");
         const data = await response.json();
         setSportsCount(data.count.toString());
       } catch (error) {
@@ -157,7 +157,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchArtsAndCultureCount = async () => {
-      const response = await fetch("/api/devices/artsAndCultureCount");
+      const response = await fetch("/api/devices/count?search=Arts and Culture");
       const data = await response.json();
       setArtsAndCultureCount(data.count.toString());
     };
@@ -166,7 +166,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchScienceAndResearchCount = async () => {
-      const response = await fetch("/api/devices/scienceAndResearchCount");
+      const response = await fetch("/api/devices/count?search=Science and Research");
       const data = await response.json();
       setScienceAndResearchCount(data.count.toString());
     };
@@ -175,7 +175,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchOpinionsCount = async () => {
-      const response = await fetch("/api/devices/opinionsCount");
+      const response = await fetch("/api/devices/count?search=Opinions");
       const data = await response.json();
       setOpinionsCount(data.count.toString());
     };

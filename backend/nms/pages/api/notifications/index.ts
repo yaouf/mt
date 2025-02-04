@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
+import db from "../../../db/data/db-config";
 
 type ResponseData = {
   message: string;
