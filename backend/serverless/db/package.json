@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm i && tsc",
     "knex": "npm i && npx ts-node node_modules/.bin/knex",
+    "sync": "npm run knex migrate:latest",
     "dangerous:update": "npm i && tsc && npm run knex -- migrate:rollback && npm run knex -- migrate:latest && npm run knex -- seed:run",
     "new": "npm i && tsc && npx knex migrate:make $1"
   },
