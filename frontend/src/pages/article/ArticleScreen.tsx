@@ -188,15 +188,18 @@ function ArticleScreen({
                             );
                           }
                         }
-                        return (
-                          metadata.length > 0 && (
-                            <Image
-                              key={i}
-                              source={{ uri: metadata[0].value }}
-                              style={articleStyles.authorImage}
-                              accessibilityLabel="Staff member's profile picture"
-                            />
-                          )
+                        const imageUri =
+                          metadata.length > 0 && metadata[0].value
+                            ? metadata[0].value
+                            : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
+                        return (   
+                          <Image
+                            key={i}
+                            source={{ uri: imageUri }}
+                            style={articleStyles.authorImage}
+                            accessibilityLabel="Staff member's profile picture"
+                          />
+                        
                         );
                       })}
                     </View>
