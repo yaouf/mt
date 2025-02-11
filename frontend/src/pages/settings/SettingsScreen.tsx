@@ -131,6 +131,14 @@ function SettingsScreen({ navigation }: NavProp) {
     load();
   }, []);
 
+  const app_settings = [
+    {
+      id: 1,
+      title: "Display Settings",
+      link: "",
+    },
+  ]
+
   const support = [
     // { id: 1, title: "Manage Account", link: "" }, // TODO: once make accounts and stuff, addd this
     {
