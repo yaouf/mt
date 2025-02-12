@@ -9,7 +9,7 @@ import { NavProp } from "src/types/navStacks";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
 import SettingsLink from "./SettingsLink";
-import DisplaySettings from "./DisplaySettings";
+import DisplaySettingsButton from "./DisplaySettingsButton";
 
 /**
  * Page for settings
@@ -255,17 +255,27 @@ function SettingsScreen({ navigation }: NavProp) {
         >
           App Settings
         </Text>
-          <View
-            // key={`support-${i}`}
-            style={{ paddingHorizontal: 4, marginBottom: 12 }}
-          >
-            <DisplaySettings />
-          </View>
+        {/* <View
+          // key={`support-${i}`}
+          style={{ paddingHorizontal: 4, marginBottom: 12 }}
+        >
+          <DisplaySettingsButton navigation={navigation}/>
+        </View> */}
+        <View style={{ paddingHorizontal: 4}}>
+          <SettingsLink
+            title="Display Settings"
+            link={"DisplaySettings"}
+            inApp={true}
+            navigation={navigation}
+          />
+          {/* <Divider marginBottom={12} marginTop={12} color={varGray1} /> */}
+        </View>
       </View>
       <View>
         <Text
           style={{
             ...settings.smallHeading,
+            marginTop: 32,
             marginBottom: 22,
             paddingHorizontal: 16,
           }}

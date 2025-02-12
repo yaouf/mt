@@ -4,6 +4,7 @@ import ArticleScreen from "../article/ArticleScreen";
 import SettingsScreen from "./SettingsScreen";
 import SavedArticles from "./SavedArticles";
 import DevTeam from "./DevTeam";
+import DisplaySettings from "./DisplaySettings";
 
 const SettingsStack = createStackNavigator<SettingsStackProps>();
 
@@ -23,6 +24,11 @@ function SettingsStackScreen() {
       <SettingsStack.Screen
         name="SavedArticles" // all saved articles page
         component={SavedArticles}
+        options={{ headerShown: false }}
+      />
+      <SettingsStack.Screen
+        name="DisplaySettings" // all saved articles page
+        component={DisplaySettings}
         options={{ headerShown: false }}
       />
       <SettingsStack.Screen

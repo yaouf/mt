@@ -33,6 +33,7 @@ export type SettingsStackProps = {
   Article: { data: Article };
   Staff: { slug: string };
   SavedArticles: undefined;
+  DisplaySettings: undefined;
   DevTeam: undefined;
 };
 
