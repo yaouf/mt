@@ -55,14 +55,14 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
               Science and Research
             </th>
             <th className="py-2 px-4 border-b text-left">Expo Push Token</th>
-            <th className="py-2 px-4 border-b text-left">Date created</th>
+            <th className="py-2 px-4 border-b text-left">Date Created</th>
           </tr>
         </thead>
         <tbody>
           {devices.map((device) => (
-            <tr key={device.expoPushToken}>
+            <tr key={device.expo_push_token}>
               <td className="py-2 px-4 border-b text-left">
-                {device.deviceType}
+                {device.device_type}
               </td>
               <td className="py-2 px-4 border-b text-center">
                 {device["Breaking News"] ? "Yes" : "No"}
@@ -86,9 +86,9 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
                 {device["Science and Research"] ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-left">
-                {device.expoPushToken}
+                {device.expo_push_token}
               </td>
-              <td className="py-2 px-4 border-b text-left">{device.dateCreated}</td>
+              <td className="py-2 px-4 border-b text-left">{device.date_created}</td>
             </tr>
           ))}
         </tbody>

@@ -18,7 +18,7 @@ export type Notification = {
 };
 
 export type Device = {
-  deviceType: string;
+  device_type: string;
   "Breaking News": boolean;
   "University News": boolean;
   Metro: boolean;
@@ -26,8 +26,8 @@ export type Device = {
   "Arts and Culture": boolean;
   "Science and Research": boolean;
   Opinions: boolean;
-  expoPushToken: string;
-  dateCreated: string;
+  expo_push_token: string;
+  date_created: string;
 };
 
 export interface EditorPick {
