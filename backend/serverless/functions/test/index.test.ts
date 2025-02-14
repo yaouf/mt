@@ -10,6 +10,7 @@ import {
 import admin from "firebase-admin";
 import firebaseFunctionsTest from "firebase-functions-test";
 import { createDevice } from "../src/url/createDevice";
+console.log("Test for serverless functions");
 
 // Initialize the firebase-functions-test instance
 const test = firebaseFunctionsTest();
