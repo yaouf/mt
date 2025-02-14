@@ -60,7 +60,13 @@ jobs:
         working-directory: ./backend/nms
 
       - name: Install dependencies for serverless functions
-        run: npm install
+        run: |
+          npm install
+          npm run build:db
+        working-directory: ./backend/serverless/functions
+
+      - name: Create .env file for Firebase Functions
+        run: echo "ENV=development" > .env
         working-directory: ./backend/serverless/functions
 
       - name: Run Jest tests for serverless functions
