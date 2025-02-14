@@ -1,8 +1,37 @@
-import { describe, expect, it } from "@jest/globals";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  expect,
+  it,
+  jest,
+} from "@jest/globals";
+import admin from "firebase-admin";
+import firebaseFunctionsTest from "firebase-functions-test";
 import { createDevice } from "../src/url/createDevice";
 
+// Initialize the firebase-functions-test instance
+const test = firebaseFunctionsTest();
+
+// Set timeout for tests
+jest.setTimeout(10000);
+
+beforeAll(async () => {
+  // Ensure admin is initialized only once
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      projectId: "demo-test",
+    });
+  }
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 jest.mock("../src/utils", () => ({
-  validateApiKey: jest.fn().mockResolvedValue(true),
+  validateApiKey: jest.fn().mockResolvedValue(true as never),
 }));
 
 describe("createDevice", () => {
@@ -43,4 +72,17 @@ describe("createDevice", () => {
       })
     );
   });
+});
+
+// Clean up firebase-functions-test resources after tests complete
+afterAll(async () => {
+  // Properly close all Firebase apps
+  await Promise.all(
+    admin.apps
+      .filter((app): app is admin.app.App => app !== null)
+      .map((app) => app.delete())
+  );
+
+  // Clean up the test environment
+  test.cleanup();
 });
