@@ -58,9 +58,11 @@ jobs:
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         working-directory: ./backend/nms
+
       - name: Install dependencies for serverless functions
         run: npm install
         working-directory: ./backend/serverless/functions
+
       - name: Run Jest tests for serverless functions
         run: npm test
         working-directory: ./backend/serverless/functions
