@@ -1,5 +1,6 @@
 import { describe, expect, it } from "@jest/globals";
 import { createDevice } from "../src/url/createDevice";
+console.log("Test for serverless functions");
 
 jest.mock("../src/utils", () => ({
   validateApiKey: jest.fn().mockResolvedValue(true),
