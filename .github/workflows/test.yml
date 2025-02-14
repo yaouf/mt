@@ -59,6 +59,10 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         working-directory: ./backend/nms
 
+      - name: Create .env file for DB (for Firebase Functions)
+        run: echo "ENV=development" > .env
+        working-directory: ./backend/serverless/db
+
       - name: Install dependencies for serverless functions
         run: |
           npm install
