@@ -9,8 +9,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { fyp } from "src/styles/pages";
+import { settings } from "src/styles/pages";
 import { NavProp, SearchStackProps } from "src/types/navStacks";
-import { text } from "src/styles/styles";
+import { text, varTextColor } from "src/styles/styles";
 
 //Screen for display settings
 
@@ -94,8 +95,9 @@ function DisplaySettings({navigation} : NavProp) {
         <Ionicons name="arrow-back" size={20} color="black" />
       </TouchableOpacity>
       <ScrollView style={styles.container}>
-        <Text style={styles.header}>Display Settings</Text>
-        <Text style={styles.header}>Appearance</Text>
+        <Text style={text.sectionHeader1}>Display Settings</Text>
+        <View style={{ rowGap: 16, marginTop: 4 }}>
+        <Text style={settings.smallHeading }>Appearance</Text>
         <View style={fyp.toggleRow}>
               <View style={{ flex: 1, paddingRight: 64 }}>
                 <Text style={text.sectionHeader3}>Automatic</Text>
@@ -109,6 +111,7 @@ function DisplaySettings({navigation} : NavProp) {
                 accessibilityRole="switch"
                 accessibilityState={{ checked: toggleValue }}
               />
+            </View>
             </View>
       </ScrollView>
     </>
