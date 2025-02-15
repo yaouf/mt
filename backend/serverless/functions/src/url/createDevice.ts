@@ -12,7 +12,7 @@ export const createDevice = onRequest(async (request, response) => {
   const environment = envars.environment.value();
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
-  const newDb = db(dbParams);
+
   logger.info("dbParams: ", dbParams);
 
   logger.info(
@@ -66,7 +66,7 @@ export const createDevice = onRequest(async (request, response) => {
 
     // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
     // Check if the device already exists in the devices table
-    const existingDevice = await newDb("devices")
+    const existingDevice = await db("devices")
       .where("expoPushToken", expoPushToken)
       .first();
     // Initialize deviceId
@@ -91,7 +91,7 @@ export const createDevice = onRequest(async (request, response) => {
       );
 
       // Update the device's settings
-      await newDb("devices")
+      await db("devices")
         .where("expoPushToken", expoPushToken)
         .update(filteredUpdateFields);
       deviceId = existingDevice.id;
@@ -116,7 +116,7 @@ export const createDevice = onRequest(async (request, response) => {
     } else {
       const dateCreated = new Date();
       // Insert the device into the devices table, and return the id of the inserted row
-      const insertedRows = await newDb("devices")
+      const insertedRows = await db("devices")
         .insert({
           id: uuidv4(), // Generate a new UUID for the device
           deviceType: deviceType,
@@ -133,7 +133,7 @@ export const createDevice = onRequest(async (request, response) => {
         })
         .returning("id");
 
-      await newDb.destroy();
+      await db.destroy();
       // TODO: change expo push token to required field
       // logger.info("inserted row: ", insertedRows);
       deviceId = insertedRows[0].id;

@@ -30,7 +30,27 @@ function configFunc(dbUrl: string) {
         directory: "./data/migrations",
       },
     },
-
+    test: {
+      client: "sqlite3",
+      connection: {
+        filename: startPath + "dist/dev.sqlite3", // Changed to in-memory database
+      },
+      useNullAsDefault: true,
+      seeds: {
+        directory: "./data/seeds",
+      },
+      migrations: {
+        directory: "./data/migrations",
+      },
+      // Add pool configuration to ensure the connection persists
+      pool: {
+        min: 1,
+        max: 1,
+        afterCreate: (conn: any, cb: any) => {
+          conn.run("PRAGMA foreign_keys = ON", cb);
+        },
+      },
+    },
     staging: {
       client: "pg",
       connection: dbUrl,

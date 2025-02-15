@@ -1,5 +1,6 @@
 import { describe, expect, it } from "@jest/globals";
 import { createDevice } from "../src/url/createDevice";
+process.env.ENV = "test";
 console.log("Test for serverless functions");
 
 jest.mock("../src/utils", () => ({
