@@ -2,6 +2,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -14,10 +15,11 @@ import {
   varGray1,
   varRed,
   varTextColor,
+  varTextSecondaryColor,
 } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 
-function LargeCard({ article, navigation }: CardProps) {
+function LargeCard({ article, navigation, author }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
 
@@ -84,6 +86,32 @@ function LargeCard({ article, navigation }: CardProps) {
             >
               {article.subhead}
             </Text>
+            {author && (
+              <View style={styles.bottom}>
+                <TouchableOpacity disabled>
+                  <Text style={styles.published}>By </Text>
+                </TouchableOpacity>
+                {article.authors.map((author, i) => (
+                  <>
+                    <TouchableOpacity
+                      key={author.slug}
+                      onPress={() =>
+                        navigation.navigate("Staff", { slug: author.slug })
+                      }
+                      accessible={true}
+                      accessibilityHint="View Author's Profile"
+                    >
+                      <Text style={styles.author}>{author.name}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity disabled>
+                      <Text style={styles.published}>
+                        {i < article.authors.length - 1 && ", "}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                ))}
+              </View>
+            )}
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
                 <Text
@@ -188,7 +216,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     flexDirection: "row",
     alignItems: "flex-start",
     alignSelf: "stretch",
@@ -221,5 +249,13 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "#ED1C24",
     backgroundColor: "#ED1C24",
+  },
+  author: {
+    color: varTextSecondaryColor,
+    fontFamily: font3,
+    fontSize: 14,
+    fontStyle: "normal",
+    /* line-height: normal; */
+    fontWeight: "700",
   },
 });

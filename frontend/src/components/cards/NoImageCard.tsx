@@ -2,15 +2,22 @@ import {
   StyleProp,
   StyleSheet,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
   ViewStyle,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
+import {
+  font1,
+  font3,
+  varGray1,
+  varTextColor,
+  varTextSecondaryColor,
+} from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 
-function NoImageCard({ article, navigation }: CardProps) {
+function NoImageCard({ article, navigation, author }: CardProps) {
   let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
 
   return (
@@ -24,6 +31,32 @@ function NoImageCard({ article, navigation }: CardProps) {
             <Text style={styles.title}>{article.headline}</Text>
             {article.subhead && article.subhead.trim() !== "" && (
               <Text style={styles.subhead}>{article.subhead}</Text>
+            )}
+            {author && (
+              <View style={styles.bottom}>
+                <TouchableOpacity disabled>
+                  <Text style={styles.published}>By </Text>
+                </TouchableOpacity>
+                {article.authors.map((author, i) => (
+                  <>
+                    <TouchableOpacity
+                      key={author.slug}
+                      onPress={() =>
+                        navigation.navigate("Staff", { slug: author.slug })
+                      }
+                      accessible={true}
+                      accessibilityHint="View Author's Profile"
+                    >
+                      <Text style={styles.author}>{author.name}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity disabled>
+                      <Text style={styles.published}>
+                        {i < article.authors.length - 1 && ", "}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                ))}
+              </View>
             )}
             <View
               style={{
@@ -129,7 +162,7 @@ const styles = StyleSheet.create({
   },
   bottom: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     flexDirection: "row",
     alignItems: "flex-start",
     alignSelf: "stretch",
@@ -153,5 +186,13 @@ const styles = StyleSheet.create({
     width: 254,
     height: 0.5,
     backgroundColor: "rgba(60, 60, 67, 0.36)",
+  },
+  author: {
+    color: varTextSecondaryColor,
+    fontFamily: font3,
+    fontSize: 12,
+    fontStyle: "normal",
+    /* line-height: normal; */
+    fontWeight: "700",
   },
 });

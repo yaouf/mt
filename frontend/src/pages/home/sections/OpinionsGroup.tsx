@@ -54,6 +54,7 @@ function OpinionsGroup(props: SectionGroupProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`${props.slug}-home-${i}`}
+                author={false}
               />
               <Divider />
             </View>

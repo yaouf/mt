@@ -63,7 +63,7 @@ function HomeScreen({ navigation }: NavProp) {
   const sections: Section_Type[] = [
     {
       id: 1,
-      component: <Top topStories={topStories} navigation={navigation} />,
+      component: <Top topStories={topStories!} navigation={navigation} />,
     },
     {
       id: 2,

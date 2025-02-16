@@ -2,14 +2,21 @@ import {
   Image,
   StyleSheet,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
+import {
+  font1,
+  font3,
+  varGray1,
+  varTextColor,
+  varTextSecondaryColor,
+} from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 
-function ImageCard({ article, navigation }: CardProps) {
+function ImageCard({ article, navigation, author }: CardProps) {
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
   if (article.dominantMedia) {
@@ -44,6 +51,32 @@ function ImageCard({ article, navigation }: CardProps) {
                 >
                   {article.headline}
                 </Text>
+                {author && (
+                  <View style={styles.bottom}>
+                    <TouchableOpacity disabled>
+                      <Text style={styles.published}>By </Text>
+                    </TouchableOpacity>
+                    {article.authors.map((author, i) => (
+                      <>
+                        <TouchableOpacity
+                          key={author.slug}
+                          onPress={() =>
+                            navigation.navigate("Staff", { slug: author.slug })
+                          }
+                          accessible={true}
+                          accessibilityHint="View Author's Profile"
+                        >
+                          <Text style={styles.author}>{author.name}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity disabled>
+                          <Text style={styles.published}>
+                            {i < article.authors.length - 1 && ", "}
+                          </Text>
+                        </TouchableOpacity>
+                      </>
+                    ))}
+                  </View>
+                )}
                 <Text style={styles.published}>
                   {formatDates(article.published_at)}
                 </Text>
@@ -148,5 +181,20 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     flexShrink: 0,
+  },
+  bottom: {
+    display: "flex",
+    justifyContent: "flex-start",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    alignSelf: "stretch",
+  },
+  author: {
+    color: varTextSecondaryColor,
+    fontFamily: font3,
+    fontSize: 12,
+    fontStyle: "normal",
+    /* line-height: normal; */
+    fontWeight: "700",
   },
 });

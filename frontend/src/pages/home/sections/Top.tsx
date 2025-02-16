@@ -24,6 +24,7 @@ function Top(props: TopProps) {
           article={props.topStories[0]}
           navigation={props.navigation}
           key={`top-home-0}`}
+          author={true}
         />
         <Divider />
         <View style={{}}>
@@ -33,6 +34,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                author={true}
               />
               <Divider />
             </View>
@@ -45,6 +47,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                author={true}
               />
               <Divider />
             </View>
@@ -57,6 +60,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                author={true}
               />
               <Divider />
             </View>

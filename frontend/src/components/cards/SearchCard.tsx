@@ -4,6 +4,7 @@ import {
   LayoutChangeEvent,
   StyleSheet,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
@@ -18,9 +19,10 @@ import {
   varGray1,
   varRed,
   varTextColor,
+  varTextSecondaryColor,
 } from "../../styles/styles";
 
-function SearchCard({ article, navigation }: CardProps) {
+function SearchCard({ article, navigation, author }: CardProps) {
   const { fontScale } = useWindowDimensions();
   const all_tags = article.tags?.map((t: Tag) => t.name) || [];
   let breaking = false;
@@ -119,6 +121,32 @@ function SearchCard({ article, navigation }: CardProps) {
                 {article.subhead}
               </Text>
             </View>
+            {author && (
+              <View style={styles.bottom}>
+                <TouchableOpacity disabled>
+                  <Text style={styles.published}>By </Text>
+                </TouchableOpacity>
+                {article.authors.map((author, i) => (
+                  <>
+                    <TouchableOpacity
+                      key={author.slug}
+                      onPress={() =>
+                        navigation.navigate("Staff", { slug: author.slug })
+                      }
+                      accessible={true}
+                      accessibilityHint="View Author's Profile"
+                    >
+                      <Text style={styles.author}>{author.name}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity disabled>
+                      <Text style={styles.published}>
+                        {i < article.authors.length - 1 && ", "}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                ))}
+              </View>
+            )}
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
                 <Text
@@ -200,6 +228,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: "normal",
     fontWeight: "500",
+    /* line-height: normal; */
+  },
+  author: {
+    color: varTextSecondaryColor,
+    fontFamily: font3,
+    fontSize: 14,
+    fontStyle: "normal",
+    fontWeight: "700",
     /* line-height: normal; */
   },
   image: {
