@@ -30,6 +30,7 @@ import HomeStackScreen from "./home/HomeStackScreen";
 import SearchStackScreen from "./search/SearchStackScreen";
 import { NotificationProvider } from "./settings/NotificationProvider";
 import SettingsStackScreen from "./settings/SettingsStackScreen";
+import GamesScreen from "./games/GamesScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -246,6 +247,11 @@ export default function MainTabNavigator() {
                     } else if (route.name === "Search") {
                       iconName = focused ? "search-sharp" : "search-outline";
                       label = "Search";
+                    } else if (route.name === "Games") {
+                      iconName = focused
+                        ? "game-controller"
+                        : "game-controller-outline";
+                      label = "Search";
                     } else if (route.name === "For You") {
                       iconName = focused ? "star-sharp" : "star-outline";
                       label = "For You";
@@ -289,6 +295,11 @@ export default function MainTabNavigator() {
               <Tab.Screen
                 name="Search"
                 component={SearchStackScreen}
+                options={{ headerTitle: () => <Header /> }}
+              />
+              <Tab.Screen
+                name="Games"
+                component={GamesScreen}
                 options={{ headerTitle: () => <Header /> }}
               />
               <Tab.Screen

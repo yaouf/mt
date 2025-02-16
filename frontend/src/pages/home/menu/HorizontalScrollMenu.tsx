@@ -53,7 +53,6 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
     <ScrollView
       ref={scrollViewRef}
       horizontal
-      ref={scrollViewRef}
       showsHorizontalScrollIndicator={false}
       style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
       accessibilityLabel="Section menu"
