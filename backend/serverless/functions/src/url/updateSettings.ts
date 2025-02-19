@@ -2,7 +2,6 @@ import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
 import db from "../../../db/dist/data/db-config";
-import envars from "../envars";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
 /**
@@ -13,12 +12,6 @@ import { validateApiKey, validateUuidV4 } from "../utils";
  */
 export const updateSettings = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
-
-  const environment = envars.environment.value();
-  const dbUrl = envars.dbUrl.value();
-  const dbParams = { environment, dbUrl };
-
-  const newDb = db(dbParams);
 
   try {
     logger.info(
@@ -108,7 +101,7 @@ export const updateSettings = onRequest(async (request, response) => {
     const deviceId = validBody.deviceId;
 
     // First, check if the device exists
-    const deviceExists = await newDb("devices").where("id", deviceId).first();
+    const deviceExists = await db("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
       logger.error(
@@ -122,9 +115,9 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Update device settings in device table
-    const res = await newDb("devices").where("id", deviceId).update(updateData);
+    const res = await db("devices").where("id", deviceId).update(updateData);
 
-    await newDb.destroy();
+    await db.destroy();
 
     // log the result of the update
     logger.info(res);
