@@ -4,14 +4,19 @@ import requests
 from flask import Flask, jsonify, request
 from bs4 import BeautifulSoup
 from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import load_dotenv  # Import dotenv
 
+# Load environment variables
+load_dotenv()
 # Flask app
 app = Flask(__name__)
 
+
+
 # API Keys based on environment
 API_KEYS = {
-    "development": "WliA7ir3krfhXWiPAXwSD1FFJ6h2wREo",
-    "production": "5b0540a9-0c0b-41c3-bed5-c88192a38e76"
+    "development": os.getenv("API_KEYS_DEVELOPMENT"),
+    "production": os.getenv("API_KEYS_DEVELOPMENT")
 }
 
 # Determine environment
@@ -21,36 +26,35 @@ STORAGE_FILE = "popular_articles.json"
 def scrape_popular_articles():
     """Scrape the popular pages from Brown Daily Herald."""
     url = "https://www.browndailyherald.com/"
-    headers = { 
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-    "X-API-KEY": API_KEYS.get(ENV)  # Pass the correct API key based on the environment
-    }
-    response = requests.get(url,headers=headers)
-    
-    if response.status_code != 200:
-        print(f"Failed to fetch data: {response.status_code}")
-        return
-    
-    soup = BeautifulSoup(response.text, "html.parser")
-    popular_header = soup.find("div", string=lambda x: x and "popular" in x.lower())  # Adjust selector as needed
-    
-    if not popular_header:
-        print("Popular header not found")
-    else:
-        # Find the container that holds the links (e.g., the next sibling or a nearby parent)
-        popular_section = popular_header.find_parent().find_next_sibling()  # Adjust as needed
-        
-        if not popular_section:
-            print("Popular section not found")
-        else:
-            articles = []
-            for rank, a_tag in enumerate(popular_section.find_all("a", href=True), start=1):
-                print(f"Found article: {a_tag['href']}")  # Debugging output
-                articles.append({"url": a_tag["href"], "rank": rank})
 
-            print("Scraped articles:", articles)
-    print("articles",articles)
-    print("Popular articles updated.")
+# Add headers to mimic a browser
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+        "X-API-KEY": API_KEYS.get(ENV)  
+    }
+
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find the "Popular" section
+    popular_section = soup.find('div', class_='subheader', string='Popular')
+    if popular_section:
+        # Get the container that follows the Popular header
+        popular_container = popular_section.find_parent('div').find_next_sibling('div')
+        # Find all articles within this container
+        popular_articles = popular_container.find_all('article')
+        
+        for article in popular_articles:
+            link = article.find('a')
+            if link:
+                title = link.text.strip()
+                url = link['href']
+                print(f"Title: {title}")
+                print(f"URL: {url}")
+                print("-" * 50)
 
 # Load stored articles
 def load_articles():
