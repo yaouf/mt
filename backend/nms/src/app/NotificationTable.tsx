@@ -53,6 +53,9 @@ const NotificationTable = ({
   };
 
   const formatTags = (notification: Notification) => {
+    if (!notification.categories || notification.categories.length === 0) {
+      return null;
+    }
     return notification.categories.join(", ");
   };
 
