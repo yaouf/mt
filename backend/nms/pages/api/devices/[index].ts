@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 
+
 type ResponseData = {
   message?: string;
   devices?: any[]; // Adjust type as per your device structure

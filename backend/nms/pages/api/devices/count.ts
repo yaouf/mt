@@ -1,18 +1,26 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 
+
 type ResponseData = {
   count?: string;
   message?: string;
 };
+
 
 export default async function getDeviceCount(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
   try {
-    const result = await db("devices").count("* as count");
-    
+    const search = req.query.search ? (req.query.search as string) : "";
+    let result;
+    if (search!="") {
+      result = await db("devices").count("* as count").where(search,true);
+    } else {
+      result = await db("devices").count("* as count");
+    }
+
     const { count } = result[0];
     console.log("count", count);
 

@@ -2,9 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 import { EditorPick } from "../types/types";
 
+
 type ResponseData = {
   message: string;
 };
+
 
 export default async function getEditorsPicks(
   req: NextApiRequest,

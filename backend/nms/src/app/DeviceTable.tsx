@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Device } from "../../pages/api/types/types";
 
+
 interface DeviceTableProps {}
 
 const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
@@ -10,13 +11,18 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
   const [currentPage, setCurrentPage] = useState(0);
   const DEVICES_PER_PAGE = 30;
 
+
+
+
+
   useEffect(() => {
+
     const fetchDevices = async () => {
       try {
         const response = await fetch(
           `/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}${
             search ? `&search=${encodeURIComponent(search)}` : ""
-          }`
+          }`,
         );
         const data = await response.json();
         setDevices(data.devices);
