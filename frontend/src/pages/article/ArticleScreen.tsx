@@ -125,13 +125,14 @@ function ArticleScreen({
                 />
               </View>
 
-              {article.dominantMedia.authors && (
+              {article.dominantMedia?.authors && (
                 <View>
                   <Image
                     source={{
                       uri: `https://snworksceo.imgix.net/bdh/${article.dominantMedia.attachment_uuid}.sized-1000x1000.${article.dominantMedia.extension}`,
                     }}
                     style={articleStyles.image}
+                    defaultSource={require("assets/placeholder-4x3.png")}
                     accessibilityLabel="Article Image"
                   />
                   <View style={baseStyles.container}>
@@ -189,17 +190,17 @@ function ArticleScreen({
                           }
                         }
                         const imageUri =
-                          metadata.length > 0 && metadata[0].value
+                          metadata?.length > 0 && metadata[0]?.value
                             ? metadata[0].value
                             : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
-                        return (   
+                        return (
                           <Image
                             key={i}
                             source={{ uri: imageUri }}
                             style={articleStyles.authorImage}
+                            defaultSource={require("assets/placeholder-4x3.png")}
                             accessibilityLabel="Staff member's profile picture"
                           />
-                        
                         );
                       })}
                     </View>

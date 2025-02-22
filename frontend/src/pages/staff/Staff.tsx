@@ -64,10 +64,11 @@ function Staff({
               accessible={true}
               accessibilityRole="header"
             >
-              {author.metadata && (
+              {author.metadata && author.metadata[0]?.value && (
                 <Image
                   source={{ uri: author.metadata[0].value }}
                   style={{ width: 64, height: 64, borderRadius: 50 }}
+                  defaultSource={require("assets/placeholder-4x3.png")}
                   accessibilityLabel="Staff member's profile picture"
                 />
               )}
@@ -147,6 +148,7 @@ function Staff({
                       uri: `http://snworksceo.imgix.net/bdh/${media.attachment_uuid}.sized-1000x1000.${media.preview_extension}`,
                     }}
                     style={{ width: 170, height: 150 }}
+                    defaultSource={require("assets/placeholder-4x3.png")}
                     onError={(error) =>
                       console.log(
                         "Image load error:",

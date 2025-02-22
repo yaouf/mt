@@ -1,12 +1,17 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { CardProps } from "src/types/navStacks";
 import { font1, varTextColor } from "../../styles/styles";
 
 function ImageCard({ article, navigation }: CardProps) {
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
-  if (article.dominantMedia) {
+  if (article.dominantMedia?.attachment_uuid) {
     img_uri =
       "https://snworksceo.imgix.net/bdh/" +
       article.dominantMedia.attachment_uuid +
@@ -25,6 +30,7 @@ function ImageCard({ article, navigation }: CardProps) {
               uri: img_uri,
             }}
             style={styles.image}
+            defaultSource={require("assets/placeholder-4x3.png")}
           />
           <View style={styles.text}>
             <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
