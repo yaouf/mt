@@ -18,16 +18,12 @@ export type Notification = {
 };
 
 export type Device = {
-  device_type: string;
-  "Breaking News": boolean;
-  "University News": boolean;
-  Metro: boolean;
-  Sports: boolean;
-  "Arts and Culture": boolean;
-  "Science and Research": boolean;
-  Opinions: boolean;
+  id: number;
   expo_push_token: string;
+  device_type: string;
   date_created: string;
+  is_push_enabled: boolean;
+  categories: string[];
 };
 
 export interface EditorPick {

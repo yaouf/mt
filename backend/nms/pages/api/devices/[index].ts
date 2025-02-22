@@ -32,7 +32,17 @@ export default async function getDevices(
 
     // Main query for pagination and search filtering
     const devices = await db("devices")
-      .select("*")
+      .leftJoin("device_preferences", "devices.id", "device_preferences.device_id")
+      .leftJoin("categories", "device_preferences.category_id", "categories.id")
+      .select(
+        "devices.id",
+        "devices.expo_push_token",
+        "devices.device_type",
+        "devices.date_created",
+        "devices.is_push_enabled",
+        db.raw("ARRAY_AGG(categories.name) as categories")
+      )
+      .groupBy("devices.id", "devices.expo_push_token")
       .orderBy("expo_push_token", "asc")
       .modify((queryBuilder) => {
         if (search) {

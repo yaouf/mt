@@ -65,25 +65,25 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
                 {device.device_type}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device["Breaking News"] ? "Yes" : "No"}
+                {device.categories.includes("Breaking News") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device["University News"] ? "Yes" : "No"}
+                {device.categories.includes("University News") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device["Metro"] ? "Yes" : "No"}
+                {device.categories.includes("Metro") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device["Opinions"] ? "Yes" : "No"}
+                {device.categories.includes("Opinions") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device["Arts and Culture"] ? "Yes" : "No"}
+                {device.categories.includes("Arts and Culture") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device["Sports"] ? "Yes" : "No"}
+                {device.categories.includes("Sports") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device["Science and Research"] ? "Yes" : "No"}
+                {device.categories.includes("Science and Research") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-left">
                 {device.expo_push_token}
