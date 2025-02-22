@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "flask": "^0.2.10",
-    "pip": "^0.0.1",
-    "requests": "^0.3.0"
-  }
-}
