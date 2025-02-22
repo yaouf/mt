@@ -138,6 +138,18 @@ function HomeScreen({ navigation }: NavProp) {
         />
       ),
     },
+    {
+      id: 8,
+      component: (
+        <SmallHorzGroup
+          navigation={navigation}
+          slug="post-magazine"
+          count={4}
+          title="post-"
+          top={top}
+        />
+      ),
+    },
   ];
 
   return (

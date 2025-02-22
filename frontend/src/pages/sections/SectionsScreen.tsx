@@ -10,6 +10,8 @@ import Divider from "src/components/Divider";
 import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
 import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
+import PostHeader from "src/components/PostHeader";
+import Header from "src/components/Header";
 
 // If reaches the end of the list, loads the next page of content
 // (another api call but with page= page+ 1 unless page=last page)
@@ -65,6 +67,11 @@ function SectionsScreen({
       }
     }
     setRows(newGroups);
+    slug == `post-magazine`
+      ? navigation
+          .getParent()
+          ?.setOptions({ headerTitle: () => <PostHeader /> })
+      : navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
   }, [section, slug]);
 
   const loadPage = async (page: number, shouldAppend = false) => {
