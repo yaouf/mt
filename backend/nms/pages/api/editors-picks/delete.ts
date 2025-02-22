@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
+import corsMiddleware from "../../../config/cors";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 
 
 type ResponseData = {
@@ -7,7 +9,7 @@ type ResponseData = {
   editorspicks?: { url: string }[];
 };
 
-export default async function deleteEditorPick(
+async function deleteEditorPickHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
@@ -38,4 +40,13 @@ export default async function deleteEditorPick(
     console.error("Error deleting editors pick from the database:", error);
     res.status(500).json({ message: error.message });
   }
+}
+
+export default async function deleteEditorPick(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData>
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, deleteEditorPickHelper);
+  });
 }

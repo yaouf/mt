@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Device } from "../../pages/api/types/types";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 
 interface DeviceTableProps {}
@@ -9,13 +11,37 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
   const [deviceCount, setDeviceCount] = useState<number>(0);
   const [devices, setDevices] = useState<Device[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [token, setToken] = useState("");
   const DEVICES_PER_PAGE = 30;
+  const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth();
 
 
 
 
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        // Force a token refresh to avoid using an expired token
+        currentUser.getIdToken(true).then((idToken) => {
+          console.log("Token fetched:", idToken);
+          setToken(idToken);
+        });
+      } else {
+        console.log("No user detected");
+        setUser(null);
+        setToken(""); // Clear token if no user
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
+
+
+  useEffect(() => {
+    if (!token) return;
 
     const fetchDevices = async () => {
       try {
@@ -23,6 +49,12 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
           `/api/devices/index?page=${currentPage}&perPage=${DEVICES_PER_PAGE}${
             search ? `&search=${encodeURIComponent(search)}` : ""
           }`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+
         );
         const data = await response.json();
         setDevices(data.devices);
@@ -33,7 +65,7 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
     };
 
     fetchDevices();
-  }, [currentPage,search]);
+  }, [currentPage,search,token]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
