@@ -6,6 +6,8 @@ import Divider from "src/components/Divider";
 import { baseStyles } from "src/styles/styles";
 import { Article } from "src/types/data";
 import LargeCard from "../../../components/cards/LargeCard";
+import { useEffect } from "react";
+import Header from "src/components/Header";
 
 type TopProps = {
   navigation: StackNavigationProp<any, any>;
@@ -13,6 +15,10 @@ type TopProps = {
 };
 
 function Top(props: TopProps) {
+  useEffect(() => {
+    props.navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
+  }, []);
+
   // Early return if no stories
   if (!props.topStories || props.topStories.length === 0) {
     return null;
