@@ -158,7 +158,11 @@ function SectionsScreen({
             data={rows}
             keyExtractor={(item) => item.id}
             renderItem={renderGroup}
-            ListHeaderComponent={<Text style={text.bigTitle}>{title}</Text>}
+            ListHeaderComponent={
+              slug != "post-magazine" ? (
+                <Text style={text.bigTitle}>{title}</Text>
+              ) : undefined
+            }
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

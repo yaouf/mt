@@ -4,6 +4,7 @@ import { fetchSectionHome } from "src/api/fetchContent";
 import ImageCard from "src/components/cards/HorizontalCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
 import Divider from "src/components/Divider";
+import PostHeader from "src/components/PostHeader";
 import SectionHeader from "src/components/SectionHeader";
 import { baseStyles, varGray1 } from "src/styles/styles";
 import { Article } from "src/types/data";
@@ -37,11 +38,15 @@ function SmallHorzGroup(props: SectionGroupProps) {
 
   return (
     <View style={baseStyles.container}>
-      <SectionHeader
-        title={props.title}
-        slug={props.slug}
-        navigation={props.navigation}
-      />
+      {props.slug == "post-magazine" ? (
+        <PostHeader />
+      ) : (
+        <SectionHeader
+          title={props.title}
+          slug={props.slug}
+          navigation={props.navigation}
+        />
+      )}
       {loading ? (
         <ActivityIndicator color={varGray1} style={{ flex: 1 }} />
       ) : (

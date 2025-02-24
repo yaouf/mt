@@ -28,9 +28,9 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
   }
 
   const textSizeMultiplier = PixelRatio.getFontScale();
-  // console.log("textSizeMultiplier", textSizeMultiplier);
+  console.log("textSizeMultiplier", textSizeMultiplier);
   const calculatedIconSize = 24 * Math.sqrt(textSizeMultiplier);
-  // console.log("calculatedIconSize", calculatedIconSize);
+  console.log("calculatedIconSize", calculatedIconSize);
 
   useEffect(() => {
     // Need to wait for layout to complete before scrolling
@@ -49,6 +49,12 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         animated: true,
       });
     }, 100);
+
+    currSection == `post-magazine`
+      ? navigation
+          .getParent()
+          ?.setOptions({ headerTitle: () => <PostHeader /> })
+      : navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
   }, [currSection]);
 
   useEffect(() => {
@@ -57,7 +63,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
           .getParent()
           ?.setOptions({ headerTitle: () => <PostHeader /> })
       : navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
-  }, [currSection]);
+  });
 
   return (
     <ScrollView
