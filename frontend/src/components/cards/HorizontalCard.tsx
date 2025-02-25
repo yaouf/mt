@@ -15,8 +15,9 @@ import {
 } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 import { Tag } from "src/types/data";
+import { useEffect } from "react";
 
-function ImageCard({ article, navigation }: CardProps) {
+function ImageCard({ article, navigation, inSearch }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
   const section = all_tags[0].replace("&;", "&");
 
@@ -38,11 +39,12 @@ function ImageCard({ article, navigation }: CardProps) {
         <View
           style={[
             styles.card,
-            section == "post- magazine" && {
-              backgroundColor: varPink,
-              padding: "5%",
-              borderRadius: 15,
-            },
+            section == "post- magazine" &&
+              !inSearch && {
+                backgroundColor: varPink,
+                padding: "5%",
+                borderRadius: 15,
+              },
           ]}
         >
           <View style={styles.content}>

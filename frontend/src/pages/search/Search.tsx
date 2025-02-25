@@ -338,6 +338,7 @@ function Search({ navigation }: NavProp) {
                 article={item}
                 navigation={navigation}
                 key={`search-result-${index}`}
+                inSearch={true}
               />
             )}
             ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}

@@ -68,6 +68,7 @@ function EditorsPicks(props: Readonly<TopProps>) {
                     article={article}
                     navigation={props.navigation}
                     key={`search-editors-${article.id}`}
+                    inSearch={true}
                   />
                 </View>
               ))}

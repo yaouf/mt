@@ -59,6 +59,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
                   article={article}
                   navigation={props.navigation}
                   key={`news-home-${i}`}
+                  inSearch={false}
                 />
                 <Divider />
               </View>
@@ -69,6 +70,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
                   article={article}
                   navigation={props.navigation}
                   key={`news-home-${i}`}
+                  inSearch={false}
                 />
                 <Divider />
               </View>
@@ -85,6 +87,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
                     article={article}
                     navigation={props.navigation}
                     key={`news-home-${i + 2}`}
+                    inSearch={false}
                   />
                   <Divider />
                 </View>

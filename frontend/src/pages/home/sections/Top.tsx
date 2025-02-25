@@ -30,6 +30,7 @@ function Top(props: TopProps) {
           article={props.topStories[0]}
           navigation={props.navigation}
           key={`top-home-0}`}
+          inSearch={false}
         />
         <Divider />
         <View style={{}}>
@@ -39,6 +40,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                inSearch={false}
               />
               <Divider />
             </View>
@@ -51,6 +53,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                inSearch={false}
               />
               <Divider />
             </View>
@@ -63,6 +66,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                inSearch={false}
               />
               <Divider />
             </View>
