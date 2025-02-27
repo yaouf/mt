@@ -1,8 +1,6 @@
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { Device } from "../../pages/api/types/types";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { c } from "vite/dist/node/types.d-aGj9QkWt";
-
 
 interface DeviceTableProps {}
 
@@ -15,10 +13,6 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
   const DEVICES_PER_PAGE = 30;
   const [user, setUser] = useState<User | null>(null);
   const auth = getAuth();
-
-
-
-
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -39,7 +33,6 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
     return () => unsubscribe();
   }, [auth]);
 
-
   useEffect(() => {
     if (!token) return;
 
@@ -54,7 +47,6 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
               Authorization: `Bearer ${token}`,
             },
           }
-
         );
         const data = await response.json();
         setDevices(data.devices);
@@ -65,11 +57,10 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
     };
 
     fetchDevices();
-  }, [currentPage,search,token]);
+  }, [currentPage, search, token]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
-    
     <div className="container mx-auto p-5 mt-14">
       <h1 className="text-2xl font-bold mb-4">Device List</h1>
       <input
@@ -126,7 +117,9 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
               <td className="py-2 px-4 border-b text-left">
                 {device.expoPushToken}
               </td>
-              <td className="py-2 px-4 border-b text-left">{device.dateCreated}</td>
+              <td className="py-2 px-4 border-b text-left">
+                {device.dateCreated}
+              </td>
             </tr>
           ))}
         </tbody>
