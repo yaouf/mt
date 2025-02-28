@@ -193,12 +193,21 @@ function ArticleScreen({
                             ? metadata[0].value
                             : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
                         return (
-                          <Image
+                          <TouchableOpacity
                             key={i}
-                            source={{ uri: imageUri }}
-                            style={articleStyles.authorImage}
-                            accessibilityLabel="Staff member's profile picture"
-                          />
+                            onPress={() =>
+                              navigation.navigate("Staff", {
+                                slug: author.slug,
+                              })
+                            }
+                          >
+                            <Image
+                              key={i}
+                              source={{ uri: imageUri }}
+                              style={articleStyles.authorImage}
+                              accessibilityLabel="Staff member's profile picture"
+                            />
+                          </TouchableOpacity>
                         );
                       })}
                     </View>
@@ -210,9 +219,13 @@ function ArticleScreen({
                       {article.authors.map((author, i) => (
                         <TouchableOpacity
                           key={author.slug}
-                          onPress={() =>
-                            navigation.navigate("Staff", { slug: author.slug })
-                          }
+                          onPress={() => {
+                            console.log(
+                              "Navigating to Staff with slug:",
+                              author.slug
+                            );
+                            navigation.navigate("Staff", { slug: author.slug });
+                          }}
                           accessible={true}
                           accessibilityHint="View Author's Profile"
                         >
