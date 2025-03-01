@@ -206,8 +206,8 @@ function ArticleScreen({
                   )}
 
                   {/* Author names and date column */}
-                  <View style={articleStyles.authorTextContainer}>
-                    <Text style={articleStyles.author}>
+                  <View style={[articleStyles.authorTextContainer, { flexShrink: 1 }]}>
+                    <Text style={[articleStyles.author, {flexWrap: 'wrap' }]}>
                       {article.authors.map((author, i) => (
                         <TouchableOpacity
                           key={author.slug}

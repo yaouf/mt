@@ -55,6 +55,8 @@ export const articleStyles = StyleSheet.create({
     fontFamily: font2,
     fontSize: fontsizeHeader,
     fontWeight: "700",
+    flexWrap: "wrap",
+    flexShrink: 1,
   },
   publishedDetails: {
     display: "flex",
@@ -68,6 +70,8 @@ export const articleStyles = StyleSheet.create({
     fontFamily: font3,
     fontSize: fontsizeHeader,
     fontWeight: "400",
+    flexWrap: "wrap",
+    flexShrink: 1,
   },
   articleBodyWrapper: {
     display: "flex",
@@ -206,11 +210,13 @@ export const articleStyles = StyleSheet.create({
     flexDirection: "column",
     gap: 4,
     justifyContent: "center",
+    flexShrink: 1,
+    flex: 1,
   },
-  publishedDetailsText: {
+  /*publishedDetailsText: {
     color: varGray1,
     fontFamily: font3,
     fontSize: fontsizeHeader,
     fontWeight: "400",
-  },
+  },*/
 });
