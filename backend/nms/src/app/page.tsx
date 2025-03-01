@@ -177,7 +177,7 @@ export default function Home() {
     <AuthWrapper>
       {(user) => (
         <>
-          <EnvVars isProduction={isProduction} />
+          <EnvVars isProduction={isProduction} >
           <DeviceCounts
             deviceCount={deviceCount}
             ntfEnabled={counts.ntfEnabled}
