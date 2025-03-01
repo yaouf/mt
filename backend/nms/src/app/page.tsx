@@ -1,25 +1,29 @@
 "use client";
-import { getIdToken, User, getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { Notification } from "../types";
+import AuthWrapper from "./AuthWrapper";
 import DeviceCounts from "./DeviceCounts";
 import DeviceTable from "./DeviceTable";
 import EditorsPicks from "./EditorsPicks";
 import EnvVars from "./EnvVars";
 import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
-import AuthWrapper from "./AuthWrapper";
 
 const isProduction = process.env.NODE_ENV === "production";
 
 const isAdmin = (user: User) => {
   // More granular role check if applicable, for now using email check
-  return isProduction ? user.email === "techadmin@browndailyherald.com" : user.email === "admin@example.com";
+  return isProduction
+    ? user.email === "techadmin@browndailyherald.com"
+    : user.email === "admin@example.com";
 };
 
 export default function Home() {
-  const [scheduledNotifications, setScheduledNotifications] = useState<Notification[]>([]);
-  const [editorsPicks, setEditorsPicks] = useState<any[]>([]); 
+  const [scheduledNotifications, setScheduledNotifications] = useState<
+    Notification[]
+  >([]);
+  const [editorsPicks, setEditorsPicks] = useState<any[]>([]);
   const [deviceCount, setDeviceCount] = useState<number>(0);
   const [counts, setCounts] = useState({
     metroCount: "Loading...",
@@ -29,15 +33,41 @@ export default function Home() {
     artsAndCultureCount: "Loading...",
     scienceAndResearchCount: "Loading...",
     opinionsCount: "Loading...",
-    ntfEnabled: "Loading..."
+    ntfEnabled: "Loading...",
   });
+  const [token, setToken] = useState<string>("");
+  const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth();
 
-  // Fetch notifications and scheduled notifications
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        currentUser.getIdToken(true).then((idToken) => {
+          console.log("Token fetched:", idToken);
+          setToken(idToken);
+        });
+      } else {
+        console.log("No user detected");
+        setUser(null);
+        setToken("");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
+
+  // Correct notifications effect
+  useEffect(() => {
+    if (!token) return;
 
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("/api/notifications",);
+        const response = await fetch("/api/notifications", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         setScheduledNotifications(data);
       } catch (error) {
@@ -46,14 +76,19 @@ export default function Home() {
     };
 
     fetchNotifications();
-  }, []);
+  }, [token]);
 
   // Fetch device counts
   useEffect(() => {
+    if (!token) return;
 
     const fetchDeviceCount = async () => {
       try {
-        const response = await fetch("/api/devices/count");
+        const response = await fetch("/api/devices/count", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         setDeviceCount(data.count);
       } catch (error) {
@@ -62,10 +97,11 @@ export default function Home() {
     };
 
     fetchDeviceCount();
-  }, []);
+  }, [token]);
 
   // Fetch count data for different sections
   useEffect(() => {
+    if (!token) return;
 
     const fetchCounts = async () => {
       const endpoints = [
@@ -74,15 +110,25 @@ export default function Home() {
         { url: "devices/count?search=University News", key: "universityCount" },
         { url: "devices/count?search=Breaking News", key: "breakingCount" },
         { url: "devices/count?search=Sports", key: "sportsCount" },
-        { url: "devices/count?search=Arts and Culture", key: "artsAndCultureCount" },
-        { url: "devices/count?search=Science and Research", key: "scienceAndResearchCount" },
+        {
+          url: "devices/count?search=Arts and Culture",
+          key: "artsAndCultureCount",
+        },
+        {
+          url: "devices/count?search=Science and Research",
+          key: "scienceAndResearchCount",
+        },
         { url: "devices/count?search=Opinions", key: "opinionsCount" },
       ];
 
       try {
         const countData = await Promise.all(
           endpoints.map(async ({ url, key }) => {
-            const response = await fetch(`/api/${url}`);
+            const response = await fetch(`/api/${url}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
             const data = await response.json();
             return { key, value: data.count.toString() };
           })
@@ -104,14 +150,19 @@ export default function Home() {
     };
 
     fetchCounts();
-  }, []);
+  }, [token]);
 
   // Fetch editor's picks data
   useEffect(() => {
+    if (!token) return;
 
     const fetchEditorsPicks = async () => {
       try {
-        const response = await fetch("/api/editors-picks");
+        const response = await fetch("/api/editors-picks", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         setEditorsPicks(data);
       } catch (error) {
@@ -120,7 +171,7 @@ export default function Home() {
     };
 
     fetchEditorsPicks();
-  }, []);
+  }, [token]);
 
   return (
     <AuthWrapper>
@@ -158,7 +209,7 @@ export default function Home() {
               </>
             )}
 
-            <DeviceTable/>
+            <DeviceTable />
           </main>
         </>
       )}
