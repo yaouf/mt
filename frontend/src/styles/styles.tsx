@@ -15,6 +15,7 @@ export const font3 =
 
 // to use in place of black
 export const varTextColor = "#020202";
+export const darkModeTextColor = "#ffffff";
 export const varTextSecondaryColor = "#333";
 export const varRed = "#ED1C24";
 export const varGray1 = "#9E9E9E";
@@ -35,7 +36,7 @@ export const baseStyles = StyleSheet.create({
 export const darkStyles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    backgroundColor: "#000",
+    backgroundColor: "#121212",
   },
 });
 
@@ -146,6 +147,91 @@ export const text = StyleSheet.create({
   },
   textMedium: {
     color: varTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 14,
+  },
+});
+
+export const darkModeText = StyleSheet.create({
+  sectionHeader1: {
+    // main section headers
+    color: darkModeTextColor,
+    fontWeight: "800",
+    fontSize: 26,
+    fontFamily: font3,
+    paddingTop: 10
+  },
+  resetSectionsButton: {
+    // main section headers
+    color: darkModeTextColor,
+    fontWeight: "800",
+    fontSize: 20,
+    fontFamily: font3,
+    paddingTop: 0
+  },
+  sectionHeader2: {
+    // with added padding for settings
+    color: darkModeTextColor,
+    fontWeight: "800",
+    fontSize: 20,
+    fontFamily: font1,
+  },
+
+  seeMore: {
+    // see more header for section
+    fontWeight: "600",
+    color: varRed,
+    fontSize: 12,
+    marginRight: 16,
+    fontFamily: font2,
+  },
+  bigTitle: {
+    // top stories is a slightly larger title
+    color: darkModeTextColor,
+    fontWeight: "600",
+    fontSize: 24,
+    fontFamily: font2,
+    marginBottom: 4,
+    marginTop: 20,
+  },
+  sectionHeader3: {
+    // like back from archive, stay updated on fyp
+    color: darkModeTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "600",
+    fontSize: 18,
+    marginBottom: 8,
+    marginTop: 8,
+  },
+  notifSmall: {
+    color: darkModeTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 16,
+    overflow: "hidden",
+    maxWidth: "100%",
+    paddingRight: 10
+  },
+  normal: {
+    color: darkModeTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 16,
+  },
+  textSmall: {
+    color: darkModeTextColor,
+    fontFamily: font2,
+    fontStyle: "normal",
+    fontWeight: "400",
+    fontSize: 12,
+  },
+  textMedium: {
+    color: darkModeTextColor,
     fontFamily: font2,
     fontStyle: "normal",
     fontWeight: "400",

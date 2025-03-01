@@ -4,7 +4,7 @@ import { ScrollView, Text, View } from "react-native";
 import Divider from "src/components/Divider";
 import NotifToggle from "src/components/NotifToggle";
 import { settings } from "src/styles/pages";
-import { baseStyles, darkStyles, font2, text, varTextColor } from "src/styles/styles";
+import { baseStyles, darkStyles, font2, text, darkModeText, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
@@ -193,22 +193,32 @@ function SettingsScreen({ navigation }: NavProp) {
     loadTheme();
   }, []);
 
+  // const toggleTheme = async () => {
+  //   const newTheme = !isDarkMode;
+  //   setIsDarkMode(newTheme);
+  //   console.log("newTheme " + newTheme);
+  //   await AsyncStorage.setItem("darkMode", newTheme.toString());
+  // };
+
   const toggleTheme = async () => {
-    const newTheme = !isDarkMode;
-    setIsDarkMode(newTheme);
-    console.log("newTheme " + newTheme);
-    await AsyncStorage.setItem("darkMode", newTheme.toString());
+    setIsDarkMode((prev) => {
+      const newTheme = !prev;
+      AsyncStorage.setItem("darkMode", newTheme.toString());
+      console.log("newTheme " + newTheme);
+      return newTheme;
+    });
   };
 
-  const styles = isDarkMode ? darkStyles : baseStyles;
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
 
   return (
     <ScrollView>
       <SavedArticlesPreview navigation={navigation} />
       <Divider />
 
-      <View style={styles.container}>
-        <Text style={text.sectionHeader1}>Stay Updated</Text>
+      <View style={containerStyle.container}>
+        <Text style={textStyle.sectionHeader1}>Stay Updated</Text>
 
         <View style={{ rowGap: 16, marginTop: 4 }}>
           <NotifToggle
