@@ -92,7 +92,7 @@ export default function Home() {
         const data = await response.json();
         setDeviceCount(data.count);
       } catch (error) {
-        console.error("Error fetching device count:", error);
+        console.error("Error fetching device count:", error)
       }
     };
 
