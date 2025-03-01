@@ -205,6 +205,7 @@ export default function Home() {
                 <EditorsPicks
                   editorsPicks={editorsPicks}
                   setEditorsPicks={setEditorsPicks}
+                  token={token}
                 />
               </>
             )}
