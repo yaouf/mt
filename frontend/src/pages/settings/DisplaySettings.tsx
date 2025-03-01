@@ -16,7 +16,7 @@ import { text, varTextColor } from "src/styles/styles";
 //Screen for display settings
 
 function DisplaySettings({navigation} : NavProp) {
-  
+  const { isDarkMode, toggleTheme } = route.params || {};
   const toggleValue = true;
 
   const toggle = async () => {

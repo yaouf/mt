@@ -9,11 +9,15 @@ type SettingsLinkProps = {
   link: string;
   inApp?: boolean;
   navigation?: StackNavigationProp<any, any>;
+  extraProps?:{
+    isDarkMode?: boolean;
+    toggleTheme?: () => void;
+  };
 };
 
 // const layout = StyleSheet.create({})
 
-function SettingsLink({ title, link, inApp, navigation }: SettingsLinkProps) {
+function SettingsLink({ title, link, inApp, navigation, extraProps }: SettingsLinkProps) {
   const openLink = async (link: string) => {
     if (inApp && navigation) {
       navigation.navigate(link);

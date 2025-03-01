@@ -1,10 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Divider from "src/components/Divider";
 import NotifToggle from "src/components/NotifToggle";
 import { settings } from "src/styles/pages";
-import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
+import { baseStyles, darkStyles, font2, text, varTextColor } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
@@ -182,13 +182,31 @@ function SettingsScreen({ navigation }: NavProp) {
       link: "https://secure.lglforms.com/form_engine/s/JydyLYLlWAfeK0wrZwuLgg",
     },
   ];
+  //dark mode related functions
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  useEffect(() => {
+    const loadTheme = async () => {
+      const storedTheme = await AsyncStorage.getItem("darkMode");
+      setIsDarkMode(storedTheme === "true");
+    };
+    loadTheme();
+  }, []);
+
+  const toggleTheme = async () => {
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    await AsyncStorage.setItem("darkMode", newTheme.toString());
+  };
+
+  const styles = isDarkMode ? darkStyles : baseStyles;
 
   return (
     <ScrollView>
       <SavedArticlesPreview navigation={navigation} />
       <Divider />
 
-      <View style={baseStyles.container}>
+      <View style={styles.container}>
         <Text style={text.sectionHeader1}>Stay Updated</Text>
 
         <View style={{ rowGap: 16, marginTop: 4 }}>
@@ -260,6 +278,7 @@ function SettingsScreen({ navigation }: NavProp) {
             link={"DisplaySettings"}
             inApp={true}
             navigation={navigation}
+            extraProps={{ isDarkMode, toggleTheme }}
           />
           {/* <Divider marginBottom={12} marginTop={12} color={varGray1} /> */}
         </View>
