@@ -196,6 +196,7 @@ function SettingsScreen({ navigation }: NavProp) {
   const toggleTheme = async () => {
     const newTheme = !isDarkMode;
     setIsDarkMode(newTheme);
+    console.log("newTheme " + newTheme);
     await AsyncStorage.setItem("darkMode", newTheme.toString());
   };
 

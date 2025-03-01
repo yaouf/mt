@@ -15,13 +15,9 @@ import { text, varTextColor } from "src/styles/styles";
 
 //Screen for display settings
 
-function DisplaySettings({navigation} : NavProp) {
+function DisplaySettings({navigation, route} : NavProp) {
   const { isDarkMode, toggleTheme } = route.params || {};
   const toggleValue = true;
-
-  const toggle = async () => {
-  
-    };
 
   return (
     <>
@@ -41,8 +37,8 @@ function DisplaySettings({navigation} : NavProp) {
               </View>
               <Switch
                 trackColor={{ true: "#000000", false: "grey" }}
-                value={toggleValue}
-                onValueChange={() => toggle()}
+                value={isDarkMode}
+                onValueChange={toggleTheme}
                 accessibilityLabel={`Automatic display setting`}
                 accessibilityHint={`Toggle to enable or disable automatic display mode`}
                 accessibilityRole="switch"

@@ -20,7 +20,7 @@ type SettingsLinkProps = {
 function SettingsLink({ title, link, inApp, navigation, extraProps }: SettingsLinkProps) {
   const openLink = async (link: string) => {
     if (inApp && navigation) {
-      navigation.navigate(link);
+      navigation.navigate(link,extraProps);
     } else {
       const supported = await Linking.canOpenURL(link);
       if (supported) {
