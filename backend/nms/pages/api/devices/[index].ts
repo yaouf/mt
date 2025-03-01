@@ -45,7 +45,7 @@ async function getDevicesHelper(
       .offset(offset)
       .limit(devicesPerPage);
 
-    res.status(200).json({ totalDevices, devices });
+    res.status(200).json({ totalDevices, DEVICEs_BUG});
   } catch (error) {
     console.error("Error fetching devices from the database:", error);
     res.status(500).json({ message: error.message });
