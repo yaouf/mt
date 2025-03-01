@@ -103,7 +103,7 @@ def load_articles():
     return []
 
 # Health check endpoint (no authentication required)
-@app.route("/health", methods=["GET"])
+@app.route("/api/health", methods=["GET"])
 def health_check():
     return jsonify({
         "status": "ok",
@@ -113,7 +113,7 @@ def health_check():
     })
 
 # API Endpoint
-@app.route("/popular-articles", methods=["GET"])
+@app.route("/api/popular-articles", methods=["GET"])
 def get_popular_articles():
     api_key = request.headers.get("X-API-KEY")
 
