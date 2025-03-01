@@ -16,74 +16,11 @@ import { text, varTextColor } from "src/styles/styles";
 //Screen for display settings
 
 function DisplaySettings({navigation} : NavProp) {
-  // const {
-  //   searchType,
-  //   setSearchType,
-  //   selectedSections,
-  //   setSelectedSections,
-  //   sortType,
-  //   setSortType,
-  // } = route.params;
-  // const [searchMode, setSearchMode] = useState(searchType);
-  // const [sortOption, setSortOption] = useState(sortType);
-
-  // useEffect(() => {
-  //   setSearchType(searchMode);
-  //   console.log("after searchMode:", searchMode);
-  //   console.log("after searchType:", searchType);
-  // }, [searchMode, searchType]);
-
-  // useEffect(() => {
-  //   setSortType(sortOption);
-  //   console.log("after searchMode:", sortOption);
-  //   console.log("after searchType:", sortType);
-  // }, [sortOption, sortType]);
-  // const toggleValue = onboarding
-  //   ? value
-  //   : systemPermissionStatus === "granted" && value;
+  
   const toggleValue = true;
 
   const toggle = async () => {
-      // if (onboarding) {
-      //   console.log("calling setState in onboarding toggle", !value);
-        // setValue((previousState: boolean) => !previousState);
-      // } else {
-      //   // update system permission status (on device and in backend)
-      //   if (systemPermissionStatus === "granted") {
-      //     console.log("new value in toggle", !value);
-      //     const newValue = !value;
-      //     setValue(newValue);
-      //     setAsync(asyncName as string, JSON.stringify(newValue));
-      //     updateBackend(newValue); // TODO: is this the right value even if toggle quickly??
-      //   } else if (systemPermissionStatus === "denied") {
-      //     Alert.alert(
-      //       "Enable Notifications",
-      //       "To enable notifications, please go to Settings and turn on notifications for this app.",
-      //       [
-      //         {
-      //           text: "Cancel",
-      //           onPress: () => console.log("cancel"),
-      //           style: "cancel",
-      //         },
-      //         { text: "Open Settings", onPress: () => Linking.openSettings() },
-      //       ]
-      //     );
-      //     // don't update background here because system settings is disallowed
-      //   } else {
-      //     console.log("if of undetermined"); // (said maybe later in settings)
-      //     await requestPermission();
-      //     const { status } = await Notifications.getPermissionsAsync();
-      //     if (status === "granted") {
-      //       console.log("in true");
-      //       setValue(true);
-      //       setAsync(asyncName as string, "true");
-      //       updateBackend(!value);
-      //     }
-      //     setSystemPermissionStatus(status);
-      //   }
   
-        // TODO: updateNotifStatus
-      //}
     };
 
   return (

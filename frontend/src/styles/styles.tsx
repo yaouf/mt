@@ -32,6 +32,12 @@ export const baseStyles = StyleSheet.create({
   //   flex: 1,
   // },
 });
+export const darkStyles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16,
+    backgroundColor: "#000",
+  },
+});
 
 /**
  * layout styles
