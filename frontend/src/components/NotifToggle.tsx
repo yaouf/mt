@@ -1,10 +1,10 @@
 import * as Notifications from "expo-notifications";
 import { Dispatch, SetStateAction, useContext } from "react";
-import { Alert, Linking, Switch, Text, View } from "react-native";
+import { Alert, Linking, Switch, Text, View, StyleSheet } from "react-native";
 import { updateSettings } from "src/api/backendAPIs";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { fyp } from "src/styles/pages";
-import { text } from "src/styles/styles";
+import { text, darkModeText } from "src/styles/styles";
 import { setAsync } from "src/utils/helpers";
 
 type NotifProps = {
@@ -14,6 +14,7 @@ type NotifProps = {
   setValue: Dispatch<SetStateAction<boolean>>;
   onboarding?: boolean;
   asyncName?: string;
+  isDarkMode: boolean;
 };
 
 function NotifToggle({
@@ -22,7 +23,8 @@ function NotifToggle({
   value,
   setValue,
   onboarding,
-  asyncName,
+  asyncName, 
+  isDarkMode
 }: NotifProps) {
   const {
     systemPermissionStatus,
@@ -166,12 +168,13 @@ function NotifToggle({
     : systemPermissionStatus === "granted" && value;
 
   console.log("value for toggle title in NotifToggle", title, toggleValue);
+  const textStyle = isDarkMode ? darkModeText : text;
 
   return (
     <View style={fyp.toggleRow}>
       <View style={{ flex: 1, paddingRight: 64 }}>
-        <Text style={text.sectionHeader3}>{title}</Text>
-        <Text style={text.notifSmall} ellipsizeMode="tail">
+        <Text style={textStyle.sectionHeader3}>{title}</Text>
+        <Text style={textStyle.notifSmall} ellipsizeMode="tail">
           {description}
         </Text>
       </View>

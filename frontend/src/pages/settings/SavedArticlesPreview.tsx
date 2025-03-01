@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { settings } from "src/styles/pages";
-import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
+import { baseStyles,darkStyles, layout, text, darkModeText, varGray1 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { SavedContext } from "../MainTabNavigator";
 import FavArticle from "./FavArticle";
@@ -15,12 +15,13 @@ import FavArticle from "./FavArticle";
          setSavedArticles({});
   */
 
-function SavedArticlesPreview({ navigation }: NavProp) {
+function SavedArticlesPreview({ navigation }: NavProp, isDarkMode: boolean) {
   const { savedArticles } = useContext(SavedContext);
-
+  const textStyle = isDarkMode ? darkModeText : text;
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
   return (
-    <View style={baseStyles.container}>
-      <Text style={{ ...text.sectionHeader1, marginTop: 16 }}>
+    <View style={containerStyle.container}>
+      <Text style={{ ...textStyle.sectionHeader1, marginTop: 16 }}>
         Saved Articles
       </Text>
       {Object.keys(savedArticles).length > 0 ? (
@@ -57,7 +58,7 @@ function SavedArticlesPreview({ navigation }: NavProp) {
           )}
         </View>
       ) : (
-        <Text style={{ ...text.normal, fontSize: 16, marginTop: 12 }}>
+        <Text style={{ ...textStyle.normal, fontSize: 16, marginTop: 12 }}>
           No saved articles yet. Press the bookmark on an article to save it.
         </Text>
       )}

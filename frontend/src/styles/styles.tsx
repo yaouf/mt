@@ -36,7 +36,7 @@ export const baseStyles = StyleSheet.create({
 export const darkStyles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    backgroundColor: "#121212",
+    backgroundColor: "#1F1F1F",
   },
 });
 

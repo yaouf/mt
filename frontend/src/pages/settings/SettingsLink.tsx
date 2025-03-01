@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, StyleSheet, Linking } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { text, varTextColor } from "src/styles/styles";
+import { text, darkModeText, varTextColor } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as WebBrowser from "expo-web-browser";
 
@@ -30,7 +30,7 @@ function SettingsLink({ title, link, inApp, navigation, extraProps }: SettingsLi
       }
     }
   };
-
+  const textStyle = extraProps?.isDarkMode ? darkModeText : text;
   return (
     <TouchableOpacity
       onPress={() => openLink(link)}
@@ -45,8 +45,8 @@ function SettingsLink({ title, link, inApp, navigation, extraProps }: SettingsLi
       accessibilityHint={`Press to open ${title} link`}
       accessibilityRole="button"
     >
-      <Text style={{ ...text.notifSmall, fontSize: 16 }}>{title}</Text>
-      <Ionicons name="chevron-forward-outline" size={24} color={varTextColor} />
+      <Text style={{ ...textStyle.notifSmall, fontSize: 16 }}>{title}</Text>
+      <Ionicons name="chevron-forward-outline" size={24} color={textStyle.sectionHeader1.color} />
     </TouchableOpacity>
   );
 }

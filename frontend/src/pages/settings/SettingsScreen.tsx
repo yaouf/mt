@@ -215,7 +215,7 @@ function SettingsScreen({ navigation }: NavProp) {
   return (
     <ScrollView>
       <SavedArticlesPreview navigation={navigation} />
-      <Divider />
+      <Divider isDarkMode={isDarkMode} />
 
       <View style={containerStyle.container}>
         <Text style={textStyle.sectionHeader1}>Stay Updated</Text>
@@ -227,6 +227,7 @@ function SettingsScreen({ navigation }: NavProp) {
             value={breaking}
             setValue={setBreaking}
             asyncName="breakingNotifs"
+            isDarkMode={isDarkMode}
           />
           <NotifToggle
             title="University News"
@@ -234,6 +235,7 @@ function SettingsScreen({ navigation }: NavProp) {
             value={universityNews}
             setValue={setUniversityNews}
             asyncName="universityNewsNotifs"
+            isDarkMode={isDarkMode}
           />
           <NotifToggle
             title="Metro"
@@ -241,6 +243,7 @@ function SettingsScreen({ navigation }: NavProp) {
             value={metro}
             setValue={setMetro}
             asyncName="metroNotifs"
+            isDarkMode={isDarkMode}
           />
           <NotifToggle
             title="Sports"
@@ -248,6 +251,7 @@ function SettingsScreen({ navigation }: NavProp) {
             value={sports}
             setValue={setSports}
             asyncName="sportsNotifs"
+            isDarkMode={isDarkMode}
           />
           <NotifToggle
             title="Arts and Culture"
@@ -255,6 +259,7 @@ function SettingsScreen({ navigation }: NavProp) {
             value={artsAndCulture}
             setValue={setArtsAndCulture}
             asyncName="artsAndCultureNotifs"
+            isDarkMode={isDarkMode}
           />
           <NotifToggle
             title="Science and Research"
@@ -262,6 +267,7 @@ function SettingsScreen({ navigation }: NavProp) {
             value={scienceAndResearch}
             setValue={setScienceAndResearch}
             asyncName="scienceAndResearchNotifs"
+            isDarkMode={isDarkMode}
           />
           <NotifToggle
             title="Opinions"
@@ -269,11 +275,12 @@ function SettingsScreen({ navigation }: NavProp) {
             value={opinions}
             setValue={setOpinions}
             asyncName="opinionsNotifs"
+            isDarkMode={isDarkMode}
           />
         </View>
       </View>
-      <Divider />
-      <View>
+      <Divider isDarkMode={isDarkMode}/>
+      <View style={{backgroundColor: containerStyle.container.backgroundColor}}>
         <Text
           style={{
             ...settings.smallHeading,
@@ -294,7 +301,7 @@ function SettingsScreen({ navigation }: NavProp) {
           {/* <Divider marginBottom={12} marginTop={12} color={varGray1} /> */}
         </View>
       </View>
-      <View>
+      <View style={{backgroundColor: containerStyle.container.backgroundColor}}>
         <Text
           style={{
             ...settings.smallHeading,
@@ -308,13 +315,13 @@ function SettingsScreen({ navigation }: NavProp) {
         {support.map((link, i) => (
           <View
             key={`support-${i}`}
-            style={{ paddingHorizontal: 4, marginBottom: 12 }}
+            style={{ paddingHorizontal: 4, marginBottom: 12, backgroundColor: containerStyle.container.backgroundColor }}
           >
-            <SettingsLink title={link.title} link={link.link} />
+            <SettingsLink title={link.title} link={link.link} extraProps={{ isDarkMode, toggleTheme }}/>
           </View>
         ))}
       </View>
-      <View>
+      <View style={{backgroundColor: containerStyle.container.backgroundColor}}>
         <Text
           style={{
             ...settings.smallHeading,
@@ -328,13 +335,13 @@ function SettingsScreen({ navigation }: NavProp) {
         {links.map((link, i) => (
           <View
             key={`more-bdh-${i}`}
-            style={{ paddingHorizontal: 4, marginBottom: 12 }}
+            style={{ paddingHorizontal: 4, marginBottom: 12, backgroundColor: containerStyle.container.backgroundColor }}
           >
-            <SettingsLink title={link.title} link={link.link} />
+            <SettingsLink title={link.title} link={link.link} extraProps={{ isDarkMode, toggleTheme }} />
           </View>
         ))}
       </View>
-      <View>
+      <View style={{backgroundColor: containerStyle.container.backgroundColor}}>
         <Text
           style={{
             ...settings.smallHeading,
@@ -345,12 +352,13 @@ function SettingsScreen({ navigation }: NavProp) {
         >
           Credits
         </Text>
-        <View style={{ paddingHorizontal: 4 }}>
+        <View style={{ paddingHorizontal: 4, backgroundColor: containerStyle.container.backgroundColor }}>
           <SettingsLink
             title="Development Team"
             link={"DevTeam"}
             inApp={true}
             navigation={navigation}
+            extraProps={{ isDarkMode, toggleTheme }}
           />
           {/* <Divider marginBottom={12} marginTop={12} color={varGray1} /> */}
         </View>
@@ -359,7 +367,7 @@ function SettingsScreen({ navigation }: NavProp) {
             marginHorizontal: 16,
             marginVertical: 20,
             fontSize: 14,
-            color: varTextColor,
+            color: textStyle.sectionHeader1.color,
             fontFamily: font2,
           }}
         >
