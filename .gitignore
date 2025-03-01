@@ -3,4 +3,4 @@
 package-lock.json
 node_modules/
 yarn.lock
-.yarn/
+.yarn/node_modules/
