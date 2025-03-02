@@ -198,8 +198,13 @@ export const articleStyles = StyleSheet.create({
   },
   authorImagesContainer: {
     flexDirection: "row",
+    alignItems: "flex-start",
     gap: 5,
+    alignSelf: 'flex-start',
     marginRight: 15,
+    flexShrink: 1,
+    flexWrap: "wrap",
+    maxWidth: "60%" // Can also decrease if we prefer the author container to take up more space
   },
   authorImage: {
     width: 48,
@@ -209,9 +214,12 @@ export const articleStyles = StyleSheet.create({
   authorTextContainer: {
     flexDirection: "column",
     gap: 4,
+    alignSelf: 'flex-start',
     justifyContent: "center",
     flexShrink: 1,
     flex: 1,
+    maxWidth: "90%",
+    minWidth: 90,
   },
   /*publishedDetailsText: {
     color: varGray1,

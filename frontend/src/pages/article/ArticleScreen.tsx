@@ -172,7 +172,7 @@ function ArticleScreen({
                       return false;
                     }
                   }) && (
-                    <View style={articleStyles.authorImagesContainer}>
+                    <View style={[articleStyles.authorImagesContainer, { flexShrink: 1 }]}>
                       {article.authors.map((author, i) => {
                         let metadata = [];
                         if (author.metadata) {
@@ -196,7 +196,7 @@ function ArticleScreen({
                           <Image
                             key={i}
                             source={{ uri: imageUri }}
-                            style={articleStyles.authorImage}
+                            style={[articleStyles.authorImage, { flexWrap: 'wrap' }]}
                             accessibilityLabel="Staff member's profile picture"
                           />
                         );
