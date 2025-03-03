@@ -12,11 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  fetchEditorsPicks,
-  fetchMostPopular,
-  fetchSectionHome,
-} from "src/api/fetchContent";
+import { fetchEditorsPicks, fetchMostPopular } from "src/api/fetchContent";
 import { Article, EditorsPickArticle } from "src/types/data";
 import { NavProp } from "src/types/navStacks";
 import ImageCard from "../../components/cards/HorizontalCard";
@@ -158,18 +154,6 @@ function Search({ navigation }: NavProp) {
   >([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchTop = async () => {
-    try {
-      const data: Article[] = await fetchSectionHome("homepage", 5);
-      setMostPopularStories(data);
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      setTopLoaded(true);
-      trackEvent("homescreen", {});
-    }
-  };
-
   useEffect(() => {
     if (!usingPrefetchedData) {
       fetchEditorsPicks()
@@ -193,8 +177,8 @@ function Search({ navigation }: NavProp) {
 
   useEffect(() => {
     if (!usingPrefetchedData) {
-      fetchTop();
-      // fetchEditorsPicks();
+      fetchEditorsPicks();
+      fetchMostPopular();
     }
   }, [usingPrefetchedData]);
 
