@@ -11,13 +11,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { fyp } from "src/styles/pages";
 import { settings } from "src/styles/pages";
 import { NavProp, SearchStackProps } from "src/types/navStacks";
-import { text, varTextColor } from "src/styles/styles";
+import { text, varTextColor, baseStyles, darkStyles, darkModeText } from "src/styles/styles";
 
 //Screen for display settings
 
 function DisplaySettings({navigation, route} : NavProp) {
   const { isDarkMode, toggleTheme } = route.params || {};
   const toggleValue = true;
+
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
 
   return (
     <>
@@ -27,13 +30,13 @@ function DisplaySettings({navigation, route} : NavProp) {
       >
         <Ionicons name="arrow-back" size={20} color="black" />
       </TouchableOpacity>
-      <ScrollView style={styles.container}>
-        <Text style={text.sectionHeader1}>Display Settings</Text>
+      <ScrollView style={containerStyle.container}>
+        <Text style={textStyle.sectionHeader1}>Display Settings</Text>
         <View style={{ rowGap: 16, marginTop: 4 }}>
         <Text style={settings.smallHeading }>Appearance</Text>
         <View style={fyp.toggleRow}>
               <View style={{ flex: 1, paddingRight: 64 }}>
-                <Text style={text.sectionHeader3}>Automatic</Text>
+                <Text style={textStyle.sectionHeader3}>Automatic</Text>
               </View>
               <Switch
                 trackColor={{ true: "#000000", false: "grey" }}
