@@ -1,12 +1,13 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { SearchStackProps } from "src/types/navStacks";
+import { NavProp, SearchStackProps } from "src/types/navStacks";
 import ArticleScreen from "../article/ArticleScreen";
 import FiltersScreen from "./FiltersScreen";
 import SearchScreen from "./SearchScreen";
 
 const SearchStack = createStackNavigator<SearchStackProps>();
 
-function SearchStackScreen() {
+function SearchStackScreen({navigation, route} : NavProp) {
+  const { isDarkMode, toggleTheme } = route.params || {};
   return (
     <SearchStack.Navigator>
       <SearchStack.Screen

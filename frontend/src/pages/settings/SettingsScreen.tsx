@@ -193,13 +193,6 @@ function SettingsScreen({ navigation }: NavProp) {
     loadTheme();
   }, []);
 
-  // const toggleTheme = async () => {
-  //   const newTheme = !isDarkMode;
-  //   setIsDarkMode(newTheme);
-  //   console.log("newTheme " + newTheme);
-  //   await AsyncStorage.setItem("darkMode", newTheme.toString());
-  // };
-
   const toggleTheme = async () => {
     setIsDarkMode((prev) => {
       const newTheme = !prev;

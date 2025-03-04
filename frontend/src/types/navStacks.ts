@@ -26,6 +26,7 @@ export type SearchStackProps = {
     setSortType: Dispatch<SetStateAction<string>>;
   };
   Article: { data: Article };
+  
 };
 
 export type SettingsStackProps = {

@@ -1,6 +1,5 @@
 "use client";
-
-import { User } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { Notification } from "../types";
 import AuthWrapper from "./AuthWrapper";
@@ -12,192 +11,183 @@ import NotificationForm from "./NotificationForm";
 import NotificationTable from "./NotificationTable";
 
 const isProduction = process.env.NODE_ENV === "production";
+
 const isAdmin = (user: User) => {
-  if (isProduction) {
-    return user.email === "techadmin@browndailyherald.com";
-  }
-  return user.email === "admin@example.com";
+  // More granular role check if applicable, for now using email check
+  return isProduction
+    ? user.email === "techadmin@browndailyherald.com"
+    : user.email === "admin@example.com";
 };
 
 export default function Home() {
   const [scheduledNotifications, setScheduledNotifications] = useState<
     Notification[]
   >([]);
-  const [editorsPicks, setEditorsPicks] = useState([] as any[]); // New state for editor's picks
-  const [deviceCount, setDeviceCount] = useState<number>(0); // New state for device count
-  const [metroCount, setMetroCount] = useState<string>("Loading...");
-  const [breakingCount, setBreakingCount] = useState<string>("Loading...");
-  const [universityCount, setUniversityCount] = useState<string>("Loading...");
-  const [sportsCount, setSportsCount] = useState<string>("Loading...");
-  const [artsAndCultureCount, setArtsAndCultureCount] =
-    useState<string>("Loading...");
-  const [scienceAndResearchCount, setScienceAndResearchCount] =
-    useState<string>("Loading...");
-  const [opinionsCount, setOpinionsCount] = useState<string>("Loading...");
-
-  const [ntfEnabled, setNtfEnabled] = useState<string>("Loading...");
+  const [editorsPicks, setEditorsPicks] = useState<any[]>([]);
+  const [deviceCount, setDeviceCount] = useState<number>(0);
+  const [counts, setCounts] = useState({
+    metroCount: "Loading...",
+    breakingCount: "Loading...",
+    universityCount: "Loading...",
+    sportsCount: "Loading...",
+    artsAndCultureCount: "Loading...",
+    scienceAndResearchCount: "Loading...",
+    opinionsCount: "Loading...",
+    ntfEnabled: "Loading...",
+  });
+  const [token, setToken] = useState<string>("");
+  const [user, setUser] = useState<User | null>(null);
+  const auth = getAuth();
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        currentUser.getIdToken(true).then((idToken) => {
+          console.log("Token fetched:", idToken);
+          setToken(idToken);
+        });
+      } else {
+        console.log("No user detected");
+        setUser(null);
+        setToken("");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [auth]);
+
+  // Correct notifications effect
+  useEffect(() => {
+    if (!token) return;
+
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("/api/notifications");
+        const response = await fetch("/api/notifications", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
-        // TODO: add runtime type checking using zod or io-ts
-        const notifications = data as Notification[];
-        console.log(notifications);
-        setScheduledNotifications(notifications);
+        setScheduledNotifications(data);
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
     };
-    fetchNotifications();
-  }, []);
 
+    fetchNotifications();
+  }, [token]);
+
+  // Fetch device counts
   useEffect(() => {
+    if (!token) return;
+
     const fetchDeviceCount = async () => {
       try {
-        const response = await fetch("/api/devices/count");
+        const response = await fetch("/api/devices/count", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         setDeviceCount(data.count);
       } catch (error) {
         console.error("Error fetching device count:", error);
       }
     };
+
     fetchDeviceCount();
-  }, []);
+  }, [token]);
 
+  // Fetch count data for different sections
   useEffect(() => {
-    const fetchNotfEnabled = async () => {
+    if (!token) return;
+
+    const fetchCounts = async () => {
+      const endpoints = [
+        { url: "devices/count?search=isPushEnabled", key: "ntfEnabled" },
+        { url: "devices/count?search=Metro", key: "metroCount" },
+        { url: "devices/count?search=University News", key: "universityCount" },
+        { url: "devices/count?search=Breaking News", key: "breakingCount" },
+        { url: "devices/count?search=Sports", key: "sportsCount" },
+        {
+          url: "devices/count?search=Arts and Culture",
+          key: "artsAndCultureCount",
+        },
+        {
+          url: "devices/count?search=Science and Research",
+          key: "scienceAndResearchCount",
+        },
+        { url: "devices/count?search=Opinions", key: "opinionsCount" },
+      ];
+
       try {
-        const response = await fetch("/api/devices/notificationEnabledCount");
-        const data = await response.json();
-        setNtfEnabled(data.count.toString());
-      } catch (error) {
-        console.error(
-          "Error fetching device count for notifications enabled:",
-          error
+        const countData = await Promise.all(
+          endpoints.map(async ({ url, key }) => {
+            const response = await fetch(`/api/${url}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            const data = await response.json();
+            return { key, value: data.count.toString() };
+          })
         );
+
+        const updatedCounts = countData.reduce((acc, { key, value }) => {
+          acc[key] = value;
+          return acc;
+        }, {});
+
+        setCounts((prevState) => ({ ...prevState, ...updatedCounts }));
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+        setCounts((prevState) => ({
+          ...prevState,
+          ntfEnabled: "Error",
+        }));
       }
     };
-    fetchNotfEnabled();
-  }, []);
 
-  useEffect(() => {
-    const fetchMetroDevices = async () => {
-      try {
-        const response = await fetch("/api/devices/metroCount");
-        const data = await response.json();
-        setMetroCount(data.count.toString());
-      } catch (error) {
-        console.error(
-          "Error fetching device count for notifications metro:",
-          error
-        );
-      }
-    };
-    fetchMetroDevices();
-  }, []);
+    fetchCounts();
+  }, [token]);
 
+  // Fetch editor's picks data
   useEffect(() => {
-    const fetchUniCount = async () => {
-      try {
-        const response = await fetch("/api/devices/universityNewsCount");
-        const data = await response.json();
-        setUniversityCount(data.count.toString());
-      } catch (error) {
-        console.error(
-          "Error fetching device count for university news:",
-          error
-        );
-      }
-    };
-    fetchUniCount();
-  }, []);
+    if (!token) return;
 
-  useEffect(() => {
     const fetchEditorsPicks = async () => {
-      const response = await fetch("/api/editors-picks");
-      const data = await response.json();
-      setEditorsPicks(data);
+      try {
+        const response = await fetch("/api/editors-picks", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setEditorsPicks(data);
+      } catch (error) {
+        console.error("Error fetching editor's picks:", error);
+      }
     };
+
     fetchEditorsPicks();
-  }, []);
-
-  useEffect(() => {
-    const fetchBreakingCount = async () => {
-      try {
-        const response = await fetch("/api/devices/breakingNewsCount");
-        const data = await response.json();
-        setBreakingCount(data.count.toString());
-      } catch (error) {
-        console.error(
-          "Error fetching device count for breaking notifications:",
-          error
-        );
-      }
-    };
-    fetchBreakingCount();
-  }, []);
-
-  useEffect(() => {
-    const fetchSportsCount = async () => {
-      try {
-        const response = await fetch("/api/devices/sportsCount");
-        const data = await response.json();
-        setSportsCount(data.count.toString());
-      } catch (error) {
-        console.error(
-          "Error fetching device count for sports notifications:",
-          error
-        );
-      }
-    };
-    fetchSportsCount();
-  }, []);
-
-  useEffect(() => {
-    const fetchArtsAndCultureCount = async () => {
-      const response = await fetch("/api/devices/artsAndCultureCount");
-      const data = await response.json();
-      setArtsAndCultureCount(data.count.toString());
-    };
-    fetchArtsAndCultureCount();
-  }, []);
-
-  useEffect(() => {
-    const fetchScienceAndResearchCount = async () => {
-      const response = await fetch("/api/devices/scienceAndResearchCount");
-      const data = await response.json();
-      setScienceAndResearchCount(data.count.toString());
-    };
-    fetchScienceAndResearchCount();
-  }, []);
-
-  useEffect(() => {
-    const fetchOpinionsCount = async () => {
-      const response = await fetch("/api/devices/opinionsCount");
-      const data = await response.json();
-      setOpinionsCount(data.count.toString());
-    };
-    fetchOpinionsCount();
-  }, []);
+  }, [token]);
 
   return (
     <AuthWrapper>
       {(user) => (
         <>
           <EnvVars isProduction={isProduction} />
-
           <DeviceCounts
             deviceCount={deviceCount}
-            ntfEnabled={ntfEnabled}
-            metroCount={metroCount}
-            breakingCount={breakingCount}
-            universityCount={universityCount}
-            sportsCount={sportsCount}
-            artsAndCultureCount={artsAndCultureCount}
-            scienceAndResearchCount={scienceAndResearchCount}
-            opinionsCount={opinionsCount}
+            ntfEnabled={counts.ntfEnabled}
+            metroCount={counts.metroCount}
+            breakingCount={counts.breakingCount}
+            universityCount={counts.universityCount}
+            sportsCount={counts.sportsCount}
+            artsAndCultureCount={counts.artsAndCultureCount}
+            scienceAndResearchCount={counts.scienceAndResearchCount}
+            opinionsCount={counts.opinionsCount}
           />
 
           <main className="flex min-h-screen flex-col items-center justify-between md:px-20 py-3">
@@ -213,8 +203,9 @@ export default function Home() {
                 />
                 <div className="flex justify-center py-10"></div>
                 <EditorsPicks
-                  editorsPicks={editorsPicks} // Pass the editorsPicks state
-                  setEditorsPicks={setEditorsPicks} // Pass the state setter function
+                  editorsPicks={editorsPicks}
+                  setEditorsPicks={setEditorsPicks}
+                  token={token}
                 />
               </>
             )}

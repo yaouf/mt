@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-
+import corsMiddleware from "../../../config/cors";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 type ResponseData = {
   message: string;
 };
 
-export default async function getNotifications(
+async function getNotificationsHelper(
   req: NextApiRequest,
   res: NextApiResponse<Notification[] | ResponseData>,
 ) {
@@ -17,4 +18,13 @@ export default async function getNotifications(
     console.error("Error fetching notifications from the database:", error);
     res.status(500).json({ message: "Internal server error." });
   }
+}
+export default async function getNotifications(
+  req: NextApiRequest,
+  res: NextApiResponse<Notification[] | ResponseData>,
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, getNotificationsHelper);
+  });
+
 }
