@@ -130,6 +130,64 @@ export async function fetchAuthor(
   }
 }
 
+interface ArticleHeader {
+  title: string;
+  url: string;
+}
+
+async function fetchMostPopularHeaders(): Promise<ArticleHeader[]> {
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-KEY": process.env.EXPO_PUBLIC_POPULAR_API_KEY,
+      },
+    };
+    const response = await fetch(
+      process.env.EXPO_PUBLIC_POPULAR_API_URL,
+      requestOptions
+    );
+    const articles: ArticleHeader[] = await response.json();
+    return articles;
+  } catch (error) {
+    console.error("Failed to fetch most popular articles:", error);
+    throw new Error("Failed to fetch most popular articles");
+  }
+}
+
+export async function fetchMostPopular(): Promise<Article[]> {
+  const headers = await fetchMostPopularHeaders();
+  const urls = headers.map((header) => header.url);
+
+  // Process URLs to get details
+  const articlePromises = urls.map(async (url) => {
+    console.log("article url", url);
+    const details = parseArticleUrl(url, false);
+    if (details?.slug && details?.publicationDate) {
+      try {
+        // Fetch the full article data using the extracted slug and publicationDate
+        const article = await fetchArticle(
+          details.slug,
+          details.publicationDate,
+          (article) => article
+        );
+        return article;
+      } catch (error) {
+        console.error("Failed to fetch article details for URL:", url, error);
+        return null;
+      }
+    } else {
+      console.error("URL parsing failed or returned incomplete details:", url);
+      return null;
+    }
+  });
+
+  // Wait for all promises to resolve and filter out null values
+  const results = await Promise.all(articlePromises);
+  return results.filter((article): article is Article => article !== null);
+}
+
 export async function fetchEditorsPicks(): Promise<EditorsPickArticle[]> {
   try {
     // Fetch the initial list of editor's picks URLs
@@ -149,13 +207,10 @@ export async function fetchEditorsPicks(): Promise<EditorsPickArticle[]> {
     console.log(response);
     const urls: EditorsPick[] = await response.json();
 
-    // Array to store the fetched articles
-    const articles: Article[] = [];
-
-    // Process each URL to fetch the full article details
-    for (const urlObject of urls) {
+    // Process each URL to fetch the full article details in parallel
+    const articlePromises = urls.map(async (urlObject) => {
       console.log("article url", urlObject.url);
-      const details = parseArticleUrl(urlObject.url, false); // Call parseArticleUrl to extract slug and publicationDate
+      const details = parseArticleUrl(urlObject.url, false);
       if (details && details.slug && details.publicationDate) {
         try {
           // Fetch the full article data using the extracted slug and publicationDate
@@ -165,7 +220,7 @@ export async function fetchEditorsPicks(): Promise<EditorsPickArticle[]> {
             (article) => article
           );
           if (article) {
-            articles.push(article);
+            return { ...article, rank: urlObject.rank };
           }
         } catch (error) {
           console.error(
@@ -180,11 +235,20 @@ export async function fetchEditorsPicks(): Promise<EditorsPickArticle[]> {
           urlObject.url
         );
       }
-    }
+      return null;
+    });
+
+    // Wait for all promises to resolve and filter out null values
+    const results = await Promise.all(articlePromises);
+    const articles = results.filter(
+      (article): article is EditorsPickArticle => article !== null
+    );
+
     console.log(articles);
     return articles;
   } catch (error) {
-    console.error("Failed to fetch editor's picks:", error);
+    const errorParsed = JSON.parse(error as string);
+    console.error("Failed to fetch editor's picks:", errorParsed);
     throw new Error("Failed to fetch editor's picks");
   }
 }
