@@ -14,6 +14,7 @@ function SearchStackScreen({navigation, route} : NavProp) {
         name="SearchScreen"
         component={SearchScreen}
         options={{ headerShown: false }}
+        initialParams={{ isDarkMode, toggleTheme }}
       />
       <SearchStack.Screen
         name="Article"

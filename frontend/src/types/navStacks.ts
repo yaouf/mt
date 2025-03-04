@@ -16,7 +16,10 @@ export type HomeStackProps = {
 };
 
 export type SearchStackProps = {
-  SearchScreen: undefined;
+  SearchScreen: {
+    isDarkMode: boolean;
+    toggleTheme: () => void;
+  };
   FiltersScreen: {
     searchType: string;
     setSearchType: Dispatch<SetStateAction<string>>;
