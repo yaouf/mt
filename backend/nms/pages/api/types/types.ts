@@ -19,11 +19,19 @@ export type Notification = {
 
 export type Device = {
   id: number;
-  expo_push_token: string;
   device_type: string;
-  date_created: string;
+  expo_push_token: string;
+  date_created: Date | null;
   is_push_enabled: boolean;
-  categories: string[];
+  categories?: string[];
+};
+
+export type DeviceToken = {
+  expo_push_token: string;
+};
+
+export type NotificationId = {
+  id: number;
 };
 
 export interface EditorPick {
