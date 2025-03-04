@@ -86,6 +86,10 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: ./backend/nms
+
+      - name: Build Db
+        run: npm run build:db
+        working-directory: ./backend/nms
         
       - name: 🧹 Run Linter
         run: npm run lint
