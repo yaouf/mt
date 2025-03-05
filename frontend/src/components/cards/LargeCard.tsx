@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { Tag } from "src/types/data";
@@ -85,7 +86,7 @@ function LargeCard({ article, navigation }: CardProps) {
               {article.subhead}
             </Text>
             <View style={styles.bottom}>
-              <View style={styles.publishedSection}>
+              <View style={styles.authorLine}>
                 <Text
                   style={styles.published}
                   accessibilityLabel={`Published on ${formatDates(
@@ -94,6 +95,34 @@ function LargeCard({ article, navigation }: CardProps) {
                 >
                   {formatDates(article.published_at)}
                 </Text>
+              <View style={styles.authorLine}>
+                  <Text style={styles.published}>By</Text>
+                  {article.authors.map((author, i) => {
+                    const lastIndex = article.authors.length - 1;
+                    let separator = "";
+
+                    if (i > 0 && i < lastIndex) {
+                      separator = ", ";
+                    } else if (i === lastIndex && i !== 0) {
+                      separator = "and ";
+                    } else {
+                      separator = " ";
+                    }
+                    return (
+                      <View key={author.slug} style={styles.authorWrapper}>
+                        <Text style={styles.published}>{separator}</Text>
+
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("Staff", { slug: author.slug })
+                          }
+                        >
+                          <Text style={styles.authorName}>{author.name}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
               </View>
             </View>
           </View>
@@ -221,5 +250,22 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderColor: "#ED1C24",
     backgroundColor: "#ED1C24",
+  },
+  authorLine: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: 4,
+  },
+  authorWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  authorName: {
+    color: "grey",
+    fontFamily: font3,
+    fontSize: 14,
+    fontWeight: "900",
+    fontStyle: "normal",
   },
 });
