@@ -27,6 +27,19 @@ export async function up(knex: Knex): Promise<void> {
     throw error;
   }
 
+  // For expoPushToken, drop the dependent unique index first
+  try {
+    await knex.raw("DROP INDEX devices_expopushtoken_unique ON devices");
+    console.log("Dropped index: devices_expopushtoken_unique");
+  } catch (error) {
+    console.error(
+      "Failed to drop index devices_expopushtoken_unique on devices",
+      error
+    );
+    throw error;
+  }
+
+  // Rename expoPushToken -> expo_push_token
   try {
     await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("expoPushToken", "expo_push_token");
@@ -42,6 +55,18 @@ export async function up(knex: Knex): Promise<void> {
     throw error;
   }
 
+  // Recreate the index (if needed)
+  try {
+    await knex.raw(
+      "CREATE UNIQUE INDEX devices_expo_push_token_unique ON devices(expo_push_token)"
+    );
+    console.log("Recreated unique index: devices_expo_push_token_unique");
+  } catch (error) {
+    console.error("Failed to recreate unique index on expo_push_token", error);
+    throw error;
+  }
+
+  // Rename isPushEnabled -> is_push_enabled
   try {
     await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("isPushEnabled", "is_push_enabled");
@@ -96,6 +121,15 @@ export async function down(knex: Knex): Promise<void> {
     throw error;
   }
 
+  // Drop the index for expo_push_token before renaming it back
+  try {
+    await knex.raw("DROP INDEX devices_expo_push_token_unique ON devices");
+    console.log("Dropped index: devices_expo_push_token_unique");
+  } catch (error) {
+    console.error("Failed to drop index devices_expo_push_token_unique", error);
+    throw error;
+  }
+
   try {
     await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("expo_push_token", "expoPushToken");
@@ -108,6 +142,17 @@ export async function down(knex: Knex): Promise<void> {
       "Failed to rename column: expo_push_token -> expoPushToken",
       error
     );
+    throw error;
+  }
+
+  // Recreate the unique index for expoPushToken
+  try {
+    await knex.raw(
+      "CREATE UNIQUE INDEX devices_expopushtoken_unique ON devices(expoPushToken)"
+    );
+    console.log("Recreated unique index: devices_expopushtoken_unique");
+  } catch (error) {
+    console.error("Failed to recreate unique index on expoPushToken", error);
     throw error;
   }
 
