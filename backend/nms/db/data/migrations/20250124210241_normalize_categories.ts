@@ -10,6 +10,24 @@ import type { Knex } from "knex";
  * This new data model is more efficient since the categories are stored in a single table and referenced by foreign keys.
  */
 
+async function dropDefaultConstraint(
+  knex: Knex,
+  tableName: string,
+  columnName: string
+) {
+  // This raw SQL query finds the default constraint for a given column and drops it.
+  await knex.raw(`
+    DECLARE @sql NVARCHAR(max) = N'';
+    SELECT @sql = N'ALTER TABLE ' + QUOTENAME('${tableName}') + ' DROP CONSTRAINT ' + QUOTENAME(dc.[name])
+    FROM sys.default_constraints dc
+    INNER JOIN sys.columns c ON dc.parent_object_id = c.object_id AND dc.parent_column_id = c.column_id
+    INNER JOIN sys.tables t ON t.object_id = c.object_id
+    WHERE t.name = '${tableName}' AND c.name = '${columnName}';
+    IF (@sql <> N'')
+      EXEC sp_executesql @sql;
+  `);
+}
+
 export async function up(knex: Knex): Promise<void> {
   await knex.transaction(async (trx) => {
     // 1) CREATE categories TABLE
@@ -69,7 +87,7 @@ export async function up(knex: Knex): Promise<void> {
       .insert(categoryNames.map((name) => ({ name })))
       .returning(["id", "name"]);
 
-    // Build a name→id lookup so we know which ID belongs to "Breaking News", etc.
+    // Build a name→id lookup so we know which ID belongs to each category
     const categoryMap: Record<string, number> = {};
     insertedCategories.forEach((cat: any) => {
       categoryMap[cat.name] = cat.id;
@@ -101,7 +119,21 @@ export async function up(knex: Knex): Promise<void> {
       }
     }
 
-    // 6) DROP old device boolean columns via raw SQL so that column names with spaces are properly escaped
+    // 6) DROP old device boolean columns:
+    // First, drop default constraints for each column so that SQL Server doesn't attempt its internal dynamic drop.
+    const deviceColumns = [
+      "Breaking News",
+      "University News",
+      "Metro",
+      "Sports",
+      "Arts and Culture",
+      "Science and Research",
+      "Opinions",
+    ];
+    for (const col of deviceColumns) {
+      await dropDefaultConstraint(knex, "devices", col);
+    }
+    // Then drop the columns using raw SQL with proper escaping.
     await knex.raw(`
       ALTER TABLE devices
       DROP COLUMN [Breaking News],
@@ -140,7 +172,20 @@ export async function up(knex: Knex): Promise<void> {
       }
     }
 
-    // 8) DROP old notification boolean columns via raw SQL
+    // 8) DROP old notification boolean columns.
+    // Again drop default constraints first.
+    const notificationColumns = [
+      "Breaking News",
+      "University News",
+      "Metro",
+      "Sports",
+      "Arts and Culture",
+      "Science and Research",
+      "Opinions",
+    ];
+    for (const col of notificationColumns) {
+      await dropDefaultConstraint(knex, "notifications", col);
+    }
     await knex.raw(`
       ALTER TABLE notifications
       DROP COLUMN [Breaking News],
@@ -156,9 +201,6 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   await knex.transaction(async (trx) => {
-    // This "down" tries to revert to the previous structure (booleans on devices/notifications).
-    // If you need to fully recover data, you'd have to re-insert booleans from these join tables.
-
     // 1) Add back old boolean columns to devices
     await knex.schema.alterTable("devices", (table) => {
       table.boolean("Breaking News").notNullable().defaultTo(false);
@@ -181,16 +223,14 @@ export async function down(knex: Knex): Promise<void> {
       table.boolean("Opinions").notNullable().defaultTo(false);
     });
 
-    // 3) Re-populate those columns if needed (from the device_preferences / notification_categories).
-    //    This is a simplified example. Real usage may need a transaction or other checks.
-
+    // 3) Re-populate those columns if needed (simplified example)
     const categoryRows = await knex("categories").select("*");
     const catIdToNameMap = categoryRows.reduce((acc, row) => {
       acc[row.id] = row.name;
       return acc;
     }, {} as Record<number, string>);
 
-    // device_preferences -> set device booleans
+    // device_preferences -> update device booleans
     const devPrefs = await knex("device_preferences").select("*");
     const deviceCatMap: Record<string, string[]> = {};
     for (const dp of devPrefs) {
@@ -208,7 +248,7 @@ export async function down(knex: Knex): Promise<void> {
       await knex("devices").where("id", deviceId).update(updateObj);
     }
 
-    // notification_categories -> set notification booleans
+    // notification_categories -> update notification booleans
     const notiPrefs = await knex("notification_categories").select("*");
     const notiCatMap: Record<number, string[]> = {};
     for (const np of notiPrefs) {
