@@ -27,11 +27,10 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
     };
 
     fetchDevices();
-  }, [currentPage,search]);
+  }, [currentPage, search]);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   return (
-    
     <div className="container mx-auto p-5 mt-14">
       <h1 className="text-2xl font-bold mb-4">Device List</h1>
       <input
@@ -65,30 +64,36 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
                 {device.device_type}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device.categories.includes("Breaking News") ? "Yes" : "No"}
+                {device.categories?.includes("Breaking News") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device.categories.includes("University News") ? "Yes" : "No"}
+                {device.categories?.includes("University News") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device.categories.includes("Metro") ? "Yes" : "No"}
+                {device.categories?.includes("Metro") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device.categories.includes("Opinions") ? "Yes" : "No"}
+                {device.categories?.includes("Opinions") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device.categories.includes("Arts and Culture") ? "Yes" : "No"}
+                {device.categories?.includes("Arts and Culture") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device.categories.includes("Sports") ? "Yes" : "No"}
+                {device.categories?.includes("Sports") ? "Yes" : "No"}
               </td>
               <td className="py-2 px-4 border-b text-center">
-                {device.categories.includes("Science and Research") ? "Yes" : "No"}
+                {device.categories?.includes("Science and Research")
+                  ? "Yes"
+                  : "No"}
               </td>
               <td className="py-2 px-4 border-b text-left">
                 {device.expo_push_token}
               </td>
-              <td className="py-2 px-4 border-b text-left">{device.date_created}</td>
+              <td className="py-2 px-4 border-b text-left">
+                {device.date_created
+                  ? device.date_created.toLocaleString()
+                  : "N/A"}
+              </td>
             </tr>
           ))}
         </tbody>
