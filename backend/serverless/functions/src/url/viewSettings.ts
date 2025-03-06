@@ -4,7 +4,6 @@ import Joi from "joi";
 import db from "../../../db/dist/data/db-config";
 import envars from "../envars";
 import { validateApiKey, validateUuidV4 } from "../utils";
-
 /**
  * Gets the settings for a device.
  * Takes a deviceId and returns an object with category preferences and is_push_enabled

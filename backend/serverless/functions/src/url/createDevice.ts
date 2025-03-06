@@ -12,7 +12,7 @@ export const createDevice = onRequest(async (request, response) => {
   const environment = envars.environment.value();
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
-  const newDb = db(dbParams);
+
   logger.info("dbParams: ", dbParams);
 
   logger.info(
@@ -65,7 +65,7 @@ export const createDevice = onRequest(async (request, response) => {
 
     // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
     // Check if the device already exists in the devices table
-    const existingDevice = await newDb("devices")
+    const existingDevice = await db("devices")
       .where("expo_push_token", expoPushToken)
       .first();
 
@@ -73,14 +73,14 @@ export const createDevice = onRequest(async (request, response) => {
     let deviceId: string;
 
     // Get all category IDs for later use
-    const categories = await newDb("categories").select("id", "name");
+    const categories = await db("categories").select("id", "name");
     const categoryMap = new Map(
       categories.map((cat: { id: number; name: string }) => [cat.name, cat.id])
     );
 
     if (existingDevice) {
       // Update the device's basic settings
-      await newDb("devices")
+      await db("devices")
         .where("expo_push_token", expoPushToken)
         .update({
           device_type: deviceType,
@@ -89,11 +89,10 @@ export const createDevice = onRequest(async (request, response) => {
               ? isPushEnabled
               : existingDevice.is_push_enabled,
         });
-
       deviceId = existingDevice.id;
 
       // Update category preferences by first removing all existing preferences
-      await newDb("device_preferences").where("device_id", deviceId).delete();
+      await db("device_preferences").where("device_id", deviceId).delete();
 
       // Then insert new preferences based on the provided values
       const preferencesToInsert = [];
@@ -165,7 +164,7 @@ export const createDevice = onRequest(async (request, response) => {
 
       // Insert new preferences if there are any
       if (preferencesToInsert.length > 0) {
-        await newDb("device_preferences").insert(preferencesToInsert);
+        await db("device_preferences").insert(preferencesToInsert);
       }
 
       logger.info(
@@ -190,7 +189,7 @@ export const createDevice = onRequest(async (request, response) => {
       // Insert the device into the devices table, and return the id of the inserted row
       deviceId = uuidv4(); // Generate a new UUID for the device
 
-      await newDb("devices").insert({
+      await db("devices").insert({
         id: deviceId,
         device_type: deviceType,
         is_push_enabled: isPushEnabled ?? false,
@@ -252,9 +251,8 @@ export const createDevice = onRequest(async (request, response) => {
 
       // Insert new preferences if there are any
       if (preferencesToInsert.length > 0) {
-        await newDb("device_preferences").insert(preferencesToInsert);
+        await db("device_preferences").insert(preferencesToInsert);
       }
-
       logger.info(
         "Device created. Inserted deviceId: ",
         deviceId,
@@ -274,7 +272,7 @@ export const createDevice = onRequest(async (request, response) => {
       );
     }
 
-    await newDb.destroy();
+    await db.destroy();
 
     // Send the device ID back to the client
     response.send({

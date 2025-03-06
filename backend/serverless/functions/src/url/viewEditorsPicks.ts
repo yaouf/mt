@@ -1,7 +1,6 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import db from "../../../db/dist/data/db-config";
-import envars from "../envars";
 import { validateApiKey } from "../utils";
 
 /**
@@ -10,11 +9,6 @@ import { validateApiKey } from "../utils";
  */
 export const viewEditorsPicks = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
-  const environment = envars.environment.value();
-  const dbUrl = envars.dbUrl.value();
-  const dbParams = { environment, dbUrl };
-  const newDb = db(dbParams);
-  logger.info("dbParams: ", dbParams);
 
   logger.info("Viewing editors picks", { structuredData: true });
 
@@ -23,13 +17,13 @@ export const viewEditorsPicks = onRequest(async (request, response) => {
       .select("url", "rank")
       .orderBy("rank", "asc");
 
-    await newDb.destroy();
+    await db.destroy();
 
     logger.info(`Editors picks: ${result}`);
     response.status(200).send(result);
   } catch (error) {
     // TODO: add destroy to all function calls even if there is an error
-    await newDb.destroy();
+    await db.destroy();
 
     logger.error("Error getting editors picks:", error);
     response.status(500).send("Error: " + error);

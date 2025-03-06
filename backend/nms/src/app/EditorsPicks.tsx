@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { EditorPick } from "../../pages/api/types/types";
 
 // TODO: having EditorsPick and EditorsPicks is confusing.
-const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
+const EditorsPicks = ({ editorsPicks, setEditorsPicks, token }) => {
   const [url, setUrl] = useState("");
   const [startindex, setStartIndex] = useState<number | null>(null);
 
@@ -20,6 +20,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ url }),
       });
@@ -42,6 +43,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ url }),
       });
@@ -103,6 +105,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(
           newPicks.map((pick, index) => ({
@@ -125,6 +128,9 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
     try {
       const response = await fetch("/api/editors-picks", {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.ok) {
         const data = await response.json();
@@ -133,7 +139,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
     } catch (error) {
       console.error("Error fetching latest picks:", error);
     }
-  }, [setEditorsPicks]);
+  }, [setEditorsPicks, token]);
 
   const moveItem = async (index: number, direction: "up" | "down") => {
     if (

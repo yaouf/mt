@@ -20,7 +20,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import {
   fetchArticle,
   fetchEditorsPicks,
-  fetchSectionHome,
+  fetchMostPopular,
 } from "src/api/fetchContent";
 import Header from "src/components/Header";
 import { NO_NAV_BAR_SCREENS } from "src/consts/consts";
@@ -120,7 +120,7 @@ export default function MainTabNavigator() {
         // Prefetch editors picks
         const editorsPicks = await fetchEditorsPicks();
         // Prefetch most popular stories
-        const popularStories = await fetchSectionHome("homepage", 5);
+        const popularStories = await fetchMostPopular();
 
         // Store prefetched data in AsyncStorage for quick access
         await AsyncStorage.setItem(
@@ -134,7 +134,9 @@ export default function MainTabNavigator() {
 
         setSearchContentPrefetched(true);
       } catch (error) {
-        console.error("Error prefetching search content:", error);
+        const errorParsed = JSON.parse(error as string);
+        console.log("errorParsed", errorParsed);
+        console.error("Error prefetching search content:", errorParsed);
       }
     }
   };

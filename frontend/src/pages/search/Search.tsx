@@ -12,13 +12,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { fetchEditorsPicks, fetchSectionHome } from "src/api/fetchContent";
+import { fetchEditorsPicks, fetchMostPopular } from "src/api/fetchContent";
 import { Article, EditorsPickArticle } from "src/types/data";
 import { NavProp } from "src/types/navStacks";
 import ImageCard from "../../components/cards/HorizontalCard";
 import { varGray1, varTextColor } from "../../styles/styles";
 import { Section_Type } from "../home/HomeScreen";
 import EditorsPicks from "../home/sections/EditorsPicks";
+import MostPopular from "../home/sections/MostPopular";
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -153,18 +154,6 @@ function Search({ navigation }: NavProp) {
   >([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchTop = async () => {
-    try {
-      const data: Article[] = await fetchSectionHome("homepage", 5);
-      setMostPopularStories(data);
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      setTopLoaded(true);
-      trackEvent("homescreen", {});
-    }
-  };
-
   useEffect(() => {
     if (!usingPrefetchedData) {
       fetchEditorsPicks()
@@ -172,25 +161,44 @@ function Search({ navigation }: NavProp) {
           setEditorsPicksStories(articles);
         })
         .catch((error) => {
-          console.error("Failed to load editor's picks:", error);
+          const errorParsed = JSON.parse(error as string);
+          console.log("errorParsed", errorParsed);
+          console.error("Failed to load editor's picks:", errorParsed);
+        });
+      fetchMostPopular()
+        .then((articles) => {
+          setMostPopularStories(articles);
+        })
+        .catch((error) => {
+          console.error("Failed to load most popular:", error);
         });
     }
   }, [usingPrefetchedData]);
 
   useEffect(() => {
     if (!usingPrefetchedData) {
-      fetchTop();
-      // fetchEditorsPicks();
+      fetchEditorsPicks();
+      fetchMostPopular();
     }
   }, [usingPrefetchedData]);
 
   const onRefresh = async () => {
     setRefreshing(true);
     setUsingPrefetchedData(false);
-    const editorsPicks = await fetchEditorsPicks();
-    setEditorsPicksStories(editorsPicks);
-    const top = await fetchSectionHome("homepage", 5);
-    setMostPopularStories(top);
+    console.log("starting fetch to editors picks");
+    setTimeout(async () => {
+      try {
+        const editorsPicks = await fetchEditorsPicks();
+        setEditorsPicksStories(editorsPicks);
+      } catch (error) {
+        const errorParsed = JSON.parse(error as string);
+        console.log("errorParsed", errorParsed);
+        console.error("Failed to fetch editor's picks:", errorParsed);
+      }
+    }, 100);
+    console.log("starting fetch to most popular");
+    const mostPopular = await fetchMostPopular();
+    setMostPopularStories(mostPopular);
     setRefreshing(false);
   };
 
@@ -215,15 +223,15 @@ function Search({ navigation }: NavProp) {
           />
         ) : null,
     },
-    // {
-    //   id: 2,
-    //   component: mostPopularStories ? (
-    //     <MostPopular
-    //       mostPopularStories={mostPopularStories}
-    //       navigation={navigation}
-    //     />
-    //   ) : null,
-    // },
+    {
+      id: 2,
+      component: mostPopularStories ? (
+        <MostPopular
+          mostPopularStories={mostPopularStories}
+          navigation={navigation}
+        />
+      ) : null,
+    },
   ];
 
   return (

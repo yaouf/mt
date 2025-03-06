@@ -7,6 +7,7 @@ export async function seed(knex: Knex): Promise<void> {
   await knex("devices").truncate();
 
   // Inserts seed entries
+  // TODO: change column names to camelCase
   await knex("devices").insert([
     {
       id: uuidv4(),

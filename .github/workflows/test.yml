@@ -37,12 +37,46 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Create .env files for DB (for Firebase Functions)
+        run: |
+          echo "ENV=test" > .env
+          echo "ENV=test" > .env.test
+          echo "NODE_ENV=test" >> .env.test
+
+        working-directory: ./backend/serverless/db
+
+      - name: Install dependencies for serverless functions
+        run: |
+          npm install
+          npm run build:db
+          npm run build
+        working-directory: ./backend/serverless/functions
+
+      - name: Create .env file for Firebase Functions
+        run: echo "ENV=test" > .env
+        working-directory: ./backend/serverless/functions
+
+      - name: Run migrations
+        run: npm run knex migrate:latest
+        working-directory: ./backend/serverless/db
+
+      - name: Run seeds
+        run: npm run knex seed:run
+        working-directory: ./backend/serverless/db
+
+      - name: Run Jest tests for serverless functions
+        run: npm test
+        working-directory: ./backend/serverless/functions
+
       - name: Add Secret Service Account Key JSON File
         run: touch serviceAccountKey.json && echo "${{secrets.SERVICE_ACCOUNT_KEY}}" | base64 -d > serviceAccountKey.json
         working-directory: ./backend/nms
 
-      - name: Add Empty .env file so load-env.js Doesn't Break 
-        run: touch .env
+      - name: Create .env file for NMS so load-env.js Doesn't Break
+        run: |
+          echo "ENV=test" > .env
+          echo "ENV=test" > .env.test
+          echo "NODE_ENV=test" >> .env.test
         working-directory: ./backend/nms/db
 
       - name: Install Global Deps
@@ -51,6 +85,18 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./backend/nms
+
+      - name: Build Db
+        run: npm run build:db
+        working-directory: ./backend/nms
+        
+      - name: 🧹 Run Linter
+        run: npm run lint
+        working-directory: ./backend/nms
+
+      - name: 🛠️ Run Build
+        run: npm run build
         working-directory: ./backend/nms
 
       - name: Run Jest tests
