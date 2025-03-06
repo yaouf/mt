@@ -17,44 +17,45 @@ export async function up(knex: Knex): Promise<void> {
   //    deviceType -> device_type
   //    expoPushToken -> expo_push_token
   //    isPushEnabled -> is_push_enabled
-  await knex.schema.alterTable("devices", async (table) => {
-    try {
+  try {
+    await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("deviceType", "device_type");
-      console.log("Successfully renamed column: deviceType -> device_type");
-    } catch (error) {
-      console.error(
-        "Failed to rename column: deviceType -> device_type",
-        error
-      );
-      throw error;
-    }
+    });
+    console.log("Successfully renamed column: deviceType -> device_type");
+  } catch (error) {
+    console.error("Failed to rename column: deviceType -> device_type", error);
+    throw error;
+  }
 
-    try {
+  try {
+    await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("expoPushToken", "expo_push_token");
-      console.log(
-        "Successfully renamed column: expoPushToken -> expo_push_token"
-      );
-    } catch (error) {
-      console.error(
-        "Failed to rename column: expoPushToken -> expo_push_token",
-        error
-      );
-      throw error;
-    }
+    });
+    console.log(
+      "Successfully renamed column: expoPushToken -> expo_push_token"
+    );
+  } catch (error) {
+    console.error(
+      "Failed to rename column: expoPushToken -> expo_push_token",
+      error
+    );
+    throw error;
+  }
 
-    try {
+  try {
+    await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("isPushEnabled", "is_push_enabled");
-      console.log(
-        "Successfully renamed column: isPushEnabled -> is_push_enabled"
-      );
-    } catch (error) {
-      console.error(
-        "Failed to rename column: isPushEnabled -> is_push_enabled",
-        error
-      );
-      throw error;
-    }
-  });
+    });
+    console.log(
+      "Successfully renamed column: isPushEnabled -> is_push_enabled"
+    );
+  } catch (error) {
+    console.error(
+      "Failed to rename column: isPushEnabled -> is_push_enabled",
+      error
+    );
+    throw error;
+  }
 
   // 3) Rename isUid -> is_uid in notifications
   try {
@@ -85,44 +86,45 @@ export async function down(knex: Knex): Promise<void> {
   }
 
   // 2) Rename columns on the devices table back
-  await knex.schema.alterTable("devices", async (table) => {
-    try {
+  try {
+    await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("device_type", "deviceType");
-      console.log("Successfully renamed column: device_type -> deviceType");
-    } catch (error) {
-      console.error(
-        "Failed to rename column: device_type -> deviceType",
-        error
-      );
-      throw error;
-    }
+    });
+    console.log("Successfully renamed column: device_type -> deviceType");
+  } catch (error) {
+    console.error("Failed to rename column: device_type -> deviceType", error);
+    throw error;
+  }
 
-    try {
+  try {
+    await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("expo_push_token", "expoPushToken");
-      console.log(
-        "Successfully renamed column: expo_push_token -> expoPushToken"
-      );
-    } catch (error) {
-      console.error(
-        "Failed to rename column: expo_push_token -> expoPushToken",
-        error
-      );
-      throw error;
-    }
+    });
+    console.log(
+      "Successfully renamed column: expo_push_token -> expoPushToken"
+    );
+  } catch (error) {
+    console.error(
+      "Failed to rename column: expo_push_token -> expoPushToken",
+      error
+    );
+    throw error;
+  }
 
-    try {
+  try {
+    await knex.schema.alterTable("devices", (table) => {
       table.renameColumn("is_push_enabled", "isPushEnabled");
-      console.log(
-        "Successfully renamed column: is_push_enabled -> isPushEnabled"
-      );
-    } catch (error) {
-      console.error(
-        "Failed to rename column: is_push_enabled -> isPushEnabled",
-        error
-      );
-      throw error;
-    }
-  });
+    });
+    console.log(
+      "Successfully renamed column: is_push_enabled -> isPushEnabled"
+    );
+  } catch (error) {
+    console.error(
+      "Failed to rename column: is_push_enabled -> isPushEnabled",
+      error
+    );
+    throw error;
+  }
 
   // 3) Rename is_uid -> isUid in notifications
   try {
