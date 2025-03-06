@@ -13,7 +13,7 @@ export const viewEditorsPicks = onRequest(async (request, response) => {
   logger.info("Viewing editors picks", { structuredData: true });
 
   try {
-    const result = await newDb("editors_picks")
+    const result = await db("editors_picks")
       .select("url", "rank")
       .orderBy("rank", "asc");
 

@@ -4,7 +4,6 @@ import Joi from "joi";
 import { Knex } from "knex";
 import db from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
-import envars from "../envars";
 
 /**
  * Updates the settings for a device.
