@@ -101,16 +101,17 @@ export async function up(knex: Knex): Promise<void> {
       }
     }
 
-    // 6) DROP old device boolean columns
-    await knex.schema.alterTable("devices", (table) => {
-      table.dropColumn("Breaking News");
-      table.dropColumn("University News");
-      table.dropColumn("Metro");
-      table.dropColumn("Sports");
-      table.dropColumn("Arts and Culture");
-      table.dropColumn("Science and Research");
-      table.dropColumn("Opinions");
-    });
+    // 6) DROP old device boolean columns via raw SQL so that column names with spaces are properly escaped
+    await knex.raw(`
+      ALTER TABLE devices
+      DROP COLUMN [Breaking News],
+                  [University News],
+                  [Metro],
+                  [Sports],
+                  [Arts and Culture],
+                  [Science and Research],
+                  [Opinions]
+    `);
 
     // 7) MIGRATE existing notification booleans -> notification_categories
     type NotificationRow = {
@@ -139,16 +140,17 @@ export async function up(knex: Knex): Promise<void> {
       }
     }
 
-    // 8) DROP old notification boolean columns
-    await knex.schema.alterTable("notifications", (table) => {
-      table.dropColumn("Breaking News");
-      table.dropColumn("University News");
-      table.dropColumn("Metro");
-      table.dropColumn("Sports");
-      table.dropColumn("Arts and Culture");
-      table.dropColumn("Science and Research");
-      table.dropColumn("Opinions");
-    });
+    // 8) DROP old notification boolean columns via raw SQL
+    await knex.raw(`
+      ALTER TABLE notifications
+      DROP COLUMN [Breaking News],
+                  [University News],
+                  [Metro],
+                  [Sports],
+                  [Arts and Culture],
+                  [Science and Research],
+                  [Opinions]
+    `);
   });
 }
 
