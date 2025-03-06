@@ -102,7 +102,7 @@ export default async function getNotification(
         "n.url",
         "n.is_uid",
         db.raw(
-          "ARRAY_AGG(c.name) FILTER (WHERE c.name IS NOT NULL) AS categories"
+          "STRING_AGG(c.name, ',') AS categories"
         )
       )
       .groupBy("n.id")

@@ -40,7 +40,7 @@ export default async function getDevices(
         "devices.device_type",
         "devices.date_created",
         "devices.is_push_enabled",
-        db.raw("ARRAY_AGG(categories.name) as categories")
+        db.raw("STRING_AGG(categories.name, ',') as categories")
       )
       .groupBy("devices.id", "devices.expo_push_token")
       .orderBy("expo_push_token", "asc")

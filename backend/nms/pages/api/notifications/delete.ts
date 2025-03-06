@@ -52,7 +52,7 @@ export default async function getNotification(
           "n.status",
           "n.url",
           "n.is_uid",
-          db.raw("ARRAY_AGG(c.name) FILTER (WHERE c.name IS NOT NULL) AS categories")
+          db.raw("STRING_AGG(c.name, ',') AS categories")
         )
         .groupBy("n.id")
         .orderBy("n.time", "desc");
