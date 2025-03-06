@@ -38,11 +38,11 @@ export default async function getDevices(
         "devices.id",
         "devices.expo_push_token",
         "devices.device_type",
-        "devices.date_created",
+        db.raw("COALESCE(devices.date_created, GETDATE()) as date_created"),
         "devices.is_push_enabled",
         db.raw("STRING_AGG(categories.name, ',') as categories")
       )
-      .groupBy("devices.id", "devices.expo_push_token")
+      .groupBy("devices.id", "devices.expo_push_token", "devices.device_type", "devices.is_push_enabled")
       .orderBy("expo_push_token", "asc")
       .modify((queryBuilder) => {
         if (search) {

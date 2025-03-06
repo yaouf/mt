@@ -28,7 +28,7 @@ export default async function getNotification(
           db.raw("STRING_AGG(c.name, ',') AS categories")
         )
         .where("n.id", jobId)
-        .groupBy("n.id")
+        .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
         .first();
 
       if (!notificationWithCategories) {
@@ -54,7 +54,7 @@ export default async function getNotification(
           "n.is_uid",
           db.raw("STRING_AGG(c.name, ',') AS categories")
         )
-        .groupBy("n.id")
+        .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
         .orderBy("n.time", "desc");
 
       res.status(200).json(

@@ -21,7 +21,7 @@ export default async function getNotifications(
         "n.is_uid",
         db.raw("STRING_AGG(c.name, ',') AS categories")
       )
-      .groupBy("n.id")
+      .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
       .orderBy("n.time", "desc");
 
     res.status(200).json(notifications);
