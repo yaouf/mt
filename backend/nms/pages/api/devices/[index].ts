@@ -42,7 +42,7 @@ export default async function getDevices(
         "devices.is_push_enabled",
         db.raw("STRING_AGG(categories.name, ',') as categories")
       )
-      .groupBy("devices.id", "devices.expo_push_token", "devices.device_type", "devices.is_push_enabled")
+      .groupBy("devices.id", "devices.expo_push_token", "devices.device_type", "devices.is_push_enabled", "devices.date_created")
       .orderBy("expo_push_token", "asc")
       .modify((queryBuilder) => {
         if (search) {
