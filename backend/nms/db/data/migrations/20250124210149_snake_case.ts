@@ -60,7 +60,7 @@ export async function up(knex: Knex): Promise<void> {
   // 3) Rename isUid -> is_uid in notifications
   try {
     console.log("Renaming column: isUid -> is_uid in notifications");
-    await knex.schema.alterTable("notifications", async (table) => {
+    await knex.schema.alterTable("notifications", (table) => {
       table.renameColumn("isUid", "is_uid");
     });
     console.log("Successfully renamed column: isUid -> is_uid");
