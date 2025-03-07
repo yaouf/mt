@@ -54,9 +54,53 @@ async function dropDefaultConstraint(
     case "sqlite3":
       // SQLite doesn't support directly dropping default constraints
       // For SQLite, we can't easily drop the default - it requires rebuilding the entire table
-      // We'll handle this in the column drop logic instead
+      // For SQLite, we need to recreate the table without the default constraint
+      // Get the table info
+      const tableInfo = await knex.raw(`PRAGMA table_info(${tableName})`);
+
+      // Create a temporary table with the same structure but without the default for the specified column
+      await knex.schema.createTable(`${tableName}_temp`, (table) => {
+        for (const column of tableInfo) {
+          const colName = column.name;
+          const colType = column.type;
+          const notNull = column.notnull === 1;
+          const isPrimary = column.pk === 1;
+
+          if (colName === columnName) {
+            // Create the column without the default constraint
+            if (isPrimary) {
+              table.specificType(colName, colType).primary().notNullable();
+            } else if (notNull) {
+              table.specificType(colName, colType).notNullable();
+            } else {
+              table.specificType(colName, colType);
+            }
+          } else {
+            // Recreate other columns as they were
+            if (isPrimary) {
+              table.specificType(colName, colType).primary().notNullable();
+            } else if (notNull) {
+              table.specificType(colName, colType).notNullable();
+            } else {
+              table.specificType(colName, colType);
+            }
+          }
+        }
+      });
+
+      // Copy data from the original table to the temporary table
+      await knex.raw(
+        `INSERT INTO ${tableName}_temp SELECT * FROM ${tableName}`
+      );
+
+      // Drop the original table
+      await knex.schema.dropTable(tableName);
+
+      // Rename the temporary table to the original table name
+      await knex.schema.renameTable(`${tableName}_temp`, tableName);
+
       console.log(
-        `SQLite: Can't directly drop default constraint for ${columnName} in ${tableName}`
+        `SQLite: Recreated table ${tableName} without default constraint for ${columnName}`
       );
       break;
 
