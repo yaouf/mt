@@ -11,7 +11,27 @@ on:
       - "backend/**"
 
 jobs:
-  test:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js 21
+        uses: actions/setup-node@v2
+        with:
+          node-version: 21
+          cache: "npm"
+
+      # Cache the repository for other jobs to use
+      - name: Cache repository
+        uses: actions/cache@v2
+        with:
+          path: .
+          key: repo-${{ github.sha }}
+
+  serverless-functions-test:
+    needs: setup
     runs-on: ubuntu-latest
     env:
       DB_URL: ${{ secrets.DB_URL }}
@@ -22,27 +42,29 @@ jobs:
       NEXT_PUBLIC_FB_PROJECT_ID: ${{secrets.NEXT_PUBLIC_FB_PROJECT_ID}}
       NEXT_PUBLIC_FB_STORAGE_BUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGE_BUCKET}}
       NEXT_PUBLIC_FB_MESSAGING_SENDER_ID: ${{secrets.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID}}
-      NEXT_PUBLIC_FB_APP_ID: $${{secrets.NEXT_PUBLIC_FB_APP_ID}}
-      NEXT_PUBLIC_FB_MEASUREMENT_ID: $${{secrets.NEXT_PUBLIC_FB_MEASUREMENT_ID}}
-    strategy:
-      matrix:
-        node-version: [21]
+      NEXT_PUBLIC_FB_APP_ID: ${{secrets.NEXT_PUBLIC_FB_APP_ID}}
+      NEXT_PUBLIC_FB_MEASUREMENT_ID: ${{secrets.NEXT_PUBLIC_FB_MEASUREMENT_ID}}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      # Restore the repository from cache
+      - name: Restore repository
+        uses: actions/cache@v2
+        with:
+          path: .
+          key: repo-${{ github.sha }}
 
-      - name: Set up Node.js ${{ matrix.node-version }}
+      - name: Set up Node.js 21
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 21
+          cache: "npm"
+          cache-dependency-path: "./backend/serverless/functions/package.json"
 
       - name: Create .env files for DB (for Firebase Functions)
         run: |
           echo "ENV=test" > .env
           echo "ENV=test" > .env.test
           echo "NODE_ENV=test" >> .env.test
-
         working-directory: ./backend/serverless/db
 
       - name: Install dependencies for serverless functions
@@ -69,6 +91,36 @@ jobs:
         run: npm test
         working-directory: ./backend/serverless/functions
 
+  nms-test:
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      DB_URL: ${{ secrets.DB_URL }}
+      NODE_ENV: test
+      ENV: test
+      NEXT_PUBLIC_FB_API_KEY: ${{secrets.NEXT_PUBLIC_FB_API_KEY}}
+      NEXT_PUBLIC_FB_AUTH_DOMAIN: ${{secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN}}
+      NEXT_PUBLIC_FB_PROJECT_ID: ${{secrets.NEXT_PUBLIC_FB_PROJECT_ID}}
+      NEXT_PUBLIC_FB_STORAGE_BUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGE_BUCKET}}
+      NEXT_PUBLIC_FB_MESSAGING_SENDER_ID: ${{secrets.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID}}
+      NEXT_PUBLIC_FB_APP_ID: ${{secrets.NEXT_PUBLIC_FB_APP_ID}}
+      NEXT_PUBLIC_FB_MEASUREMENT_ID: ${{secrets.NEXT_PUBLIC_FB_MEASUREMENT_ID}}
+
+    steps:
+      # Restore the repository from cache
+      - name: Restore repository
+        uses: actions/cache@v2
+        with:
+          path: .
+          key: repo-${{ github.sha }}
+
+      - name: Set up Node.js 21
+        uses: actions/setup-node@v2
+        with:
+          node-version: 21
+          cache: "npm"
+          cache-dependency-path: "./backend/nms/package.json"
+
       - name: Add Secret Service Account Key JSON File
         run: touch serviceAccountKey.json && echo "${{secrets.SERVICE_ACCOUNT_KEY}}" | base64 -d > serviceAccountKey.json
         working-directory: ./backend/nms
@@ -91,6 +143,7 @@ jobs:
       - name: Build Db
         run: npm run build:db
         working-directory: ./backend/nms
+
       - name: 🧹 Run Linter
         run: npm run lint
         working-directory: ./backend/nms
