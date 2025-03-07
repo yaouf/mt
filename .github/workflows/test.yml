@@ -21,7 +21,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 21
-          cache: "npm"
 
       # Cache the repository for other jobs to use
       - name: Cache repository
@@ -57,8 +56,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 21
-          cache: "npm"
-          cache-dependency-path: "./backend/serverless/functions/package.json"
 
       - name: Create .env files for DB (for Firebase Functions)
         run: |
@@ -118,8 +115,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 21
-          cache: "npm"
-          cache-dependency-path: "./backend/nms/package.json"
 
       - name: Add Secret Service Account Key JSON File
         run: touch serviceAccountKey.json && echo "${{secrets.SERVICE_ACCOUNT_KEY}}" | base64 -d > serviceAccountKey.json
