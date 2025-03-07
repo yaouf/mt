@@ -20,10 +20,13 @@ async function getDeviceCountHelper(
       if (search === "isPushEnabled") {
         // Count all devices that have at least one category enabled and push notifications enabled
         result = await db("devices")
-          .count("* as count")
-          .join("device_preferences", "devices.id", "device_preferences.device_id")
-          .where("devices.is_push_enabled", true)
-          .groupBy("devices.id");
+          .countDistinct("devices.id as count")
+          .join(
+            "device_preferences",
+            "devices.id",
+            "device_preferences.device_id"
+          )
+          .where("devices.is_push_enabled", true);
       } else if (search.includes("is_push_enabled")) {
         // Direct query for push enabled status
         result = await db("devices")
@@ -31,11 +34,15 @@ async function getDeviceCountHelper(
           .where("is_push_enabled", true);
       } else {
         // For category-specific search queries
-        const categoryName = search.replace(/"/g, ''); // Remove quotes if present
-        
+        const categoryName = search.replace(/"/g, ""); // Remove quotes if present
+
         result = await db("devices")
           .countDistinct("devices.id as count")
-          .join("device_preferences", "devices.id", "device_preferences.device_id")
+          .join(
+            "device_preferences",
+            "devices.id",
+            "device_preferences.device_id"
+          )
           .join("categories", "device_preferences.category_id", "categories.id")
           .where("categories.name", categoryName)
           .andWhere("devices.is_push_enabled", true);
@@ -45,8 +52,8 @@ async function getDeviceCountHelper(
       result = await db("devices").count("* as count");
     }
 
-    // Handle both array result and single row result
-    const count = Array.isArray(result) ? result.length : result[0]?.count || 0;
+    // Always use the count value from the database result
+    const count = result[0]?.count || 0;
     console.log("count", count);
 
     res.status(200).json({ count });
