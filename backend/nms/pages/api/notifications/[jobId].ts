@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
-import {authMiddleware} from "../../../middleware/authMiddleware";
 import corsMiddleware from "../../../config/cors";
+import db from "../../../dist/data/db-config";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 
 type ResponseData = {
   message: string;
@@ -44,7 +44,15 @@ async function getNotificationHelper(
           db.raw("STRING_AGG(c.name, ',') AS categories")
         )
         .where("n.id", jobId)
-        .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
+        .groupBy(
+          "n.id",
+          "n.time",
+          "n.title",
+          "n.body",
+          "n.status",
+          "n.url",
+          "n.is_uid"
+        )
         .first();
 
       if (!notificationWithCategories) {
@@ -70,7 +78,15 @@ async function getNotificationHelper(
           "n.is_uid",
           db.raw("STRING_AGG(c.name, ',') AS categories")
         )
-        .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
+        .groupBy(
+          "n.id",
+          "n.time",
+          "n.title",
+          "n.body",
+          "n.status",
+          "n.url",
+          "n.is_uid"
+        )
         .orderBy("n.time", "desc");
 
       res.status(200).json(
@@ -87,7 +103,7 @@ async function getNotificationHelper(
 }
 export default async function getNotification(
   req: NextApiRequest,
-  res: NextApiResponse<Notification[] | ResponseData>,
+  res: NextApiResponse<Notification[] | ResponseData>
 ) {
   corsMiddleware(req, res, async () => {
     await authMiddleware(req, res, getNotificationHelper);

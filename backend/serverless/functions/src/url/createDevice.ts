@@ -13,6 +13,7 @@ export const createDevice = onRequest(async (request, response) => {
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
   const newDb = db(dbParams);
+
   logger.info("dbParams: ", dbParams);
 
   logger.info(

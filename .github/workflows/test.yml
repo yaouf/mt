@@ -91,7 +91,6 @@ jobs:
       - name: Build Db
         run: npm run build:db
         working-directory: ./backend/nms
-
       - name: 🧹 Run Linter
         run: npm run lint
         working-directory: ./backend/nms

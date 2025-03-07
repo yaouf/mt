@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
-import { EditorPick } from "../types/types";
-import { authMiddleware } from "../../../middleware/authMiddleware";
 import corsMiddleware from "../../../config/cors";
+import db from "../../../dist/data/db-config";
+import { authMiddleware } from "../../../middleware/authMiddleware";
+import { EditorPick } from "../types/types";
 
 type ResponseData =
   | {

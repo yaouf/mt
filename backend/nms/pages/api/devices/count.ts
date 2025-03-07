@@ -19,6 +19,7 @@ async function getDeviceCountHelper(
     if (search !== "") {
       if (search === "isPushEnabled") {
         // Count all devices that have at least one category enabled and push notifications enabled
+        // This combines both approaches - using the new schema with device_preferences
         result = await db("devices")
           .countDistinct("devices.id as count")
           .join(

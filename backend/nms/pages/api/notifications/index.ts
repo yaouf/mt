@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
 import corsMiddleware from "../../../config/cors";
+import db from "../../../dist/data/db-config";
 import { authMiddleware } from "../../../middleware/authMiddleware";
-
 type ResponseData = {
   message: string;
 };
@@ -37,7 +36,15 @@ async function getNotificationsHelper(
         "n.is_uid",
         db.raw("STRING_AGG(c.name, ',') AS categories")
       )
-      .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
+      .groupBy(
+        "n.id",
+        "n.time",
+        "n.title",
+        "n.body",
+        "n.status",
+        "n.url",
+        "n.is_uid"
+      )
       .orderBy("n.time", "desc");
 
     res.status(200).json(notifications);
@@ -48,7 +55,7 @@ async function getNotificationsHelper(
 }
 export default async function getNotifications(
   req: NextApiRequest,
-  res: NextApiResponse<Notification[] | ResponseData>,
+  res: NextApiResponse<Notification[] | ResponseData>
 ) {
   corsMiddleware(req, res, async () => {
     await authMiddleware(req, res, getNotificationsHelper);

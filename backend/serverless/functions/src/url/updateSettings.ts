@@ -18,7 +18,6 @@ export const updateSettings = onRequest(async (request, response) => {
   const environment = envars.environment.value();
   const dbUrl = envars.dbUrl.value();
   const dbParams = { environment, dbUrl };
-
   const newDb = db(dbParams);
 
   try {
@@ -78,7 +77,7 @@ export const updateSettings = onRequest(async (request, response) => {
     const deviceId = validBody.deviceId;
 
     // First, check if the device exists
-    const deviceExists = await newDb("devices").where("id", deviceId).first();
+    const deviceExists = await db("devices").where("id", deviceId).first();
     if (!deviceExists) {
       // If the device doesn't exist, return an error response
       logger.error(
@@ -157,7 +156,7 @@ export const updateSettings = onRequest(async (request, response) => {
       }
     });
 
-    await newDb.destroy();
+    await db.destroy();
 
     // Log the result of update
     logger.info("Device settings updated for deviceId: ", {
