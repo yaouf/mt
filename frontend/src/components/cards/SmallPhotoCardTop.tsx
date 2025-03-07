@@ -32,7 +32,6 @@ function LargeCard({ article, navigation }: CardProps) {
       article.dominantMedia.extension;
   }
   const { isDarkMode, toggleTheme } = useTheme();
-  
   const containerStyle = isDarkMode ? darkStyles : styles;
   return (
     <View>
