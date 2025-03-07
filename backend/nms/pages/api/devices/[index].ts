@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
 import corsMiddleware from "../../../config/cors";
+import db from "../../../dist/data/db-config";
 import { authMiddleware } from "../../../middleware/authMiddleware";
-
 
 type ResponseData = {
   message?: string;
@@ -31,21 +30,33 @@ async function getDevicesHelper(
       })
       .count("* as count")
       .first();
-    const totalDevices = totalDevicesResult ? parseInt(totalDevicesResult.count, 10) : 0;
+    const totalDevices = totalDevicesResult
+      ? parseInt(totalDevicesResult.count, 10)
+      : 0;
 
     // Main query for pagination and search filtering
     const devices = await db("devices")
-      .leftJoin("device_preferences", "devices.id", "device_preferences.device_id")
+      .leftJoin(
+        "device_preferences",
+        "devices.id",
+        "device_preferences.device_id"
+      )
       .leftJoin("categories", "device_preferences.category_id", "categories.id")
       .select(
         "devices.id",
         "devices.expo_push_token",
         "devices.device_type",
-        db.raw("COALESCE(devices.date_created, GETDATE()) as date_created"),
+        db.raw("COALESCE(devices.date_created, NOW()) as date_created"),
         "devices.is_push_enabled",
         db.raw("STRING_AGG(categories.name, ',') as categories")
       )
-      .groupBy("devices.id", "devices.expo_push_token", "devices.device_type", "devices.is_push_enabled", "devices.date_created")
+      .groupBy(
+        "devices.id",
+        "devices.expo_push_token",
+        "devices.device_type",
+        "devices.is_push_enabled",
+        "devices.date_created"
+      )
       .orderBy("expo_push_token", "asc")
       .modify((queryBuilder) => {
         if (search) {
