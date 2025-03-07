@@ -11,15 +11,13 @@ const SettingsStack = createStackNavigator<SettingsStackProps>();
 
 
 
-function SettingsStackScreen({ navigation, route }: NavProp) {
-  const { isDarkMode, toggleTheme } = route.params || {};
+function SettingsStackScreen({ navigation}: NavProp) {
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
         options={{ headerShown: false }}
-        initialParams={{ isDarkMode, toggleTheme }}
       />
       <SettingsStack.Screen
         name="Article" // to open articles that were saved

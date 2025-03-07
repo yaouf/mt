@@ -12,12 +12,13 @@ import { fyp } from "src/styles/pages";
 import { settings } from "src/styles/pages";
 import { NavProp, SearchStackProps } from "src/types/navStacks";
 import { text, varTextColor, baseStyles, darkStyles, darkModeText } from "src/styles/styles";
+import { useTheme } from "src/components/ThemeContext";
 
 //Screen for display settings
 
-function DisplaySettings({navigation, route} : NavProp) {
-  const { isDarkMode, toggleTheme } = route.params || {};
-  const toggleValue = true;
+function DisplaySettings({navigation} : NavProp) {
+  const { isDarkMode, toggleTheme } = useTheme();
+  const toggleValue = false;
 
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;

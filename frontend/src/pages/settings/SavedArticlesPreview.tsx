@@ -6,6 +6,7 @@ import { baseStyles,darkStyles, layout, text, darkModeText, varGray1 } from "src
 import { NavProp } from "src/types/navStacks";
 import { SavedContext } from "../MainTabNavigator";
 import FavArticle from "./FavArticle";
+import { useTheme } from "src/components/ThemeContext";
 
 /* 
         onPress={() => {
@@ -15,8 +16,9 @@ import FavArticle from "./FavArticle";
          setSavedArticles({});
   */
 
-function SavedArticlesPreview({ navigation }: NavProp, isDarkMode: boolean) {
+function SavedArticlesPreview({ navigation }: NavProp) {
   const { savedArticles } = useContext(SavedContext);
+  const { isDarkMode, toggleTheme } = useTheme();
   const textStyle = isDarkMode ? darkModeText : text;
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   return (

@@ -3,6 +3,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { text, darkModeText, varTextColor } from "src/styles/styles";
 import { StackNavigationProp } from "@react-navigation/stack";
 import * as WebBrowser from "expo-web-browser";
+import { useTheme } from "src/components/ThemeContext";
 
 type SettingsLinkProps = {
   title: string;
@@ -17,10 +18,10 @@ type SettingsLinkProps = {
 
 // const layout = StyleSheet.create({})
 
-function SettingsLink({ title, link, inApp, navigation, extraProps }: SettingsLinkProps) {
+function SettingsLink({ title, link, inApp, navigation}: SettingsLinkProps) {
   const openLink = async (link: string) => {
     if (inApp && navigation) {
-      navigation.navigate(link,extraProps);
+      navigation.navigate(link);
     } else {
       const supported = await Linking.canOpenURL(link);
       if (supported) {
@@ -30,7 +31,8 @@ function SettingsLink({ title, link, inApp, navigation, extraProps }: SettingsLi
       }
     }
   };
-  const textStyle = extraProps?.isDarkMode ? darkModeText : text;
+  const { isDarkMode, toggleTheme } = useTheme();
+  const textStyle = isDarkMode ? darkModeText : text;
   return (
     <TouchableOpacity
       onPress={() => openLink(link)}

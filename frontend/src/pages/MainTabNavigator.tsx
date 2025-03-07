@@ -216,25 +216,6 @@ export default function MainTabNavigator() {
     notification && JSON.stringify(notification.request.content.data)
   );
 
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  
-  useEffect(() => {
-    const loadTheme = async () => {
-      const storedTheme = await AsyncStorage.getItem("darkMode");
-      setIsDarkMode(storedTheme === "true");
-    };
-    loadTheme();
-  }, []);
-
-  const toggleTheme = async () => {
-    setIsDarkMode((prev) => {
-      const newTheme = !prev;
-      AsyncStorage.setItem("darkMode", newTheme.toString());
-      console.log("newTheme " + newTheme);
-      return newTheme;
-    });
-  };
-
   return (
     <SafeAreaView
       style={{ flex: 1, paddingTop: 0, marginTop: 0 }}
@@ -304,19 +285,16 @@ export default function MainTabNavigator() {
                   // headerStyle: {},
                   headerShadowVisible: false,
                 }}
-                initialParams={{ isDarkMode, toggleTheme }}
               />
               <Tab.Screen
                 name="Search"
                 component={SearchStackScreen}
                 options={{ headerTitle: () => <Header /> }}
-                initialParams={{ isDarkMode, toggleTheme }}
               />
               <Tab.Screen
                 name="Settings"
                 component={SettingsStackScreen}
                 options={{ headerTitle: () => <Header /> }}
-                initialParams={{ isDarkMode, toggleTheme }}
               />
             </Tab.Navigator>
           </SavedContext.Provider>

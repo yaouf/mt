@@ -16,10 +16,6 @@ export type HomeStackProps = {
 };
 
 export type SearchStackProps = {
-  SearchScreen: {
-    isDarkMode: boolean;
-    toggleTheme: () => void;
-  };
   FiltersScreen: {
     searchType: string;
     setSearchType: Dispatch<SetStateAction<string>>;
@@ -33,7 +29,7 @@ export type SearchStackProps = {
 };
 
 export type SettingsStackProps = {
-  SettingsScreen: { isDarkMode: boolean; toggleTheme: () => void };
+  SettingsScreen: undefined;
   Article: { data: Article };
   Staff: { slug: string };
   SavedArticles: undefined;

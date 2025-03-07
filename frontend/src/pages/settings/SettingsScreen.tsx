@@ -9,8 +9,7 @@ import { NavProp, SettingsStackProps } from "src/types/navStacks";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
 import SettingsLink from "./SettingsLink";
-import { RouteProp } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { useTheme } from "src/components/ThemeContext";
 
 /**
  * Page for settings
@@ -24,7 +23,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
  * @returns Settings screen
  */
 
-function SettingsScreen({navigation, route} : NavProp) {
+function SettingsScreen({navigation} : NavProp) {
   const {
     breaking,
     setBreaking,
@@ -185,27 +184,8 @@ function SettingsScreen({navigation, route} : NavProp) {
       link: "https://secure.lglforms.com/form_engine/s/JydyLYLlWAfeK0wrZwuLgg",
     },
   ];
-  //dark mode related functions
-  // const [isDarkMode, setIsDarkMode] = useState(false);
-  
-  // useEffect(() => {
-  //   const loadTheme = async () => {
-  //     const storedTheme = await AsyncStorage.getItem("darkMode");
-  //     setIsDarkMode(storedTheme === "true");
-  //   };
-  //   loadTheme();
-  // }, []);
 
-  // const toggleTheme = async () => {
-  //   setIsDarkMode((prev) => {
-  //     const newTheme = !prev;
-  //     AsyncStorage.setItem("darkMode", newTheme.toString());
-  //     console.log("newTheme " + newTheme);
-  //     return newTheme;
-  //   });
-  // };
-
-  const { isDarkMode, toggleTheme } = route.params || {};
+  const { isDarkMode, toggleTheme } = useTheme();
 
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;
