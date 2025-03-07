@@ -3,17 +3,22 @@ import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
 import dbFactory from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
+import envars from "../envars";
+
 /**
- * Gets the settings for a device.
- * Takes a deviceId and returns an object with category preferences and is_push_enabled
- * Called when a user goes to the settings screen in the app.
+ * Implementation function for getting device settings
+ * This allows for dependency injection during testing
  */
-export const viewSettings = onRequest(async (request, response) => {
+export const viewSettingsImplementation = async (
+  request: any,
+  response: any,
+  dbConnection?: any
+) => {
   if (!validateApiKey(request, response)) return;
   
   try {
-    // Initialize the database connection
-    const db = dbFactory({ environment: process.env.ENV || "test" });
+    // Initialize the database connection unless one was provided (for testing)
+    const db = dbConnection || dbFactory({ environment: envars.environment.value });
     // Schema for request body validation
     const schema = Joi.object({
       deviceId: Joi.string().required(),
@@ -92,8 +97,10 @@ export const viewSettings = onRequest(async (request, response) => {
   } catch (error) {
     // Make sure to destroy the DB connection even in case of error
     try {
-      const db = dbFactory({ environment: process.env.ENV || "test" });
-      await db.destroy();
+      if (!dbConnection) {
+        const db = dbFactory({ environment: envars.environment.value });
+        await db.destroy();
+      }
     } catch (destroyError) {
       logger.error("Error destroying DB connection:", destroyError);
     }
@@ -102,4 +109,13 @@ export const viewSettings = onRequest(async (request, response) => {
     response.status(500).send("Error viewing settings");
     return;
   }
+};
+
+/**
+ * Gets the settings for a device.
+ * Takes a deviceId and returns an object with category preferences and is_push_enabled
+ * Called when a user goes to the settings screen in the app.
+ */
+export const viewSettings = onRequest(async (request, response) => {
+  return viewSettingsImplementation(request, response);
 });

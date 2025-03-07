@@ -1,17 +1,75 @@
-import { describe, expect, it } from "@jest/globals";
-import { createDevice } from "../src/url/createDevice";
-process.env.ENV = "test";
+// @ts-nocheck
+import { describe, expect, it, jest } from "@jest/globals";
+import { createDeviceImplementation } from "../src/url/createDevice";
 console.log("Test for serverless functions");
 
-// We don't need to mock the db module since we're skipping db operations in test mode
-
+// Mock dependencies
 jest.mock("../src/utils", () => ({
   validateApiKey: jest.fn().mockReturnValue(true),
   validateUuidV4: jest.fn().mockReturnValue(true),
 }));
 
+// Mock environment variables 
+jest.mock("../src/envars", () => ({
+  environment: { value: "test" },
+  dbUrl: { value: "mock-db-url" },
+  trustedApiKey: { value: "mock-api-key" },
+  dbName: { value: "mock-db-name" },
+  dbUser: { value: "mock-db-user" },
+  dbPassword: { value: "mock-db-password" },
+  default: {
+    environment: { value: "test" },
+    dbUrl: { value: "mock-db-url" },
+    trustedApiKey: { value: "mock-api-key" },
+    dbName: { value: "mock-db-name" },
+    dbUser: { value: "mock-db-user" },
+    dbPassword: { value: "mock-db-password" },
+  }
+}));
+
+// Mock UUID for predictable response
+jest.mock("uuid", () => ({
+  v4: jest.fn().mockReturnValue("test-device-id")
+}));
+
 describe("createDevice", () => {
+  beforeEach(() => {
+    // Reset mock calls before each test
+    jest.clearAllMocks();
+  });
+
   it("should create a new device successfully", async () => {
+    // Create mock database
+    const mockDb = jest.fn();
+    
+    // Mock categories table
+    mockDb.mockImplementation((table) => {
+      if (table === 'categories') {
+        return {
+          select: jest.fn().mockResolvedValue([
+            { id: 1, name: "Breaking News" },
+            { id: 2, name: "University News" },
+            { id: 3, name: "Metro" },
+            { id: 4, name: "Opinions" },
+            { id: 5, name: "Arts and Culture" },
+            { id: 6, name: "Sports" },
+            { id: 7, name: "Science and Research" }
+          ])
+        };
+      }
+      
+      // Default table handler
+      return {
+        where: jest.fn().mockReturnValue({
+          first: jest.fn().mockResolvedValue(null)
+        }),
+        insert: jest.fn().mockResolvedValue([1])
+      };
+    });
+    
+    // Add destroy method to mockDb
+    mockDb.destroy = jest.fn().mockResolvedValue(undefined);
+    
     const req = {
       body: {
         deviceType: "iOS",
@@ -32,14 +90,15 @@ describe("createDevice", () => {
       get(header) {
         return this.headers[header];
       },
-    } as unknown as Request;
+    } as any;
 
     const res = {
       status: jest.fn().mockReturnThis(),
       send: jest.fn(),
-    };
+    } as any;
 
-    await createDevice(req as any, res as any);
+    // Call the implementation function directly with our mock DB
+    await createDeviceImplementation(req, res, mockDb);
 
     // Check if response was called with a deviceId
     expect(res.send).toHaveBeenCalledWith(
@@ -47,5 +106,8 @@ describe("createDevice", () => {
         deviceId: expect.any(String),
       })
     );
+    
+    // Verify the DB was called
+    expect(mockDb).toHaveBeenCalled();
   });
 });

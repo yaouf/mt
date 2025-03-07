@@ -3,19 +3,22 @@ import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
 import dbFactory from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
+import envars from "../envars";
 
 /**
- * Updates the boolean that indicates whether a device should receive push notifications.
- * Takes a deviceId and a boolean value for isPushEnabled to update to.
- * Called when a user subscribes or unsubscribes from push notifications in iOS Settings.
- * NOTE: Not currently in use.
+ * Implementation function for updating notification status
+ * This allows for dependency injection during testing
  */
-export const updateNotificationStatus = onRequest(async (request, response) => {
+export const updateNotificationStatusImplementation = async (
+  request: any,
+  response: any,
+  dbConnection?: any
+) => {
   if (!validateApiKey(request, response)) return;
 
   try {
-    // Initialize the database connection
-    const db = dbFactory({ environment: process.env.ENV || "test" });
+    // Initialize the database connection unless one was provided (for testing)
+    const db = dbConnection || dbFactory({ environment: envars.environment.value });
     
     // Request body validation schema
     const schema = Joi.object({
@@ -76,8 +79,10 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
   } catch (error) {
     // Make sure to destroy the DB connection even in case of error
     try {
-      const db = dbFactory({ environment: process.env.ENV || "test" });
-      await db.destroy();
+      if (!dbConnection) {
+        const db = dbFactory({ environment: envars.environment.value });
+        await db.destroy();
+      }
     } catch (destroyError) {
       logger.error("Error destroying DB connection:", destroyError);
     }
@@ -85,4 +90,14 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     logger.error("Error updating notification status", error);
     response.status(500).send("Error updating notification status");
   }
+};
+
+/**
+ * Updates the boolean that indicates whether a device should receive push notifications.
+ * Takes a deviceId and a boolean value for isPushEnabled to update to.
+ * Called when a user subscribes or unsubscribes from push notifications in iOS Settings.
+ * NOTE: Not currently in use.
+ */
+export const updateNotificationStatus = onRequest(async (request, response) => {
+  return updateNotificationStatusImplementation(request, response);
 });

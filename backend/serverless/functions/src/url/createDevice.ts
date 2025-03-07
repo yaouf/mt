@@ -4,22 +4,19 @@ import Joi from "joi";
 import { v4 as uuidv4 } from "uuid";
 import dbFactory from "../../../db/dist/data/db-config";
 import { validateApiKey } from "../utils";
+import envars from "../envars";
 
-export const createDevice = onRequest(async (request, response) => {
+// Create a testable version of the function to make it easier to test
+export const createDeviceImplementation = async (
+  request: any, 
+  response: any, 
+  dbConnection?: any
+) => {
   if (!validateApiKey(request, response)) return;
 
   try {
-    // For test environment, simulate success without db operations
-    if (process.env.ENV === "test") {
-      logger.info("Test environment detected, skipping database operations");
-      response.send({
-        deviceId: "test-device-id",
-      });
-      return;
-    }
-    
-    // Initialize the database connection
-    const db = dbFactory({ environment: process.env.ENV || "test" });
+    // Initialize the database connection unless one was provided (for testing)
+    const db = dbConnection || dbFactory({ environment: envars.environment.value });
 
     logger.info(
       "createDevice was called with the following request body: ",
@@ -284,20 +281,16 @@ export const createDevice = onRequest(async (request, response) => {
       deviceId: deviceId,
     });
     } catch (dbError) {
-      // For test environment, simulate success
-      if (process.env.ENV === "test") {
-        logger.info("Test environment detected, skipping database operations");
-        response.send({
-          deviceId: "test-device-id",
-        });
-        return;
-      } else {
-        // In real environment, propagate the error
-        throw dbError;
-      }
+      // Propagate the database error
+      throw dbError;
     }
   } catch (error) {
     logger.error("Error creating device:", error);
     response.status(500).send("Error: " + error);
   }
+};
+
+// Export the Firebase function with the implementation
+export const createDevice = onRequest(async (request, response) => {
+  return createDeviceImplementation(request, response);
 });

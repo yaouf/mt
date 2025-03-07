@@ -4,19 +4,22 @@ import Joi from "joi";
 import { Knex } from "knex";
 import dbFactory from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
+import envars from "../envars";
 
 /**
- * Updates the settings for a device.
- * Takes a deviceId and an object with category preferences and isPushEnabled
- * and their corresponding boolean values to update to.
- * Called when a user changes their push notification settings in the app.
+ * Implementation function for updating device settings
+ * This allows for dependency injection during testing
  */
-export const updateSettings = onRequest(async (request, response) => {
+export const updateSettingsImplementation = async (
+  request: any,
+  response: any,
+  dbConnection?: any
+) => {
   if (!validateApiKey(request, response)) return;
 
   try {
-    // Initialize the database connection
-    const db = dbFactory({ environment: process.env.ENV || "test" });
+    // Initialize the database connection unless one was provided (for testing)
+    const db = dbConnection || dbFactory({ environment: envars.environment.value });
     
     logger.info(
       "Updating user settings",
@@ -175,8 +178,10 @@ export const updateSettings = onRequest(async (request, response) => {
   } catch (error) {
     // Make sure to destroy the DB connection even in case of error
     try {
-      const db = dbFactory({ environment: process.env.ENV || "test" });
-      await db.destroy();
+      if (!dbConnection) {
+        const db = dbFactory({ environment: envars.environment.value });
+        await db.destroy();
+      }
     } catch (destroyError) {
       logger.error("Error destroying DB connection:", destroyError);
     }
@@ -185,4 +190,14 @@ export const updateSettings = onRequest(async (request, response) => {
     response.status(500).send("Error updating settings");
     return;
   }
+};
+
+/**
+ * Updates the settings for a device.
+ * Takes a deviceId and an object with category preferences and isPushEnabled
+ * and their corresponding boolean values to update to.
+ * Called when a user changes their push notification settings in the app.
+ */
+export const updateSettings = onRequest(async (request, response) => {
+  return updateSettingsImplementation(request, response);
 });

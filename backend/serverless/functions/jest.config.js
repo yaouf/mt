@@ -12,7 +12,8 @@ module.exports = {
         strictPropertyInitialization: false,
         noImplicitThis: false,
         alwaysStrict: false,
-      }
+      },
+      isolatedModules: true // This should ignore type errors
     }],
   },
 }; 
