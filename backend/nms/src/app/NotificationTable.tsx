@@ -4,6 +4,7 @@ import { Notification } from "../types";
 import ConfirmationModal from "./ConfirmationModal";
 import SignOutButton from "./SignOut";
 import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
+import { auth } from "./firebase";
 
 // TODO: factor out this var, since used in multiple places
 const isProduction = process.env.NODE_ENV === "production";
@@ -31,10 +32,21 @@ const NotificationTable = ({
     if (!notificationToDelete) return;
     try {
       console.log("Deleting notification:", notificationToDelete);
+      
+      // Get the current Firebase auth token
+      const user = auth.currentUser;
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+      
+      const token = await user.getIdToken();
+      
       const response = await fetch("/api/notifications/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ jobId: notificationToDelete.id }),
       });
