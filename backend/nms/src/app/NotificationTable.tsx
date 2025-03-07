@@ -9,7 +9,9 @@ import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
 const isProduction = process.env.NODE_ENV === "production";
 interface NotificationTableProps {
   scheduledNotifications: Notification[];
-  setScheduledNotifications: React.Dispatch<React.SetStateAction<Notification[]>>;
+  setScheduledNotifications: React.Dispatch<
+    React.SetStateAction<Notification[]>
+  >;
 }
 const NotificationTable = ({
   scheduledNotifications,
@@ -17,9 +19,8 @@ const NotificationTable = ({
 }: NotificationTableProps) => {
   const [isSentVisible, setIsSentVisible] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [notificationToDelete, setNotificationToDelete] = useState<Notification | null>(
-    null
-  );
+  const [notificationToDelete, setNotificationToDelete] =
+    useState<Notification | null>(null);
 
   const handleDeleteClick = (notification: Notification) => {
     setNotificationToDelete(notification);
@@ -56,7 +57,14 @@ const NotificationTable = ({
     if (!notification.categories || notification.categories.length === 0) {
       return null;
     }
-    return notification.categories.join(", ");
+
+    // Handle both string and array types for categories
+    if (Array.isArray(notification.categories)) {
+      return notification.categories.join(", ");
+    } else {
+      // If it's a string, it might be a comma-separated list already
+      return notification.categories;
+    }
   };
 
   const formatTime = (time: string) => {
