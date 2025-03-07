@@ -4,12 +4,15 @@ import { Notification } from "../types";
 import ConfirmationModal from "./ConfirmationModal";
 import SignOutButton from "./SignOut";
 import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
+import { auth } from "./firebase";
 
 // TODO: factor out this var, since used in multiple places
 const isProduction = process.env.NODE_ENV === "production";
 interface NotificationTableProps {
   scheduledNotifications: Notification[];
-  setScheduledNotifications: React.Dispatch<React.SetStateAction<Notification[]>>;
+  setScheduledNotifications: React.Dispatch<
+    React.SetStateAction<Notification[]>
+  >;
 }
 const NotificationTable = ({
   scheduledNotifications,
@@ -17,9 +20,8 @@ const NotificationTable = ({
 }: NotificationTableProps) => {
   const [isSentVisible, setIsSentVisible] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [notificationToDelete, setNotificationToDelete] = useState<Notification | null>(
-    null
-  );
+  const [notificationToDelete, setNotificationToDelete] =
+    useState<Notification | null>(null);
 
   const handleDeleteClick = (notification: Notification) => {
     setNotificationToDelete(notification);
@@ -30,10 +32,21 @@ const NotificationTable = ({
     if (!notificationToDelete) return;
     try {
       console.log("Deleting notification:", notificationToDelete);
+      
+      // Get the current Firebase auth token
+      const user = auth.currentUser;
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+      
+      const token = await user.getIdToken();
+      
       const response = await fetch("/api/notifications/delete", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ jobId: notificationToDelete.id }),
       });
@@ -53,15 +66,17 @@ const NotificationTable = ({
   };
 
   const formatTags = (notification: Notification) => {
-    const tags: string[] = [];
-    if (notification["Breaking News"]) tags.push("Breaking News");
-    if (notification["University News"]) tags.push("University News");
-    if (notification["Metro"]) tags.push("Metro");
-    if (notification["Sports"]) tags.push("Sports");
-    if (notification["Arts and Culture"]) tags.push("Arts and Culture");
-    if (notification["Science and Research"]) tags.push("Science and Research");
-    if (notification["Opinions"]) tags.push("Opinions");
-    return tags.join(", ");
+    if (!notification.categories || notification.categories.length === 0) {
+      return null;
+    }
+
+    // Handle both string and array types for categories
+    if (Array.isArray(notification.categories)) {
+      return notification.categories.join(", ");
+    } else {
+      // If it's a string, it might be a comma-separated list already
+      return notification.categories;
+    }
   };
 
   const formatTime = (time: string) => {

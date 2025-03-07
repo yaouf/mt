@@ -28,7 +28,9 @@ const NotificationForm = ({ setScheduledNotifications }) => {
   const [isFailed, setIsFailed] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setNewFormData((prevData) => ({
       ...prevData,
@@ -98,7 +100,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         });
 
         setIsFailed(false);
-        showBanner("Sent successfully!");
+        showBanner("Scheduled successfully!");
       } else {
         console.error("Error scheduling notification");
         setIsFailed(true);

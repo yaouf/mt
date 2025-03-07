@@ -7,7 +7,5 @@ export interface Notification {
     status: string;
     url: string;
     isUid: boolean;
-    "Breaking News": boolean;
-    "University News": boolean;
-    "Metro": boolean;
+    categories: string[];
 }
