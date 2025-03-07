@@ -10,7 +10,7 @@
     "build:db": "npm --prefix db run build",
     "knex:db": "npm --prefix db run knex",
     "dangerous:update:db": "npm --prefix db run dangerous:update",
-    "test": "cross-env NODE_ENV=test ENV=test npm run dangerous:update:db && (npx concurrently --kill-others \"redis-server\" \"cross-env NODE_ENV=test ENV=test jest --verbose --detectOpenHandles --forceExit\"; npm run kill:redis || true)",
+    "test": "cross-env NODE_ENV=test ENV=test npm run dangerous:update:db && (npx concurrently --kill-others \"redis-server\" \"cross-env NODE_ENV=test ENV=test jest --verbose --detectOpenHandles\"; npm run kill:redis || true)",
     "test:pw": "npx concurrently --kill-others \"redis-server\" \"cross-env NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev\" && (cross-env ENV=test NODE_ENV=test npm run dangerous:update:db && cross-env ENV=test NODE_ENV=test npx playwright test)",
     "test:all": "cross-env NODE_ENV=test npm run test:pw && npm run test",
     "test:all:debug": "cross-env NODE_ENV=test npm run test:pw -- --debug && npm run test",
