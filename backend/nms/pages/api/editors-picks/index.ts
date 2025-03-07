@@ -13,7 +13,7 @@ async function getEditorsPicksHelper(
   res: NextApiResponse<EditorPick[] | ResponseData>
 ) {
   try {
-    const picks = await db("editorspicks")
+    const picks = await db("editors_picks")
       .select("url", "rank")
       .orderBy("rank", "asc");
     res.status(200).json(picks);

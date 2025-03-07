@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
 import corsMiddleware from "../../../config/cors";
+import db from "../../../dist/data/db-config";
 import { authMiddleware } from "../../../middleware/authMiddleware";
-
+import { EditorPick } from "../types/types";
 
 type ResponseData = {
   message?: string;
@@ -11,7 +11,7 @@ type ResponseData = {
 
 async function deleteEditorPickHelper(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  res: NextApiResponse<ResponseData | EditorPick[]>
 ) {
   try {
     let data: any;
@@ -26,11 +26,12 @@ async function deleteEditorPickHelper(
     console.log("url", url);
 
     // Delete the pick from the table
-    const deletedCount = await db("editorspicks").where({ url: url }).del();
+    const deletedCount = await db("editors_picks").where({ url: url }).del();
 
     if (deletedCount > 0) {
-      const editorspicks = await db("editorspicks").select("url");
-      res.status(200).json({ editorspicks });
+      const editorsPicks = await db("editors_picks").select("url");
+      console.log("picks", editorsPicks);
+      res.status(200).json({ editorspicks: editorsPicks });
     } else {
       res.status(404).json({
         message: "Editor pick not found in database.",

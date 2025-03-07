@@ -18,29 +18,43 @@ async function getDeviceCountHelper(
 
     if (search !== "") {
       if (search === "isPushEnabled") {
-        // Use the custom logic for push enabled count
+        // Count all devices that have at least one category enabled and push notifications enabled
+        // This combines both approaches - using the new schema with device_preferences
+        result = await db("devices")
+          .countDistinct("devices.id as count")
+          .join(
+            "device_preferences",
+            "devices.id",
+            "device_preferences.device_id"
+          )
+          .where("devices.is_push_enabled", true);
+      } else if (search.includes("is_push_enabled")) {
+        // Direct query for push enabled status
         result = await db("devices")
           .count("* as count")
-          .where((builder) => {
-            builder
-              .where("Breaking News", true)
-              .orWhere("University News", true)
-              .orWhere("Metro", true)
-              .orWhere("Sports", true)
-              .orWhere("Arts and Culture", true)
-              .orWhere("Science and Research", true)
-              .orWhere("Opinions", true);
-          });
+          .where("is_push_enabled", true);
       } else {
-        // For other search queries, use the standard where clause
-        result = await db("devices").count("* as count").where(search, true);
+        // For category-specific search queries
+        const categoryName = search.replace(/"/g, ""); // Remove quotes if present
+
+        result = await db("devices")
+          .countDistinct("devices.id as count")
+          .join(
+            "device_preferences",
+            "devices.id",
+            "device_preferences.device_id"
+          )
+          .join("categories", "device_preferences.category_id", "categories.id")
+          .where("categories.name", categoryName)
+          .andWhere("devices.is_push_enabled", true);
       }
     } else {
       // When no search query is provided, count all devices
       result = await db("devices").count("* as count");
     }
 
-    const { count } = result[0];
+    // Always use the count value from the database result
+    const count = result[0]?.count || 0;
     console.log("count", count);
 
     res.status(200).json({ count });

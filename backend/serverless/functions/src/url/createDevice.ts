@@ -3,31 +3,23 @@ import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
 import { v4 as uuidv4 } from "uuid";
 import db from "../../../db/dist/data/db-config";
-import envars from "../envars";
 import { validateApiKey } from "../utils";
 
 export const createDevice = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
-
-  const environment = envars.environment.value();
-  const dbUrl = envars.dbUrl.value();
-  const dbParams = { environment, dbUrl };
-
-  logger.info("dbParams: ", dbParams);
 
   logger.info(
     "createDevice was called with the following request body: ",
     { structuredData: true },
     request.body
   );
-  // creates a new device in device table with deviceId, deviceType, breakingNewsAlerts, universityNewsAlerts, expoPushToken? (optional)
+  // creates a new device in device table with deviceId, device_type, and category preferences
   // Assume info above is in request body as json. If any required fields are missing, return an error status code
 
   try {
     // Extract device information from the request body
 
     // Schema for request body validation
-    // TODO: factor out schema and repetitive fields into a single object
     const schema = Joi.object({
       deviceType: Joi.string().required(),
       expoPushToken: Joi.string().required(),
@@ -67,41 +59,114 @@ export const createDevice = onRequest(async (request, response) => {
     // Check if expoPushToken already exists, if so, update existing row. If not, insert new row
     // Check if the device already exists in the devices table
     const existingDevice = await db("devices")
-      .where("expoPushToken", expoPushToken)
+      .where("expo_push_token", expoPushToken)
       .first();
+
     // Initialize deviceId
     let deviceId: string;
+
+    // Get all category IDs for later use
+    const categories = await db("categories").select("id", "name");
+    const categoryMap = new Map(
+      categories.map((cat: { id: number; name: string }) => [cat.name, cat.id])
+    );
+
     if (existingDevice) {
-      const updateFields: Record<string, any> = {
-        deviceType,
-        "Breaking News": breakingNews,
-        "University News": universityNews,
-        Metro: metro,
-        Opinions: opinions,
-        "Arts and Culture": artsAndCulture,
-        Sports: sports,
-        "Science and Research": scienceAndResearch,
-        isPushEnabled,
-      };
-
-      const filteredUpdateFields = Object.fromEntries(
-        Object.entries(updateFields).filter(
-          ([_, value]) => value !== undefined && value !== null
-        )
-      );
-
-      // Update the device's settings
+      // Update the device's basic settings
       await db("devices")
-        .where("expoPushToken", expoPushToken)
-        .update(filteredUpdateFields);
+        .where("expo_push_token", expoPushToken)
+        .update({
+          device_type: deviceType,
+          is_push_enabled:
+            isPushEnabled !== undefined
+              ? isPushEnabled
+              : existingDevice.is_push_enabled,
+        });
+
       deviceId = existingDevice.id;
-      // TODO: refactor this into a single object
+
+      // Update category preferences by first removing all existing preferences
+      await db("device_preferences").where("device_id", deviceId).delete();
+
+      // Then insert new preferences based on the provided values
+      const preferencesToInsert = [];
+
+      if (
+        breakingNews !== undefined &&
+        breakingNews &&
+        categoryMap.has("Breaking News")
+      ) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Breaking News"),
+        });
+      }
+
+      if (
+        universityNews !== undefined &&
+        universityNews &&
+        categoryMap.has("University News")
+      ) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("University News"),
+        });
+      }
+
+      if (metro !== undefined && metro && categoryMap.has("Metro")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Metro"),
+        });
+      }
+
+      if (opinions !== undefined && opinions && categoryMap.has("Opinions")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Opinions"),
+        });
+      }
+
+      if (
+        artsAndCulture !== undefined &&
+        artsAndCulture &&
+        categoryMap.has("Arts and Culture")
+      ) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Arts and Culture"),
+        });
+      }
+
+      if (sports !== undefined && sports && categoryMap.has("Sports")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Sports"),
+        });
+      }
+
+      if (
+        scienceAndResearch !== undefined &&
+        scienceAndResearch &&
+        categoryMap.has("Science and Research")
+      ) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Science and Research"),
+        });
+      }
+
+      // Insert new preferences if there are any
+      if (preferencesToInsert.length > 0) {
+        await db("device_preferences").insert(preferencesToInsert);
+      }
+
       logger.info(
         "CreateDevice was called but device already exists. Device updated for deviceId: ",
         {
           deviceId,
           updates: {
-            deviceType: deviceType,
+            device_type: deviceType,
             "Breaking News": breakingNews,
             "University News": universityNews,
             Metro: metro,
@@ -109,41 +174,86 @@ export const createDevice = onRequest(async (request, response) => {
             "Arts and Culture": artsAndCulture,
             Sports: sports,
             "Science and Research": scienceAndResearch,
-            isPushEnabled: isPushEnabled,
+            is_push_enabled: isPushEnabled,
           },
         }
       );
     } else {
       const dateCreated = new Date();
       // Insert the device into the devices table, and return the id of the inserted row
-      const insertedRows = await db("devices")
-        .insert({
-          id: uuidv4(), // Generate a new UUID for the device
-          deviceType: deviceType,
-          "Breaking News": breakingNews ?? false,
-          "University News": universityNews ?? false,
-          Metro: metro ?? false,
-          Opinions: opinions ?? false,
-          "Arts and Culture": artsAndCulture ?? false,
-          Sports: sports ?? false,
-          "Science and Research": scienceAndResearch ?? false,
-          isPushEnabled: isPushEnabled ?? false,
-          expoPushToken: expoPushToken, // Should always exist, even if notifications were denied, but right now it's optional
-          dateCreated: dateCreated,
-        })
-        .returning("id");
+      deviceId = uuidv4(); // Generate a new UUID for the device
 
-      await db.destroy();
-      // TODO: change expo push token to required field
-      // logger.info("inserted row: ", insertedRows);
-      deviceId = insertedRows[0].id;
-      // TODO: structure logs so I can filter by function name in logger
+      await db("devices").insert({
+        id: deviceId,
+        device_type: deviceType,
+        is_push_enabled: isPushEnabled ?? false,
+        expo_push_token: expoPushToken,
+        date_created: dateCreated,
+      });
+
+      // Insert category preferences
+      const preferencesToInsert = [];
+
+      if (breakingNews && categoryMap.has("Breaking News")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Breaking News"),
+        });
+      }
+
+      if (universityNews && categoryMap.has("University News")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("University News"),
+        });
+      }
+
+      if (metro && categoryMap.has("Metro")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Metro"),
+        });
+      }
+
+      if (opinions && categoryMap.has("Opinions")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Opinions"),
+        });
+      }
+
+      if (artsAndCulture && categoryMap.has("Arts and Culture")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Arts and Culture"),
+        });
+      }
+
+      if (sports && categoryMap.has("Sports")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Sports"),
+        });
+      }
+
+      if (scienceAndResearch && categoryMap.has("Science and Research")) {
+        preferencesToInsert.push({
+          device_id: deviceId,
+          category_id: categoryMap.get("Science and Research"),
+        });
+      }
+
+      // Insert new preferences if there are any
+      if (preferencesToInsert.length > 0) {
+        await db("device_preferences").insert(preferencesToInsert);
+      }
+
       logger.info(
         "Device created. Inserted deviceId: ",
         deviceId,
         " with the following settings: ",
         {
-          deviceType: deviceType,
+          device_type: deviceType,
           "Breaking News": breakingNews,
           "University News": universityNews,
           Metro: metro,
@@ -151,16 +261,13 @@ export const createDevice = onRequest(async (request, response) => {
           "Arts and Culture": artsAndCulture,
           Sports: sports,
           "Science and Research": scienceAndResearch,
-          isPushEnabled: isPushEnabled,
-          dateCreated: dateCreated,
+          is_push_enabled: isPushEnabled,
+          date_created: dateCreated,
         }
       );
     }
-    // Select all from devices table and log result
-    //  const allDevices = await db(dbParams)("devices").select();
-    // logger.info(allDevices);
+
     // Send the device ID back to the client
-    // TODO: add dateCreated to response
     response.send({
       deviceId: deviceId,
     });

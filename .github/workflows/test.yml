@@ -11,7 +11,26 @@ on:
       - "backend/**"
 
 jobs:
-  test:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js 21
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21
+
+      # Cache the repository for other jobs to use
+      - name: Cache repository
+        uses: actions/cache@v3
+        with:
+          path: .
+          key: repo-${{ github.sha }}
+
+  serverless-functions-test:
+    needs: setup
     runs-on: ubuntu-latest
     env:
       DB_URL: ${{ secrets.DB_URL }}
@@ -22,27 +41,27 @@ jobs:
       NEXT_PUBLIC_FB_PROJECT_ID: ${{secrets.NEXT_PUBLIC_FB_PROJECT_ID}}
       NEXT_PUBLIC_FB_STORAGE_BUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGE_BUCKET}}
       NEXT_PUBLIC_FB_MESSAGING_SENDER_ID: ${{secrets.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID}}
-      NEXT_PUBLIC_FB_APP_ID: $${{secrets.NEXT_PUBLIC_FB_APP_ID}}
-      NEXT_PUBLIC_FB_MEASUREMENT_ID: $${{secrets.NEXT_PUBLIC_FB_MEASUREMENT_ID}}
-    strategy:
-      matrix:
-        node-version: [21]
+      NEXT_PUBLIC_FB_APP_ID: ${{secrets.NEXT_PUBLIC_FB_APP_ID}}
+      NEXT_PUBLIC_FB_MEASUREMENT_ID: ${{secrets.NEXT_PUBLIC_FB_MEASUREMENT_ID}}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+      # Restore the repository from cache
+      - name: Restore repository
+        uses: actions/cache@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          path: .
+          key: repo-${{ github.sha }}
+
+      - name: Set up Node.js 21
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21
 
       - name: Create .env files for DB (for Firebase Functions)
         run: |
           echo "ENV=test" > .env
           echo "ENV=test" > .env.test
           echo "NODE_ENV=test" >> .env.test
-
         working-directory: ./backend/serverless/db
 
       - name: Install dependencies for serverless functions
@@ -65,8 +84,52 @@ jobs:
         working-directory: ./backend/serverless/db
 
       - name: Run Jest tests for serverless functions
+        timeout-minutes: 5
         run: npm test
         working-directory: ./backend/serverless/functions
+
+  nms-test:
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      DB_URL: ${{ secrets.DB_URL }}
+      NODE_ENV: test
+      ENV: test
+      NEXT_PUBLIC_FB_API_KEY: ${{secrets.NEXT_PUBLIC_FB_API_KEY}}
+      NEXT_PUBLIC_FB_AUTH_DOMAIN: ${{secrets.NEXT_PUBLIC_FB_AUTH_DOMAIN}}
+      NEXT_PUBLIC_FB_PROJECT_ID: ${{secrets.NEXT_PUBLIC_FB_PROJECT_ID}}
+      NEXT_PUBLIC_FB_STORAGE_BUCKET: ${{secrets.NEXT_PUBLIC_FB_STORAGE_BUCKET}}
+      NEXT_PUBLIC_FB_MESSAGING_SENDER_ID: ${{secrets.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID}}
+      NEXT_PUBLIC_FB_APP_ID: ${{secrets.NEXT_PUBLIC_FB_APP_ID}}
+      NEXT_PUBLIC_FB_MEASUREMENT_ID: ${{secrets.NEXT_PUBLIC_FB_MEASUREMENT_ID}}
+      # Add Firebase service account environment variables
+      FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+      FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+      FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+
+    steps:
+      # Restore the repository from cache
+      - name: Restore repository
+        uses: actions/cache@v3
+        with:
+          path: .
+          key: repo-${{ github.sha }}
+
+      - name: Set up Node.js 21
+        uses: actions/setup-node@v3
+        with:
+          node-version: 21
+
+      # Cache npm dependencies specifically for NMS
+      - name: Cache NMS node modules
+        uses: actions/cache@v3
+        id: nms-cache
+        with:
+          path: ./backend/nms/node_modules
+          key: ${{ runner.os }}-nms-node-modules-${{ hashFiles('./backend/nms/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nms-node-modules-
 
       - name: Add Secret Service Account Key JSON File
         run: touch serviceAccountKey.json && echo "${{secrets.SERVICE_ACCOUNT_KEY}}" | base64 -d > serviceAccountKey.json
@@ -77,20 +140,31 @@ jobs:
           echo "ENV=test" > .env
           echo "ENV=test" > .env.test
           echo "NODE_ENV=test" >> .env.test
+          # Add Firebase credentials to .env file
+          echo "FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}" >> .env.test
+          echo "FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }}" >> .env.test
+          echo "FIREBASE_PRIVATE_KEY='${{ secrets.FIREBASE_PRIVATE_KEY }}'" >> .env.test
         working-directory: ./backend/nms/db
 
-      - name: Install Global Deps
+      # Install Redis but don't start it (the test script will start it)
+      - name: Install Redis
         run: sudo apt-get update && sudo apt-get install -y redis-server
         working-directory: ./backend/nms
 
+      # Optimize npm installation
       - name: Install dependencies
-        run: npm install
+        if: steps.nms-cache.outputs.cache-hit != 'true'
+        run: |
+          npm config set fund false
+          npm config set audit false
+          npm config set progress false
+          npm ci --prefer-offline --no-audit
         working-directory: ./backend/nms
 
       - name: Build Db
         run: npm run build:db
         working-directory: ./backend/nms
-        
+
       - name: 🧹 Run Linter
         run: npm run lint
         working-directory: ./backend/nms
@@ -100,7 +174,11 @@ jobs:
         working-directory: ./backend/nms
 
       - name: Run Jest tests
+        timeout-minutes: 5
         run: npm test
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
         working-directory: ./backend/nms

@@ -18,7 +18,6 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     deviceId: Joi.string().required(),
     isPushEnabled: Joi.boolean().required(),
   });
-
   // Validate request body
   const { error, value: validBody } = schema.validate(request.body);
   if (error) {
@@ -66,8 +65,6 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
       // If the status is the same, inform the user no update was necessary
       response.send("No update necessary; status is already set as provided.");
     }
-
-    await db.destroy();
   } catch (error) {
     logger.error("Error updating notification status", error);
     response.status(500).send("Error updating notification status");

@@ -49,10 +49,13 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
           }
         );
         const data = await response.json();
-        setDevices(data.devices);
-        setDeviceCount(parseInt(data.totalDevices));
+        // Ensure devices is always an array
+        setDevices(Array.isArray(data.devices) ? data.devices : []);
+        setDeviceCount(parseInt(data.totalDevices) || 0);
       } catch (error) {
         console.error("Error fetching devices:", error);
+        // Set to empty array in case of error
+        setDevices([]);
       }
     };
 
@@ -84,44 +87,64 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
               Science and Research
             </th>
             <th className="py-2 px-4 border-b text-left">Expo Push Token</th>
-            <th className="py-2 px-4 border-b text-left">Date created</th>
+            <th className="py-2 px-4 border-b text-left">Date Created</th>
           </tr>
         </thead>
         <tbody>
-          {devices.map((device) => (
-            <tr key={device.expoPushToken}>
-              <td className="py-2 px-4 border-b text-left">
-                {device.deviceType}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {device["Breaking News"] ? "Yes" : "No"}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {device["University News"] ? "Yes" : "No"}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {device["Metro"] ? "Yes" : "No"}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {device["Opinions"] ? "Yes" : "No"}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {device["Arts and Culture"] ? "Yes" : "No"}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {device["Sports"] ? "Yes" : "No"}
-              </td>
-              <td className="py-2 px-4 border-b text-center">
-                {device["Science and Research"] ? "Yes" : "No"}
-              </td>
-              <td className="py-2 px-4 border-b text-left">
-                {device.expoPushToken}
-              </td>
-              <td className="py-2 px-4 border-b text-left">
-                {device.dateCreated}
+          {devices && devices.length > 0 ? (
+            devices.map((device) => (
+              <tr key={device.expo_push_token}>
+                <td className="py-2 px-4 border-b text-left">
+                  {device.device_type}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {device.categories?.includes("Breaking News") ? "Yes" : "No"}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {device.categories?.includes("University News")
+                    ? "Yes"
+                    : "No"}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {device.categories?.includes("Metro") ? "Yes" : "No"}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {device.categories?.includes("Opinions") ? "Yes" : "No"}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {device.categories?.includes("Arts and Culture")
+                    ? "Yes"
+                    : "No"}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {device.categories?.includes("Sports") ? "Yes" : "No"}
+                </td>
+                <td className="py-2 px-4 border-b text-center">
+                  {device.categories?.includes("Science and Research")
+                    ? "Yes"
+                    : "No"}
+                </td>
+                <td className="py-2 px-4 border-b text-left">
+                  {device.expo_push_token}
+                </td>
+                <td className="py-2 px-4 border-b text-left">
+                  {device.date_created ? (
+                    new Date(device.date_created).toLocaleString()
+                  ) : (
+                    <span title="This device was created before date tracking was implemented">
+                      Null
+                    </span>
+                  )}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={10} className="py-4 text-center">
+                No devices found
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 
