@@ -33,7 +33,7 @@ export type SearchStackProps = {
 };
 
 export type SettingsStackProps = {
-  SettingsScreen: undefined;
+  SettingsScreen: { isDarkMode: boolean; toggleTheme: () => void };
   Article: { data: Article };
   Staff: { slug: string };
   SavedArticles: undefined;

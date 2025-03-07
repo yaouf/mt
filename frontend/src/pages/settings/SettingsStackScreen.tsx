@@ -1,20 +1,25 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import { SettingsStackProps } from "src/types/navStacks";
+import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
+import { NavProp, SettingsStackProps } from "src/types/navStacks";
 import ArticleScreen from "../article/ArticleScreen";
 import SettingsScreen from "./SettingsScreen";
 import SavedArticles from "./SavedArticles";
 import DevTeam from "./DevTeam";
 import DisplaySettings from "./DisplaySettings";
+import { RouteProp } from "@react-navigation/native";
 
 const SettingsStack = createStackNavigator<SettingsStackProps>();
 
-function SettingsStackScreen() {
+
+
+function SettingsStackScreen({ navigation, route }: NavProp) {
+  const { isDarkMode, toggleTheme } = route.params || {};
   return (
     <SettingsStack.Navigator>
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
         options={{ headerShown: false }}
+        initialParams={{ isDarkMode, toggleTheme }}
       />
       <SettingsStack.Screen
         name="Article" // to open articles that were saved

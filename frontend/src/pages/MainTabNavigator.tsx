@@ -304,6 +304,7 @@ export default function MainTabNavigator() {
                   // headerStyle: {},
                   headerShadowVisible: false,
                 }}
+                initialParams={{ isDarkMode, toggleTheme }}
               />
               <Tab.Screen
                 name="Search"

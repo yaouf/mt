@@ -5,10 +5,12 @@ import Divider from "src/components/Divider";
 import NotifToggle from "src/components/NotifToggle";
 import { settings } from "src/styles/pages";
 import { baseStyles, darkStyles, font2, text, darkModeText, varTextColor } from "src/styles/styles";
-import { NavProp } from "src/types/navStacks";
+import { NavProp, SettingsStackProps } from "src/types/navStacks";
 import { NotificationContext } from "./NotificationProvider";
 import SavedArticlesPreview from "./SavedArticlesPreview";
 import SettingsLink from "./SettingsLink";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 /**
  * Page for settings
@@ -21,7 +23,8 @@ import SettingsLink from "./SettingsLink";
  *
  * @returns Settings screen
  */
-function SettingsScreen({ navigation }: NavProp) {
+
+function SettingsScreen({navigation, route} : NavProp) {
   const {
     breaking,
     setBreaking,
@@ -183,24 +186,26 @@ function SettingsScreen({ navigation }: NavProp) {
     },
   ];
   //dark mode related functions
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // const [isDarkMode, setIsDarkMode] = useState(false);
   
-  useEffect(() => {
-    const loadTheme = async () => {
-      const storedTheme = await AsyncStorage.getItem("darkMode");
-      setIsDarkMode(storedTheme === "true");
-    };
-    loadTheme();
-  }, []);
+  // useEffect(() => {
+  //   const loadTheme = async () => {
+  //     const storedTheme = await AsyncStorage.getItem("darkMode");
+  //     setIsDarkMode(storedTheme === "true");
+  //   };
+  //   loadTheme();
+  // }, []);
 
-  const toggleTheme = async () => {
-    setIsDarkMode((prev) => {
-      const newTheme = !prev;
-      AsyncStorage.setItem("darkMode", newTheme.toString());
-      console.log("newTheme " + newTheme);
-      return newTheme;
-    });
-  };
+  // const toggleTheme = async () => {
+  //   setIsDarkMode((prev) => {
+  //     const newTheme = !prev;
+  //     AsyncStorage.setItem("darkMode", newTheme.toString());
+  //     console.log("newTheme " + newTheme);
+  //     return newTheme;
+  //   });
+  // };
+
+  const { isDarkMode, toggleTheme } = route.params || {};
 
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;

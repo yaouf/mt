@@ -9,6 +9,7 @@ import Onboarding from "./onboarding/Onboarding";
 import MainTabNavigator from "./pages/MainTabNavigator";
 import { useNotification } from "./pages/settings/NotificationProvider";
 import { setAsync } from "./utils/helpers";
+import { ThemeProvider } from "./components/ThemeContext";
 
 const fullStack = createStackNavigator();
 
@@ -101,6 +102,7 @@ function BdhApp() {
 
   return (
     // <NotificationProvider>
+    <ThemeProvider>
     <NavigationContainer theme={MyTheme} linking={linking}>
       <SafeAreaProvider>
         <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
@@ -126,7 +128,8 @@ function BdhApp() {
         </Animated.View>
       </SafeAreaProvider>
     </NavigationContainer>
-    // </NotificationProvider>
+    {/* // </NotificationProvider> */}
+    </ThemeProvider>
   );
 }
 
