@@ -65,6 +65,7 @@ jobs:
         working-directory: ./backend/serverless/db
 
       - name: Run Jest tests for serverless functions
+        timeout-minutes: 5
         run: npm test
         working-directory: ./backend/serverless/functions
 
@@ -90,7 +91,7 @@ jobs:
       - name: Build Db
         run: npm run build:db
         working-directory: ./backend/nms
-        
+
       - name: 🧹 Run Linter
         run: npm run lint
         working-directory: ./backend/nms
@@ -100,6 +101,7 @@ jobs:
         working-directory: ./backend/nms
 
       - name: Run Jest tests
+        timeout-minutes: 5
         run: npm test
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

@@ -1,8 +1,7 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
-import db from "../../../db/dist/data/db-config";
-import envars from "../envars";
+import dbFactory from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
 /**
  * Gets the settings for a device.
@@ -11,11 +10,10 @@ import { validateApiKey, validateUuidV4 } from "../utils";
  */
 export const viewSettings = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
-  const environment = envars.environment.value();
-  const dbUrl = envars.dbUrl.value();
-  const dbParams = { environment, dbUrl };
-  const newDb = db(dbParams);
+  
   try {
+    // Initialize the database connection
+    const db = dbFactory({ environment: process.env.ENV || "test" });
     // Schema for request body validation
     const schema = Joi.object({
       deviceId: Joi.string().required(),
@@ -48,7 +46,7 @@ export const viewSettings = onRequest(async (request, response) => {
     logger.info("Device ID received", { deviceId });
 
     // Get the device's basic settings
-    const device = await newDb("devices")
+    const device = await db("devices")
       .where("id", deviceId)
       .select("is_push_enabled")
       .first();
@@ -61,10 +59,10 @@ export const viewSettings = onRequest(async (request, response) => {
     }
 
     // Get all categories
-    const allCategories = await newDb("categories").select("id", "name");
+    const allCategories = await db("categories").select("id", "name");
 
     // Get the device's category preferences
-    const devicePreferences = await newDb("device_preferences")
+    const devicePreferences = await db("device_preferences")
       .where("device_id", deviceId)
       .select("category_id");
 
@@ -85,13 +83,21 @@ export const viewSettings = onRequest(async (request, response) => {
       isPushEnabled: device.is_push_enabled,
     };
 
-    await newDb.destroy();
+    await db.destroy();
 
     // Log and send the settings
     logger.info("Device settings sent for deviceId: ", { deviceId, settings });
     response.send(settings);
     return;
   } catch (error) {
+    // Make sure to destroy the DB connection even in case of error
+    try {
+      const db = dbFactory({ environment: process.env.ENV || "test" });
+      await db.destroy();
+    } catch (destroyError) {
+      logger.error("Error destroying DB connection:", destroyError);
+    }
+    
     logger.error("Error viewing settings", error);
     response.status(500).send("Error viewing settings");
     return;

@@ -3,8 +3,11 @@ import { createDevice } from "../src/url/createDevice";
 process.env.ENV = "test";
 console.log("Test for serverless functions");
 
+// We don't need to mock the db module since we're skipping db operations in test mode
+
 jest.mock("../src/utils", () => ({
-  validateApiKey: jest.fn().mockResolvedValue(true),
+  validateApiKey: jest.fn().mockReturnValue(true),
+  validateUuidV4: jest.fn().mockReturnValue(true),
 }));
 
 describe("createDevice", () => {

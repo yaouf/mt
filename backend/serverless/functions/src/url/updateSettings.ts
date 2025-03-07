@@ -2,7 +2,7 @@ import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
 import { Knex } from "knex";
-import db from "../../../db/dist/data/db-config";
+import dbFactory from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
 /**
@@ -15,6 +15,9 @@ export const updateSettings = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
 
   try {
+    // Initialize the database connection
+    const db = dbFactory({ environment: process.env.ENV || "test" });
+    
     logger.info(
       "Updating user settings",
       { structuredData: true },
@@ -170,6 +173,14 @@ export const updateSettings = onRequest(async (request, response) => {
     response.send("Settings updated!");
     return;
   } catch (error) {
+    // Make sure to destroy the DB connection even in case of error
+    try {
+      const db = dbFactory({ environment: process.env.ENV || "test" });
+      await db.destroy();
+    } catch (destroyError) {
+      logger.error("Error destroying DB connection:", destroyError);
+    }
+    
     logger.error("Error updating settings", error);
     response.status(500).send("Error updating settings");
     return;

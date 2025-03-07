@@ -1,7 +1,7 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
-import db from "../../../db/dist/data/db-config";
+import dbFactory from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
 /**
@@ -13,38 +13,43 @@ import { validateApiKey, validateUuidV4 } from "../utils";
 export const updateNotificationStatus = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
 
-  // Request body validation schema
-  const schema = Joi.object({
-    deviceId: Joi.string().required(),
-    isPushEnabled: Joi.boolean().required(),
-  });
-
-  // Validate request body
-  const { error, value: validBody } = schema.validate(request.body);
-  if (error) {
-    response
-      .status(400)
-      .send("Request body validation error: " + error.message);
-    return;
-  }
-
-  // Validate deviceId, make sure its uuid v4
-  if (!validateUuidV4(validBody.deviceId)) {
-    response
-      .status(400)
-      .send(
-        'Request body validation error: "deviceId" is not a valid UUID v4.'
-      );
-    return;
-  }
-
-  // Extract ID and currentNotificationStatus from request body
-  const { deviceId, isPushEnabled } = validBody;
-
   try {
+    // Initialize the database connection
+    const db = dbFactory({ environment: process.env.ENV || "test" });
+    
+    // Request body validation schema
+    const schema = Joi.object({
+      deviceId: Joi.string().required(),
+      isPushEnabled: Joi.boolean().required(),
+    });
+
+    // Validate request body
+    const { error, value: validBody } = schema.validate(request.body);
+    if (error) {
+      logger.error("Request body validation error: " + error.message);
+      response
+        .status(400)
+        .send("Request body validation error: " + error.message);
+      return;
+    }
+
+    // Validate deviceId, make sure its uuid v4
+    if (!validateUuidV4(validBody.deviceId)) {
+      logger.error('Request body validation error: "deviceId" is not a valid UUID v4.');
+      response
+        .status(400)
+        .send(
+          'Request body validation error: "deviceId" is not a valid UUID v4.'
+        );
+      return;
+    }
+
+    // Extract ID and currentNotificationStatus from request body
+    const { deviceId, isPushEnabled } = validBody;
     // Check the current status in the database
     const device = await db("devices").where("id", deviceId).first();
     if (!device) {
+      logger.error('Device not found. Are you sure field "deviceId" is correct?', { deviceId });
       response
         .status(404)
         .send('Device not found. Are you sure field "deviceId" is correct?');
@@ -52,10 +57,10 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
     }
 
     // Compare current status with the new status
-    if (device.isPushEnabled !== isPushEnabled) {
+    if (device.is_push_enabled !== isPushEnabled) {
       // Update the notification status in the database
       await db("devices").where("id", deviceId).update({
-        isPushEnabled,
+        is_push_enabled: isPushEnabled,
       });
       logger.info("Notification status updated", {
         id: deviceId,
@@ -69,6 +74,14 @@ export const updateNotificationStatus = onRequest(async (request, response) => {
 
     await db.destroy();
   } catch (error) {
+    // Make sure to destroy the DB connection even in case of error
+    try {
+      const db = dbFactory({ environment: process.env.ENV || "test" });
+      await db.destroy();
+    } catch (destroyError) {
+      logger.error("Error destroying DB connection:", destroyError);
+    }
+    
     logger.error("Error updating notification status", error);
     response.status(500).send("Error updating notification status");
   }

@@ -2,8 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 import { notificationQueue } from "../queue/queue";
 import { Notification, RequestData, ResponseData } from "../types/types";
+import corsMiddleware from "../../../config/cors";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 
-export default async function getNotification(
+async function deleteNotificationHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData | Notification[]>
 ) {
@@ -69,6 +71,15 @@ export default async function getNotification(
     console.error("Error deleting notification from the database:", error);
     res.status(500).json({ message: "Internal server error." });
   }
+}
+
+export default async function deleteNotification(
+  req: NextApiRequest,
+  res: NextApiResponse<ResponseData | Notification[]>
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, deleteNotificationHelper);
+  });
 }
 
 // import type { NextApiRequest, NextApiResponse } from "next";
