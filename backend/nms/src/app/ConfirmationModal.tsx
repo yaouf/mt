@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -7,12 +5,12 @@ interface ConfirmModalProps {
   message: string;
 }
 
-const ConfirmationModal: React.FC<ConfirmModalProps> = ({
+function ConfirmationModal({
   isOpen,
   onClose,
   onConfirm,
   message,
-}) => {
+}: ConfirmModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -40,6 +38,6 @@ const ConfirmationModal: React.FC<ConfirmModalProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default ConfirmationModal;

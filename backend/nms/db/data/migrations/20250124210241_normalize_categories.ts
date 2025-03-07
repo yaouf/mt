@@ -10,22 +10,98 @@ import type { Knex } from "knex";
  * This new data model is more efficient since the categories are stored in a single table and referenced by foreign keys.
  */
 
+// Helper function to determine database type
+function getDatabaseType(knex: Knex): "mssql" | "pg" | "sqlite3" | "other" {
+  const client = knex.client.config.client;
+  if (typeof client === "string") {
+    if (client === "mssql") return "mssql";
+    if (client === "pg") return "pg";
+    if (client === "sqlite3") return "sqlite3";
+  }
+  return "other";
+}
+
+// Database-specific implementations for dropping default constraints
 async function dropDefaultConstraint(
   knex: Knex,
   tableName: string,
   columnName: string
 ) {
-  // This raw SQL query finds the default constraint for a given column and drops it.
-  await knex.raw(`
-    DECLARE @sql NVARCHAR(max) = N'';
-    SELECT @sql = N'ALTER TABLE ' + QUOTENAME('${tableName}') + ' DROP CONSTRAINT ' + QUOTENAME(dc.[name])
-    FROM sys.default_constraints dc
-    INNER JOIN sys.columns c ON dc.parent_object_id = c.object_id AND dc.parent_column_id = c.column_id
-    INNER JOIN sys.tables t ON t.object_id = c.object_id
-    WHERE t.name = '${tableName}' AND c.name = '${columnName}';
-    IF (@sql <> N'')
-      EXEC sp_executesql @sql;
-  `);
+  const dbType = getDatabaseType(knex);
+
+  switch (dbType) {
+    case "mssql":
+      // This raw SQL query finds the default constraint for a given column and drops it in SQL Server
+      await knex.raw(`
+        DECLARE @sql NVARCHAR(max) = N'';
+        SELECT @sql = N'ALTER TABLE ' + QUOTENAME('${tableName}') + ' DROP CONSTRAINT ' + QUOTENAME(dc.[name])
+        FROM sys.default_constraints dc
+        INNER JOIN sys.columns c ON dc.parent_object_id = c.object_id AND dc.parent_column_id = c.column_id
+        INNER JOIN sys.tables t ON t.object_id = c.object_id
+        WHERE t.name = '${tableName}' AND c.name = '${columnName}';
+        IF (@sql <> N'')
+          EXEC sp_executesql @sql;
+      `);
+      break;
+
+    case "pg":
+      // PostgreSQL approach to dropping a default constraint
+      await knex.raw(
+        `ALTER TABLE "${tableName}" ALTER COLUMN "${columnName}" DROP DEFAULT`
+      );
+      break;
+
+    case "sqlite3":
+      // SQLite doesn't support directly dropping default constraints
+      // For SQLite, we can't easily drop the default - it requires rebuilding the entire table
+      // We'll handle this in the column drop logic instead
+      console.log(
+        `SQLite: Can't directly drop default constraint for ${columnName} in ${tableName}`
+      );
+      break;
+
+    default:
+      console.warn(
+        `Unsupported database type: ${dbType}. Default constraint dropping may fail.`
+      );
+      // Fall back to a generic approach for unknown databases
+      try {
+        // Different databases have different syntax for dropping default constraints
+        // Try a few common approaches
+        if (dbType === "other") {
+          // First try PostgreSQL-style syntax as it's common
+          try {
+            await knex.raw(
+              `ALTER TABLE "${tableName}" ALTER COLUMN "${columnName}" DROP DEFAULT`
+            );
+          } catch (firstErr) {
+            console.warn(`First approach failed: ${firstErr}`);
+            // If that fails, try MySQL-style syntax
+            try {
+              await knex.raw(
+                `ALTER TABLE \`${tableName}\` ALTER \`${columnName}\` DROP DEFAULT`
+              );
+            } catch (secondErr) {
+              console.warn(`Second approach failed: ${secondErr}`);
+              // Last resort: try to use the schema builder
+              await knex.schema.alterTable(tableName, (table) => {
+                // This is a generic approach that might work for some databases
+                // We can't use dropDefault directly as it's not available in all Knex versions
+                table.specificType(columnName, "DROP DEFAULT");
+              });
+            }
+          }
+        } else {
+          // Use the raw query which is more generic
+          await knex.raw(
+            `ALTER TABLE "${tableName}" ALTER COLUMN "${columnName}" DROP DEFAULT`
+          );
+        }
+      } catch (err) {
+        console.error(`Failed to drop default constraint: ${err}`);
+        // If all approaches fail, log the error but continue execution
+      }
+  }
 }
 
 export async function up(knex: Knex): Promise<void> {
@@ -120,7 +196,6 @@ export async function up(knex: Knex): Promise<void> {
     }
 
     // 6) DROP old device boolean columns:
-    // First, drop default constraints for each column so that SQL Server doesn't attempt its internal dynamic drop.
     const deviceColumns = [
       "Breaking News",
       "University News",
@@ -130,20 +205,74 @@ export async function up(knex: Knex): Promise<void> {
       "Science and Research",
       "Opinions",
     ];
+
+    // Get the database type
+    const dbType = getDatabaseType(knex);
+
+    // First, drop default constraints for each column - this depends on database type
     for (const col of deviceColumns) {
       await dropDefaultConstraint(knex, "devices", col);
     }
-    // Then drop the columns using raw SQL with proper escaping.
-    await knex.raw(`
-      ALTER TABLE devices
-      DROP COLUMN [Breaking News],
-                  [University News],
-                  [Metro],
-                  [Sports],
-                  [Arts and Culture],
-                  [Science and Research],
-                  [Opinions]
-    `);
+
+    // Then drop the columns using database-specific syntax
+    if (dbType === "mssql") {
+      // SQL Server uses square brackets for identifiers with spaces
+      await knex.raw(`
+        ALTER TABLE devices
+        DROP COLUMN [Breaking News],
+                    [University News],
+                    [Metro],
+                    [Sports],
+                    [Arts and Culture],
+                    [Science and Research],
+                    [Opinions]
+      `);
+    } else if (dbType === "pg") {
+      // PostgreSQL uses double quotes for identifiers with spaces
+      await knex.raw(`
+        ALTER TABLE devices
+        DROP COLUMN "Breaking News",
+                    "University News",
+                    "Metro",
+                    "Sports",
+                    "Arts and Culture",
+                    "Science and Research",
+                    "Opinions"
+      `);
+    } else if (dbType === "sqlite3") {
+      // SQLite has limited ALTER TABLE support
+      // For SQLite, we need to drop columns one by one (if supported)
+      // or create a new table, copy data, and rename
+      console.log("SQLite: Using individual column drops for devices table");
+
+      // SQLite doesn't support dropping multiple columns in one statement
+      // and has limited ALTER TABLE support in general
+      // In newer SQLite versions with DROP COLUMN support:
+      for (const col of deviceColumns) {
+        try {
+          await knex.schema.alterTable("devices", (table) => {
+            // Use quotes for column names with spaces
+            table.dropColumn(col);
+          });
+        } catch (err) {
+          console.error(`Failed to drop column ${col}: ${err}`);
+          // May need to implement table rebuild strategy for SQLite
+          // if column dropping fails
+        }
+      }
+    } else {
+      // Generic approach for other databases
+      console.warn(`Using generic approach for dropping columns on ${dbType}`);
+      try {
+        await knex.schema.alterTable("devices", (table) => {
+          for (const col of deviceColumns) {
+            table.dropColumn(col);
+          }
+        });
+      } catch (err) {
+        console.error(`Failed to drop columns: ${err}`);
+      }
+    }
 
     // 7) MIGRATE existing notification booleans -> notification_categories
     type NotificationRow = {
@@ -183,19 +312,66 @@ export async function up(knex: Knex): Promise<void> {
       "Science and Research",
       "Opinions",
     ];
+
+    // First drop default constraints for each column
     for (const col of notificationColumns) {
       await dropDefaultConstraint(knex, "notifications", col);
     }
-    await knex.raw(`
-      ALTER TABLE notifications
-      DROP COLUMN [Breaking News],
-                  [University News],
-                  [Metro],
-                  [Sports],
-                  [Arts and Culture],
-                  [Science and Research],
-                  [Opinions]
-    `);
+
+    // Then drop the columns using database-specific syntax
+    if (dbType === "mssql") {
+      // SQL Server uses square brackets for identifiers with spaces
+      await knex.raw(`
+        ALTER TABLE notifications
+        DROP COLUMN [Breaking News],
+                    [University News],
+                    [Metro],
+                    [Sports],
+                    [Arts and Culture],
+                    [Science and Research],
+                    [Opinions]
+      `);
+    } else if (dbType === "pg") {
+      // PostgreSQL uses double quotes for identifiers with spaces
+      await knex.raw(`
+        ALTER TABLE notifications
+        DROP COLUMN "Breaking News",
+                    "University News",
+                    "Metro",
+                    "Sports",
+                    "Arts and Culture",
+                    "Science and Research",
+                    "Opinions"
+      `);
+    } else if (dbType === "sqlite3") {
+      // SQLite doesn't support dropping multiple columns in one statement
+      // In newer SQLite versions with DROP COLUMN support:
+      console.log(
+        "SQLite: Using individual column drops for notifications table"
+      );
+      for (const col of notificationColumns) {
+        try {
+          await knex.schema.alterTable("notifications", (table) => {
+            table.dropColumn(col);
+          });
+        } catch (err) {
+          console.error(`Failed to drop column ${col}: ${err}`);
+          // May need to implement table rebuild strategy for SQLite
+        }
+      }
+    } else {
+      // Generic approach for other databases
+      console.warn(`Using generic approach for dropping columns on ${dbType}`);
+      try {
+        await knex.schema.alterTable("notifications", (table) => {
+          for (const col of notificationColumns) {
+            table.dropColumn(col);
+          }
+        });
+      } catch (err) {
+        console.error(`Failed to drop columns: ${err}`);
+      }
+    }
   });
 }
 

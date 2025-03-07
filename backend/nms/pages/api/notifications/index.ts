@@ -1,10 +1,26 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
-import { Notification, ResponseData } from "../types/types";
+import corsMiddleware from "../../../config/cors";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 
-export default async function getNotifications(
-  _req: NextApiRequest,
-  res: NextApiResponse<ResponseData | Notification[]>
+type ResponseData = {
+  message: string;
+};
+
+type Notification = {
+  id: number;
+  time: string;
+  title: string;
+  body: string;
+  status: string;
+  url: string;
+  is_uid: boolean;
+  categories: string;
+};
+
+async function getNotificationsHelper(
+  req: NextApiRequest,
+  res: NextApiResponse<Notification[] | ResponseData>
 ) {
   try {
     // Fetch notifications with their associated categories
@@ -30,41 +46,11 @@ export default async function getNotifications(
     res.status(500).json({ message: "Internal server error." });
   }
 }
-
-// import { NextApiRequest, NextApiResponse } from "next";
-// import db from "../../../dist/data/db-config";
-
-// type ResponseData = {
-//   message: string;
-// };
-
-// export default async function getNotifications(
-//   req: NextApiRequest,
-//   res: NextApiResponse<Notification[] | ResponseData>
-// ) {
-//   try {
-//     // Sorts in reverse chronological order
-//     const notifications = await db("notifications")
-//       .select(
-//         "id",
-//         "time",
-//         "title",
-//         "body",
-//         "status",
-//         "Breaking News",
-//         "University News",
-//         "Metro",
-//         "Sports",
-//         "Arts and Culture",
-//         "Science and Research",
-//         "Opinions",
-//         "url",
-//         "isUid"
-//       )
-//       .orderBy("time", "desc");
-//     res.status(200).json(notifications);
-//   } catch (error) {
-//     console.error("Error fetching notifications from the database:", error);
-//     res.status(500).json({ message: "Internal server error." });
-//   }
-// }
+export default async function getNotifications(
+  req: NextApiRequest,
+  res: NextApiResponse<Notification[] | ResponseData>,
+) {
+  corsMiddleware(req, res, async () => {
+    await authMiddleware(req, res, getNotificationsHelper);
+  });
+}

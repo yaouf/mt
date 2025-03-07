@@ -29,7 +29,14 @@ export async function up(knex: Knex): Promise<void> {
 
   // For expoPushToken, drop the dependent unique index first
   try {
-    await knex.raw("DROP INDEX devices_expopushtoken_unique ON devices");
+    const dbType = knex.client.config.client;
+    if (dbType === "sqlite3") {
+      // SQLite syntax doesn't use ON table_name
+      await knex.raw("DROP INDEX IF EXISTS devices_expopushtoken_unique");
+    } else {
+      // Other databases like PostgreSQL use ON table_name
+      await knex.raw("DROP INDEX devices_expopushtoken_unique ON devices");
+    }
     console.log("Dropped index: devices_expopushtoken_unique");
   } catch (error) {
     console.error(
@@ -123,7 +130,14 @@ export async function down(knex: Knex): Promise<void> {
 
   // Drop the index for expo_push_token before renaming it back
   try {
-    await knex.raw("DROP INDEX devices_expo_push_token_unique ON devices");
+    const dbType = knex.client.config.client;
+    if (dbType === "sqlite3") {
+      // SQLite syntax doesn't use ON table_name
+      await knex.raw("DROP INDEX IF EXISTS devices_expo_push_token_unique");
+    } else {
+      // Other databases like PostgreSQL use ON table_name
+      await knex.raw("DROP INDEX devices_expo_push_token_unique ON devices");
+    }
     console.log("Dropped index: devices_expo_push_token_unique");
   } catch (error) {
     console.error("Failed to drop index devices_expo_push_token_unique", error);
