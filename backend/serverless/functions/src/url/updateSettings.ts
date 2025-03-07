@@ -3,7 +3,6 @@ import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
 import { Knex } from "knex";
 import db from "../../../db/dist/data/db-config";
-import envars from "../envars";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
 /**
@@ -14,11 +13,6 @@ import { validateApiKey, validateUuidV4 } from "../utils";
  */
 export const updateSettings = onRequest(async (request, response) => {
   if (!validateApiKey(request, response)) return;
-
-  const environment = envars.environment.value();
-  const dbUrl = envars.dbUrl.value();
-  const dbParams = { environment, dbUrl };
-  const newDb = db(dbParams);
 
   try {
     logger.info(
@@ -91,13 +85,13 @@ export const updateSettings = onRequest(async (request, response) => {
     }
 
     // Get all category IDs for later use
-    const categories = await newDb("categories").select("id", "name");
+    const categories = await db("categories").select("id", "name");
     const categoryMap = new Map(
       categories.map((cat: { id: number; name: string }) => [cat.name, cat.id])
     );
 
     // Begin transaction to ensure all updates are atomic
-    await newDb.transaction(async (trx: Knex.Transaction) => {
+    await db.transaction(async (trx: Knex.Transaction) => {
       // Update is_push_enabled if provided
       if (isPushEnabled !== undefined) {
         await trx("devices")
@@ -155,8 +149,6 @@ export const updateSettings = onRequest(async (request, response) => {
         }
       }
     });
-
-    await db.destroy();
 
     // Log the result of update
     logger.info("Device settings updated for deviceId: ", {
