@@ -15,17 +15,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js 21
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 21
           cache: "npm"
 
       # Cache the repository for other jobs to use
       - name: Cache repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .
           key: repo-${{ github.sha }}
@@ -48,13 +48,13 @@ jobs:
     steps:
       # Restore the repository from cache
       - name: Restore repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .
           key: repo-${{ github.sha }}
 
       - name: Set up Node.js 21
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 21
           cache: "npm"
@@ -109,13 +109,13 @@ jobs:
     steps:
       # Restore the repository from cache
       - name: Restore repository
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: .
           key: repo-${{ github.sha }}
 
       - name: Set up Node.js 21
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 21
           cache: "npm"
