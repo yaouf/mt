@@ -1,11 +1,18 @@
-import { describe, expect, it, jest } from "@jest/globals";
+import { describe, expect, it, jest, afterAll } from "@jest/globals";
 import { createDevice } from "../src/url/createDevice";
+import db from "../../db/dist/data/db-config";
 process.env.ENV = "test";
 console.log("Test for serverless functions");
 
 jest.mock("../src/utils", () => ({
   validateApiKey: jest.fn().mockReturnValue(true),
 }));
+
+// Close database connections after all tests
+afterAll(async () => {
+  await db.destroy();
+  console.log("Database connections closed");
+});
 
 describe("createDevice", () => {
   it("should create a new device successfully", async () => {
