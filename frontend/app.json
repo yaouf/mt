@@ -39,6 +39,15 @@
       }
     },
     "owner": "bdh-app",
-    "plugins": ["expo-build-properties"]
+    "plugins": [
+      "expo-build-properties",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-8731315434789018~9308730648",
+          "iosAppId": "ca-app-pub-8731315434789018~9308730648"
+        }
+      ]
+    ]
   }
 }

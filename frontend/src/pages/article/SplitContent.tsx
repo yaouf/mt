@@ -3,11 +3,11 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import * as WebBrowser from "expo-web-browser";
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
-// import {
-//   BannerAd,
-//   BannerAdSize,
-//   TestIds,
-// } from "react-native-google-mobile-ads";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
 import {
   HTMLContentModel,
   HTMLElementModel,
@@ -18,9 +18,9 @@ import { fetchArticle } from "src/api/fetchContent";
 import { articleStyles } from "src/styles/article";
 import { Article } from "src/types/data";
 
-// const adUnitId = __DEV__
-//   ? TestIds.BANNER
-//   : "ca-app-pub-8731315434789018/9601202667";
+const adUnitId = __DEV__
+  ? TestIds.BANNER
+  : "ca-app-pub-8731315434789018/9601202667";
 
 const IframeRenderer = React.memo(
   ({ tnode }: any) => {
@@ -159,6 +159,13 @@ function SplitArticle({ content }: SplitArticleType) {
         style={articleStyles.adImage}
       /> */}
         <Text style={articleStyles.adText}>Advertisement</Text>
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.MEDIUM_RECTANGLE}
+          onAdFailedToLoad={(error) =>
+            console.error("Ad failed to load:", error)
+          }
+        />
       </View>
     ),
     []
