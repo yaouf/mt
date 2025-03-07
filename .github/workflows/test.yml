@@ -146,7 +146,8 @@ jobs:
           echo "FIREBASE_PRIVATE_KEY='${{ secrets.FIREBASE_PRIVATE_KEY }}'" >> .env.test
         working-directory: ./backend/nms/db
 
-      - name: Install Global Deps
+      # Install Redis but don't start it (the test script will start it)
+      - name: Install Redis
         run: sudo apt-get update && sudo apt-get install -y redis-server
         working-directory: ./backend/nms
 
