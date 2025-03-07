@@ -37,7 +37,6 @@ export const MenuContext = createContext<MenuContextType>({
 });
 
 function HomeStackScreen({ navigation, route }) {
-  const { isDarkMode, toggleTheme } = route.params || {};
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 

@@ -6,6 +6,7 @@ import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { fyp } from "src/styles/pages";
 import { text, darkModeText } from "src/styles/styles";
 import { setAsync } from "src/utils/helpers";
+import { useTheme } from "./ThemeContext";
 
 type NotifProps = {
   title: string;
@@ -14,7 +15,6 @@ type NotifProps = {
   setValue: Dispatch<SetStateAction<boolean>>;
   onboarding?: boolean;
   asyncName?: string;
-  isDarkMode: boolean;
 };
 
 function NotifToggle({
@@ -24,7 +24,6 @@ function NotifToggle({
   setValue,
   onboarding,
   asyncName, 
-  isDarkMode
 }: NotifProps) {
   const {
     systemPermissionStatus,
@@ -168,6 +167,7 @@ function NotifToggle({
     : systemPermissionStatus === "granted" && value;
 
   console.log("value for toggle title in NotifToggle", title, toggleValue);
+  const { isDarkMode, toggleTheme } = useTheme();
   const textStyle = isDarkMode ? darkModeText : text;
 
   return (
