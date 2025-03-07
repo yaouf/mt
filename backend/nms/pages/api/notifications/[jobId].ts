@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
-import {authMiddleware} from "../../../middleware/authMiddleware";
 import corsMiddleware from "../../../config/cors";
+import db from "../../../dist/data/db-config";
+import { authMiddleware } from "../../../middleware/authMiddleware";
 
 type ResponseData = {
   message: string;
@@ -11,39 +11,90 @@ type Notification = {
   time: string;
   title: string;
   body: string;
+  tags?: string[];
+  categories?: string;
+  status?: string;
+  url?: string;
+  is_uid?: boolean;
 };
 
 async function getNotificationHelper(
   req: NextApiRequest,
-  res: NextApiResponse<Notification[] | ResponseData>,
+  res: NextApiResponse<ResponseData | Notification[]>
 ) {
   try {
-    // get path param
     console.log("query", req.query);
+
     // Get the jobId from the query string
     const jobId = parseInt(req.query.jobId as string);
-    if(isNaN(jobId)) {
-      return res
-        .status(404)
-        .json({
-          message:
-            "Invalid jobId. Please provide a valid jobId like so: /api/notifications/1",
-        });
-    }
 
-    if (jobId) {
-      const notification = await db("notifications")
-        .select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions", "url", "isUid")
-        .where({ id: jobId });
-      if (notification.length === 0) {
+    if (!isNaN(jobId)) {
+      // Fetch single notification with categories
+      const notificationWithCategories = await db("notifications as n")
+        .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
+        .leftJoin("categories as c", "nc.category_id", "c.id")
+        .select(
+          "n.id",
+          "n.time",
+          "n.title",
+          "n.body",
+          "n.status",
+          "n.url",
+          "n.is_uid",
+          db.raw("STRING_AGG(c.name, ',') AS categories")
+        )
+        .where("n.id", jobId)
+        .groupBy(
+          "n.id",
+          "n.time",
+          "n.title",
+          "n.body",
+          "n.status",
+          "n.url",
+          "n.is_uid"
+        )
+        .first();
+
+      if (!notificationWithCategories) {
         return res.status(404).json({ message: "Notification not found." });
-      } 
-      res.status(200).json(notification[0]);
+      }
+
+      res.status(200).json({
+        ...notificationWithCategories,
+        tags: notificationWithCategories.categories || [],
+      });
     } else {
-      // TODO: is this being reached, given we have index.ts?
-      // Sorts in reverse chronological order
-      const notifications = await db("notifications").select("id", "time", "title", "body", "status", "Breaking News", "University News", "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions", "url", "isUid").orderBy("time", "desc");
-      res.status(200).json(notifications);
+      // Fetch all notifications with categories
+      const notificationsWithCategories = await db("notifications as n")
+        .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
+        .leftJoin("categories as c", "nc.category_id", "c.id")
+        .select(
+          "n.id",
+          "n.time",
+          "n.title",
+          "n.body",
+          "n.status",
+          "n.url",
+          "n.is_uid",
+          db.raw("STRING_AGG(c.name, ',') AS categories")
+        )
+        .groupBy(
+          "n.id",
+          "n.time",
+          "n.title",
+          "n.body",
+          "n.status",
+          "n.url",
+          "n.is_uid"
+        )
+        .orderBy("n.time", "desc");
+
+      res.status(200).json(
+        notificationsWithCategories.map((notification) => ({
+          ...notification,
+          tags: notification.categories || [],
+        }))
+      );
     }
   } catch (error) {
     console.error("Error fetching notifications from the database:", error);
@@ -52,10 +103,9 @@ async function getNotificationHelper(
 }
 export default async function getNotification(
   req: NextApiRequest,
-  res: NextApiResponse<Notification[] | ResponseData>,
+  res: NextApiResponse<Notification[] | ResponseData>
 ) {
   corsMiddleware(req, res, async () => {
     await authMiddleware(req, res, getNotificationHelper);
   });
-
 }
