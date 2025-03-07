@@ -4,7 +4,8 @@ import { fetchSectionHome } from "src/api/fetchContent";
 import NoImageCard from "src/components/cards/NoImageCard";
 import Divider from "src/components/Divider";
 import OpinionsHeader from "src/components/OpinionsHeader";
-import { baseStyles, layout, varGray1 } from "src/styles/styles";
+import { useTheme } from "src/components/ThemeContext";
+import { baseStyles, darkStyles, layout, varGray1 } from "src/styles/styles";
 import { Article } from "src/types/data";
 import { SectionGroupProps } from "src/types/navStacks";
 
@@ -37,8 +38,12 @@ function OpinionsGroup(props: SectionGroupProps) {
     // );
   }, []);
 
+  const { isDarkMode, toggleTheme } = useTheme();
+    
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+
   return (
-    <View style={baseStyles.container}>
+    <View style={containerStyle.container}>
       <OpinionsHeader
         title={props.title}
         slug={props.slug}

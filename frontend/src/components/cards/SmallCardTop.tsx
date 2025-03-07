@@ -9,6 +9,8 @@ import {
 import { Tag } from "src/types/data";
 import { CardProps } from "src/types/navStacks";
 import {
+  darkModeBackgroundColor,
+  darkModeTextColor,
   font1,
   font2,
   font3,
@@ -17,12 +19,14 @@ import {
   varTextColor,
 } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
+import { useTheme } from "../ThemeContext";
   
   function SmallCardTop({ article, navigation }: CardProps) {
     const all_tags = article.tags.map((t: Tag) => t.name);
   
     let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
-  
+    const { isDarkMode, toggleTheme } = useTheme();
+    const containerStyle = isDarkMode ? darkStyles : styles;
   
     return (
       <View style={cardSize}>
@@ -156,6 +160,97 @@ import { formatDates } from "../../utils/formatDates";
     subhead: {
         alignSelf: "stretch",
         color: varTextColor,
+        fontFamily: font1,
+        fontSize: 16,
+        fontWeight: "400",
+        lineHeight: 22,
+        fontStyle: "italic",
+        marginBottom: 12, 
+      },
+    
+    option: {
+      backgroundColor: "rgba(237, 237, 237, 0.80)",
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      alignSelf: "stretch",
+      paddingVertical: 11,
+      paddingHorizontal: 16,
+      padding: 8,
+      fontSize: 16,
+      borderBottomColor: "rgba(60, 60, 67, 0.36)",
+      borderBottomWidth: 0.5,
+    },
+    publishedSection: {
+      display: "flex",
+      alignItems: "center",
+      gap: 4,
+    },
+    options: {
+      width: 16,
+      height: 16,
+    },
+    line: {
+      width: 254,
+      height: 0.5,
+      backgroundColor: "rgba(60, 60, 67, 0.36)",
+    },
+  });
+
+  const darkStyles = StyleSheet.create({
+    title: {
+      height: "auto",
+      alignSelf: "stretch",
+      color: darkModeTextColor,
+      fontFamily: font1,
+      fontSize: 18,
+      fontStyle: "normal",
+      fontWeight: "700",
+      lineHeight: 20,
+      overflow: "hidden",
+      flexWrap: "nowrap",
+      marginBottom: 8,
+    },
+    card: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "stretch",
+      borderRadius: 0,
+      backgroundColor: darkModeBackgroundColor,
+      overflow: "visible",
+    },
+    section: {
+      color: varGray1,
+      fontFamily: font3,
+      fontSize: 10,
+      fontStyle: "normal",
+    },
+    published: {
+      color: varGray1,
+      fontFamily: font3,
+      fontSize: 12,
+      fontWeight: "500",
+      fontStyle: "normal",
+    },
+    text: {
+      display: "flex",
+      flexDirection: "column",
+      paddingBottom: 8,
+      paddingHorizontal: 0,
+      alignItems: "flex-start",
+      alignSelf: "stretch",
+      gap: 4,
+    },
+    bottom: {
+      display: "flex",
+      justifyContent: "space-between",
+      flexDirection: "row",
+      alignItems: "flex-start",
+      alignSelf: "stretch",
+    },
+    subhead: {
+        alignSelf: "stretch",
+        color: darkModeTextColor,
         fontFamily: font1,
         fontSize: 16,
         fontWeight: "400",

@@ -5,7 +5,8 @@ import ImageCard from "src/components/cards/HorizontalCard";
 import LargeSectionCard from "src/components/cards/LargeSectionCard";
 import Divider from "src/components/Divider";
 import SectionHeader from "src/components/SectionHeader";
-import { baseStyles, varGray1 } from "src/styles/styles";
+import { useTheme } from "src/components/ThemeContext";
+import { baseStyles, darkModeText, darkStyles, text, varGray1 } from "src/styles/styles";
 import { Article } from "src/types/data";
 import { SectionGroupProps } from "src/types/navStacks";
 
@@ -17,6 +18,9 @@ import { SectionGroupProps } from "src/types/navStacks";
 function SmallHorzGroup(props: SectionGroupProps) {
   const [articles, setArticles] = useState<Article[]>();
   const [loading, setLoading] = useState<boolean>(true);
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +40,7 @@ function SmallHorzGroup(props: SectionGroupProps) {
   }, []);
 
   return (
-    <View style={baseStyles.container}>
+    <View style={containerStyle.container}>
       <SectionHeader
         title={props.title}
         slug={props.slug}
