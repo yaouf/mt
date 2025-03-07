@@ -128,9 +128,13 @@ const DeviceTable: React.FC<DeviceTableProps> = ({}) => {
                   {device.expo_push_token}
                 </td>
                 <td className="py-2 px-4 border-b text-left">
-                  {device.date_created
-                    ? new Date(device.date_created).toLocaleString()
-                    : "N/A"}
+                  {device.date_created ? (
+                    new Date(device.date_created).toLocaleString()
+                  ) : (
+                    <span title="This device was created before date tracking was implemented">
+                      Null
+                    </span>
+                  )}
                 </td>
               </tr>
             ))

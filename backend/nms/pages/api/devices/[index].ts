@@ -46,7 +46,7 @@ async function getDevicesHelper(
         "devices.id",
         "devices.expo_push_token",
         "devices.device_type",
-        db.raw("COALESCE(devices.date_created, NOW()) as date_created"),
+        db.raw("devices.date_created as date_created"),
         "devices.is_push_enabled",
         db.raw("STRING_AGG(categories.name, ',') as categories")
       )
