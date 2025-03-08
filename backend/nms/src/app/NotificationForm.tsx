@@ -1,7 +1,7 @@
 "use client";
 
 import moment from "moment-timezone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { validate as isValidUUID } from "uuid";
 import ConfirmationModal from "./ConfirmationModal";
@@ -12,14 +12,65 @@ const BANNER_DURATION = 5000; // how long the dashboard banner stays up after a 
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const NotificationForm = ({ setScheduledNotifications }) => {
+const NotificationForm = ({ setScheduledNotifications, token }) => {
   const [newFormData, setNewFormData] = useState({
     time: "",
     title: "",
     body: "",
     tags: [] as string[],
     url: "",
+    authorIds: [] as number[],
   });
+
+  const [authors, setAuthors] = useState([]);
+  const [isLoadingAuthors, setIsLoadingAuthors] = useState(false);
+  const [authorSearchTerm, setAuthorSearchTerm] = useState("");
+
+  // Fetch authors when component mounts
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchAuthors = async () => {
+      try {
+        setIsLoadingAuthors(true);
+        const response = await fetch("/api/authors", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAuthors(data.authors || []);
+        } else {
+          console.error("Failed to fetch authors");
+        }
+      } catch (error) {
+        console.error("Error fetching authors:", error);
+      } finally {
+        setIsLoadingAuthors(false);
+      }
+    };
+
+    fetchAuthors();
+  }, [token]);
+
+  // Handle author selection
+  const handleAuthorChange = (e) => {
+    const { value, checked } = e.target;
+    const authorId = parseInt(value, 10);
+
+    if (checked) {
+      setNewFormData((prevData) => ({
+        ...prevData,
+        authorIds: [...prevData.authorIds, authorId],
+      }));
+    } else {
+      setNewFormData((prevData) => ({
+        ...prevData,
+        authorIds: prevData.authorIds.filter((id) => id !== authorId),
+      }));
+    }
+  };
 
   const [bannerMessage, setBannerMessage] = useState("");
   const [bannerVisible, setBannerVisible] = useState(false);
@@ -97,6 +148,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
           body: "",
           tags: [],
           url: "",
+          authorIds: [],
         });
 
         setIsFailed(false);
@@ -337,6 +389,82 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             className="border rounded-md px-3 py-2 w-full"
             placeholder="https://www.browndailyherald.com/article/2024/09/sydney-skybetter-named-new-faculty-director-of-brown-arts-institute"
           />
+        </div>
+
+        {/* Author selection */}
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Authors
+          </label>
+
+          {/* Author search */}
+          <div className="mb-2">
+            <input
+              type="text"
+              placeholder="Search authors..."
+              value={authorSearchTerm}
+              onChange={(e) => setAuthorSearchTerm(e.target.value)}
+              className="border rounded-md px-3 py-2 w-full mb-2"
+            />
+          </div>
+
+          {/* Display authors */}
+          <div className="max-h-40 overflow-y-auto border rounded-md p-2">
+            {isLoadingAuthors ? (
+              <p className="text-gray-500">Loading authors...</p>
+            ) : authors.length === 0 ? (
+              <p className="text-gray-500">No authors found</p>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                {authors
+                  .filter(
+                    (author) =>
+                      authorSearchTerm === "" ||
+                      author.name
+                        .toLowerCase()
+                        .includes(authorSearchTerm.toLowerCase()) ||
+                      author.slug
+                        .toLowerCase()
+                        .includes(authorSearchTerm.toLowerCase())
+                  )
+                  .map((author) => (
+                    <label
+                      key={author.id}
+                      className="flex items-center p-1 hover:bg-gray-100 rounded"
+                    >
+                      <input
+                        type="checkbox"
+                        value={author.id}
+                        checked={newFormData.authorIds.includes(author.id)}
+                        onChange={handleAuthorChange}
+                        className="form-checkbox mr-2"
+                      />
+                      <span>{author.name}</span>
+                    </label>
+                  ))}
+              </div>
+            )}
+          </div>
+
+          {/* Selected authors summary */}
+          {newFormData.authorIds.length > 0 && (
+            <div className="mt-2">
+              <p className="text-sm font-medium">Selected authors:</p>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {newFormData.authorIds.map((authorId) => {
+                  const author = authors.find((a) => a.id === authorId);
+                  return author ? (
+                    <span
+                      key={author.id}
+                      className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded"
+                    >
+                      {author.name}
+                    </span>
+                  ) : null;
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Button to schedule notification */}

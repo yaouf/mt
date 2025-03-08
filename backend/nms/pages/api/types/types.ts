@@ -13,8 +13,9 @@ export type Notification = {
   body: string;
   url: string;
   status: string;
-  is_uid: boolean;
-  categories?: string[];
+  isUid: boolean;
+  tags?: string[];
+  authors?: Author[]; // Optional array of author IDs
 };
 
 export type Device = {
@@ -37,4 +38,25 @@ export type NotificationId = {
 export interface EditorPick {
   url: string;
   rank: number;
+}
+
+export interface Author {
+  id: number;
+  name: string;
+  slug: string;
+  dateCreated?: string;
+}
+
+export interface DeviceAuthorSubscription {
+  id: number;
+  deviceId: string;
+  authorId: number;
+  dateCreated: string;
+}
+
+export interface NotificationAuthor {
+  id: number;
+  notificationId: number;
+  authorId: number;
+  dateCreated: string;
 }

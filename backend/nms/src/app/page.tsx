@@ -200,6 +200,7 @@ export default function Home() {
               <>
                 <NotificationForm
                   setScheduledNotifications={setScheduledNotifications}
+                  token={token}
                 />
                 <div className="flex justify-center py-10"></div>
                 <EditorsPicks
