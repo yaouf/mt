@@ -29,26 +29,26 @@ function ImageCard({ article, navigation }: CardProps) {
       <TouchableWithoutFeedback
         onPress={() => navigation.push("Article", { data: article })}
       >
-        <View style={styles.card}>
-          <View style={styles.content}>
-            <View style={styles.imageWrapper}>
+        <View style={containerStyle.card}>
+          <View style={containerStyle.content}>
+            <View style={containerStyle.imageWrapper}>
               <Image
                 source={{
                   uri: img_uri,
                 }}
-                style={styles.image}
+                style={containerStyle.image}
               />
             </View>
-            <View style={styles.text}>
-              <View style={styles.innerText}>
+            <View style={containerStyle.text}>
+              <View style={containerStyle.innerText}>
                 <Text
-                  style={styles.title}
+                  style={containerStyle.title}
                   numberOfLines={4}
                   ellipsizeMode="tail"
                 >
                   {article.headline}
                 </Text>
-                <Text style={styles.published}>
+                <Text style={containerStyle.published}>
                   {formatDates(article.published_at)}
                 </Text>
               </View>
@@ -215,6 +215,7 @@ const darkStyles = StyleSheet.create({
     alignSelf: "stretch",
     overflow: "hidden",
     flexWrap: "nowrap",
+    color: darkModeTextColor,
     fontFamily: font1,
     fontSize: 18,
     fontStyle: "normal",
