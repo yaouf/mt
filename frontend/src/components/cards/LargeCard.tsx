@@ -48,24 +48,24 @@ function LargeCard({ article, navigation }: CardProps) {
         accessibilityRole="button"
         accessibilityHint={`Double tap to open article`}
       >
-        <View style={styles.card}>
+        <View style={containerStyle.card}>
           <Image
             source={{
               uri: img_uri,
             }}
-            style={styles.image}
+            style={containerStyle.image}
           />
-          <View style={styles.text}>
+          <View style={containerStyle.text}>
             {breaking ? (
               <View
-                style={styles.breakingBox}
+                style={containerStyle.breakingBox}
                 accessibilityLabel="Section: Breaking News."
               >
-                <Text style={styles.breaking}>Breaking News</Text>
+                <Text style={containerStyle.breaking}>Breaking News</Text>
               </View>
             ) : (
               <Text
-                style={styles.section}
+                style={containerStyle.section}
                 accessibilityLabel={`Section: ${all_tags[0].replace(
                   "&;",
                   "&"
@@ -75,23 +75,23 @@ function LargeCard({ article, navigation }: CardProps) {
               </Text>
             )}
             <Text
-              style={styles.title}
+              style={containerStyle.title}
               accessibilityLabel={`Headline: ${article.headline}.`}
             >
               {article.headline}
             </Text>
             <Text
-              style={styles.subhead}
+              style={containerStyle.subhead}
               numberOfLines={6}
               ellipsizeMode="tail"
               accessibilityLabel={`Subtitle: ${article.subhead}`}
             >
               {article.subhead}
             </Text>
-            <View style={styles.bottom}>
-              <View style={styles.publishedSection}>
+            <View style={containerStyle.bottom}>
+              <View style={containerStyle.publishedSection}>
                 <Text
-                  style={styles.published}
+                  style={containerStyle.published}
                   accessibilityLabel={`Published on ${formatDates(
                     article.published_at
                   )}`}
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     alignSelf: "stretch",
     gap: 4,
+    
   },
   bottom: {
     display: "flex",
@@ -304,6 +305,7 @@ const darkStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     alignSelf: "stretch",
+    backgroundColor: darkModeBackgroundColor,
   },
   publishedSection: {
     display: "flex",
