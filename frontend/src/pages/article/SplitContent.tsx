@@ -15,7 +15,8 @@ import {
 } from "react-native-render-html";
 import WebView from "react-native-webview";
 import { fetchArticle } from "src/api/fetchContent";
-import { articleStyles } from "src/styles/article";
+import { useTheme } from "src/components/ThemeContext";
+import { articleStyles, darkArticleStyles } from "src/styles/article";
 import { Article } from "src/types/data";
 
 // const adUnitId = __DEV__
@@ -163,11 +164,12 @@ function SplitArticle({ content }: SplitArticleType) {
     ),
     []
   );
-
+  const { isDarkMode, toggleTheme } = useTheme();
+  const articleStyle = isDarkMode ? darkArticleStyles : articleStyles;
   // Render content with ads inserted at placeholder positions
   return (
-    <View style={articleStyles.articleBodyWrapper}>
-      <View style={articleStyles.articleBody}>
+    <View style={articleStyle.articleBodyWrapper}>
+      <View style={articleStyle.articleBody}>
         {splitContent.map((paragraph, index) => {
           if (paragraph === "<!-- ADVERTISEMENT_PLACEHOLDER -->") {
             return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
@@ -177,7 +179,7 @@ function SplitArticle({ content }: SplitArticleType) {
             <RenderHTML
               key={`para-${index}`}
               source={{ html: paragraph + "\n" }}
-              baseStyle={articleStyles.text}
+              baseStyle={articleStyle.text}
               customHTMLElementModels={customHTMLElementModels}
               renderers={renderers}
               renderersProps={renderersProps}
