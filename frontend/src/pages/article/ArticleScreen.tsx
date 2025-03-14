@@ -239,7 +239,7 @@ function ArticleScreen({
 
               <SplitArticle content={article.content} />
             </View>
-            <View style={{ height: 80 }}></View>
+            <View style={{ height: 80, backgroundColor: containerStyle.container.backgroundColor}}></View>
           </ScrollView>
         </View>
       </TapGestureHandler>
