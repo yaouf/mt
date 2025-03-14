@@ -20,7 +20,7 @@ export const varTextSecondaryColor = "#333";
 export const darkTextSecondaryColor = "#e8e8e8";
 export const varRed = "#ED1C24";
 export const varGray1 = "#9E9E9E";
-export const darkModeBackgroundColor = "1F1F1F";
+export const darkModeBackgroundColor = "#1F1F1FF";
 
 export const baseStyles = StyleSheet.create({
   container: {

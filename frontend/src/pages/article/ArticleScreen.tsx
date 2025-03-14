@@ -122,7 +122,7 @@ function ArticleScreen({
                 <View
                   style={{
                     height: 1,
-                    backgroundColor: "white",
+                    backgroundColor: containerStyle.container.backgroundColor,
                     width: "100%",
                     marginBottom: -15,
                   }}

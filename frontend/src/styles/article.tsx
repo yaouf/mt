@@ -241,7 +241,7 @@ export const darkArticleStyles = StyleSheet.create({
     gap: 7.422,
     marginBottom: 27,
     paddingTop: 25,
-    backgroundColor: darkModeBackgroundColor
+    // backgroundColor: darkModeBackgroundColor
   },
   title: {
     // alignSelf: "stretch",
@@ -283,7 +283,7 @@ export const darkArticleStyles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
     marginTop: 3,
-    backgroundColor: darkModeBackgroundColor
+    backgroundColor: "#1F1F1FFF"
   },
   articleBody: {
     width: "100%",
@@ -375,7 +375,7 @@ export const darkArticleStyles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: "row",
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: "#1F1F1FFF",
     width: "100%",
     padding: 18,
     justifyContent: "space-between",
