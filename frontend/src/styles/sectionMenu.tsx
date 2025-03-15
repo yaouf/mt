@@ -95,7 +95,7 @@ export const darkMenuStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: "#1F1F1FFF",
     borderRadius: 4,
     borderWidth: 0.5,
     borderColor: varGray1,
