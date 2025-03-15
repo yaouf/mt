@@ -3,10 +3,12 @@ import {
   ActivityIndicator,
   FlatList,
   SafeAreaView,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { fetchAuthor } from "src/api/fetchContent";
 import AuthorNotifToggle from "src/components/AuthorNotifToggle";
 import { baseStyles, text, varGray1 } from "src/styles/styles";
@@ -71,6 +73,16 @@ function AuthorSubscriptions({ navigation }: NavProp) {
 
   return (
     <SafeAreaView style={baseStyles.container}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+        accessible={true}
+        accessibilityLabel="Go back"
+        accessibilityHint="Returns to the previous screen"
+      >
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </TouchableOpacity>
+      
       <View style={{ flex: 1, paddingTop: 16 }}>
         <Text style={text.sectionHeader1}>Author Notifications</Text>
         <Text style={{ ...text.textMedium, marginTop: 8, marginBottom: 16 }}>
@@ -101,5 +113,13 @@ function AuthorSubscriptions({ navigation }: NavProp) {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  backButton: {
+    marginTop: 15,
+    marginLeft: 15, 
+    marginBottom: 5,
+  },
+});
 
 export default AuthorSubscriptions;
