@@ -127,7 +127,7 @@ jobs:
         id: nms-cache
         with:
           path: ./backend/nms/node_modules
-          key: ${{ runner.os }}-nms-node-modules-${{ hashFiles('./backend/nms/package-lock.json') }}
+          key: ${{ runner.os }}-nms-node-modules-${{ hashFiles('./backend/nms/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-nms-node-modules-
 
