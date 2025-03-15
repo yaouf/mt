@@ -8,15 +8,15 @@ import { text } from 'src/styles/styles';
 interface AuthorSubscriptionModalProps {
   isVisible: boolean;
   onClose: () => void;
-  author: Author | null;
+  authors: Author[];
 }
 
 const AuthorSubscriptionModal: React.FC<AuthorSubscriptionModalProps> = ({
   isVisible,
   onClose,
-  author
+  authors
 }) => {
-  if (!author) return null;
+  if (!authors || authors.length === 0) return null;
 
   return (
     <Modal
@@ -30,16 +30,23 @@ const AuthorSubscriptionModal: React.FC<AuthorSubscriptionModalProps> = ({
           <View style={styles.handle} />
           
           <View style={styles.header}>
-            <Text style={styles.headerText}>Subscribe to this Author</Text>
+            <Text style={styles.headerText}>
+              {authors.length > 1 ? 'Subscribe to Authors' : 'Subscribe to this Author'}
+            </Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Ionicons name="close" size={24} color="#000" />
             </TouchableOpacity>
           </View>
           
           <View style={styles.authorContainer}>            
-            <View style={styles.toggleContainer}>
-              <AuthorNotifToggle author={author} />
-            </View>
+            {authors.map((author, index) => (
+              <View key={author.slug || index} style={[
+                styles.toggleContainer,
+                index > 0 && { marginTop: 20, paddingTop: 15, borderTopWidth: 1, borderTopColor: '#eee' }
+              ]}>
+                <AuthorNotifToggle author={author} />
+              </View>
+            ))}
           </View>
         </View>
       </View>

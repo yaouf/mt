@@ -46,7 +46,7 @@ function ArticleScreen({
   
   // Author notification modal state
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [authorData, setAuthorData] = useState<Author | null>(null);
+  const [authorsData, setAuthorsData] = useState<Author[]>([]);
 
   useEffect(() => {
     trackEvent("article", {
@@ -55,20 +55,38 @@ function ArticleScreen({
     });
   }, []);
   
-  // Function to handle author notification subscription
-  const handleAuthorSubscription = async (authorSlug: string) => {
+  // Function to handle author notification subscription for all article authors
+  const handleAuthorSubscription = async () => {
     try {
       Haptics.selectionAsync();
-      await fetchAuthor(
-        authorSlug,
-        (author) => {
-          setAuthorData(author || null);
-          setIsModalVisible(true);
-        },
-        () => {},
-        () => {},
-        () => {}
-      );
+      
+      if (!article.authors || article.authors.length === 0) return;
+      
+      // For multiple authors, fetch each author's data
+      const authorPromises = article.authors.map(author => {
+        return new Promise<Author | null>((resolve) => {
+          if (!author.slug) {
+            resolve(null);
+            return;
+          }
+          
+          fetchAuthor(
+            author.slug,
+            (fetchedAuthor) => resolve(fetchedAuthor || null),
+            () => {},
+            () => {},
+            () => {}
+          ).catch(() => resolve(null));
+        });
+      });
+      
+      const results = await Promise.all(authorPromises);
+      const validAuthors = results.filter((a): a is Author => a !== null);
+      
+      if (validAuthors.length > 0) {
+        setAuthorsData(validAuthors);
+        setIsModalVisible(true);
+      }
     } catch (error) {
       console.error("Error fetching author data:", error);
     }
@@ -269,9 +287,9 @@ function ArticleScreen({
                     </View>
                     
                     {/* Bell icon for author notifications - vertically centered and with right padding */}
-                    {article.authors.length > 0 && (
+                    {article.authors && article.authors.length > 0 && article.authors.some(author => author && author.slug) && (
                       <TouchableOpacity
-                        onPress={() => handleAuthorSubscription(article.authors[0].slug)}
+                        onPress={handleAuthorSubscription}
                         accessible={true}
                         accessibilityLabel="Subscribe to author notifications"
                         accessibilityHint="Get notified when this author publishes new articles"
@@ -315,7 +333,7 @@ function ArticleScreen({
       <AuthorSubscriptionModal
         isVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
-        author={authorData}
+        authors={authorsData}
       />
     </SafeAreaView>
   );
