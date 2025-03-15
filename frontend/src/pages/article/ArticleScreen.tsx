@@ -109,9 +109,9 @@ function ArticleScreen({
           >
             <View style={baseStyles.container}>
               <View style={articleStyles.headingContainer}>
-                <Text style={articleStyles.title}>{article.headline}</Text>
+                <Text selectable style={articleStyles.title}>{article.headline}</Text>
                 {article.subhead ? (
-                  <Text style={articleStyles.lead}>{article.subhead}</Text>
+                  <Text selectable style={articleStyles.lead}>{article.subhead}</Text>
                 ) : (
                   <View style={{ height: 0, marginBottom: 7.422 }} /> // Placeholder for gap
                 )}
@@ -137,7 +137,7 @@ function ArticleScreen({
                   <View style={baseStyles.container}>
                     {(article.dominantMedia.content ||
                       article.dominantMedia.authors) && (
-                      <Text style={articleStyles.mediaCaption}>
+                      <Text selectable style={articleStyles.mediaCaption}>
                         {article.dominantMedia.content
                           ? article.dominantMedia.content
                               .replaceAll("\n", " ")
@@ -224,6 +224,7 @@ function ArticleScreen({
                       ))}
                     </Text>
                     <Text
+                      selectable
                       style={articleStyles.publishedDetailsText}
                       accessibilityLabel="Published Date"
                     >

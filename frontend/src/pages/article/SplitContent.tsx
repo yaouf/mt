@@ -174,17 +174,19 @@ function SplitArticle({ content }: SplitArticleType) {
           }
           // Render normal paragraph content
           return (
-            <RenderHTML
-              key={`para-${index}`}
-              source={{ html: paragraph + "\n" }}
-              baseStyle={articleStyles.text}
-              customHTMLElementModels={customHTMLElementModels}
-              renderers={renderers}
-              renderersProps={renderersProps}
-              GenericPressable={View}
-            />
+              <RenderHTML
+                key={`para-${index}`}
+                source={{ html: paragraph + "\n" }}
+                baseStyle={articleStyles.text}
+                customHTMLElementModels={customHTMLElementModels}
+                renderers={renderers}
+                renderersProps={renderersProps}
+                GenericPressable={View}
+                defaultTextProps={{selectable:true}}
+              />
           );
         })}
+        
       </View>
     </View>
   );
