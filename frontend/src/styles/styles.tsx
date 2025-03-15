@@ -18,6 +18,7 @@ export const varTextColor = "#020202";
 export const varTextSecondaryColor = "#333";
 export const varRed = "#ED1C24";
 export const varGray1 = "#9E9E9E";
+export const varPink = "#F2DAE5";
 
 export const baseStyles = StyleSheet.create({
   container: {
@@ -41,12 +42,12 @@ export const layout = StyleSheet.create({
   vStack: {
     rowGap: 0,
     marginTop: 0,
-    overflow: "visible"
+    overflow: "visible",
   },
   recentArticlesStack: {
     rowGap: 10,
     marginTop: 0,
-    overflow: "visible"
+    overflow: "visible",
   },
   grid: {
     flexDirection: "row",
@@ -69,7 +70,7 @@ export const text = StyleSheet.create({
     fontWeight: "800",
     fontSize: 26,
     fontFamily: font3,
-    paddingTop: 10
+    paddingTop: 10,
   },
   resetSectionsButton: {
     // main section headers
@@ -77,7 +78,7 @@ export const text = StyleSheet.create({
     fontWeight: "800",
     fontSize: 20,
     fontFamily: font3,
-    paddingTop: 0
+    paddingTop: 0,
   },
   sectionHeader2: {
     // with added padding for settings
@@ -122,7 +123,7 @@ export const text = StyleSheet.create({
     fontSize: 16,
     overflow: "hidden",
     maxWidth: "100%",
-    paddingRight: 10
+    paddingRight: 10,
   },
   normal: {
     color: varTextColor,

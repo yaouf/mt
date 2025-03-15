@@ -7,11 +7,20 @@ import {
   ViewStyle,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
+import {
+  font1,
+  font3,
+  varGray1,
+  varPink,
+  varTextColor,
+} from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
+import { Tag } from "src/types/data";
 
 function NoImageCard({ article, navigation }: CardProps) {
   let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
+  const all_tags = article.tags.map((t: Tag) => t.name);
+  const section = all_tags[0].replace("&;", "&");
 
   return (
     <View style={cardSize}>
@@ -19,7 +28,16 @@ function NoImageCard({ article, navigation }: CardProps) {
         style={styles2.touchableItem}
         onPress={() => navigation.push("Article", { data: article })}
       >
-        <View style={styles.card}>
+        <View
+          style={[
+            styles.card,
+            section == "post- magazine" && {
+              backgroundColor: varPink,
+              padding: "5%",
+              borderRadius: 15,
+            },
+          ]}
+        >
           <View style={styles.text}>
             <Text style={styles.title}>{article.headline}</Text>
             {article.subhead && article.subhead.trim() !== "" && (
