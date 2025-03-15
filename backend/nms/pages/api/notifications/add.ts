@@ -1,7 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 import { notificationQueue } from "../queue/queue";
-import { Notification, NotificationId, ResponseData } from "../types/types";
+import {
+  Author,
+  Notification,
+  NotificationId,
+  ResponseData,
+} from "../types/types";
 
 export default async function getNotification(
   req: NextApiRequest,
@@ -73,21 +78,24 @@ export default async function getNotification(
     await db("notification_categories").insert(notificationCategories);
 
     // Add author relationships if any authors are specified
-    let validAuthors = [];
+    let validAuthors: Author[] = [];
     if (authorIds && authorIds.length > 0) {
       // Verify each author exists
-      validAuthors = await db("authors").whereIn("id", authorIds).select("id");
+      validAuthors = (await db("authors")
+        .whereIn("id", authorIds)
+        .select("id", "name", "slug")) as Author[];
 
       if (validAuthors.length !== authorIds.length) {
         const missingAuthors = authorIds.filter(
-          (id: number) => !validAuthors.find((author: any) => author.id === id)
+          (id: number) =>
+            !validAuthors.find((author: Author) => author.id === id)
         );
         console.log("Missing authors:", missingAuthors);
         // Continue with valid authors only
       }
 
       // Create relationships for valid authors
-      const notificationAuthors = validAuthors.map((author) => ({
+      const notificationAuthors = validAuthors.map((author: Author) => ({
         notificationId: notificationIdObject.id,
         authorId: author.id,
       }));
@@ -111,7 +119,7 @@ export default async function getNotification(
         tags,
         url,
         isUid,
-        authorIds: validAuthors ? validAuthors.map((author) => author.id) : [],
+        authorIds: validAuthors.map((author: Author) => author.id),
       },
       { delay, jobId: `${notificationIdObject.id}_n` }
     );
