@@ -16,6 +16,9 @@ type Notification = {
   status?: string;
   url?: string;
   is_uid?: boolean;
+  authors?: string;
+  author_ids?: string;
+  authorIds?: number[];
 };
 
 async function getNotificationHelper(
@@ -29,10 +32,12 @@ async function getNotificationHelper(
     const jobId = parseInt(req.query.jobId as string);
 
     if (!isNaN(jobId)) {
-      // Fetch single notification with categories
+      // Fetch single notification with categories and authors
       const notificationWithCategories = await db("notifications as n")
         .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
         .leftJoin("categories as c", "nc.category_id", "c.id")
+        .leftJoin("notification_authors as na", "n.id", "na.notificationId")
+        .leftJoin("authors as a", "na.authorId", "a.id")
         .select(
           "n.id",
           "n.time",
@@ -41,7 +46,9 @@ async function getNotificationHelper(
           "n.status",
           "n.url",
           "n.is_uid",
-          db.raw("STRING_AGG(c.name, ',') AS categories")
+          db.raw("STRING_AGG(DISTINCT c.name, ',') AS categories"),
+          db.raw("STRING_AGG(DISTINCT a.name, ',') AS authors"),
+          db.raw("STRING_AGG(DISTINCT CAST(a.id AS TEXT), ',') AS author_ids")
         )
         .where("n.id", jobId)
         .groupBy(
@@ -59,15 +66,23 @@ async function getNotificationHelper(
         return res.status(404).json({ message: "Notification not found." });
       }
 
+      // Convert author_ids to an array of numbers
+      const authorIds = notificationWithCategories.author_ids 
+        ? notificationWithCategories.author_ids.split(',').map(id => parseInt(id, 10))
+        : [];
+      
       res.status(200).json({
         ...notificationWithCategories,
-        tags: notificationWithCategories.categories || [],
+        tags: notificationWithCategories.categories ? notificationWithCategories.categories.split(',') : [],
+        authorIds
       });
     } else {
-      // Fetch all notifications with categories
+      // Fetch all notifications with categories and authors
       const notificationsWithCategories = await db("notifications as n")
         .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
         .leftJoin("categories as c", "nc.category_id", "c.id")
+        .leftJoin("notification_authors as na", "n.id", "na.notificationId")
+        .leftJoin("authors as a", "na.authorId", "a.id")
         .select(
           "n.id",
           "n.time",
@@ -76,7 +91,9 @@ async function getNotificationHelper(
           "n.status",
           "n.url",
           "n.is_uid",
-          db.raw("STRING_AGG(c.name, ',') AS categories")
+          db.raw("STRING_AGG(DISTINCT c.name, ',') AS categories"),
+          db.raw("STRING_AGG(DISTINCT a.name, ',') AS authors"),
+          db.raw("STRING_AGG(DISTINCT CAST(a.id AS TEXT), ',') AS author_ids")
         )
         .groupBy(
           "n.id",
@@ -90,10 +107,18 @@ async function getNotificationHelper(
         .orderBy("n.time", "desc");
 
       res.status(200).json(
-        notificationsWithCategories.map((notification) => ({
-          ...notification,
-          tags: notification.categories || [],
-        }))
+        notificationsWithCategories.map((notification) => {
+          // Convert author_ids to an array of numbers for each notification
+          const authorIds = notification.author_ids 
+            ? notification.author_ids.split(',').map(id => parseInt(id, 10))
+            : [];
+            
+          return {
+            ...notification,
+            tags: notification.categories ? notification.categories.split(',') : [],
+            authorIds
+          };
+        })
       );
     }
   } catch (error) {

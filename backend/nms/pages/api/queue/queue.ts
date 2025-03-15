@@ -29,9 +29,11 @@ const worker = new Worker(
   "notificationQueue",
   async (job) => {
     // This is the job data that was passed to `notificationQueue.add()`
-    const { time, title, body, tags, url, isUid, notificationId } = job.data;
+    const { time, title, body, tags, url, isUid, notificationId, authorIds } = job.data;
     // Fetch all devices that have subscribed to the tags
     let expoPushTokens: Set<string> = new Set(); // Use a map with push token as key
+    
+    // Get devices subscribed to specific tags
     for (let tag of tags) {
       const devices = (await db("devices")
         .select("devices.expo_push_token")
@@ -44,6 +46,23 @@ const worker = new Worker(
         .where("categories.name", tag)) as DeviceToken[];
       for (let device of devices) {
         expoPushTokens.add(device.expo_push_token);
+      }
+    }
+    
+    // Get devices subscribed to specific authors (if any)
+    if (authorIds && authorIds.length > 0) {
+      for (let authorId of authorIds) {
+        const devices = (await db("devices")
+          .select("devices.expo_push_token")
+          .join(
+            "device_author_subscriptions",
+            "devices.id",
+            "device_author_subscriptions.deviceId"
+          )
+          .where("device_author_subscriptions.authorId", authorId)) as DeviceToken[];
+        for (let device of devices) {
+          expoPushTokens.add(device.expo_push_token);
+        }
       }
     }
 

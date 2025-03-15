@@ -38,3 +38,10 @@ export interface EditorPick {
   url: string;
   rank: number;
 }
+
+export interface Author {
+  id: number;
+  name: string;
+  slug: string;
+  dateCreated?: Date;
+}
