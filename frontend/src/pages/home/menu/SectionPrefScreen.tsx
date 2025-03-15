@@ -8,12 +8,13 @@ import {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { menuStyles } from "src/styles/sectionMenu";
-import { baseStyles, text, varGray1 } from "src/styles/styles";
+import { menuStyles, darkMenuStyles } from "src/styles/sectionMenu";
+import { baseStyles, darkModeText, darkStyles, text, varGray1 } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { MenuItem } from "src/types/other";
 import { setAsync } from "src/utils/helpers";
 import { MenuContext } from "../HomeStackScreen";
+import { useTheme } from "src/components/ThemeContext";
 
 function SectionPrefScreen({ navigation }: NavProp) {
   const { original, sectionMenu, setSectionMenu } = useContext(MenuContext);
@@ -50,11 +51,13 @@ function SectionPrefScreen({ navigation }: NavProp) {
   };
 
   const renderItem = ({ item, drag }: RenderItemParams<MenuItem>) => {
+    const { isDarkMode, toggleTheme } = useTheme();
+    const menuStyle = isDarkMode ? darkMenuStyles : menuStyles;
     return (
       <TouchableOpacity
         onLongPress={drag}
         delayLongPress={100}
-        style={[menuStyles.rowItem, { height: itemHeight }]}
+        style={[menuStyle.rowItem, { height: itemHeight }]}
       >
         {/* <TouchableOpacity onPress={() => remove(item)}>
           <Feather
@@ -64,12 +67,12 @@ function SectionPrefScreen({ navigation }: NavProp) {
             style={menuStyles.icon}
           />
         </TouchableOpacity> */}
-        <Text style={menuStyles.rowText}>{item.title}</Text>
+        <Text style={menuStyle.rowText}>{item.title}</Text>
         <Ionicons
           name="reorder-three-outline"
           size={28}
           color="#1C1B1F"
-          style={menuStyles.icon}
+          style={menuStyle.icon}
         />
       </TouchableOpacity>
     );
@@ -105,12 +108,15 @@ function SectionPrefScreen({ navigation }: NavProp) {
     const { height } = event.nativeEvent.layout;
     setItemHeight((height * 40) / 22);
   };
-
+  const { isDarkMode, toggleTheme } = useTheme();
+  const menuStyle = isDarkMode ? darkMenuStyles : menuStyles;
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
   return (
     <GestureHandlerRootView
-      style={[baseStyles.container, { marginBottom: marginBottom }]}
+      style={[containerStyle.container, { marginBottom: marginBottom }]}
     >
-      <View style={[{ marginTop: 12, flexWrap: "wrap" }, menuStyles.header]}>
+      <View style={[{ marginTop: 12, flexWrap: "wrap" }, menuStyle.header]}>
         <TouchableOpacity
           onPress={() => navigation.pop()}
           accessible={true}
@@ -121,7 +127,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
           <MaterialIcons name="close" size={28} color="#1C1B1F" />
         </TouchableOpacity>
 
-        <Text style={[menuStyles.otherText, { fontSize: 20, fontWeight: 600 }]}>
+        <Text style={[menuStyle.otherText, { fontSize: 20, fontWeight: 600 }]}>
           Section Preferences
         </Text>
 
@@ -146,29 +152,29 @@ function SectionPrefScreen({ navigation }: NavProp) {
       />
 
       <NestableScrollContainer
-        style={[menuStyles.contentContainer, { marginRight: -20 }]}
+        style={[menuStyle.contentContainer, { marginRight: -20 }]}
         scrollIndicatorInsets={{ right: 4 }}
         contentContainerStyle={{ paddingRight: 20 }}
       >
         <View>
           <Text
-            style={[{ marginBottom: 12 }, text.sectionHeader3]}
+            style={[{ marginBottom: 12 }, textStyle.sectionHeader3]}
             onLayout={handleSpacing}
           >
             Favorite Sections
           </Text>
-          <Text style={[menuStyles.descriptionText]}>
+          <Text style={[menuStyle.descriptionText]}>
             Add and reorder sections to customize your home page.
           </Text>
           {/* TODO: do we need a lock icon? */}
-          <View style={[menuStyles.rowItem, { height: itemHeight }]}>
+          <View style={[menuStyle.rowItem, { height: itemHeight }]}>
             {/* <MaterialIcons
               name="lock-outline"
               size={28}
               color={varGray1}
               style={menuStyles.icon}
             /> */}
-            <Text style={[menuStyles.rowText, { color: varGray1 }]}>ALL</Text>
+            <Text style={[menuStyle.rowText, { color: varGray1 }]}>ALL</Text>
           </View>
           <NestableDraggableFlatList
             data={preferences}
@@ -184,7 +190,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
         <View>
           {removed.length > 0 && (
             <Text
-              style={[{ marginBottom: 12, marginTop: 16 }, text.sectionHeader3]}
+              style={[{ marginBottom: 12, marginTop: 16 }, textStyle.sectionHeader3]}
             >
               Removed Sections
             </Text>
@@ -192,16 +198,16 @@ function SectionPrefScreen({ navigation }: NavProp) {
           {removed.map((item) => (
             <TouchableOpacity
               onPress={() => add(item)}
-              style={[menuStyles.rowItem, { height: itemHeight }]}
+              style={[menuStyle.rowItem, { height: itemHeight }]}
               key={`section-${item.id}`}
             >
               <Feather
                 name="plus-circle"
                 size={28}
                 color="#249607"
-                style={menuStyles.icon}
+                style={menuStyle.icon}
               />
-              <Text style={menuStyles.rowText}>{item.title}</Text>
+              <Text style={menuStyle.rowText}>{item.title}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -211,9 +217,9 @@ function SectionPrefScreen({ navigation }: NavProp) {
             setPreferences([...original]);
             setRemoved([]);
           }}
-          style={[menuStyles.rowItem, menuStyles.reset, { height: itemHeight }]}
+          style={[menuStyle.rowItem, menuStyle.reset, { height: itemHeight }]}
         >
-          <Text style={menuStyles.otherText}>Reset to Default</Text>
+          <Text style={menuStyle.otherText}>Reset to Default</Text>
         </TouchableOpacity>
       </NestableScrollContainer>
     </GestureHandlerRootView>

@@ -7,11 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { menuStyles } from "src/styles/sectionMenu";
+import { darkMenuStyles, menuStyles } from "src/styles/sectionMenu";
 import { NavProp } from "src/types/navStacks";
 import { setAsync } from "src/utils/helpers";
 import { menuItems } from "src/utils/setupDevice";
 import { MenuContext } from "../HomeStackScreen";
+import { useTheme } from "src/components/ThemeContext";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
@@ -49,19 +50,24 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
     }, 100);
   }, [currSection]);
 
+  const { isDarkMode, toggleTheme } = useTheme();
+  const menuStyle = isDarkMode ? darkMenuStyles : menuStyles;
+
   return (
     <ScrollView
       ref={scrollViewRef}
       horizontal
       ref={scrollViewRef}
       showsHorizontalScrollIndicator={false}
-      style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
+      style={{ borderBottomWidth: 1, borderColor: "#ccc",
+        backgroundColor: menuStyle.rowItem.backgroundColor
+       }}
       accessibilityLabel="Section menu"
       accessibilityHint="Scroll horizontally to view different BDH sections"
     >
       <TouchableOpacity
         key={1}
-        style={[menuStyles.menuItem, { paddingLeft: 20 }]}
+        style={[menuStyle.menuItem, { paddingLeft: 20 }]}
         onPress={() => navigation.push("SectionPref")}
         accessible={true}
         accessibilityRole="button"
@@ -76,18 +82,18 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
       {currSection === "all" ? (
         <View
-          style={menuStyles.menuItem}
+          style={menuStyle.menuItem}
           accessible={true}
           accessibilityRole="button"
           accessibilityState={{ selected: true }}
           accessibilityLabel="All sections, selected"
         >
-          <Text style={menuStyles.menuItemSelected}>all</Text>
+          <Text style={menuStyle.menuItemSelected}>all</Text>
         </View>
       ) : (
         <TouchableOpacity
           key={2}
-          style={menuStyles.menuItem}
+          style={menuStyle.menuItem}
           onPress={() => {
             // TODO: should this also be navigate?
             navigation.navigate("HomeScreen", { slug: "all" });
@@ -98,7 +104,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
           accessibilityLabel="All sections"
           accessibilityHint="Double tap to view all sections"
         >
-          <Text style={menuStyles.menuItemText}>all</Text>
+          <Text style={menuStyle.menuItemText}>all</Text>
         </TouchableOpacity>
       )}
 
@@ -106,18 +112,18 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         menuItem.slug === currSection ? (
           <View
             key={menuItem.id}
-            style={menuStyles.menuItem}
+            style={menuStyle.menuItem}
             accessible={true}
             accessibilityRole="button"
             accessibilityState={{ selected: true }}
             accessibilityLabel={`${menuItem.title} section, selected`}
           >
-            <Text style={menuStyles.menuItemSelected}>{menuItem.title}</Text>
+            <Text style={menuStyle.menuItemSelected}>{menuItem.title}</Text>
           </View>
         ) : (
           <TouchableOpacity
             key={menuItem.id}
-            style={menuStyles.menuItem}
+            style={menuStyle.menuItem}
             onPress={() => {
               if (
                 menuItem.title == "Sports" ||
@@ -145,7 +151,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
             accessibilityLabel={`${menuItem.title} section`}
             accessibilityHint={`Double tap to view ${menuItem.title} section`}
           >
-            <Text style={menuStyles.menuItemText}>{menuItem.title}</Text>
+            <Text style={menuStyle.menuItemText}>{menuItem.title}</Text>
           </TouchableOpacity>
         )
       )}

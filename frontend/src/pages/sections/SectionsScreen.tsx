@@ -9,7 +9,8 @@ import NoImageCard from "src/components/cards/NoImageCard";
 import Divider from "src/components/Divider";
 import { Article } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
-import { baseStyles, layout, text, varGray1 } from "../../styles/styles";
+import { baseStyles, darkModeText, darkStyles, layout, text, varGray1 } from "../../styles/styles";
+import { useTheme } from "src/components/ThemeContext";
 
 // If reaches the end of the list, loads the next page of content
 // (another api call but with page= page+ 1 unless page=last page)
@@ -149,16 +150,18 @@ function SectionsScreen({
     if (!isLoadingMore) return null;
     return <ActivityIndicator color={varGray1} style={{ padding: 20 }} />;
   };
-
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
   return (
     <View>
-      <View style={baseStyles.container}>
+      <View style={containerStyle.container}>
         <View>
           <FlatList
             data={rows}
             keyExtractor={(item) => item.id}
             renderItem={renderGroup}
-            ListHeaderComponent={<Text style={text.bigTitle}>{title}</Text>}
+            ListHeaderComponent={<Text style={textStyle.bigTitle}>{title}</Text>}
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
