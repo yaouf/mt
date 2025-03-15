@@ -49,12 +49,24 @@ function ImageCard({ article, navigation, inSearch }: CardProps) {
         >
           <View style={styles.content}>
             <View style={styles.imageWrapper}>
-              <Image
-                source={{
-                  uri: img_uri,
-                }}
-                style={styles.image}
-              />
+              {article.dominantMedia &&
+              article.dominantMedia.attachment_uuid ? (
+                <Image
+                  source={{
+                    uri: img_uri,
+                  }}
+                  style={styles.image}
+                />
+              ) : (
+                <Image
+                  source={require("../../../assets/post-logo.png")}
+                  style={{
+                    width: 80,
+                    height: 35,
+                    alignSelf: "center",
+                  }}
+                />
+              )}
             </View>
             <View style={styles.text}>
               <View style={styles.innerText}>

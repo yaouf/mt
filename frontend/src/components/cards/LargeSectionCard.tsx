@@ -46,11 +46,12 @@ function LargeCard({ article, navigation, inSearch }: CardProps) {
         <View
           style={[
             styles.card,
-            section == "post- magazine" && {
-              backgroundColor: varPink,
-              padding: "5%",
-              borderRadius: 15,
-            },
+            section == "post- magazine" &&
+              !inSearch && {
+                backgroundColor: varPink,
+                padding: "5%",
+                borderRadius: 15,
+              },
           ]}
         >
           <Image

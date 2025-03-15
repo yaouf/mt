@@ -124,6 +124,7 @@ function SectionsScreen({
           <LargeSectionCard
             article={item.articles[0]}
             navigation={navigation}
+            inSearch={false}
           />
           <Divider />
         </View>
@@ -136,7 +137,11 @@ function SectionsScreen({
       <View style={layout.vStack}>
         {item.articles.map((article, i) => (
           <View key={`${item.id}-${i}`}>
-            <CardComponent article={article} navigation={navigation} />
+            <CardComponent
+              article={article}
+              navigation={navigation}
+              inSearch={false}
+            />
             <Divider />
           </View>
         ))}
