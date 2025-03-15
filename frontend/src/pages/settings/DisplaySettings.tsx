@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { fyp } from "src/styles/pages";
@@ -22,14 +23,17 @@ function DisplaySettings({navigation} : NavProp) {
 
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;
+  const arrowColor = isDarkMode ? "white" : "black";
 
   return (
-    <>
+    <SafeAreaView style={[{ flex: 1 }, containerStyle.container]}>
       <TouchableOpacity
-        style={styles.backButton}
+        style={{marginTop: 15,
+          marginLeft: 15,
+          backgroundColor: containerStyle.container.backgroundColor}}
         onPress={() => navigation.goBack()}
       >
-        <Ionicons name="arrow-back" size={20} color="black" />
+        <Ionicons name="arrow-back" size={20} color={arrowColor} />
       </TouchableOpacity>
       <ScrollView style={containerStyle.container}>
         <Text style={textStyle.sectionHeader1}>Display Settings</Text>
@@ -37,7 +41,7 @@ function DisplaySettings({navigation} : NavProp) {
         <Text style={settings.smallHeading }>Appearance</Text>
         <View style={fyp.toggleRow}>
               <View style={{ flex: 1, paddingRight: 64 }}>
-                <Text style={textStyle.sectionHeader3}>Automatic</Text>
+                <Text style={textStyle.sectionHeader3}>Dark Mode</Text>
               </View>
               <Switch
                 trackColor={{ true: "#000000", false: "grey" }}
@@ -51,49 +55,8 @@ function DisplaySettings({navigation} : NavProp) {
             </View>
             </View>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    marginBottom: 20,
-  },
-  header: {
-    fontSize: 18,
-    marginBottom: 20,
-    paddingTop: 10,
-  },
-  optionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  optionText: {
-    flex: 1,
-    fontSize: 16,
-  },
-  radioCircle: {
-    height: 20,
-    width: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  selected: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "#000",
-  },
-  backButton: {
-    marginTop: 15,
-    marginLeft: 15,
-  },
-});
 
 export default DisplaySettings;
