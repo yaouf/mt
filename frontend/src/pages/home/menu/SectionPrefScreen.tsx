@@ -17,10 +17,10 @@ import { MenuContext } from "../HomeStackScreen";
 
 function SectionPrefScreen({ navigation }: NavProp) {
   const { original, sectionMenu, setSectionMenu } = useContext(MenuContext);
-  const [preferences, setPreferences] = useState<MenuItem[]>(sectionMenu);
+  const [preferences, setPreferences] = useState<MenuItem[]>(sectionMenu && sectionMenu.length > 0 ? sectionMenu : original);
   const [removed, setRemoved] = useState<MenuItem[]>(
     original.filter(
-      (item) => !preferences.some((pref) => pref.slug === item.slug)
+      (item) => !(preferences && preferences.some((pref) => pref.slug === item.slug))
     )
   );
 

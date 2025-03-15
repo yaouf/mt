@@ -14,11 +14,13 @@ import { shareArticle } from "./ShareArticle";
  */
 function BottomArticleBar(props: ArticleDetailProps) {
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
+  const [saved, setSaved] = useState<boolean>(savedArticles && typeof savedArticles === 'object' && props.uuid in savedArticles);
 
   useEffect(() => {
-    setSaved(props.uuid in savedArticles);
-  }, [savedArticles, saved]);
+    if (savedArticles && typeof savedArticles === 'object') {
+      setSaved(props.uuid in savedArticles);
+    }
+  }, [savedArticles, props.uuid]);
 
   function handleShare() {
     const split = props.published_at.split("-");
@@ -32,12 +34,13 @@ function BottomArticleBar(props: ArticleDetailProps) {
       style={{ paddingRight: 10 }}
       onPress={() => {
         Haptics.selectionAsync();
+        const articlesToUse = savedArticles && typeof savedArticles === 'object' ? savedArticles : {};
         handleBookmark(
           saved,
           props.slug,
           props.published_at,
           props.uuid,
-          savedArticles,
+          articlesToUse,
           setSavedArticles,
           setSaved
         );

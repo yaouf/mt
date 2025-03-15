@@ -60,13 +60,14 @@ function HomeStackScreen({ navigation, route }) {
     const loadSectionsAsync = async () => {
       try {
         const sections = await getAsync("sectionMenu");
-        if (sections !== undefined) {
-          setSectionMenu(sections);
+        if (sections) {
+          setSectionMenu(JSON.parse(sections));
         } else {
           setSectionMenu(menuItems); // first load
         }
       } catch (err) {
-        console.log(err);
+        console.log("Error loading section menu:", err);
+        setSectionMenu(menuItems); // fallback to default menu items
       }
     };
     loadSectionsAsync();

@@ -20,10 +20,13 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
   // const itemRef = useRef<View>(null);
   const itemPositions = useRef<{ [key: string]: number }>({});
 
-  if (!sectionMenu) {
-    setSectionMenu(menuItems);
-    setAsync("sectionMenu", JSON.stringify(menuItems));
-  }
+  // Ensure sectionMenu is initialized
+  useEffect(() => {
+    if (!sectionMenu || sectionMenu.length === 0) {
+      setSectionMenu(menuItems);
+      setAsync("sectionMenu", JSON.stringify(menuItems));
+    }
+  }, [sectionMenu, setSectionMenu]);
 
   const textSizeMultiplier = PixelRatio.getFontScale();
   console.log("textSizeMultiplier", textSizeMultiplier);
@@ -102,43 +105,63 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         </TouchableOpacity>
       )}
 
-      {sectionMenu.map((menuItem) =>
-        menuItem.slug === currSection ? (
-          <View
-            key={menuItem.id}
-            style={menuStyles.menuItem}
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityState={{ selected: true }}
-            accessibilityLabel={`${menuItem.title} section, selected`}
-          >
-            <Text style={menuStyles.menuItemSelected}>{menuItem.title}</Text>
-          </View>
-        ) : (
+      {sectionMenu && sectionMenu.length > 0 ? (
+        sectionMenu.map((menuItem) =>
+          menuItem.slug === currSection ? (
+            <View
+              key={menuItem.id}
+              style={menuStyles.menuItem}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityState={{ selected: true }}
+              accessibilityLabel={`${menuItem.title} section, selected`}
+            >
+              <Text style={menuStyles.menuItemSelected}>{menuItem.title}</Text>
+            </View>
+          ) : (
+            <TouchableOpacity
+              key={menuItem.id}
+              style={menuStyles.menuItem}
+              onPress={() => {
+                if (
+                  menuItem.title == "Sports" ||
+                  menuItem.title == "Arts & Culture" ||
+                  menuItem.title == "Science & Research"
+                ) {
+                  const xPosition = itemPositions.current[menuItem.slug] || 0;
+                  scrollViewRef.current?.scrollTo({
+                    x: xPosition - 10,
+                    animated: true,
+                  });
+                }
+                navigation.navigate("Section", { slug: menuItem.slug });
+                setCurrSection(menuItem.slug);
+                // itemRef.current?.measureLayout(
+                //   scrollViewRef.current as any,
+                //   (x, y, width, height) => {
+                //     console.log(x);
+                //     scrollViewRef.current?.scrollTo({ x, animated: true });
+                //   }
+                // );
+              }}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={`${menuItem.title} section`}
+              accessibilityHint={`Double tap to view ${menuItem.title} section`}
+            >
+              <Text style={menuStyles.menuItemText}>{menuItem.title}</Text>
+            </TouchableOpacity>
+          )
+        )
+      ) : (
+        // Render default items if sectionMenu is undefined or empty
+        menuItems.map((menuItem) => (
           <TouchableOpacity
             key={menuItem.id}
             style={menuStyles.menuItem}
             onPress={() => {
-              if (
-                menuItem.title == "Sports" ||
-                menuItem.title == "Arts & Culture" ||
-                menuItem.title == "Science & Research"
-              ) {
-                const xPosition = itemPositions.current[menuItem.slug] || 0;
-                scrollViewRef.current?.scrollTo({
-                  x: xPosition - 10,
-                  animated: true,
-                });
-              }
               navigation.navigate("Section", { slug: menuItem.slug });
               setCurrSection(menuItem.slug);
-              // itemRef.current?.measureLayout(
-              //   scrollViewRef.current as any,
-              //   (x, y, width, height) => {
-              //     console.log(x);
-              //     scrollViewRef.current?.scrollTo({ x, animated: true });
-              //   }
-              // );
             }}
             accessible={true}
             accessibilityRole="button"
@@ -147,7 +170,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
           >
             <Text style={menuStyles.menuItemText}>{menuItem.title}</Text>
           </TouchableOpacity>
-        )
+        ))
       )}
     </ScrollView>
   );
