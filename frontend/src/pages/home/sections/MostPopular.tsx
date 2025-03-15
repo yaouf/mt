@@ -41,6 +41,7 @@ function MostPopular(props: Readonly<TopProps>) {
                     article={article}
                     navigation={props.navigation}
                     key={`search-popular-${article.id}`}
+                    inSearch={true}
                   />
                   {props.mostPopularStories &&
                     index !== props.mostPopularStories.length - 1 && (

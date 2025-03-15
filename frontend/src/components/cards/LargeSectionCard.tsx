@@ -12,13 +12,15 @@ import {
   font2,
   font3,
   varGray1,
+  varPink,
   varTextColor,
 } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 
-function LargeCard({ article, navigation }: CardProps) {
+function LargeCard({ article, navigation, inSearch }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
+  const section = all_tags[0].replace("&;", "&");
 
   for (let i = 0; i < all_tags.length; i++) {
     if (all_tags[i] == "breaking") {
@@ -41,7 +43,17 @@ function LargeCard({ article, navigation }: CardProps) {
       <TouchableWithoutFeedback
         onPress={() => navigation.push("Article", { data: article })}
       >
-        <View style={styles.card}>
+        <View
+          style={[
+            styles.card,
+            section == "post- magazine" &&
+              !inSearch && {
+                backgroundColor: varPink,
+                padding: "5%",
+                borderRadius: 15,
+              },
+          ]}
+        >
           <Image
             source={{
               uri: img_uri,

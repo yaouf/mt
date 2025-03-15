@@ -277,7 +277,6 @@ function ArticleScreen({
                         })}
                       </View>
                     )}
-
                     {/* Author names and date */}
                     <View style={articleStyles.authorTextContainer}>
                       <Text style={articleStyles.author}>

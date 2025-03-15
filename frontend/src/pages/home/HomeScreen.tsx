@@ -63,7 +63,7 @@ function HomeScreen({ navigation }: NavProp) {
   const sections: Section_Type[] = [
     {
       id: 1,
-      component: <Top topStories={topStories} navigation={navigation} />,
+      component: <Top topStories={topStories!} navigation={navigation} />,
     },
     {
       id: 2,
@@ -134,6 +134,18 @@ function HomeScreen({ navigation }: NavProp) {
           slug="science-research"
           count={4}
           title="Science & Research"
+          top={top}
+        />
+      ),
+    },
+    {
+      id: 8,
+      component: (
+        <SmallHorzGroup
+          navigation={navigation}
+          slug="post-magazine"
+          count={4}
+          title="post-"
           top={top}
         />
       ),

@@ -12,6 +12,8 @@ import { NavProp } from "src/types/navStacks";
 import { setAsync } from "src/utils/helpers";
 import { menuItems } from "src/utils/setupDevice";
 import { MenuContext } from "../HomeStackScreen";
+import Header from "src/components/Header";
+import PostHeader from "src/components/PostHeader";
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
   const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
@@ -50,7 +52,21 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         animated: true,
       });
     }, 100);
+
+    currSection == `post-magazine`
+      ? navigation
+          .getParent()
+          ?.setOptions({ headerTitle: () => <PostHeader /> })
+      : navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
   }, [currSection]);
+
+  useEffect(() => {
+    currSection == `post-magazine`
+      ? navigation
+          .getParent()
+          ?.setOptions({ headerTitle: () => <PostHeader /> })
+      : navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
+  });
 
   return (
     <ScrollView

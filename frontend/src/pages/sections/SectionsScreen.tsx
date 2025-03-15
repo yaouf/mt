@@ -124,6 +124,7 @@ function SectionsScreen({
           <LargeSectionCard
             article={item.articles[0]}
             navigation={navigation}
+            inSearch={false}
           />
           <Divider />
         </View>
@@ -136,7 +137,11 @@ function SectionsScreen({
       <View style={layout.vStack}>
         {item.articles.map((article, i) => (
           <View key={`${item.id}-${i}`}>
-            <CardComponent article={article} navigation={navigation} />
+            <CardComponent
+              article={article}
+              navigation={navigation}
+              inSearch={false}
+            />
             <Divider />
           </View>
         ))}
@@ -158,7 +163,11 @@ function SectionsScreen({
             data={rows}
             keyExtractor={(item) => item.id}
             renderItem={renderGroup}
-            ListHeaderComponent={<Text style={text.bigTitle}>{title}</Text>}
+            ListHeaderComponent={
+              slug != "post-magazine" ? (
+                <Text style={text.bigTitle}>{title}</Text>
+              ) : undefined
+            }
             ListFooterComponent={renderFooter}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

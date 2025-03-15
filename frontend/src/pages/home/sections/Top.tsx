@@ -6,6 +6,8 @@ import Divider from "src/components/Divider";
 import { baseStyles } from "src/styles/styles";
 import { Article } from "src/types/data";
 import LargeCard from "../../../components/cards/LargeCard";
+import { useEffect } from "react";
+import Header from "src/components/Header";
 
 type TopProps = {
   navigation: StackNavigationProp<any, any>;
@@ -13,6 +15,10 @@ type TopProps = {
 };
 
 function Top(props: TopProps) {
+  useEffect(() => {
+    props.navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
+  }, []);
+
   // Early return if no stories
   if (!props.topStories || props.topStories.length === 0) {
     return null;
@@ -24,6 +30,7 @@ function Top(props: TopProps) {
           article={props.topStories[0]}
           navigation={props.navigation}
           key={`top-home-0}`}
+          inSearch={false}
         />
         <Divider />
         <View style={{}}>
@@ -33,6 +40,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                inSearch={false}
               />
               <Divider />
             </View>
@@ -45,6 +53,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                inSearch={false}
               />
               <Divider />
             </View>
@@ -57,6 +66,7 @@ function Top(props: TopProps) {
                 article={article}
                 navigation={props.navigation}
                 key={`top-home-${i + 1}`}
+                inSearch={false}
               />
               <Divider />
             </View>

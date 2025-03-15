@@ -6,10 +6,21 @@ import {
   View,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
+import {
+  font1,
+  font3,
+  varGray1,
+  varPink,
+  varTextColor,
+} from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
+import { Tag } from "src/types/data";
+import { useEffect } from "react";
 
-function ImageCard({ article, navigation }: CardProps) {
+function ImageCard({ article, navigation, inSearch }: CardProps) {
+  const all_tags = article.tags.map((t: Tag) => t.name);
+  const section = all_tags[0].replace("&;", "&");
+
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
   if (article.dominantMedia) {
@@ -25,15 +36,37 @@ function ImageCard({ article, navigation }: CardProps) {
       <TouchableWithoutFeedback
         onPress={() => navigation.push("Article", { data: article })}
       >
-        <View style={styles.card}>
+        <View
+          style={[
+            styles.card,
+            section == "post- magazine" &&
+              !inSearch && {
+                backgroundColor: varPink,
+                padding: "5%",
+                borderRadius: 15,
+              },
+          ]}
+        >
           <View style={styles.content}>
             <View style={styles.imageWrapper}>
-              <Image
-                source={{
-                  uri: img_uri,
-                }}
-                style={styles.image}
-              />
+              {article.dominantMedia &&
+              article.dominantMedia.attachment_uuid ? (
+                <Image
+                  source={{
+                    uri: img_uri,
+                  }}
+                  style={styles.image}
+                />
+              ) : (
+                <Image
+                  source={require("../../../assets/post-logo.png")}
+                  style={{
+                    width: 80,
+                    height: 35,
+                    alignSelf: "center",
+                  }}
+                />
+              )}
             </View>
             <View style={styles.text}>
               <View style={styles.innerText}>

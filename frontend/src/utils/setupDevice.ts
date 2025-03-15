@@ -13,6 +13,7 @@ export const menuItems: MenuItem[] = [
   { id: 6, title: "arts & culture", slug: "arts-culture" },
   { id: 7, title: "sports", slug: "sports" },
   { id: 8, title: "science & research", slug: "science-research" },
+  { id: 9, title: "post-", slug: "post-magazine" },
   // { id: 9, title: "podcasts", slug: "podcasts" },
 ];
 
@@ -22,6 +23,7 @@ export const menuItems: MenuItem[] = [
  *
  * returns the device id after calling createDevice
  */
+// TODO: add post- notifs
 export const setUpDevice = async (
   setBreaking: Dispatch<SetStateAction<boolean>>,
   setUniversityNews: Dispatch<SetStateAction<boolean>>,

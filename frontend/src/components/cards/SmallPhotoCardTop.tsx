@@ -11,6 +11,7 @@ import {
   font1,
   font3,
   varGray1,
+  varPink,
   varRed,
   varTextColor,
 } from "../../styles/styles";
@@ -18,6 +19,7 @@ import { formatDates } from "../../utils/formatDates";
 
 function LargeCard({ article, navigation }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
+  const section = all_tags[0].replace("&;", "&");
 
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
@@ -36,7 +38,16 @@ function LargeCard({ article, navigation }: CardProps) {
         accessibilityRole="button"
         accessibilityHint={`Double tap to open article`}
       >
-        <View style={styles.card}>
+        <View
+          style={[
+            styles.card,
+            section == "post- magazine" && {
+              backgroundColor: varPink,
+              padding: "5%",
+              borderRadius: 15,
+            },
+          ]}
+        >
           <Image
             source={{
               uri: img_uri,
@@ -46,9 +57,9 @@ function LargeCard({ article, navigation }: CardProps) {
           <View style={styles.text}>
             <Text
               style={styles.section}
-              accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
+              accessibilityLabel={`Section: ${section}.`}
             >
-              {all_tags[0].replace("&;", "&")}
+              {section}
             </Text>
             <Text
               style={styles.title}

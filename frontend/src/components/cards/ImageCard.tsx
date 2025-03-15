@@ -1,9 +1,13 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { font1, varTextColor } from "../../styles/styles";
+import { font1, varPink, varTextColor } from "../../styles/styles";
+import { Tag } from "src/types/data";
 
 function ImageCard({ article, navigation }: CardProps) {
+  const all_tags = article.tags.map((t: Tag) => t.name);
+  const section = all_tags[0].replace("&;", "&");
+
   let img_uri =
     "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
   if (article.dominantMedia) {
@@ -19,7 +23,16 @@ function ImageCard({ article, navigation }: CardProps) {
       <TouchableWithoutFeedback
         onPress={() => navigation.push("Article", { data: article })}
       >
-        <View style={styles.card}>
+        <View
+          style={[
+            styles.card,
+            section == "post- magazine" && {
+              backgroundColor: varPink,
+              padding: "5%",
+              borderRadius: 15,
+            },
+          ]}
+        >
           <Image
             source={{
               uri: img_uri,
