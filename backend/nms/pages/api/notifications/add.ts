@@ -71,29 +71,27 @@ export default async function getNotification(
 
     // Insert category relationships into notification_categories
     await db("notification_categories").insert(notificationCategories);
-    
+
     // Add author relationships if any authors are specified
     let validAuthors = [];
     if (authorIds && authorIds.length > 0) {
       // Verify each author exists
-      validAuthors = await db("authors")
-        .whereIn("id", authorIds)
-        .select("id");
-      
+      validAuthors = await db("authors").whereIn("id", authorIds).select("id");
+
       if (validAuthors.length !== authorIds.length) {
         const missingAuthors = authorIds.filter(
-          (id) => !validAuthors.find((author) => author.id === id)
+          (id: number) => !validAuthors.find((author: any) => author.id === id)
         );
         console.log("Missing authors:", missingAuthors);
         // Continue with valid authors only
       }
-      
+
       // Create relationships for valid authors
       const notificationAuthors = validAuthors.map((author) => ({
         notificationId: notificationIdObject.id,
         authorId: author.id,
       }));
-      
+
       if (notificationAuthors.length > 0) {
         await db("notification_authors").insert(notificationAuthors);
       }
@@ -113,7 +111,7 @@ export default async function getNotification(
         tags,
         url,
         isUid,
-        authorIds: validAuthors ? validAuthors.map(author => author.id) : [],
+        authorIds: validAuthors ? validAuthors.map((author) => author.id) : [],
       },
       { delay, jobId: `${notificationIdObject.id}_n` }
     );
@@ -132,17 +130,19 @@ export default async function getNotification(
         "n.status",
         "n.url",
         "n.is_uid",
-        db.raw(
-          "STRING_AGG(DISTINCT c.name, ',') AS categories"
-        ),
-        db.raw(
-          "STRING_AGG(DISTINCT a.name, ',') AS authors"
-        ),
-        db.raw(
-          "STRING_AGG(DISTINCT CAST(a.id AS TEXT), ',') AS author_ids"
-        )
+        db.raw("STRING_AGG(DISTINCT c.name, ',') AS categories"),
+        db.raw("STRING_AGG(DISTINCT a.name, ',') AS authors"),
+        db.raw("STRING_AGG(DISTINCT CAST(a.id AS TEXT), ',') AS author_ids")
       )
-      .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
+      .groupBy(
+        "n.id",
+        "n.time",
+        "n.title",
+        "n.body",
+        "n.status",
+        "n.url",
+        "n.is_uid"
+      )
       .orderBy("n.time", "desc");
 
     res.status(200).json(notifications);
