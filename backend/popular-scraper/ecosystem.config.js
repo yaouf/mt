@@ -2,8 +2,7 @@ module.exports = {
   apps: [
     {
       name: "popular-scraper-prod",
-      script: "app.py",
-      interpreter: "./venv/bin/python",
+      script: "./run-with-venv.sh",
       instances: 1,
       autorestart: true,
       watch: false,
