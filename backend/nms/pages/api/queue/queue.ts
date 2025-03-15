@@ -1,7 +1,7 @@
 import { Job, Queue, Worker } from "bullmq";
 import Expo, { ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
 import db from "../../../dist/data/db-config";
-import { Device } from "../types/types";
+import { DeviceToken } from "../types/types";
 
 const connection = {
   host: "localhost",
@@ -29,77 +29,29 @@ const worker = new Worker(
   "notificationQueue",
   async (job) => {
     // This is the job data that was passed to `notificationQueue.add()`
-    const { jobId, time, title, body, tags, url, isUid, authors } = job.data;
-    console.log("tags", tags);
-    console.log("authors", authors);
-
+    const { time, title, body, tags, url, isUid, notificationId } = job.data;
     // Fetch all devices that have subscribed to the tags
-    let deviceMap = new Map<string, Device>(); // Use a map with push token as key
+    let expoPushTokens: Set<string> = new Set(); // Use a map with push token as key
     for (let tag of tags) {
-      console.log("tag", tag);
       const devices = (await db("devices")
-        .select("expo_push_token")
-        .where(tag, true)) as Device[];
-      for (let device of devices) {
-        deviceMap.set(device.expo_push_token, device);
-      }
-    }
-
-    // If there are authors associated with this notification, fetch devices subscribed to them
-    if (authors && authors.length > 0) {
-      console.log(
-        `Finding devices subscribed to authors: ${authors
-          .map((a) => a.name)
-          .join(", ")}`
-      );
-
-      // Get all authorIds from the notification
-      const authorIds = authors.map((author) => author.id);
-
-      // Query for devices subscribed to any of these authors
-      const subscribedDevices = await db("devices")
-        .join(
-          "device_author_subscriptions",
-          "devices.id",
-          "=",
-          "device_author_subscriptions.deviceId"
-        )
-        .whereIn("device_author_subscriptions.authorId", authorIds)
         .select("devices.expo_push_token")
-        .distinct();
-
-      // Add these devices to our map
-      for (let device of subscribedDevices) {
-        deviceMap.set(device.expo_push_token, device);
+        .join(
+          "device_preferences",
+          "devices.id",
+          "device_preferences.device_id"
+        )
+        .join("categories", "device_preferences.category_id", "categories.id")
+        .where("categories.name", tag)) as DeviceToken[];
+      for (let device of devices) {
+        expoPushTokens.add(device.expo_push_token);
       }
-
-      console.log(
-        `Found ${subscribedDevices.length} additional devices subscribed to authors`
-      );
     }
 
-    const devices = Array.from(deviceMap.values());
-    // console.log("devices", devices);
-    // if (tags.includes("breaking-news")) {
-    //   // Fetch all devices that have subscribed to breaking news alerts
-    //   const breakingDevices = await db("devices").select("expo_push_token").where("breakingNewsAlerts", true) as Device[];
-    //   devices = devices.concat(breakingDevices);
-    // }
-    // if (tags.includes("University News")) {
-    //   // Fetch all devices that have subscribed to universityNews summary alerts
-    //   const universityNewsDevices = await db("devices").select("expo_push_token").where("universityNewsAlerts", true) as Device[];
-    //   devices = devices.concat(universityNewsDevices);
-    // }
-    // if (tags.includes("Metro")) {
-    //   // Fetch all devices that have subscribed to daily summary alerts
-    //   const dailyDevices = await db("devices").select("expo_push_token").where("metroAlerts", true);
-    //   devices = devices.concat(dailyDevices) as Device[];
-    // }
-
+    const tokensArray = Array.from(expoPushTokens);
     // Send notifications to all devices
-    devices.forEach((device) => {
+    tokensArray.forEach((token) => {
       // Send the notification to the device
-      // console.log(`Sending notification to ${device.expo_push_token}`);
+      // console.log(`Sending notification to ${device.expoPushToken}`);
 
       // Notifcation sending
 
@@ -108,15 +60,17 @@ const worker = new Worker(
 
       // Extract the Expo push tokens from the devices
 
-      // const somePushTokens: string[] = [device.expo_push_token]
+      // const somePushTokens: string[] = [device.expoPushToken]
 
       // Create the messages that you want to send to clients
-      const pushToken = device.expo_push_token;
+      const pushToken = token;
       if (!Expo.isExpoPushToken(pushToken)) {
         console.error(`Push token ${pushToken} is not a valid Expo push token`);
         return;
       }
+
       // Construct a push notification message for each valid push token
+
       const messages: ExpoPushMessage[] = [];
       messages.push({
         to: pushToken,
@@ -183,10 +137,12 @@ const worker = new Worker(
 
     // Update notification status to "sent" in the database
     try {
-      console.log("jobId", jobId);
-      await db("notifications").where({ id: jobId }).update({ status: "sent" });
+      console.log("notificationId", notificationId);
+      await db("notifications")
+        .where({ id: notificationId })
+        .update({ status: "sent" });
       console.log(
-        `Notification with ID ${jobId} at time ${time} successfully updated to status "sent"`
+        `Notification with ID ${notificationId} at time ${time} successfully updated to status "sent"`
       );
     } catch (error) {
       console.error("Error updating notification status:", error);

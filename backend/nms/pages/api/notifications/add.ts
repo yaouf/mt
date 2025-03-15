@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import db from "../../../dist/data/db-config";
 import { notificationQueue } from "../queue/queue";
-import { Author, Notification, NotificationId, ResponseData } from "../types/types";
+import { Notification, NotificationId, ResponseData } from "../types/types";
 
 export default async function getNotification(
   req: NextApiRequest,
@@ -25,127 +25,90 @@ export default async function getNotification(
     const tags = data.tags;
     const url = data.url;
     const isUid = data.isUid;
-    const authorIds = data.authorIds || []; // Optional array of author IDs
 
     // Validate required fields
     if (!time || !title || !tags || !url) {
+      // Determine which field is missing
+      console.log("Missing fields:", { time, title, tags, url });
       return res.status(400).json({ message: "Missing fields." });
     }
 
-    // Create boolean variables for tags
-    console.log("tags in add.ts", tags);
-    const breakingNews = tags.includes("Breaking News");
-    const universityNews = tags.includes("University News");
-    const metro = tags.includes("Metro");
-    const sports = tags.includes("Sports");
-    const artsAndCulture = tags.includes("Arts and Culture");
-    const scienceAndResearch = tags.includes("Science and Research");
-    const opinion = tags.includes("Opinions");
+    // Insert the notification into the notifications table
+    const [notificationIdObject] = (await db("notifications")
+      .insert({
+        time,
+        title,
+        body,
+        url,
+        is_uid: isUid,
+        status: "pending",
+      })
+      .returning("id")) as NotificationId[];
 
-    console.log("url", url);
-    console.log("isUid", isUid);
-    
-    // Start a transaction to ensure all related operations succeed or fail together
-    const trx = await db.transaction();
+    console.log("Inserted notification ID:", notificationIdObject.id);
 
-    try {
-      // Insert the notification data into the "notifications" table
-      const insertedRows = await trx("notifications")
-        .insert({
-          time: time,
-          title: title,
-          body: body,
-          "Breaking News": breakingNews,
-          "University News": universityNews,
-          "Metro": metro,
-          "Sports": sports,
-          "Arts and Culture": artsAndCulture,
-          "Science and Research": scienceAndResearch,
-          "Opinions": opinion,
-          url: url,
-          isUid: isUid,
-          status: "pending",
-        })
-        .returning("id");
-      
-      console.log("insertedRows", insertedRows);
-      
-      // Get the ID of the inserted notification
-      const jobId = insertedRows[0].id as number;
-      console.log("jobId", jobId);
+    // Map tags to category IDs
+    const categories = await db("categories")
+      .whereIn("name", tags)
+      .select("id", "name");
 
-      // Validate the jobId
-      if (!jobId) {
-        await trx.rollback();
-        return res.status(400).json({ message: "Invalid notification data." });
-      }
-
-      // If author IDs are provided, create the author associations
-      let authors: Author[] = [];
-      if (authorIds && authorIds.length > 0) {
-        // Verify all authors exist
-        const existingAuthors = await trx("authors")
-          .whereIn("id", authorIds)
-          .select("id", "name", "slug");
-        
-        if (existingAuthors.length !== authorIds.length) {
-          await trx.rollback();
-          return res.status(400).json({ message: "One or more specified authors do not exist." });
-        }
-        
-        // Create the notification-author relationships
-        const notificationAuthors = authorIds.map(authorId => ({
-          notificationId: jobId,
-          authorId,
-          dateCreated: new Date().toISOString()
-        }));
-        
-        await trx("notification_authors").insert(notificationAuthors);
-        authors = existingAuthors;
-      }
-
-      // Calculate the delay in milliseconds
-      const dateTime = new Date(time);
-      console.log("current time", Date.now(), "scheduled time", dateTime.getTime());
-      const milliseconds = dateTime.getTime() - Date.now();
-      console.log("milliseconds", milliseconds);
-
-      // Add the notification to the queue with author information
-      const _job = await notificationQueue.add("notification",
-        { jobId, time, title, body, tags, url, isUid, authors },
-        { delay: milliseconds, jobId: jobId.toString() + "_n" }
+    if (categories.length !== tags.length) {
+      const missingTags = tags.filter(
+        (tag: string) =>
+          !categories.find((category: any) => category.name === tag)
       );
-
-      // Commit the transaction
-      await trx.commit();
-
-      // Query for all notifications including the new one
-      const notifications = await db("notifications")
-        .select("id", "time", "title", "body", "status", "Breaking News", "University News", 
-                "Metro", "Sports", "Arts and Culture", "Science and Research", "Opinions", 
-                "url", "isUid");
-      
-      // If we have author info, include it in the response
-      if (authors.length > 0) {
-        const result = notifications.map(notification => {
-          if (notification.id === jobId) {
-            return {
-              ...notification,
-              authors,
-            };
-          }
-          return notification;
-        });
-        return res.status(200).json(result);
-      }
-      
-      console.log("notifications in db after adding", notifications);
-      res.status(200).json(notifications);
-    } catch (error) {
-      // If there's an error, roll back the transaction
-      await trx.rollback();
-      throw error;
+      console.log("Missing categories:", missingTags);
+      return res
+        .status(400)
+        .json({ message: `Invalid tags: ${missingTags.join(", ")}` });
     }
+
+    const notificationCategories = categories.map((category) => ({
+      notification_id: notificationIdObject.id,
+      category_id: category.id,
+    }));
+
+    // Insert category relationships into notification_categories
+    await db("notification_categories").insert(notificationCategories);
+
+    // Schedule the notification using the queue
+    const dateTime = new Date(time);
+    const delay = dateTime.getTime() - Date.now();
+
+    await notificationQueue.add(
+      "notification",
+      {
+        notificationId: notificationIdObject.id,
+        time,
+        title,
+        body,
+        tags,
+        url,
+        isUid,
+      },
+      { delay, jobId: `${notificationIdObject.id}_n` }
+    );
+
+    // Fetch all notifications with their categories
+    const notifications = await db("notifications as n")
+      .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
+      .leftJoin("categories as c", "nc.category_id", "c.id")
+      .select(
+        "n.id",
+        "n.time",
+        "n.title",
+        "n.body",
+        "n.status",
+        "n.url",
+        "n.is_uid",
+        db.raw(
+          "STRING_AGG(c.name, ',') AS categories"
+        )
+      )
+      .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
+      .orderBy("n.time", "desc");
+
+    res.status(200).json(notifications);
   } catch (error) {
     console.error("Error adding notification to the queue:", error);
     res.status(500).json({ message: "Internal server error." });
