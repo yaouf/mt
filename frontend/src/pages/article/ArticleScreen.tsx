@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { trackEvent } from "@aptabase/react-native";
 import { StackScreenProps } from "@react-navigation/stack";
 import * as Haptics from "expo-haptics";
@@ -20,13 +21,15 @@ import {
   View,
 } from "react-native";
 import { State, TapGestureHandler } from "react-native-gesture-handler";
+import { fetchAuthor } from "src/api/fetchContent";
 import { articleStyles } from "src/styles/article";
-import { Article } from "src/types/data";
+import { Article, Author } from "src/types/data";
 import { HomeStackProps } from "src/types/navStacks";
 import { formatDates } from "src/utils/formatDates";
 import { handleBookmark } from "src/utils/helpers";
 import { baseStyles } from "../../styles/styles";
 import { SavedContext } from "../MainTabNavigator";
+import AuthorSubscriptionModal from "./AuthorSubscriptionModal";
 import BottomArticleBar from "./BottomArticleBar";
 import SplitArticle from "./SplitContent";
 
@@ -39,7 +42,11 @@ function ArticleScreen({
   const scrollOffset = useRef(0);
   const translateY = useRef(new Animated.Value(0)).current; // Animated value for translateY
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState<boolean>(article.uuid in savedArticles);
+  const [saved, setSaved] = useState<boolean>(savedArticles && typeof savedArticles === 'object' && article.uuid in savedArticles);
+  
+  // Author notification modal state
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [authorData, setAuthorData] = useState<Author | null>(null);
 
   useEffect(() => {
     trackEvent("article", {
@@ -47,6 +54,25 @@ function ArticleScreen({
       slug: route.params.data.slug,
     });
   }, []);
+  
+  // Function to handle author notification subscription
+  const handleAuthorSubscription = async (authorSlug: string) => {
+    try {
+      Haptics.selectionAsync();
+      await fetchAuthor(
+        authorSlug,
+        (author) => {
+          setAuthorData(author || null);
+          setIsModalVisible(true);
+        },
+        () => {},
+        () => {},
+        () => {}
+      );
+    } catch (error) {
+      console.error("Error fetching author data:", error);
+    }
+  };
 
   useEffect(() => {
     // Animate the bottom bar in or out based on visibility state
@@ -87,12 +113,16 @@ function ArticleScreen({
   const onDoubleTap = (event) => {
     if (event.nativeEvent.state === State.END) {
       Haptics.selectionAsync();
+      
+      // Ensure savedArticles is an object before passing to handleBookmark
+      const articlesToUse = savedArticles && typeof savedArticles === 'object' ? savedArticles : {};
+      
       handleBookmark(
         saved,
         article.slug,
         article.published_at,
         article.uuid,
-        savedArticles,
+        articlesToUse,
         setSavedArticles,
         setSaved
       );
@@ -205,31 +235,55 @@ function ArticleScreen({
                   )}
 
                   {/* Author names and date column */}
-                  <View style={articleStyles.authorTextContainer}>
-                    <Text style={articleStyles.author}>
-                      {article.authors.map((author, i) => (
-                        <TouchableOpacity
-                          key={author.slug}
-                          onPress={() =>
-                            navigation.navigate("Staff", { slug: author.slug })
-                          }
-                          accessible={true}
-                          accessibilityHint="View Author's Profile"
-                        >
-                          <Text style={articleStyles.author}>
-                            {author.name}
-                            {i < article.authors.length - 1 ? ", " : ""}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </Text>
-                    <Text
-                      selectable
-                      style={articleStyles.publishedDetailsText}
-                      accessibilityLabel="Published Date"
-                    >
-                      {formatDates(article.published_at)}
-                    </Text>
+                  <View style={[
+                    articleStyles.authorTextContainer,
+                    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }
+                  ]}>
+                    {/* Left side with author and date */}
+                    <View style={{ flex: 1 }}>
+                      <Text style={articleStyles.author}>
+                        {article.authors.map((author, i) => (
+                          <TouchableOpacity
+                            key={author.slug}
+                            onPress={() =>
+                              navigation.navigate("Staff", { slug: author.slug })
+                            }
+                            accessible={true}
+                            accessibilityHint="View Author's Profile"
+                          >
+                            <Text style={articleStyles.author}>
+                              {author.name}
+                              {i < article.authors.length - 1 ? ", " : ""}
+                            </Text>
+                          </TouchableOpacity>
+                        ))}
+                      </Text>
+                      
+                      <Text
+                        selectable
+                        style={articleStyles.publishedDetailsText}
+                        accessibilityLabel="Published Date"
+                      >
+                        {formatDates(article.published_at)}
+                      </Text>
+                    </View>
+                    
+                    {/* Bell icon for author notifications - vertically centered and with right padding */}
+                    {article.authors.length > 0 && (
+                      <TouchableOpacity
+                        onPress={() => handleAuthorSubscription(article.authors[0].slug)}
+                        accessible={true}
+                        accessibilityLabel="Subscribe to author notifications"
+                        accessibilityHint="Get notified when this author publishes new articles"
+                        style={{ 
+                          padding: 5, 
+                          paddingRight: 15,
+                          alignSelf: 'center'
+                        }}
+                      >
+                        <Ionicons name="notifications-outline" size={26} color="#1C1B1F" />
+                      </TouchableOpacity>
+                    )}
                   </View>
                 </View>
               </View>
@@ -256,6 +310,13 @@ function ArticleScreen({
           uuid={article.uuid}
         />
       </Animated.View>
+      
+      {/* Author Subscription Modal */}
+      <AuthorSubscriptionModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        author={authorData}
+      />
     </SafeAreaView>
   );
 }

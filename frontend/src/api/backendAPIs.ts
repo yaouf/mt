@@ -167,3 +167,62 @@ export const viewSettings = async (deviceId: string) => {
     console.log("success");
   }
 };
+
+/**
+ * Updates the author subscription for a device
+ * @param deviceId Device ID
+ * @param authorSlug The author's slug
+ * @param subscribe Whether to subscribe (true) or unsubscribe (false)
+ */
+export const updateAuthorSubscription = async (
+  deviceId: string,
+  authorSlug: string,
+  subscribe: boolean
+): Promise<boolean> => {
+  // TODO: Implement when backend API is available
+  console.log(`${subscribe ? 'Subscribing to' : 'Unsubscribing from'} author ${authorSlug} for device ${deviceId}`);
+  
+  // This is a placeholder for the future API implementation
+  // When the backend API is available, uncomment and implement the following:
+  
+  /*
+  const body = JSON.stringify({
+    deviceId: deviceId,
+    authorSlug: authorSlug,
+    subscribe: subscribe
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": process.env.EXPO_PUBLIC_API_KEY,
+    },
+    body: body,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(
+      process.env.EXPO_PUBLIC_UPDATE_AUTHOR_SUBSCRIPTION_ENDPOINT ?? "",
+      requestOptions
+    );
+
+    if (response.status === 200) {
+      console.log("Author subscription updated successfully");
+      return true;
+    } else {
+      console.log("Failed to update author subscription:", response.status);
+      console.log("Response message:", response.statusText);
+      console.log("Response body:", await response.text());
+      return false;
+    }
+  } catch (error) {
+    console.error("Error updating author subscription:", error);
+    return false;
+  }
+  */
+  
+  // Return true for now as a placeholder
+  return true;
+};
