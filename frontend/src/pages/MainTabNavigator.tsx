@@ -30,6 +30,8 @@ import HomeStackScreen from "./home/HomeStackScreen";
 import SearchStackScreen from "./search/SearchStackScreen";
 import { NotificationProvider } from "./settings/NotificationProvider";
 import SettingsStackScreen from "./settings/SettingsStackScreen";
+import { useTheme } from "src/components/ThemeContext";
+import { baseStyles, darkStyles } from "src/styles/styles";
 
 const Tab = createBottomTabNavigator();
 
@@ -113,6 +115,10 @@ export default function MainTabNavigator() {
   >(undefined);
 
   const [searchContentPrefetched, setSearchContentPrefetched] = useState(false);
+
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const iconColor = isDarkMode ? "white" : "black";
 
   const prefetchSearchContent = async () => {
     if (!searchContentPrefetched) {
@@ -218,7 +224,7 @@ export default function MainTabNavigator() {
 
   return (
     <SafeAreaView
-      style={{ flex: 1, paddingTop: 0, marginTop: 0 }}
+      style={{ flex: 1, paddingTop: 0, marginTop: 0, backgroundColor: containerStyle.container.backgroundColor }}
       edges={["bottom", "left", "right"]}
     >
       <HoldMenuProvider
@@ -254,7 +260,7 @@ export default function MainTabNavigator() {
                       <Ionicons
                         name={iconName}
                         size={size + 4} // Increase icon size slightly
-                        color={color}
+                        color={iconColor}
                         accessibilityLabel={label}
                       />
                     );
@@ -268,6 +274,7 @@ export default function MainTabNavigator() {
                     paddingBottom: 2,
                     paddingRight: 20,
                     paddingLeft: 20,
+                    backgroundColor:containerStyle.container.backgroundColor,
                     display: NO_NAV_BAR_SCREENS.includes(routeName)
                       ? "none"
                       : "flex",
@@ -282,19 +289,29 @@ export default function MainTabNavigator() {
                 component={HomeStackScreen}
                 options={{
                   headerTitle: () => <Header />,
-                  // headerStyle: {},
+                  headerStyle: {
+                    backgroundColor: containerStyle.container.backgroundColor,
+                  },
                   headerShadowVisible: false,
                 }}
               />
               <Tab.Screen
                 name="Search"
                 component={SearchStackScreen}
-                options={{ headerTitle: () => <Header /> }}
+                options={{ headerTitle: () => <Header />,
+                  headerStyle: {
+                    backgroundColor: containerStyle.container.backgroundColor,
+                  },
+                 }}
               />
               <Tab.Screen
                 name="Settings"
                 component={SettingsStackScreen}
-                options={{ headerTitle: () => <Header /> }}
+                options={{ headerTitle: () => <Header />,
+                  headerStyle: {
+                    backgroundColor: containerStyle.container.backgroundColor,
+                  },
+                 }}
               />
             </Tab.Navigator>
           </SavedContext.Provider>
