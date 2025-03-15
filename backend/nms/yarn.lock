@@ -1,0 +1,117 @@
+"@adobe/css-tools@4.3.3":
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/@adobe/css-tools/-/css-tools-4.3.3.tgz#09096739f40822607908c69772d1275d04589991"
+  dev: true
+
+"@alloc/quick-lru@5.2.0":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@alloc/quick-lru/-/quick-lru-5.2.0.tgz#5428a2a7a4f7833075677b3195825d57b2b73f1d"
+  dev: true
+  engines:
+    node: ">=10"
+  funding:
+    url: "https://github.com/sponsors/sindresorhus"
+
+"@ampproject/remapping@^2.2.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@ampproject/remapping/-/remapping-2.3.0.tgz#27320077c5f850d944c6934c2275995543c52a0a"
+  dependencies:
+    "@jridgewell/gen-mapping" "^0.3.5"
+    "@jridgewell/trace-mapping" "^0.3.24"
+  engines:
+    node: ">=6.0.0"
+
+"@azure/abort-controller@^1.0.0":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@azure/abort-controller/-/abort-controller-2.1.2.tgz#888120e3a6a1240364e0544f128e001295982e5b"
+  dependencies:
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-auth@^1.4.0":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-auth/-/core-auth-1.7.2.tgz#d2994c9f1311b229712a143f2908f51952e93540"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-util" "^1.1.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-client@^1.3.0":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-client/-/core-client-1.9.2.tgz#f19694c9c1b332d75a8523c96030507c57095941"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-auth" "^1.4.0"
+    "@azure/core-rest-pipeline" "^1.9.1"
+    "@azure/core-tracing" "^1.0.0"
+    "@azure/core-util" "^1.6.1"
+    "@azure/logger" "^1.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-http-compat@^2.0.1":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-http-compat/-/core-http-compat-2.1.2.tgz#1216a695420364d5500e42f9e61c5f3e0c055877"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-client" "^1.3.0"
+    "@azure/core-rest-pipeline" "^1.3.0"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-lro@^2.2.0":
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-lro/-/core-lro-2.7.2.tgz#5ed32111863073995834863ab9459312217d8487"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-util" "^1.2.0"
+    "@azure/logger" "^1.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-paging@^1.1.1":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-paging/-/core-paging-1.6.2.tgz#3d639651582e013146430342676f1110034b0714"
+  dependencies:
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-rest-pipeline@^1.1.0":
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/@azure/core-rest-pipeline/-/core-rest-pipeline-1.16.3.tgz#a963428d011129f1797274092b3506132715975d"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-auth" "^1.4.0"
+    "@azure/core-tracing" "^1.0.1"
+    "@azure/core-util" "^1.9.0"
+    "@azure/logger" "^1.0.0"
+    "http-proxy-agent" "^7.0.0"
+    "https-proxy-agent" "^7.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-tracing@^1.0.0":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-tracing/-/core-tracing-1.1.2.tgz#974052309855018659178c7401d67060f6448839"
+  dependencies:
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-util@^1.0.0":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-util/-/core-util-1.9.2.tgz#9359a3c75124119429188f61972b930f3079b764"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/identity@

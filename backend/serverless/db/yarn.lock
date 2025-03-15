@@ -1,0 +1,124 @@
+"@azure/abort-controller@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@azure/abort-controller/-/abort-controller-2.1.2.tgz#888120e3a6a1240364e0544f128e001295982e5b"
+  dependencies:
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-auth@1.7.2":
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-auth/-/core-auth-1.7.2.tgz#d2994c9f1311b229712a143f2908f51952e93540"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-util" "^1.1.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-client@1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-client/-/core-client-1.9.2.tgz#f19694c9c1b332d75a8523c96030507c57095941"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-auth" "^1.4.0"
+    "@azure/core-rest-pipeline" "^1.9.1"
+    "@azure/core-tracing" "^1.0.0"
+    "@azure/core-util" "^1.6.1"
+    "@azure/logger" "^1.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-http-compat@2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-http-compat/-/core-http-compat-2.1.2.tgz#1216a695420364d5500e42f9e61c5f3e0c055877"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-client" "^1.3.0"
+    "@azure/core-rest-pipeline" "^1.3.0"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-lro@2.7.2":
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-lro/-/core-lro-2.7.2.tgz#5ed32111863073995834863ab9459312217d8487"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-util" "^1.2.0"
+    "@azure/logger" "^1.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-paging@1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-paging/-/core-paging-1.6.2.tgz#3d639651582e013146430342676f1110034b0714"
+  dependencies:
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-rest-pipeline@1.16.3":
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/@azure/core-rest-pipeline/-/core-rest-pipeline-1.16.3.tgz#a963428d011129f1797274092b3506132715975d"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    "@azure/core-auth" "^1.4.0"
+    "@azure/core-tracing" "^1.0.1"
+    "@azure/core-util" "^1.9.0"
+    "@azure/logger" "^1.0.0"
+    "http-proxy-agent" "^7.0.0"
+    "https-proxy-agent" "^7.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-tracing@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-tracing/-/core-tracing-1.1.2.tgz#974052309855018659178c7401d67060f6448839"
+  dependencies:
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/core-util@1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@azure/core-util/-/core-util-1.9.2.tgz#9359a3c75124119429188f61972b930f3079b764"
+  dependencies:
+    "@azure/abort-controller" "^2.0.0"
+    tslib "^2.6.2"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/identity@4.4.1":
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/@azure/identity/-/identity-4.4.1.tgz#3d9e87705461230132333b241315750d4072f954"
+  dependencies:
+    "@azure/abort-controller" "^1.0.0"
+    "@azure/core-auth" "^1.5.0"
+    "@azure/core-client" "^1.9.2"
+    "@azure/core-rest-pipeline" "^1.1.0"
+    "@azure/core-tracing" "^1.0.0"
+    "@azure/core-util" "^1.3.0"
+    "@azure/logger" "^1.0.0"
+    "@azure/msal-browser" "^3.14.0"
+    "@azure/msal-node" "^2.9.2"
+    "events" "^3.0.0"
+    "jws" "^4.0.0"
+    "open" "^8.0.0"
+    "stoppable" "^1.1.0"
+    tslib "^2.2.0"
+  engines:
+    node: ">=18.0.0"
+
+"@azure/keyvault-keys@4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@azure/keyvault-keys/-/keyvault-keys-4.8.0.tgz#27320077c5f850d944c6934c2275995543c52a0a"
+  dependencies:
+    "@azure/abort-controller" "^1.0.0"
+    "@azure/core-auth" "^1.3.0"
+    "@azure/core-client" "^1.5.0"
+    "@azure/core-http-compat" "^2.0.1"
+    "@azure/core-lro" "^2.2.0"
+    "@azure/core-
