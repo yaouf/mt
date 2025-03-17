@@ -124,7 +124,7 @@ const NotificationForm = ({ setScheduledNotifications, token }: NotificationForm
       const localTime = newFormData.time;
       const utcTime = moment.tz(localTime, userTimeZone).utc().format();
 
-      const lastSegment = newFormData.url.split("/").pop();
+      const lastSegment = newFormData.url.split("/").pop() || "";
       const isUid = isValidUUID(lastSegment);
 
       // Update the form data with UTC time before sending it to the server
