@@ -5,6 +5,12 @@ import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { validate as isValidUUID } from "uuid";
 import ConfirmationModal from "./ConfirmationModal";
+import { Author, Notification } from "../types";
+
+interface NotificationFormProps {
+  setScheduledNotifications: (notifications: Notification[]) => void;
+  token: string;
+}
 
 const TITLE_CHAR_LIM = 43; // max notif title length for normal text size (I think).
 const BODY_CHAR_LIM = 165; // max notif body length for normal text size.
@@ -12,7 +18,7 @@ const BANNER_DURATION = 5000; // how long the dashboard banner stays up after a 
 
 const isProduction = process.env.NODE_ENV === "production";
 
-const NotificationForm = ({ setScheduledNotifications, token }) => {
+const NotificationForm = ({ setScheduledNotifications, token }: NotificationFormProps) => {
   const [newFormData, setNewFormData] = useState({
     time: "",
     title: "",
@@ -22,7 +28,7 @@ const NotificationForm = ({ setScheduledNotifications, token }) => {
     authorIds: [] as number[],
   });
 
-  const [authors, setAuthors] = useState([]);
+  const [authors, setAuthors] = useState<Author[]>([]);
   const [isLoadingAuthors, setIsLoadingAuthors] = useState(false);
   const [authorSearchTerm, setAuthorSearchTerm] = useState("");
 

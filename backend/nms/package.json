@@ -14,7 +14,8 @@
     "test:pw": "npx concurrently --kill-others \"redis-server\" \"cross-env NODE_ENV=test firebase emulators:start --project bdh-mobile-app---dev\" && (cross-env ENV=test NODE_ENV=test npm run dangerous:update:db && cross-env ENV=test NODE_ENV=test npx playwright test)",
     "test:all": "cross-env NODE_ENV=test npm run test:pw && npm run test",
     "test:all:debug": "cross-env NODE_ENV=test npm run test:pw -- --debug && npm run test",
-    "kill:redis": "npx cross-port-killer 6379"
+    "kill:redis": "npx cross-port-killer 6379",
+    "lint:fix": "eslint --fix ."
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.5",
@@ -48,9 +49,11 @@
     "@testing-library/react": "^15.0.2",
     "@types/cors": "^2.8.17",
     "@types/jest": "^29.5.12",
-    "@types/node": "20.11.26",
-    "@types/react": "18.2.65",
+    "@types/moment-timezone": "^0.5.13",
+    "@types/node": "^20.11.26",
+    "@types/react": "^18.2.65",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.0.1",
     "cross-env": "^7.0.3",
     "cross-port-killer": "^1.4.0",

@@ -9,3 +9,9 @@ export interface Notification {
     isUid: boolean;
     categories: string[];
 }
+
+export interface Author {
+    id: number;
+    name: string;
+    slug: string;
+}
