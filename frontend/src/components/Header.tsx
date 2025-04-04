@@ -6,6 +6,9 @@ function Header() {
   const screenWidth = Dimensions.get("window").width;
   const { isDarkMode, toggleTheme } = useTheme();
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const logo = isDarkMode
+  ? require("assets/logo-white.png")
+  : require("assets/logo-black.png");
   return (
     <View
       style={{
@@ -21,7 +24,7 @@ function Header() {
         backgroundColor: containerStyle.container.backgroundColor
        }}>
         <Image
-          source={require("assets/logo-black.png")}
+          source={logo}
           style={{
             width: 207,
             height: 35,
