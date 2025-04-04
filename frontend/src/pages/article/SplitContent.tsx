@@ -68,6 +68,9 @@ type SplitArticleType = {
 };
 
 function SplitArticle({ content }: SplitArticleType) {
+  const { isDarkMode, toggleTheme } = useTheme();
+  const articleStyle = isDarkMode ? darkArticleStyles : articleStyles;
+  
   const source = {
     html: content,
   };
@@ -86,7 +89,7 @@ function SplitArticle({ content }: SplitArticleType) {
       }),
       a: HTMLElementModel.fromCustomModel({
         tagName: "a",
-        mixedUAStyles: articleStyles.hyperlink,
+        mixedUAStyles: articleStyle.hyperlink,
         contentModel: HTMLContentModel.textual,
       }),
     }),
@@ -164,8 +167,6 @@ function SplitArticle({ content }: SplitArticleType) {
     ),
     []
   );
-  const { isDarkMode, toggleTheme } = useTheme();
-  const articleStyle = isDarkMode ? darkArticleStyles : articleStyles;
   // Render content with ads inserted at placeholder positions
   return (
     <View style={articleStyle.articleBodyWrapper}>
