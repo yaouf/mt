@@ -14,7 +14,7 @@ import {
 import NotifToggle from "src/components/NotifToggle";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
-import { font2, text,darkModeText, darkModeBackgroundColor } from "src/styles/styles";
+import { font2, text,darkModeText, darkModeBackgroundColor, darkModeBgColorStd } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
 import { setAsync } from "src/utils/helpers";
 import { setUpDevice } from "../utils/setupDevice";
@@ -273,16 +273,16 @@ const styles = StyleSheet.create({
 const darkStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: darkModeBgColorStd,
   },
   scrollViewContent: {
     flexGrow: 1,
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: darkModeBgColorStd,
   },
   contentContainer: {
     flex: 1,
     padding: "5%",
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: darkModeBgColorStd,
   },
   title: {
     ...darkModeText.bigTitle,
@@ -293,7 +293,7 @@ const darkStyles = StyleSheet.create({
     ...darkModeText.normal,
     fontSize: 16,
     marginBottom: "5%",
-    color: "#ffffff"
+    color: "#fff"
   },
   notifContainer: {
     rowGap: 16,
@@ -301,21 +301,22 @@ const darkStyles = StyleSheet.create({
   },
   buttonContainer: {
     padding: "5%",
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: darkModeBgColorStd,
   },
   continueButton: {
     ...settings.continueButton,
     marginBottom: "2%",
-    backgroundColor: darkModeBackgroundColor,
+    borderColor: "white",
+    backgroundColor: darkModeBgColorStd,
   },
   maybeLaterButton: {
-    borderColor: "black",
-    backgroundColor: darkModeBackgroundColor,
+    borderColor: "white",
+    backgroundColor: darkModeBgColorStd,
   },
   buttonText: {
     fontFamily: font2,
     fontSize: 16,
-    color: "#ffffff"
+    color: "#fff"
   },
 });
 
