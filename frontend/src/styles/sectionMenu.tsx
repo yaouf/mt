@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { darkModeBackgroundColor, darkModeTextColor, font2, varGray1, varTextColor } from "./styles";
+import { darkModeBackgroundColor, darkModeBgColorStd, darkModeTextColor, font2, varGray1, varTextColor } from "./styles";
 
 export const menuStyles = StyleSheet.create({
   header: {
@@ -95,7 +95,7 @@ export const darkMenuStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    backgroundColor: "#1F1F1FFF",
+    backgroundColor: "#1F1F1F",
     borderRadius: 4,
     borderWidth: 0.5,
     borderColor: varGray1,
@@ -159,6 +159,6 @@ export const darkMenuStyles = StyleSheet.create({
   },
   contentContainer: {
     marginBottom: 70,
-    backgroundColor: darkModeBackgroundColor
+    backgroundColor: darkModeBgColorStd,
   },
 });
