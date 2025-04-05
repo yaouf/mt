@@ -66,9 +66,9 @@ jobs:
 
       - name: Install dependencies for serverless functions
         run: |
-          npm install
-          npm run build:db
-          npm run build
+          yarn install
+          yarn run build:db
+          yarn run build
         working-directory: ./backend/serverless/functions
 
       - name: Create .env file for Firebase Functions
@@ -76,16 +76,16 @@ jobs:
         working-directory: ./backend/serverless/functions
 
       - name: Run migrations
-        run: npm run knex migrate:latest
+        run: yarn run knex migrate:latest
         working-directory: ./backend/serverless/db
 
       - name: Run seeds
-        run: npm run knex seed:run
+        run: yarn run knex seed:run
         working-directory: ./backend/serverless/db
 
       - name: Run Jest tests for serverless functions
         timeout-minutes: 5
-        run: npm test
+        run: yarn test
         working-directory: ./backend/serverless/functions
 
   nms-test:
@@ -121,7 +121,7 @@ jobs:
         with:
           node-version: 21
 
-      # Cache npm dependencies specifically for NMS
+      # Cache yarn dependencies specifically for NMS
       - name: Cache NMS node modules
         uses: actions/cache@v3
         id: nms-cache
@@ -151,31 +151,27 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y redis-server
         working-directory: ./backend/nms
 
-      # Optimize npm installation
+      # Optimize yarn installation
       - name: Install dependencies
         if: steps.nms-cache.outputs.cache-hit != 'true'
-        run: |
-          npm config set fund false
-          npm config set audit false
-          npm config set progress false
-          npm ci --prefer-offline --no-audit
+        run: yarn install
         working-directory: ./backend/nms
 
       - name: Build Db
-        run: npm run build:db
+        run: yarn run build:db
         working-directory: ./backend/nms
 
       - name: 🧹 Run Linter
-        run: npm run lint
+        run: yarn run lint
         working-directory: ./backend/nms
 
       - name: 🛠️ Run Build
-        run: npm run build
+        run: yarn run build
         working-directory: ./backend/nms
 
       - name: Run Jest tests
         timeout-minutes: 5
-        run: npm test
+        run: yarn test
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
