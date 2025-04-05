@@ -55,7 +55,25 @@ function HomeStackScreen({ navigation, route }) {
       try {
         const sections = await getAsync('sectionMenu');
         if (sections !== undefined) {
-          setSectionMenu(sections);
+          // Ensure all menuItems are present in sections
+          const storedSections = [...sections];
+          let sectionsChanged = false;
+          
+          menuItems.forEach(menuItem => {
+            // Check if this menuItem exists in storedSections
+            if (!storedSections.some(section => section.slug === menuItem.slug)) {
+              // Add missing menuItem
+              storedSections.push(menuItem);
+              sectionsChanged = true;
+            }
+          });
+          
+          if (sectionsChanged) {
+            // Update AsyncStorage with the corrected sections
+            setAsync('sectionMenu', JSON.stringify(storedSections));
+          }
+          
+          setSectionMenu(storedSections);
         } else {
           setSectionMenu(menuItems); // first load
         }
