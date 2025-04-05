@@ -174,6 +174,7 @@ function SplitArticle({ content }: SplitArticleType) {
               source={{ html: paragraph + '\n' }}
               baseStyle={articleStyles.text}
               customHTMLElementModels={customHTMLElementModels}
+              enableCSSInlineProcessing={true}
               renderers={renderers}
               renderersProps={renderersProps}
               GenericPressable={View}

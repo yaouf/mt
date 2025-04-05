@@ -5,8 +5,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   View,
-} from "react-native";
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+} from 'react-native';
 import { CardProps } from 'src/types/navStacks';
 import { font1, font3, varGray1, varPink, varTextColor } from '../../styles/styles';
 import { formatDates } from '../../utils/formatDates';
@@ -66,30 +65,25 @@ function ImageCard({ article, navigation, inSearch }: CardProps) {
                 <Text style={styles.title} numberOfLines={4} ellipsizeMode="tail">
                   {article.headline}
                 </Text>
-                <Text style={styles.published}>
-                  {formatDates(article.published_at)}
-                </Text>
-              <View style={styles.authorLine}>
+                <View style={styles.authorLine}>
                   <Text style={styles.published}>By</Text>
                   {article.authors.map((author, i) => {
                     const lastIndex = article.authors.length - 1;
-                    let separator = "";
+                    let separator = '';
 
                     if (i > 0 && i < lastIndex) {
-                      separator = ", ";
+                      separator = ', ';
                     } else if (i === lastIndex && i !== 0) {
-                      separator = " and ";
+                      separator = ' and ';
                     } else {
-                      separator = " ";
+                      separator = ' ';
                     }
                     return (
                       <View key={author.slug} style={styles.authorWrapper}>
                         <Text style={styles.published}>{separator}</Text>
 
                         <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate("Staff", { slug: author.slug })
-                          }
+                          onPress={() => navigation.navigate('Staff', { slug: author.slug })}
                         >
                           <Text style={styles.authorName}>{author.name}</Text>
                         </TouchableOpacity>
@@ -97,6 +91,7 @@ function ImageCard({ article, navigation, inSearch }: CardProps) {
                     );
                   })}
                 </View>
+                <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
           </View>
@@ -200,19 +195,19 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   authorLine: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   authorWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   authorName: {
-    color: "grey",
+    color: 'grey',
     fontFamily: font3,
     fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "900",
+    fontStyle: 'normal',
+    fontWeight: '900',
   },
 });
