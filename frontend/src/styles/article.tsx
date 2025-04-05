@@ -47,7 +47,9 @@ export const articleStyles = StyleSheet.create({
     color: varTextSecondaryColor,
     fontFamily: font2,
     fontSize: fontsizeHeader,
-    fontWeight: '700',
+    fontWeight: "700",
+    flexWrap: "wrap",
+    flexShrink: 1,
   },
   publishedDetails: {
     display: 'flex',
@@ -60,7 +62,9 @@ export const articleStyles = StyleSheet.create({
     color: varGray1,
     fontFamily: font3,
     fontSize: fontsizeHeader,
-    fontWeight: '400',
+    fontWeight: "400",
+    flexWrap: "wrap",
+    flexShrink: 1,
   },
   articleBodyWrapper: {
     display: 'flex',
@@ -186,9 +190,14 @@ export const articleStyles = StyleSheet.create({
     marginLeft: 2,
   },
   authorImagesContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
+    alignItems: "flex-start",
     gap: 5,
+    alignSelf: 'flex-start',
     marginRight: 15,
+    flexShrink: 1,
+    flexWrap: "wrap",
+    maxWidth: "60%" // Can also decrease if we prefer the author container to take up more space
   },
   authorImage: {
     width: 48,
@@ -198,12 +207,17 @@ export const articleStyles = StyleSheet.create({
   authorTextContainer: {
     flexDirection: 'column',
     gap: 4,
-    justifyContent: 'center',
+    alignSelf: 'flex-start',
+    justifyContent: "center",
+    flexShrink: 1,
+    flex: 1,
+    maxWidth: "90%",
+    minWidth: 90,
   },
-  publishedDetailsText: {
+  /*publishedDetailsText: {
     color: varGray1,
     fontFamily: font3,
     fontSize: fontsizeHeader,
-    fontWeight: '400',
-  },
+    fontWeight: "400",
+  },*/
 });

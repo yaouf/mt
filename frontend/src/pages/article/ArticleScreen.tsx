@@ -166,7 +166,7 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                       return false;
                     }
                   }) && (
-                    <View style={articleStyles.authorImagesContainer}>
+                    <View style={[articleStyles.authorImagesContainer, { flexShrink: 1 }]}>
                       {article.authors.map((author, i) => {
                         let metadata = [];
                         if (author.metadata) {
@@ -187,7 +187,7 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                           <Image
                             key={i}
                             source={{ uri: imageUri }}
-                            style={articleStyles.authorImage}
+                            style={[articleStyles.authorImage, { flexWrap: 'wrap' }]}
                             accessibilityLabel="Staff member's profile picture"
                           />
                         );
@@ -196,8 +196,8 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                   )}
 
                   {/* Author names and date column */}
-                  <View style={articleStyles.authorTextContainer}>
-                    <Text style={articleStyles.author}>
+                  <View style={[articleStyles.authorTextContainer, { flexShrink: 1 }]}>
+                    <Text style={[articleStyles.author, {flexWrap: 'wrap' }]}>
                       {article.authors.map((author, i) => (
                         <TouchableOpacity
                           key={author.slug}
