@@ -11,11 +11,12 @@ import { ScrollView } from "react-native-gesture-handler";
 import { fetchAuthor } from "src/api/fetchContent";
 import Divider from "src/components/Divider";
 import ImageCard from "src/components/cards/HorizontalCard";
-import { articleStyles } from "src/styles/article";
-import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
+import { articleStyles, darkArticleStyles } from "src/styles/article";
+import { baseStyles, darkStyles, layout, text, varGray1, darkModeText } from "src/styles/styles";
 import { Article, Author, Media } from "src/types/data";
 import { SettingsStackProps } from "src/types/navStacks";
 import BottomStaffBar from "./BottomStaffBar";
+import { useTheme } from "src/components/ThemeContext";
 
 function Staff({
   route,
@@ -44,11 +45,16 @@ function Staff({
     );
   }
 
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const articleStyle = isDarkMode ? darkArticleStyles : articleStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <ScrollView
-          style={baseStyles.container}
+          style={containerStyle.container}
           accessibilityLabel="Staff member details"
           accessibilityHint="Scroll to view staff member's information, articles, and media"
         >
@@ -72,13 +78,13 @@ function Staff({
                 />
               )}
               <View style={{ flex: 1 }}>
-                <Text style={text.sectionHeader1} accessibilityRole="header">
+                <Text style={textStyle.sectionHeader1} accessibilityRole="header">
                   {author.name}
                 </Text>
                 {author.tagline !== "" && (
                   <Text
                     style={{
-                      ...text.textMedium,
+                      ...textStyle.textMedium,
                       fontStyle: "italic",
                       marginTop: 4,
                     }}
@@ -94,7 +100,7 @@ function Staff({
               <View accessible={true}>
                 <Divider marginTop={0} marginBottom={8} />
                 <Text
-                  style={{ ...articleStyles.articleBody, marginTop: 8 }}
+                  style={{ ...articleStyle.articleBody, marginTop: 8 }}
                   accessibilityLabel="Staff member's biography"
                 >
                   {author.bio
@@ -109,7 +115,7 @@ function Staff({
           {articles.length > 0 && (
             <View accessibilityLabel="Recent articles section">
               <Divider marginTop={10} marginBottom={10} />
-              <Text style={text.sectionHeader1} accessibilityRole="header">
+              <Text style={textStyle.sectionHeader1} accessibilityRole="header">
                 Recent Articles
               </Text>
               <View style={{ height: 10 }}></View>
@@ -128,7 +134,7 @@ function Staff({
           {media.length > 0 && (
             <View accessibilityLabel="Media section">
               <Divider marginTop={18} marginBottom={8} />
-              <Text style={text.sectionHeader1} accessibilityRole="header">
+              <Text style={textStyle.sectionHeader1} accessibilityRole="header">
                 Media
               </Text>
               <View

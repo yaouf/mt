@@ -6,9 +6,7 @@ function Header() {
   const screenWidth = Dimensions.get("window").width;
   const { isDarkMode, toggleTheme } = useTheme();
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
-  const logo = isDarkMode
-  ? require("assets/logo-white.png")
-  : require("assets/logo-black.png");
+  const logo = isDarkMode ? require("assets/logo-white.png") : require("assets/logo-black.png");
   return (
     <View
       style={{

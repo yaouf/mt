@@ -292,7 +292,8 @@ export const darkArticleStyles = StyleSheet.create({
     alignItems: "center",
     paddingBottom: 10,
     marginLeft: -3,
-    backgroundColor: darkModeBackgroundColor
+    backgroundColor: darkModeBackgroundColor,
+    color: darkModeTextColor
   },
   text: {
     color: darkTextSecondaryColor,

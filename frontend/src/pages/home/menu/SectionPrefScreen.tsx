@@ -71,7 +71,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
         <Ionicons
           name="reorder-three-outline"
           size={28}
-          color="#1C1B1F"
+          color={logoStyle}
           style={menuStyle.icon}
         />
       </TouchableOpacity>
@@ -112,6 +112,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
   const menuStyle = isDarkMode ? darkMenuStyles : menuStyles;
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;
+  const logoStyle = isDarkMode ? "#FFFFFF" : "#1C1B1F";
   return (
     <GestureHandlerRootView
       style={[containerStyle.container, { marginBottom: marginBottom }]}
@@ -124,7 +125,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
           accessibilityHint="Close the section preferences screen without saving new preferences"
           style={{ paddingHorizontal: 10 }}
         >
-          <MaterialIcons name="close" size={28} color="#1C1B1F" />
+          <MaterialIcons name="close" size={28} color={logoStyle} />
         </TouchableOpacity>
 
         <Text style={[menuStyle.otherText, { fontSize: 20, fontWeight: 600 }]}>

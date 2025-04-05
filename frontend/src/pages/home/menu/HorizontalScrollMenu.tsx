@@ -52,6 +52,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
 
   const { isDarkMode, toggleTheme } = useTheme();
   const menuStyle = isDarkMode ? darkMenuStyles : menuStyles;
+  const iconColor = isDarkMode ? "#9E9E9E" : "black";
 
   return (
     <ScrollView
@@ -76,7 +77,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         <Ionicons
           name="filter-outline"
           size={calculatedIconSize}
-          color="black"
+          color={iconColor}
         />
       </TouchableOpacity>
 

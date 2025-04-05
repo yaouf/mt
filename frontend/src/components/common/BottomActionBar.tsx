@@ -22,6 +22,7 @@ function BottomActionBar({ onShare, rightButtons }: BottomActionBarProps) {
   const { isDarkMode, toggleTheme } = useTheme();
   const articleStyle = isDarkMode ? darkArticleStyles : articleStyles;
   const iconColor = isDarkMode ? darkTextSecondaryColor : "#1C1B1F";
+  const share_logo = isDarkMode ? require("../../../assets/icons/share-white.png") : require("../../../assets/icons/share.png");
   return (
     <View
       style={articleStyle.actionBar}
@@ -56,7 +57,7 @@ function BottomActionBar({ onShare, rightButtons }: BottomActionBarProps) {
           accessibilityHint="Press to share the article"
         >
           <Image
-            source={require("../../../assets/icons/share.png")}
+            source={share_logo}
             style={articleStyle.icon}
           />
         </TouchableOpacity>
