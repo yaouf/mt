@@ -9,6 +9,7 @@ import { Tag } from "src/types/data";
 import { CardProps } from "src/types/navStacks";
 import {
   darkModeBackgroundColor,
+  darkModeBgColorStd,
   darkModeTextColor,
   font1,
   font3,
@@ -32,7 +33,6 @@ function LargeCard({ article, navigation }: CardProps) {
       article.dominantMedia.extension;
   }
   const { isDarkMode, toggleTheme } = useTheme();
-  
   const containerStyle = isDarkMode ? darkStyles : styles;
   return (
     <View>
@@ -209,7 +209,7 @@ const darkStyles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "stretch",
     borderRadius: 0,
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: darkModeBgColorStd,
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,

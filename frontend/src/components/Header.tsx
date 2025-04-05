@@ -1,9 +1,12 @@
 import { Dimensions, Image, View } from "react-native";
 import { useTheme } from "./ThemeContext";
+import { baseStyles, darkStyles } from "src/styles/styles";
 
 function Header() {
   const screenWidth = Dimensions.get("window").width;
   const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const logo = isDarkMode ? require("assets/logo-white.png") : require("assets/logo-black.png");
   return (
     <View
       style={{
@@ -12,14 +15,14 @@ function Header() {
         justifyContent: "center",
         alignItems: "center",
         marginHorizontal: "auto",
-        // backgroundColor: "black"
+        backgroundColor: containerStyle.container.backgroundColor
       }}
     >
       <View style={{ width: screenWidth * 0.9,
-        // backgroundColor: "black"
+        backgroundColor: containerStyle.container.backgroundColor
        }}>
         <Image
-          source={require("assets/logo-black.png")}
+          source={logo}
           style={{
             width: 207,
             height: 35,

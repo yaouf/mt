@@ -1,7 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { Image, TouchableOpacity, View } from "react-native";
-import { articleStyles } from "src/styles/article";
+import { articleStyles, darkArticleStyles } from "src/styles/article";
+import { useTheme } from "../ThemeContext";
+import { darkTextSecondaryColor } from "src/styles/styles";
 
 interface BottomActionBarProps {
   onShare: () => void;
@@ -17,31 +19,34 @@ interface BottomActionBarProps {
  */
 function BottomActionBar({ onShare, rightButtons }: BottomActionBarProps) {
   const navigation = useNavigation();
-
+  const { isDarkMode, toggleTheme } = useTheme();
+  const articleStyle = isDarkMode ? darkArticleStyles : articleStyles;
+  const iconColor = isDarkMode ? darkTextSecondaryColor : "#1C1B1F";
+  const share_logo = isDarkMode ? require("../../../assets/icons/share-white.png") : require("../../../assets/icons/share.png");
   return (
     <View
-      style={articleStyles.actionBar}
+      style={articleStyle.actionBar}
       accessibilityLabel="Article Action Bar"
     >
-      <View style={articleStyles.actions}>
+      <View style={articleStyle.actions}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{}}
           accessibilityLabel="Back Button"
           accessibilityHint="Press to go back to the previous screen"
         >
-          <Ionicons name="arrow-back" size={26} color="#1C1B1F" />
+          <Ionicons name="arrow-back" size={26} color={iconColor} />
         </TouchableOpacity>
       </View>
 
-      <View style={articleStyles.actions}>
+      <View style={articleStyle.actions}>
         <TouchableOpacity
           onPress={() => navigation.navigate("HomeScreen")}
           style={{ paddingRight: 10 }}
           accessibilityLabel="Home Button"
           accessibilityHint="Press to return to the home screen"
         >
-          <Ionicons name="home-outline" size={26} color="#1C1B1F" />
+          <Ionicons name="home-outline" size={26} color={iconColor} />
         </TouchableOpacity>
         {/* Adds new actions to middle of right side */}
         {rightButtons}
@@ -52,8 +57,8 @@ function BottomActionBar({ onShare, rightButtons }: BottomActionBarProps) {
           accessibilityHint="Press to share the article"
         >
           <Image
-            source={require("../../../assets/icons/share.png")}
-            style={articleStyles.icon}
+            source={share_logo}
+            style={articleStyle.icon}
           />
         </TouchableOpacity>
       </View>

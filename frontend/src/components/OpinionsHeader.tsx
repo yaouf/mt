@@ -3,6 +3,8 @@ import React, { useContext } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { MenuContext } from "src/pages/home/HomeStackScreen";
 import { text } from "src/styles/styles";
+import { darkModeText } from "src/styles/styles";
+import { useTheme } from "./ThemeContext";
 
 const styles = StyleSheet.create({
   opinionsHeaderContainer: {
@@ -22,10 +24,11 @@ type SectionHeaderProps = {
 function SectionHeader(props: SectionHeaderProps) {
   const { setCurrSection } = useContext(MenuContext);
 
-
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerText = isDarkMode ? darkModeText : text;
   return (
     <View style={styles.opinionsHeaderContainer} key={`${props.slug}-section-header`}>
-      <View/><Text style={text.sectionHeader1}>{props.title}</Text>
+      <View/><Text style={containerText.sectionHeader1}>{props.title}</Text>
     </View>
   );
 }

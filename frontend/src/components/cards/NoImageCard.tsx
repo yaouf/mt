@@ -7,11 +7,14 @@ import {
   ViewStyle,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
+import { darkModeBackgroundColor, darkModeBgColorStd, darkModeTextColor, font1, font3, varGray1, varTextColor } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
+import { useTheme } from "../ThemeContext";
 
 function NoImageCard({ article, navigation }: CardProps) {
   let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : styles;
 
   return (
     <View style={cardSize}>
@@ -19,11 +22,11 @@ function NoImageCard({ article, navigation }: CardProps) {
         style={styles2.touchableItem}
         onPress={() => navigation.push("Article", { data: article })}
       >
-        <View style={styles.card}>
-          <View style={styles.text}>
-            <Text style={styles.title}>{article.headline}</Text>
+        <View style={containerStyle.card}>
+          <View style={containerStyle.text}>
+            <Text style={containerStyle.title}>{article.headline}</Text>
             {article.subhead && article.subhead.trim() !== "" && (
-              <Text style={styles.subhead}>{article.subhead}</Text>
+              <Text style={containerStyle.subhead}>{article.subhead}</Text>
             )}
             <View
               style={{
@@ -34,7 +37,7 @@ function NoImageCard({ article, navigation }: CardProps) {
                 alignItems: "flex-end",
               }}
             >
-              <Text style={styles.published}>
+              <Text style={containerStyle.published}>
                 {formatDates(article.published_at)}
               </Text>
             </View>
@@ -137,6 +140,93 @@ const styles = StyleSheet.create({
   subhead: {
     alignSelf: "stretch",
     color: varTextColor,
+    fontFamily: font1,
+    fontSize: 18,
+    fontWeight: "400",
+    lineHeight: 22,
+    fontStyle: "italic",
+    marginBottom: 12,
+  },
+  publishedSection: {
+    display: "flex",
+    alignItems: "center",
+    gap: 4,
+  },
+  line: {
+    width: 254,
+    height: 0.5,
+    backgroundColor: "rgba(60, 60, 67, 0.36)",
+  },
+});
+
+
+const darkStyles = StyleSheet.create({
+  title: {
+    height: "auto",
+    alignSelf: "stretch",
+    color: darkModeTextColor,
+    fontFamily: font1,
+    fontSize: 20,
+    fontStyle: "normal",
+    fontWeight: "700",
+    lineHeight: 20,
+    overflow: "hidden",
+    flexWrap: "nowrap",
+    marginBottom: 4,
+  },
+  card: {
+    display: "flex",
+    // width: 170,
+    // width: "48%",
+    flexDirection: "column",
+    alignItems: "stretch",
+    borderWidth: 0,
+    backgroundColor: darkModeBgColorStd,
+    // shadowColor: varTextColor,
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 1.497,
+    // },
+    // shadowOpacity: 0.08,
+    // shadowRadius: 29.949,
+    // elevation: 3,
+    overflow: "visible",
+  },
+  section: {
+    color: varGray1,
+    fontFamily: font3,
+    fontSize: 10,
+    fontStyle: "normal",
+    // fontWeight: "500",
+    /* lineHeight: 'normal',*/
+  },
+  published: {
+    color: varGray1,
+    fontFamily: font3,
+    fontSize: 12,
+    fontWeight: "500",
+    fontStyle: "normal",
+    // fontWeight: "500",
+    /* line-height: normal; */
+  },
+  text: {
+    display: "flex",
+    flexDirection: "column",
+    paddingHorizontal: 0,
+    alignItems: "flex-start",
+    alignSelf: "stretch",
+    gap: 4,
+  },
+  bottom: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    alignSelf: "stretch",
+  },
+  subhead: {
+    alignSelf: "stretch",
+    color: darkModeTextColor,
     fontFamily: font1,
     fontSize: 18,
     fontWeight: "400",

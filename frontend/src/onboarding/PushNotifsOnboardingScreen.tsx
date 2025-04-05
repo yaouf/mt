@@ -14,10 +14,11 @@ import {
 import NotifToggle from "src/components/NotifToggle";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { settings } from "src/styles/pages";
-import { font2, text } from "src/styles/styles";
+import { font2, text,darkModeText, darkModeBackgroundColor } from "src/styles/styles";
 import { OnboardParams } from "src/types/navStacks";
 import { setAsync } from "src/utils/helpers";
 import { setUpDevice } from "../utils/setupDevice";
+import { useTheme } from "src/components/ThemeContext";
 
 const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
 
@@ -116,22 +117,23 @@ function PushNotifsOnboardingScreen({
   }, []);
 
   console.log("sports", sports, artsAndCulture, scienceAndResearch, opinions);
-
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : styles;
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <View style={styles.contentContainer}>
+    <SafeAreaView style={containerStyle.safeArea}>
+      <ScrollView contentContainerStyle={containerStyle.scrollViewContent}>
+        <View style={containerStyle.contentContainer}>
           <View>
-            <Text style={styles.title}>
+            <Text style={containerStyle.title}>
               {isUpdate ? "New Sections." : "Welcome."}
             </Text>
-            <Text style={styles.description}>
+            <Text style={containerStyle.description}>
               {isUpdate
                 ? "Update your notification preferences."
                 : "Turn on alerts for the topics that interest you and we'll keep you updated."}
             </Text>
 
-            <View style={styles.notifContainer}>
+            <View style={containerStyle.notifContainer}>
               {/* TODO: factor out duplicate descriptions between this and settingsscreen */}
               <NotifToggle
                 title="Breaking News"
@@ -186,18 +188,18 @@ function PushNotifsOnboardingScreen({
           </View>
         </View>
       </ScrollView>
-      <View style={styles.buttonContainer}>
+      <View style={containerStyle.buttonContainer}>
         <TouchableOpacity
-          style={styles.continueButton}
+          style={containerStyle.continueButton}
           onPress={saveNotifPreferences}
           accessible={true}
           accessibilityRole="button"
           accessibilityHint="Press to save notification preferences and continue to the app"
         >
-          <Text style={styles.buttonText}>Save and continue</Text>
+          <Text style={containerStyle.buttonText}>Save and continue</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.continueButton, styles.maybeLaterButton]}
+          style={[containerStyle.continueButton, containerStyle.maybeLaterButton]}
           onPress={() => {
             setUpDevice(
               setBreaking,
@@ -219,7 +221,7 @@ function PushNotifsOnboardingScreen({
           accessibilityRole="button"
           accessibilityHint="Press to skip setting up notifications"
         >
-          <Text style={styles.buttonText}>Maybe Later</Text>
+          <Text style={containerStyle.buttonText}>Maybe Later</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -265,6 +267,55 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: font2,
     fontSize: 16,
+  },
+});
+
+const darkStyles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: darkModeBackgroundColor,
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    backgroundColor: darkModeBackgroundColor,
+  },
+  contentContainer: {
+    flex: 1,
+    padding: "5%",
+    backgroundColor: darkModeBackgroundColor,
+  },
+  title: {
+    ...darkModeText.bigTitle,
+    fontSize: 32,
+    marginBottom: "5%",
+  },
+  description: {
+    ...darkModeText.normal,
+    fontSize: 16,
+    marginBottom: "5%",
+    color: "#ffffff"
+  },
+  notifContainer: {
+    rowGap: 16,
+    width: "100%",
+  },
+  buttonContainer: {
+    padding: "5%",
+    backgroundColor: darkModeBackgroundColor,
+  },
+  continueButton: {
+    ...settings.continueButton,
+    marginBottom: "2%",
+    backgroundColor: darkModeBackgroundColor,
+  },
+  maybeLaterButton: {
+    borderColor: "black",
+    backgroundColor: darkModeBackgroundColor,
+  },
+  buttonText: {
+    fontFamily: font2,
+    fontSize: 16,
+    color: "#ffffff"
   },
 });
 

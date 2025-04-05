@@ -10,6 +10,7 @@ import { Tag } from "src/types/data";
 import { CardProps } from "src/types/navStacks";
 import {
   darkModeBackgroundColor,
+  darkModeBgColorStd,
   darkModeTextColor,
   font1,
   font2,
@@ -36,8 +37,8 @@ import { useTheme } from "../ThemeContext";
           accessibilityRole="button"
           accessibilityHint={`Double tap to open article`}
         >
-          <View style={styles.card}>
-            <View style={styles.text}>
+          <View style={containerStyle.card}>
+            <View style={containerStyle.text}>
             <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end", marginBottom: 8}}>
             <Text style={{color: varRed, fontWeight: 700, fontFamily: font2, fontSize: 12,}}
               accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
@@ -45,17 +46,17 @@ import { useTheme } from "../ThemeContext";
               {all_tags[0].replace("&;", "&")}
             </Text>
             </View>
-              <Text style={styles.title}
+              <Text style={containerStyle.title}
                 accessibilityLabel={`Headline: ${article.headline}.`}
               >
                 {article.headline}
               </Text>
-              <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail"
+              <Text style={containerStyle.subhead} numberOfLines={6} ellipsizeMode="tail"
                 accessibilityLabel={`Subtitle: ${article.subhead}.`}
               >
               {article.subhead}
             </Text>
-              <Text style={styles.published}
+              <Text style={containerStyle.published}
                 accessibilityLabel={`Published on ${formatDates(article.published_at)}.`}
               >
                 {formatDates(article.published_at)}
@@ -156,6 +157,7 @@ import { useTheme } from "../ThemeContext";
       flexDirection: "row",
       alignItems: "flex-start",
       alignSelf: "stretch",
+      backgroundColor: darkModeBackgroundColor,
     },
     subhead: {
         alignSelf: "stretch",
@@ -216,7 +218,7 @@ import { useTheme } from "../ThemeContext";
       flexDirection: "column",
       alignItems: "stretch",
       borderRadius: 0,
-      backgroundColor: darkModeBackgroundColor,
+      backgroundColor: darkModeBgColorStd,
       overflow: "visible",
     },
     section: {

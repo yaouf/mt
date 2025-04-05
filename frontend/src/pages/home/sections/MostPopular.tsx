@@ -3,7 +3,8 @@ import React from "react";
 import { Text, View } from "react-native";
 import ImageCard from "src/components/cards/HorizontalCard";
 import Divider from "src/components/Divider";
-import { baseStyles } from "src/styles/styles";
+import { useTheme } from "src/components/ThemeContext";
+import { baseStyles, darkStyles } from "src/styles/styles";
 import { Article } from "src/types/data";
 
 type TopProps = {
@@ -17,10 +18,12 @@ type TopProps = {
  * @returns
  */
 function MostPopular(props: Readonly<TopProps>) {
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
   return (
     <>
       {props.mostPopularStories && props.mostPopularStories.length > 0 && (
-        <View style={[baseStyles.container, { paddingVertical: 15 }]}>
+        <View style={[containerStyle.container, { paddingVertical: 15 }]}>
           <Text
             style={{
               fontWeight: "600",

@@ -20,8 +20,8 @@ function Top(props: TopProps) {
   }
   const { isDarkMode, toggleTheme } = useTheme();
   
-    const containerStyle = isDarkMode ? darkStyles : baseStyles;
-    const textStyle = isDarkMode ? darkModeText : text;
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
   return (
     <View style={containerStyle.container}>
       <View style={{ overflow: "visible" }}>

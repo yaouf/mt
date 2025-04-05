@@ -7,6 +7,8 @@ import { ArticleDetailProps } from "src/types/other";
 import { handleBookmark } from "src/utils/helpers";
 import { SavedContext } from "../MainTabNavigator";
 import { shareArticle } from "./ShareArticle";
+import { useTheme } from "src/components/ThemeContext";
+import { darkTextSecondaryColor } from "src/styles/styles";
 
 /**
  * action bar at the bottom of each article
@@ -15,6 +17,8 @@ import { shareArticle } from "./ShareArticle";
 function BottomArticleBar(props: ArticleDetailProps) {
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(props.uuid in savedArticles);
+  const { isDarkMode, toggleTheme } = useTheme();
+  const iconColor = isDarkMode ? darkTextSecondaryColor : "#1C1B1F";
 
   useEffect(() => {
     setSaved(props.uuid in savedArticles);
@@ -47,9 +51,9 @@ function BottomArticleBar(props: ArticleDetailProps) {
       accessibilityHint="Press to bookmark or unbookmark the article"
     >
       {saved ? (
-        <Ionicons name="bookmark" size={26} color="#1C1B1F" />
+        <Ionicons name="bookmark" size={26} color={iconColor} />
       ) : (
-        <Ionicons name="bookmark-outline" size={26} color="#1C1B1F" />
+        <Ionicons name="bookmark-outline" size={26} color={iconColor} />
       )}
     </TouchableOpacity>
   );

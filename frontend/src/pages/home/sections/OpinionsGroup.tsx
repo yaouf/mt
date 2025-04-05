@@ -39,7 +39,6 @@ function OpinionsGroup(props: SectionGroupProps) {
   }, []);
 
   const { isDarkMode, toggleTheme } = useTheme();
-    
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
 
   return (
