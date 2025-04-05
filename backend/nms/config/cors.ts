@@ -1,10 +1,7 @@
 import Cors from 'cors';
 
 // Allowed origins
-const allowedOrigins = [
-  'https://dashboard.browndailyherald.com',  
-  'http://localhost:3000',                   
-];
+const allowedOrigins = ['https://dashboard.browndailyherald.com', 'http://localhost:3000'];
 
 // Middleware to configure CORS
 const corsMiddleware = Cors({
@@ -19,9 +16,9 @@ const corsMiddleware = Cors({
       return callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  
-  allowedHeaders: ['Authorization', 'Content-Type'],     
-  credentials: true,                                     
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Authorization', 'Content-Type'],
+  credentials: true,
 });
 
 export default corsMiddleware;

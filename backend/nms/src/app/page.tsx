@@ -1,41 +1,39 @@
-"use client";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { useEffect, useState } from "react";
-import { Notification } from "../types";
-import AuthWrapper from "./AuthWrapper";
-import DeviceCounts from "./DeviceCounts";
-import DeviceTable from "./DeviceTable";
-import EditorsPicks from "./EditorsPicks";
-import EnvVars from "./EnvVars";
-import NotificationForm from "./NotificationForm";
-import NotificationTable from "./NotificationTable";
+'use client';
+import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { Notification } from '../types';
+import AuthWrapper from './AuthWrapper';
+import DeviceCounts from './DeviceCounts';
+import DeviceTable from './DeviceTable';
+import EditorsPicks from './EditorsPicks';
+import EnvVars from './EnvVars';
+import NotificationForm from './NotificationForm';
+import NotificationTable from './NotificationTable';
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 const isAdmin = (user: User) => {
   // More granular role check if applicable, for now using email check
   return isProduction
-    ? user.email === "techadmin@browndailyherald.com"
-    : user.email === "admin@example.com";
+    ? user.email === 'techadmin@browndailyherald.com'
+    : user.email === 'admin@example.com';
 };
 
 export default function Home() {
-  const [scheduledNotifications, setScheduledNotifications] = useState<
-    Notification[]
-  >([]);
+  const [scheduledNotifications, setScheduledNotifications] = useState<Notification[]>([]);
   const [editorsPicks, setEditorsPicks] = useState<any[]>([]);
   const [deviceCount, setDeviceCount] = useState<number>(0);
   const [counts, setCounts] = useState({
-    metroCount: "Loading...",
-    breakingCount: "Loading...",
-    universityCount: "Loading...",
-    sportsCount: "Loading...",
-    artsAndCultureCount: "Loading...",
-    scienceAndResearchCount: "Loading...",
-    opinionsCount: "Loading...",
-    ntfEnabled: "Loading...",
+    metroCount: 'Loading...',
+    breakingCount: 'Loading...',
+    universityCount: 'Loading...',
+    sportsCount: 'Loading...',
+    artsAndCultureCount: 'Loading...',
+    scienceAndResearchCount: 'Loading...',
+    opinionsCount: 'Loading...',
+    ntfEnabled: 'Loading...',
   });
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
   const auth = getAuth();
 
@@ -44,13 +42,13 @@ export default function Home() {
       if (currentUser) {
         setUser(currentUser);
         currentUser.getIdToken(true).then((idToken) => {
-          console.log("Token fetched:", idToken);
+          console.log('Token fetched:', idToken);
           setToken(idToken);
         });
       } else {
-        console.log("No user detected");
+        console.log('No user detected');
         setUser(null);
-        setToken("");
+        setToken('');
       }
     });
 
@@ -63,7 +61,7 @@ export default function Home() {
 
     const fetchNotifications = async () => {
       try {
-        const response = await fetch("/api/notifications", {
+        const response = await fetch('/api/notifications', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -71,7 +69,7 @@ export default function Home() {
         const data = await response.json();
         setScheduledNotifications(data);
       } catch (error) {
-        console.error("Error fetching notifications:", error);
+        console.error('Error fetching notifications:', error);
       }
     };
 
@@ -84,7 +82,7 @@ export default function Home() {
 
     const fetchDeviceCount = async () => {
       try {
-        const response = await fetch("/api/devices/count", {
+        const response = await fetch('/api/devices/count', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -92,7 +90,7 @@ export default function Home() {
         const data = await response.json();
         setDeviceCount(data.count);
       } catch (error) {
-        console.error("Error fetching device count:", error);
+        console.error('Error fetching device count:', error);
       }
     };
 
@@ -105,20 +103,20 @@ export default function Home() {
 
     const fetchCounts = async () => {
       const endpoints = [
-        { url: "devices/count?search=isPushEnabled", key: "ntfEnabled" },
-        { url: "devices/count?search=Metro", key: "metroCount" },
-        { url: "devices/count?search=University News", key: "universityCount" },
-        { url: "devices/count?search=Breaking News", key: "breakingCount" },
-        { url: "devices/count?search=Sports", key: "sportsCount" },
+        { url: 'devices/count?search=isPushEnabled', key: 'ntfEnabled' },
+        { url: 'devices/count?search=Metro', key: 'metroCount' },
+        { url: 'devices/count?search=University News', key: 'universityCount' },
+        { url: 'devices/count?search=Breaking News', key: 'breakingCount' },
+        { url: 'devices/count?search=Sports', key: 'sportsCount' },
         {
-          url: "devices/count?search=Arts and Culture",
-          key: "artsAndCultureCount",
+          url: 'devices/count?search=Arts and Culture',
+          key: 'artsAndCultureCount',
         },
         {
-          url: "devices/count?search=Science and Research",
-          key: "scienceAndResearchCount",
+          url: 'devices/count?search=Science and Research',
+          key: 'scienceAndResearchCount',
         },
-        { url: "devices/count?search=Opinions", key: "opinionsCount" },
+        { url: 'devices/count?search=Opinions', key: 'opinionsCount' },
       ];
 
       try {
@@ -141,10 +139,10 @@ export default function Home() {
 
         setCounts((prevState) => ({ ...prevState, ...updatedCounts }));
       } catch (error) {
-        console.error("Error fetching counts:", error);
+        console.error('Error fetching counts:', error);
         setCounts((prevState) => ({
           ...prevState,
-          ntfEnabled: "Error",
+          ntfEnabled: 'Error',
         }));
       }
     };
@@ -158,7 +156,7 @@ export default function Home() {
 
     const fetchEditorsPicks = async () => {
       try {
-        const response = await fetch("/api/editors-picks", {
+        const response = await fetch('/api/editors-picks', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -198,9 +196,7 @@ export default function Home() {
 
             {isAdmin(user) && (
               <>
-                <NotificationForm
-                  setScheduledNotifications={setScheduledNotifications}
-                />
+                <NotificationForm setScheduledNotifications={setScheduledNotifications} />
                 <div className="flex justify-center py-10"></div>
                 <EditorsPicks
                   editorsPicks={editorsPicks}

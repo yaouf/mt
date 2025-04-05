@@ -1,9 +1,9 @@
-import type { Knex } from "knex";
+import type { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   const dbType = knex.client.config.client;
 
-  if (dbType === "mssql") {
+  if (dbType === 'mssql') {
     // SQL Server approach
     return knex.raw(`
       DECLARE @sql NVARCHAR(MAX) = '';
@@ -16,13 +16,13 @@ export async function up(knex: Knex): Promise<void> {
       IF LEN(@sql) > 0
         EXEC sp_executesql @sql;
     `);
-  } else if (dbType === "sqlite3") {
+  } else if (dbType === 'sqlite3') {
     // For SQLite, we need to recreate the table without the unique constraint
     // First, get the table info
-    const tableInfo = await knex.raw("PRAGMA table_info(editors_picks)");
+    const tableInfo = await knex.raw('PRAGMA table_info(editors_picks)');
 
     // Create a new table without the unique constraint
-    await knex.schema.createTable("editors_picks_new", (table) => {
+    await knex.schema.createTable('editors_picks_new', (table) => {
       // Recreate all columns from the original table
       for (const column of tableInfo) {
         const colName = column.name;
@@ -41,33 +41,31 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Copy data from old table to new table
-    await knex.raw("INSERT INTO editors_picks_new SELECT * FROM editors_picks");
+    await knex.raw('INSERT INTO editors_picks_new SELECT * FROM editors_picks');
 
     // Drop old table
-    await knex.schema.dropTable("editors_picks");
+    await knex.schema.dropTable('editors_picks');
 
     // Rename new table to old table name
-    await knex.schema.renameTable("editors_picks_new", "editors_picks");
+    await knex.schema.renameTable('editors_picks_new', 'editors_picks');
 
-    console.log(
-      "SQLite: Recreated editors_picks table without unique constraints"
-    );
+    console.log('SQLite: Recreated editors_picks table without unique constraints');
     return;
   } else {
     // Generic approach for PostgreSQL and others
     try {
       // Try to drop the unique constraint on rank
-      await knex.schema.alterTable("editors_picks", (table) => {
-        table.dropUnique(["rank"]);
+      await knex.schema.alterTable('editors_picks', (table) => {
+        table.dropUnique(['rank']);
       });
-      console.log("Dropped unique constraint on editors_picks.rank");
+      console.log('Dropped unique constraint on editors_picks.rank');
     } catch (error) {
-      console.error("Failed to drop unique constraint:", error);
+      console.error('Failed to drop unique constraint:', error);
       // If the specific constraint name is unknown, try a more generic approach
-      console.log("Attempting alternative approach...");
+      console.log('Attempting alternative approach...');
 
       // For PostgreSQL
-      if (dbType === "pg") {
+      if (dbType === 'pg') {
         try {
           await knex.raw(`
             DO $$
@@ -85,9 +83,9 @@ export async function up(knex: Knex): Promise<void> {
               END IF;
             END $$;
           `);
-          console.log("PostgreSQL: Dropped unique constraint on editors_picks");
+          console.log('PostgreSQL: Dropped unique constraint on editors_picks');
         } catch (pgError) {
-          console.error("PostgreSQL approach failed:", pgError);
+          console.error('PostgreSQL approach failed:', pgError);
         }
       }
     }
@@ -95,7 +93,7 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema.alterTable("editors_picks", (table) => {
-    table.unique(["rank"]);
+  return knex.schema.alterTable('editors_picks', (table) => {
+    table.unique(['rank']);
   });
 }

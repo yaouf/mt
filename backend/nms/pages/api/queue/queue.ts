@@ -1,15 +1,15 @@
-import { Job, Queue, Worker } from "bullmq";
-import Expo, { ExpoPushMessage, ExpoPushTicket } from "expo-server-sdk";
-import db from "../../../dist/data/db-config";
-import { DeviceToken } from "../types/types";
+import { Job, Queue, Worker } from 'bullmq';
+import Expo, { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
+import db from '../../../dist/data/db-config';
+import { DeviceToken } from '../types/types';
 
 const connection = {
-  host: "localhost",
+  host: 'localhost',
   port: 6379,
 };
 
 // Connect to a local Redis instance. For production, configure the connection accordingly.
-const notificationQueue = new Queue("notificationQueue", {
+const notificationQueue = new Queue('notificationQueue', {
   connection,
   defaultJobOptions: {
     removeOnComplete: true,
@@ -18,7 +18,7 @@ const notificationQueue = new Queue("notificationQueue", {
     },
   },
 });
-console.log("connected to queue");
+console.log('connected to queue');
 
 notificationQueue.setGlobalConcurrency(1);
 
@@ -26,22 +26,18 @@ notificationQueue.setGlobalConcurrency(1);
 
 // Send notifications to corresponding devices
 const worker = new Worker(
-  "notificationQueue",
+  'notificationQueue',
   async (job) => {
     // This is the job data that was passed to `notificationQueue.add()`
     const { time, title, body, tags, url, isUid, notificationId } = job.data;
     // Fetch all devices that have subscribed to the tags
     let expoPushTokens: Set<string> = new Set(); // Use a map with push token as key
     for (let tag of tags) {
-      const devices = (await db("devices")
-        .select("devices.expo_push_token")
-        .join(
-          "device_preferences",
-          "devices.id",
-          "device_preferences.device_id"
-        )
-        .join("categories", "device_preferences.category_id", "categories.id")
-        .where("categories.name", tag)) as DeviceToken[];
+      const devices = (await db('devices')
+        .select('devices.expo_push_token')
+        .join('device_preferences', 'devices.id', 'device_preferences.device_id')
+        .join('categories', 'device_preferences.category_id', 'categories.id')
+        .where('categories.name', tag)) as DeviceToken[];
       for (let device of devices) {
         expoPushTokens.add(device.expo_push_token);
       }
@@ -74,7 +70,7 @@ const worker = new Worker(
       const messages: ExpoPushMessage[] = [];
       messages.push({
         to: pushToken,
-        sound: "default",
+        sound: 'default',
         title: title,
         body: body,
         data: { url, isUid },
@@ -101,7 +97,7 @@ const worker = new Worker(
       // Create an array to store the receipt IDs for each notification
       let receiptIds: string[] = [];
       for (let ticket of tickets) {
-        if (ticket && "id" in ticket) {
+        if (ticket && 'id' in ticket) {
           receiptIds.push(ticket.id);
         }
       }
@@ -119,11 +115,11 @@ const worker = new Worker(
             // Handle the receipts to determine if the notifications were successfully sent
             for (let receiptId in receipts) {
               let { status, details } = receipts[receiptId];
-              if (status === "ok") {
+              if (status === 'ok') {
                 continue;
-              } else if (status === "error") {
+              } else if (status === 'error') {
                 console.error(`There was an error sending a notification:`);
-                if (details && "error" in details) {
+                if (details && 'error' in details) {
                   console.error(`The error code is ${details.error}`);
                 }
               }
@@ -137,28 +133,26 @@ const worker = new Worker(
 
     // Update notification status to "sent" in the database
     try {
-      console.log("notificationId", notificationId);
-      await db("notifications")
-        .where({ id: notificationId })
-        .update({ status: "sent" });
+      console.log('notificationId', notificationId);
+      await db('notifications').where({ id: notificationId }).update({ status: 'sent' });
       console.log(
         `Notification with ID ${notificationId} at time ${time} successfully updated to status "sent"`
       );
     } catch (error) {
-      console.error("Error updating notification status:", error);
+      console.error('Error updating notification status:', error);
     }
   },
   { connection }
 );
 
-worker.on("failed", (job: Job, error: Error) => {
+worker.on('failed', (job: Job, error: Error) => {
   // Do something with the return value.
-  console.error("job with data : ", job.data, " failed with error: ", error);
+  console.error('job with data : ', job.data, ' failed with error: ', error);
 });
 
-worker.on("error", (err) => {
+worker.on('error', (err) => {
   // log the error
-  console.error("worker failed with error", err);
+  console.error('worker failed with error', err);
 });
 
 export { notificationQueue, worker };

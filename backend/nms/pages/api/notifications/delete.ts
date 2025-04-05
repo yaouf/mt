@@ -1,9 +1,9 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import db from "../../../dist/data/db-config";
-import { notificationQueue } from "../queue/queue";
-import { Notification, RequestData, ResponseData } from "../types/types";
-import corsMiddleware from "../../../config/cors";
-import { authMiddleware } from "../../../middleware/authMiddleware";
+import type { NextApiRequest, NextApiResponse } from 'next';
+import db from '../../../dist/data/db-config';
+import { notificationQueue } from '../queue/queue';
+import { Notification, RequestData, ResponseData } from '../types/types';
+import corsMiddleware from '../../../config/cors';
+import { authMiddleware } from '../../../middleware/authMiddleware';
 
 async function deleteNotificationHelper(
   req: NextApiRequest,
@@ -12,7 +12,7 @@ async function deleteNotificationHelper(
   try {
     // Parse the request body
     let data: any;
-    if (typeof req.body === "string") {
+    if (typeof req.body === 'string') {
       data = JSON.parse(req.body);
     } else {
       data = req.body;
@@ -22,54 +22,51 @@ async function deleteNotificationHelper(
 
     // Validate required fields
     if (!jobId) {
-      return res.status(400).json({ message: "Invalid notification data." });
+      return res.status(400).json({ message: 'Invalid notification data.' });
     }
 
     // Delete the notification from the job queue
-    const job = await notificationQueue.getJob(jobId.toString() + "_n");
-    console.log(notificationQueue.getActive())
+    const job = await notificationQueue.getJob(jobId.toString() + '_n');
+    console.log(notificationQueue.getActive());
     if (job) {
-      console.log("Job deleted from queue.");
+      console.log('Job deleted from queue.');
       await job.remove();
     } else {
-      console.warn(
-        "Could not find job in queue with id:",
-        jobId.toString() + "_n"
-      );
+      console.warn('Could not find job in queue with id:', jobId.toString() + '_n');
     }
 
     // Delete the notification from the "notifications" table
-    const deletedCount = await db("notifications").where({ id: jobId }).del();
+    const deletedCount = await db('notifications').where({ id: jobId }).del();
 
     if (deletedCount > 0) {
       // Fetch all notifications with their categories after deletion
-      const notifications = await db("notifications as n")
-        .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
-        .leftJoin("categories as c", "nc.category_id", "c.id")
+      const notifications = await db('notifications as n')
+        .leftJoin('notification_categories as nc', 'n.id', 'nc.notification_id')
+        .leftJoin('categories as c', 'nc.category_id', 'c.id')
         .select(
-          "n.id",
-          "n.time",
-          "n.title",
-          "n.body",
-          "n.status",
-          "n.url",
-          "n.is_uid",
+          'n.id',
+          'n.time',
+          'n.title',
+          'n.body',
+          'n.status',
+          'n.url',
+          'n.is_uid',
           db.raw("STRING_AGG(c.name, ',') AS categories")
         )
-        .groupBy("n.id", "n.time", "n.title", "n.body", "n.status", "n.url", "n.is_uid")
-        .orderBy("n.time", "desc");
+        .groupBy('n.id', 'n.time', 'n.title', 'n.body', 'n.status', 'n.url', 'n.is_uid')
+        .orderBy('n.time', 'desc');
 
-      console.log("Notifications in database after deletion:", notifications);
+      console.log('Notifications in database after deletion:', notifications);
 
       res.status(200).json(notifications);
     } else {
       res.status(404).json({
-        message: "Notification not found in database.",
+        message: 'Notification not found in database.',
       });
     }
   } catch (error) {
-    console.error("Error deleting notification from the database:", error);
-    res.status(500).json({ message: "Internal server error." });
+    console.error('Error deleting notification from the database:', error);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 }
 

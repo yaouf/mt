@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import corsMiddleware from "../../../config/cors";
-import db from "../../../dist/data/db-config";
-import { authMiddleware } from "../../../middleware/authMiddleware";
+import { NextApiRequest, NextApiResponse } from 'next';
+import corsMiddleware from '../../../config/cors';
+import db from '../../../dist/data/db-config';
+import { authMiddleware } from '../../../middleware/authMiddleware';
 type ResponseData = {
   message: string;
 };
@@ -23,34 +23,26 @@ async function getNotificationsHelper(
 ) {
   try {
     // Fetch notifications with their associated categories
-    const notifications = await db("notifications as n")
-      .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
-      .leftJoin("categories as c", "nc.category_id", "c.id")
+    const notifications = await db('notifications as n')
+      .leftJoin('notification_categories as nc', 'n.id', 'nc.notification_id')
+      .leftJoin('categories as c', 'nc.category_id', 'c.id')
       .select(
-        "n.id",
-        "n.time",
-        "n.title",
-        "n.body",
-        "n.status",
-        "n.url",
-        "n.is_uid",
+        'n.id',
+        'n.time',
+        'n.title',
+        'n.body',
+        'n.status',
+        'n.url',
+        'n.is_uid',
         db.raw("STRING_AGG(c.name, ',') AS categories")
       )
-      .groupBy(
-        "n.id",
-        "n.time",
-        "n.title",
-        "n.body",
-        "n.status",
-        "n.url",
-        "n.is_uid"
-      )
-      .orderBy("n.time", "desc");
+      .groupBy('n.id', 'n.time', 'n.title', 'n.body', 'n.status', 'n.url', 'n.is_uid')
+      .orderBy('n.time', 'desc');
 
     res.status(200).json(notifications);
   } catch (error) {
-    console.error("Error fetching notifications from the database:", error);
-    res.status(500).json({ message: "Internal server error." });
+    console.error('Error fetching notifications from the database:', error);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 }
 export default async function getNotifications(

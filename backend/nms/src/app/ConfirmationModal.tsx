@@ -5,12 +5,7 @@ interface ConfirmModalProps {
   message: string;
 }
 
-function ConfirmationModal({
-  isOpen,
-  onClose,
-  onConfirm,
-  message,
-}: ConfirmModalProps) {
+function ConfirmationModal({ isOpen, onClose, onConfirm, message }: ConfirmModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -19,10 +14,7 @@ function ConfirmationModal({
         <h2 className="text-xl font-bold mb-4">Confirm Action</h2>
         <p className="mb-6">{message}</p>
         <div className="flex justify-end">
-          <button
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2"
-            onClick={onClose}
-          >
+          <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2" onClick={onClose}>
             Cancel
           </button>
           <button
