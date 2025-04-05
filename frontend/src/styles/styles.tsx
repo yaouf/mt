@@ -27,17 +27,59 @@ export const baseStyles = StyleSheet.create({
     backgroundColor: "#fff",
     // flex: 1,
   },
+  backButton: {
+    marginTop: 15,
+    marginLeft: 15,
+  },
   // container: {
   //   flex: 1,
   // },
   // webview: {
   //   flex: 1,
   // },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flex: 1,
+  },
 });
 export const darkStyles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     backgroundColor: "#1F1F1F",
+  },
+  backButton: {
+    marginTop: 15,
+    marginLeft: 15,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#1F1F1F",
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flex: 1,
   },
 });
 
@@ -153,6 +195,18 @@ export const text = StyleSheet.create({
     fontWeight: "400",
     fontSize: 14,
   },
+  cancelText: {
+    color: varTextColor,
+    fontSize: 16,
+    marginLeft: 10,
+    flexShrink: 1,
+  },
+  searchInput: {
+    color: varTextColor,
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 8,
+  },
 });
 
 export const darkModeText = StyleSheet.create({
@@ -237,6 +291,18 @@ export const darkModeText = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: "400",
     fontSize: 14,
+  },
+  cancelText: {
+    color: darkModeTextColor,
+    fontSize: 16,
+    marginLeft: 10,
+    flexShrink: 1,
+  },
+  searchInput: {
+    color: darkModeTextColor,
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 8,
   },
 });
 

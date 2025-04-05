@@ -23,10 +23,12 @@ function DisplaySettings({navigation} : NavProp) {
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;
 
+
+
   return (
     <>
       <TouchableOpacity
-        style={styles.backButton}
+        style={containerStyle.backButton}
         onPress={() => navigation.goBack()}
       >
         <Ionicons name="arrow-back" size={20} color="black" />
@@ -56,44 +58,12 @@ function DisplaySettings({navigation} : NavProp) {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  /*container: {
     flex: 1,
     padding: 20,
     marginBottom: 20,
-  },
-  header: {
-    fontSize: 18,
-    marginBottom: 20,
-    paddingTop: 10,
-  },
-  optionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  optionText: {
-    flex: 1,
-    fontSize: 16,
-  },
-  radioCircle: {
-    height: 20,
-    width: 20,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#000",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  selected: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: "#000",
-  },
-  backButton: {
-    marginTop: 15,
-    marginLeft: 15,
-  },
+  },*/
+  // currently using universal css, uncomment if we need any local ones
 });
 
 export default DisplaySettings;

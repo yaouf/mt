@@ -16,9 +16,10 @@ import { fetchEditorsPicks, fetchSectionHome } from "src/api/fetchContent";
 import { Article, EditorsPickArticle } from "src/types/data";
 import { NavProp } from "src/types/navStacks";
 import ImageCard from "../../components/cards/HorizontalCard";
-import { varGray1, varTextColor } from "../../styles/styles";
+import { varGray1, varTextColor, baseStyles, darkStyles, text, darkModeText } from "../../styles/styles";
 import { Section_Type } from "../home/HomeScreen";
 import EditorsPicks from "../home/sections/EditorsPicks";
+import { useTheme } from "src/components/ThemeContext";
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -226,9 +227,14 @@ function Search({ navigation }: NavProp) {
     // },
   ];
 
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
+
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
+    <View style={[containerStyle.container]}>
+      <View style={containerStyle.searchContainer}>
         {/* <TouchableOpacity
           onPress={() => navigation.push("FilterScreen")}
           accessibilityLabel="Open filter drawer"
@@ -241,7 +247,7 @@ function Search({ navigation }: NavProp) {
             accessible={false}
           />
         </TouchableOpacity> */}
-        <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
+        <Animated.View style={[containerStyle.inputContainer, { width: inputWidth }]}>
           <MaterialIcons
             name="search"
             size={20}
@@ -249,17 +255,18 @@ function Search({ navigation }: NavProp) {
             style={styles.searchIcon}
             accessible={false}
           />
+          {typeof textStyle === 'object' && textStyle.searchInput && (
           <TextInput
             onChangeText={onChangeText}
             ref={textInputRef}
             value={text}
             placeholder="Search"
-            style={styles.input}
+            style={textStyle.searchInput}
             onFocus={handleFocus}
             onSubmitEditing={handleSearch}
             accessibilityLabel="Search input"
             accessibilityHint="Enter keywords to search for articles"
-          />
+          /> )}
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("FiltersScreen", {
@@ -296,11 +303,13 @@ function Search({ navigation }: NavProp) {
             accessibilityHint="Clear search input and cancel search"
             accessibilityRole="button"
           >
-            <Text style={styles.cancelText}>Cancel</Text>
+            {typeof textStyle === 'object' && textStyle.cancelText && (
+              <Text style={textStyle.cancelText}>Cancel</Text>
+            )}
           </TouchableOpacity>
         )}
       </View>
-
+        {/* MYAN: THIS IS WHERE I STOPPED IMPLEMENTING THE CSS, CONTINUE FROM THIS POINT DOWN!!*/}
       {!searchCompleted && !loading && (
         <View accessibilityLabel="Search Results">
           {topLoaded && (
@@ -389,12 +398,15 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     width: "40%",
   },
+
+
+
   // Search
   container: {
     flex: 1,
     backgroundColor: "#fff",
   },
-  searchContainer: {
+  /*searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 15,
@@ -410,11 +422,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     flex: 1,
-  },
+  },*/
   searchIcon: {
     marginRight: 5,
   },
-  input: {
+  /*input: {
     flex: 1,
     fontSize: 16,
     paddingVertical: 8,
@@ -424,7 +436,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 10,
     flexShrink: 1,
-  },
+  },*/
   instructionContainer: {
     flex: 1,
     justifyContent: "center",
