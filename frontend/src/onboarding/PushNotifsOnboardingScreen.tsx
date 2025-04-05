@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackScreenProps } from "@react-navigation/stack";
-import Constants from "expo-constants";
-import { useContext, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StackScreenProps } from '@react-navigation/stack';
+import Constants from 'expo-constants';
+import { useContext, useEffect } from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -10,21 +10,21 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import NotifToggle from "src/components/NotifToggle";
-import { NotificationContext } from "src/pages/settings/NotificationProvider";
-import { settings } from "src/styles/pages";
-import { font2, text } from "src/styles/styles";
-import { OnboardParams } from "src/types/navStacks";
-import { setAsync } from "src/utils/helpers";
-import { setUpDevice } from "../utils/setupDevice";
+} from 'react-native';
+import NotifToggle from 'src/components/NotifToggle';
+import { NotificationContext } from 'src/pages/settings/NotificationProvider';
+import { settings } from 'src/styles/pages';
+import { font2, text } from 'src/styles/styles';
+import { OnboardParams } from 'src/types/navStacks';
+import { setAsync } from 'src/utils/helpers';
+import { setUpDevice } from '../utils/setupDevice';
 
-const { height: screenHeight, width: screenWidth } = Dimensions.get("window");
+const { height: screenHeight, width: screenWidth } = Dimensions.get('window');
 
 function PushNotifsOnboardingScreen({
   route,
   navigation,
-}: StackScreenProps<OnboardParams, "PushNotifs">) {
+}: StackScreenProps<OnboardParams, 'PushNotifs'>) {
   const {
     breaking,
     setBreaking,
@@ -67,32 +67,24 @@ function PushNotifsOnboardingScreen({
         scienceAndResearch
       )
         .then((id) => setDeviceID(id))
-        .then(() =>
-          setAsync("appVersion", Constants.expoConfig?.version ?? "")
-        );
+        .then(() => setAsync('appVersion', Constants.expoConfig?.version ?? ''));
     });
 
-    navigation.push("MainApp");
+    navigation.push('MainApp');
   };
 
   useEffect(() => {
     async function updateNotifPreferences() {
-      const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
-      const universityNewsNotifs = await AsyncStorage.getItem(
-        "universityNewsNotifs"
-      );
-      const metroNotifs = await AsyncStorage.getItem("metroNotifs");
-      const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
-      const artsAndCultureNotifs = await AsyncStorage.getItem(
-        "artsAndCultureNotifs"
-      );
-      const scienceAndResearchNotifs = await AsyncStorage.getItem(
-        "scienceAndResearchNotifs"
-      );
-      const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
+      const breakingNotifs = await AsyncStorage.getItem('breakingNotifs');
+      const universityNewsNotifs = await AsyncStorage.getItem('universityNewsNotifs');
+      const metroNotifs = await AsyncStorage.getItem('metroNotifs');
+      const sportsNotifs = await AsyncStorage.getItem('sportsNotifs');
+      const artsAndCultureNotifs = await AsyncStorage.getItem('artsAndCultureNotifs');
+      const scienceAndResearchNotifs = await AsyncStorage.getItem('scienceAndResearchNotifs');
+      const opinionsNotifs = await AsyncStorage.getItem('opinionsNotifs');
 
       console.log(
-        "notifPrefs",
+        'notifPrefs',
         breakingNotifs,
         universityNewsNotifs,
         metroNotifs,
@@ -102,32 +94,30 @@ function PushNotifsOnboardingScreen({
         opinionsNotifs
       );
 
-      setBreaking(breakingNotifs === "true");
-      setUniversityNews(universityNewsNotifs === "true");
-      setMetro(metroNotifs === "true");
-      setSports(sportsNotifs === "true");
-      setArtsAndCulture(artsAndCultureNotifs === "true");
-      setScienceAndResearch(scienceAndResearchNotifs === "true");
-      setOpinions(opinionsNotifs === "true");
+      setBreaking(breakingNotifs === 'true');
+      setUniversityNews(universityNewsNotifs === 'true');
+      setMetro(metroNotifs === 'true');
+      setSports(sportsNotifs === 'true');
+      setArtsAndCulture(artsAndCultureNotifs === 'true');
+      setScienceAndResearch(scienceAndResearchNotifs === 'true');
+      setOpinions(opinionsNotifs === 'true');
     }
     if (isUpdate) {
       updateNotifPreferences();
     }
   }, []);
 
-  console.log("sports", sports, artsAndCulture, scienceAndResearch, opinions);
+  console.log('sports', sports, artsAndCulture, scienceAndResearch, opinions);
 
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.contentContainer}>
           <View>
-            <Text style={styles.title}>
-              {isUpdate ? "New Sections." : "Welcome."}
-            </Text>
+            <Text style={styles.title}>{isUpdate ? 'New Sections.' : 'Welcome.'}</Text>
             <Text style={styles.description}>
               {isUpdate
-                ? "Update your notification preferences."
+                ? 'Update your notification preferences.'
                 : "Turn on alerts for the topics that interest you and we'll keep you updated."}
             </Text>
 
@@ -210,10 +200,8 @@ function PushNotifsOnboardingScreen({
               systemPermissionStatus
             )
               .then((id) => setDeviceID(id))
-              .then(() =>
-                setAsync("appVersion", Constants.expoConfig?.version ?? "")
-              )
-              .then(() => navigation.push("MainApp"));
+              .then(() => setAsync('appVersion', Constants.expoConfig?.version ?? ''))
+              .then(() => navigation.push('MainApp'));
           }}
           accessible={true}
           accessibilityRole="button"
@@ -229,38 +217,38 @@ function PushNotifsOnboardingScreen({
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   scrollViewContent: {
     flexGrow: 1,
   },
   contentContainer: {
     flex: 1,
-    padding: "5%",
+    padding: '5%',
   },
   title: {
     ...text.bigTitle,
     fontSize: 32,
-    marginBottom: "5%",
+    marginBottom: '5%',
   },
   description: {
     ...text.normal,
     fontSize: 16,
-    marginBottom: "5%",
+    marginBottom: '5%',
   },
   notifContainer: {
     rowGap: 16,
-    width: "100%",
+    width: '100%',
   },
   buttonContainer: {
-    padding: "5%",
+    padding: '5%',
   },
   continueButton: {
     ...settings.continueButton,
-    marginBottom: "2%",
+    marginBottom: '2%',
   },
   maybeLaterButton: {
-    borderColor: "white",
+    borderColor: 'white',
   },
   buttonText: {
     fontFamily: font2,

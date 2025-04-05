@@ -1,12 +1,13 @@
-import moment from "moment";
-import { useState } from "react";
-import { Notification } from "../types";
-import ConfirmationModal from "./ConfirmationModal";
-import SignOutButton from "./SignOut";
-import ToggleSentVisibleButton from "./ToggleSentVisibleButton";
+import moment from 'moment';
+import { useState } from 'react';
+import { Notification } from '../types';
+import ConfirmationModal from './ConfirmationModal';
+import SignOutButton from './SignOut';
+import ToggleSentVisibleButton from './ToggleSentVisibleButton';
+import { auth } from './firebase';
 
 // TODO: factor out this var, since used in multiple places
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 interface NotificationTableProps {
   scheduledNotifications: Notification[];
   setScheduledNotifications: React.Dispatch<React.SetStateAction<Notification[]>>;
@@ -17,9 +18,7 @@ const NotificationTable = ({
 }: NotificationTableProps) => {
   const [isSentVisible, setIsSentVisible] = useState(false);
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const [notificationToDelete, setNotificationToDelete] = useState<Notification | null>(
-    null
-  );
+  const [notificationToDelete, setNotificationToDelete] = useState<Notification | null>(null);
 
   const handleDeleteClick = (notification: Notification) => {
     setNotificationToDelete(notification);
@@ -29,43 +28,56 @@ const NotificationTable = ({
   const onConfirmDelete = async () => {
     if (!notificationToDelete) return;
     try {
-      console.log("Deleting notification:", notificationToDelete);
-      const response = await fetch("/api/notifications/delete", {
-        method: "DELETE",
+      console.log('Deleting notification:', notificationToDelete);
+
+      // Get the current Firebase auth token
+      const user = auth.currentUser;
+      if (!user) {
+        console.error('User not authenticated');
+        return;
+      }
+
+      const token = await user.getIdToken();
+
+      const response = await fetch('/api/notifications/delete', {
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ jobId: notificationToDelete.id }),
       });
 
       if (response.ok) {
-        console.log("Notification deleted successfully.");
+        console.log('Notification deleted successfully.');
         const data = (await response.json()) as any[];
-        console.log("data", data);
+        console.log('data', data);
         setScheduledNotifications(data);
       } else {
-        console.error("Error deleting notification");
+        console.error('Error deleting notification');
         console.error(response.json);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
   const formatTags = (notification: Notification) => {
-    const tags: string[] = [];
-    if (notification["Breaking News"]) tags.push("Breaking News");
-    if (notification["University News"]) tags.push("University News");
-    if (notification["Metro"]) tags.push("Metro");
-    if (notification["Sports"]) tags.push("Sports");
-    if (notification["Arts and Culture"]) tags.push("Arts and Culture");
-    if (notification["Science and Research"]) tags.push("Science and Research");
-    if (notification["Opinions"]) tags.push("Opinions");
-    return tags.join(", ");
+    if (!notification.categories || notification.categories.length === 0) {
+      return null;
+    }
+
+    // Handle both string and array types for categories
+    if (Array.isArray(notification.categories)) {
+      return notification.categories.join(', ');
+    } else {
+      // If it's a string, it might be a comma-separated list already
+      return notification.categories;
+    }
   };
 
   const formatTime = (time: string) => {
-    return moment(time).tz("America/New_York").format("YYYY-MM-DD hh:mm A z");
+    return moment(time).tz('America/New_York').format('YYYY-MM-DD hh:mm A z');
   };
 
   return (
@@ -74,10 +86,7 @@ const NotificationTable = ({
         <h1 className="text-3xl font-bold">Scheduled Notifications</h1>
         <SignOutButton />
       </div>
-      <ToggleSentVisibleButton
-        isSentVisible={isSentVisible}
-        setIsSentVisible={setIsSentVisible}
-      />
+      <ToggleSentVisibleButton isSentVisible={isSentVisible} setIsSentVisible={setIsSentVisible} />
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
           <tr>
@@ -92,19 +101,13 @@ const NotificationTable = ({
         </thead>
         <tbody>
           {scheduledNotifications
-            .filter((notification) =>
-              isSentVisible ? true : notification.status !== "sent"
-            )
+            .filter((notification) => (isSentVisible ? true : notification.status !== 'sent'))
             .map((notification) => (
               <tr key={notification.id}>
-                <td className="py-2 px-4 border-b">
-                  {formatTime(notification.time)}
-                </td>
+                <td className="py-2 px-4 border-b">{formatTime(notification.time)}</td>
                 <td className="py-2 px-4 border-b">{notification.title}</td>
                 <td className="py-2 px-4 border-b">{notification.body}</td>
-                <td className="py-2 px-4 border-b">
-                  {formatTags(notification)}
-                </td>
+                <td className="py-2 px-4 border-b">{formatTags(notification)}</td>
                 <td className="py-2 px-4 border-b">
                   <a
                     href={notification.url}
@@ -117,7 +120,7 @@ const NotificationTable = ({
                 </td>
                 <td className="py-2 px-4 border-b">{notification.status}</td>
                 <td className="py-2 px-4 border-b">
-                  {(notification.status !== "sent" || !isProduction) && (
+                  {(notification.status !== 'sent' || !isProduction) && (
                     <button
                       onClick={() => handleDeleteClick(notification)}
                       className="bg-red-500 text-white px-4 py-2 rounded-md"

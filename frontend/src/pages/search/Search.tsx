@@ -1,7 +1,7 @@
-import { trackEvent } from "@aptabase/react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useEffect, useRef, useState } from "react";
+import { trackEvent } from '@aptabase/react-native';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   FlatList,
@@ -11,14 +11,15 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { fetchEditorsPicks, fetchSectionHome } from "src/api/fetchContent";
-import { Article, EditorsPickArticle } from "src/types/data";
-import { NavProp } from "src/types/navStacks";
-import ImageCard from "../../components/cards/HorizontalCard";
-import { varGray1, varTextColor } from "../../styles/styles";
-import { Section_Type } from "../home/HomeScreen";
-import EditorsPicks from "../home/sections/EditorsPicks";
+} from 'react-native';
+import { fetchEditorsPicks, fetchMostPopular } from 'src/api/fetchContent';
+import { Article, EditorsPickArticle } from 'src/types/data';
+import { NavProp } from 'src/types/navStacks';
+import ImageCard from '../../components/cards/HorizontalCard';
+import { varGray1, varTextColor } from '../../styles/styles';
+import { Section_Type } from '../home/HomeScreen';
+import EditorsPicks from '../home/sections/EditorsPicks';
+import MostPopular from '../home/sections/MostPopular';
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -39,14 +40,14 @@ const SearchSkeleton = () => {
 function Search({ navigation }: NavProp) {
   const textInputRef = useRef<TextInput>(null);
   const [searchActivated, setSearchActivated] = useState(false);
-  const [text, onChangeText] = useState("");
+  const [text, onChangeText] = useState('');
   const [loading, setLoading] = useState(false);
   const [searchCompleted, setSearchCompleted] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
   const animatedWidth = useRef(new Animated.Value(0)).current;
-  const [searchType, setSearchType] = useState("Article");
+  const [searchType, setSearchType] = useState('Article');
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
-  const [sortType, setSortType] = useState("date");
+  const [sortType, setSortType] = useState('date');
 
   const [usingPrefetchedData, setUsingPrefetchedData] = useState(true);
 
@@ -54,12 +55,8 @@ function Search({ navigation }: NavProp) {
     const loadPrefetchedData = async () => {
       try {
         // Try to load prefetched data
-        const prefetchedEditorsPicks = await AsyncStorage.getItem(
-          "prefetchedEditorsPicks"
-        );
-        const prefetchedPopularStories = await AsyncStorage.getItem(
-          "prefetchedPopularStories"
-        );
+        const prefetchedEditorsPicks = await AsyncStorage.getItem('prefetchedEditorsPicks');
+        const prefetchedPopularStories = await AsyncStorage.getItem('prefetchedPopularStories');
 
         if (prefetchedEditorsPicks && prefetchedPopularStories) {
           setEditorsPicksStories(JSON.parse(prefetchedEditorsPicks));
@@ -69,7 +66,7 @@ function Search({ navigation }: NavProp) {
           setUsingPrefetchedData(false);
         }
       } catch (error) {
-        console.error("Error loading prefetched data:", error);
+        console.error('Error loading prefetched data:', error);
         setUsingPrefetchedData(false);
       }
     };
@@ -79,12 +76,12 @@ function Search({ navigation }: NavProp) {
 
   const handleSearch = async () => {
     setLoading(true);
-    trackEvent("search", { text });
+    trackEvent('search', { text });
     try {
-      let queryUrl = "https://www.browndailyherald.com/search.json?a=1";
-      if (searchType === "Writer" || searchType === "Photographer") {
+      let queryUrl = 'https://www.browndailyherald.com/search.json?a=1';
+      if (searchType === 'Writer' || searchType === 'Photographer') {
         queryUrl += `&au=${text}`;
-      } else if (searchType === "Article") {
+      } else if (searchType === 'Article') {
         queryUrl += `&s=${text}&ty=article`;
       }
       // if (selectedSections.length > 0) {
@@ -97,7 +94,7 @@ function Search({ navigation }: NavProp) {
         queryUrl += `&tg=${selectedSections[0]}`;
       }
 
-      if (sortType == "date") {
+      if (sortType == 'date') {
         queryUrl += `&o=date`;
       }
       const response = await fetch(queryUrl);
@@ -110,7 +107,7 @@ function Search({ navigation }: NavProp) {
       setSearchCompleted(true);
     } catch (error) {
       setLoading(false);
-      console.error("Error" + error);
+      console.error('Error' + error);
     }
   };
 
@@ -119,7 +116,7 @@ function Search({ navigation }: NavProp) {
     textInputRef.current?.clear();
     textInputRef.current?.blur();
     setSearchCompleted(false);
-    onChangeText("");
+    onChangeText('');
     Animated.timing(animatedWidth, {
       toValue: 0,
       duration: 200,
@@ -128,7 +125,7 @@ function Search({ navigation }: NavProp) {
   };
 
   const handleClearText = () => {
-    onChangeText("");
+    onChangeText('');
     textInputRef.current?.focus();
   };
 
@@ -143,27 +140,13 @@ function Search({ navigation }: NavProp) {
 
   const inputWidth = animatedWidth.interpolate({
     inputRange: [0, 1],
-    outputRange: ["100%", "80%"],
+    outputRange: ['100%', '80%'],
   });
 
   const [topLoaded, setTopLoaded] = useState(false);
   const [mostPopularStories, setMostPopularStories] = useState<Article[]>();
-  const [editorsPicksStories, setEditorsPicksStories] = useState<
-    EditorsPickArticle[]
-  >([]);
+  const [editorsPicksStories, setEditorsPicksStories] = useState<EditorsPickArticle[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-
-  const fetchTop = async () => {
-    try {
-      const data: Article[] = await fetchSectionHome("homepage", 5);
-      setMostPopularStories(data);
-    } catch (e) {
-      console.warn(e);
-    } finally {
-      setTopLoaded(true);
-      trackEvent("homescreen", {});
-    }
-  };
 
   useEffect(() => {
     if (!usingPrefetchedData) {
@@ -172,25 +155,44 @@ function Search({ navigation }: NavProp) {
           setEditorsPicksStories(articles);
         })
         .catch((error) => {
-          console.error("Failed to load editor's picks:", error);
+          const errorParsed = JSON.parse(error as string);
+          console.log('errorParsed', errorParsed);
+          console.error("Failed to load editor's picks:", errorParsed);
+        });
+      fetchMostPopular()
+        .then((articles) => {
+          setMostPopularStories(articles);
+        })
+        .catch((error) => {
+          console.error('Failed to load most popular:', error);
         });
     }
   }, [usingPrefetchedData]);
 
   useEffect(() => {
     if (!usingPrefetchedData) {
-      fetchTop();
-      // fetchEditorsPicks();
+      fetchEditorsPicks();
+      fetchMostPopular();
     }
   }, [usingPrefetchedData]);
 
   const onRefresh = async () => {
     setRefreshing(true);
     setUsingPrefetchedData(false);
-    const editorsPicks = await fetchEditorsPicks();
-    setEditorsPicksStories(editorsPicks);
-    const top = await fetchSectionHome("homepage", 5);
-    setMostPopularStories(top);
+    console.log('starting fetch to editors picks');
+    setTimeout(async () => {
+      try {
+        const editorsPicks = await fetchEditorsPicks();
+        setEditorsPicksStories(editorsPicks);
+      } catch (error) {
+        const errorParsed = JSON.parse(error as string);
+        console.log('errorParsed', errorParsed);
+        console.error("Failed to fetch editor's picks:", errorParsed);
+      }
+    }, 100);
+    console.log('starting fetch to most popular');
+    const mostPopular = await fetchMostPopular();
+    setMostPopularStories(mostPopular);
     setRefreshing(false);
   };
 
@@ -209,21 +211,15 @@ function Search({ navigation }: NavProp) {
       id: 1,
       component:
         editorsPicksStories.length > 0 ? (
-          <EditorsPicks
-            editorsPicksStories={editorsPicksStories}
-            navigation={navigation}
-          />
+          <EditorsPicks editorsPicksStories={editorsPicksStories} navigation={navigation} />
         ) : null,
     },
-    // {
-    //   id: 2,
-    //   component: mostPopularStories ? (
-    //     <MostPopular
-    //       mostPopularStories={mostPopularStories}
-    //       navigation={navigation}
-    //     />
-    //   ) : null,
-    // },
+    {
+      id: 2,
+      component: mostPopularStories ? (
+        <MostPopular mostPopularStories={mostPopularStories} navigation={navigation} />
+      ) : null,
+    },
   ];
 
   return (
@@ -262,7 +258,7 @@ function Search({ navigation }: NavProp) {
           />
           <TouchableOpacity
             onPress={() =>
-              navigation.navigate("FiltersScreen", {
+              navigation.navigate('FiltersScreen', {
                 searchType,
                 setSearchType,
                 selectedSections,
@@ -281,10 +277,7 @@ function Search({ navigation }: NavProp) {
             />
           </TouchableOpacity>
           {text.length > 0 && (
-            <TouchableOpacity
-              onPress={handleClearText}
-              accessibilityLabel="Clear search text"
-            >
+            <TouchableOpacity onPress={handleClearText} accessibilityLabel="Clear search text">
               <Ionicons name="close-circle" size={20} color={varGray1} />
             </TouchableOpacity>
           )}
@@ -308,13 +301,9 @@ function Search({ navigation }: NavProp) {
               data={sections.filter((section) => section.component !== null)}
               renderItem={({ item }) => item.component}
               keyExtractor={(item) => item.id.toString()}
-              ItemSeparatorComponent={() => (
-                <View style={{ marginHorizontal: 16 }}></View>
-              )}
+              ItemSeparatorComponent={() => <View style={{ marginHorizontal: 16 }}></View>}
               initialNumToRender={1}
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
               accessibilityLabel="Section Headers List"
             />
           )}
@@ -338,6 +327,7 @@ function Search({ navigation }: NavProp) {
                 article={item}
                 navigation={navigation}
                 key={`search-result-${index}`}
+                inSearch={true}
               />
             )}
             ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}
@@ -357,55 +347,55 @@ function Search({ navigation }: NavProp) {
 const styles = StyleSheet.create({
   // Skeleton Search
   skeletonCard: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    backgroundColor: '#fff',
     borderRadius: 8,
-    overflow: "hidden",
+    overflow: 'hidden',
     height: 100,
   },
   skeletonImage: {
     width: 85,
-    height: "100%",
-    backgroundColor: "#f0f0f0",
+    height: '100%',
+    backgroundColor: '#f0f0f0',
   },
   skeletonContent: {
     flex: 1,
     padding: 6,
     paddingLeft: 30,
-    justifyContent: "flex-start",
-    display: "flex",
-    flexDirection: "column",
+    justifyContent: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
     gap: 10,
   },
   skeletonTitle: {
     height: 20,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: '#f0f0f0',
     borderRadius: 4,
-    width: "90%",
+    width: '90%',
   },
   skeletonDate: {
     height: 16,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: '#f0f0f0',
     borderRadius: 4,
-    width: "40%",
+    width: '40%',
   },
   // Search
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#f0f0f0",
+    borderBottomColor: '#f0f0f0',
   },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -427,19 +417,19 @@ const styles = StyleSheet.create({
   },
   instructionContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
   },
   instructionText: {
-    color: "gray",
+    color: 'gray',
     fontSize: 18,
-    textAlign: "center",
+    textAlign: 'center',
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   resultsContainer: {
     paddingHorizontal: 15,

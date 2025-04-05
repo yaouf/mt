@@ -1,12 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
-import { parseArticleUrl } from "src/pages/MainTabNavigator";
-import {
-  Article,
-  Author,
-  EditorsPick,
-  EditorsPickArticle,
-  Media,
-} from "src/types/data";
+import { Dispatch, SetStateAction } from 'react';
+import { parseArticleUrl } from 'src/pages/MainTabNavigator';
+import { Article, Author, EditorsPick, EditorsPickArticle, Media } from 'src/types/data';
 
 export async function fetchSectionHome(
   section: string,
@@ -53,7 +47,7 @@ export async function fetchArticle(
   setArticle: Dispatch<SetStateAction<Article | undefined>>
 ): Promise<Article> {
   // "published_at": "2024-05-24 22:49:21",
-  const split = date.split("-");
+  const split = date.split('-');
 
   try {
     // Fetch a response using the Search.JSON URL Link (Currently restricted to basic searches)
@@ -106,9 +100,7 @@ export async function fetchAuthor(
 ): Promise<string> {
   try {
     // Fetch a response using the Search.JSON URL Link (Currently restricted to basic searches)
-    const response = await fetch(
-      `https://www.browndailyherald.com/staff/${slug}.json`
-    );
+    const response = await fetch(`https://www.browndailyherald.com/staff/${slug}.json`);
     const jsonString = await response.text();
     const resultObject = JSON.parse(jsonString); // Parse string into an object
 
@@ -130,32 +122,81 @@ export async function fetchAuthor(
   }
 }
 
+interface ArticleHeader {
+  title: string;
+  url: string;
+}
+
+async function fetchMostPopularHeaders(): Promise<ArticleHeader[]> {
+  try {
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': process.env.EXPO_PUBLIC_POPULAR_API_KEY,
+      },
+    };
+    const response = await fetch(process.env.EXPO_PUBLIC_POPULAR_API_URL, requestOptions);
+    const articles: ArticleHeader[] = await response.json();
+    return articles;
+  } catch (error) {
+    console.error('Failed to fetch most popular articles:', error);
+    throw new Error('Failed to fetch most popular articles');
+  }
+}
+
+export async function fetchMostPopular(): Promise<Article[]> {
+  const headers = await fetchMostPopularHeaders();
+  const urls = headers.map((header) => header.url);
+
+  // Process URLs to get details
+  const articlePromises = urls.map(async (url) => {
+    console.log('article url', url);
+    const details = parseArticleUrl(url, false);
+    if (details?.slug && details?.publicationDate) {
+      try {
+        // Fetch the full article data using the extracted slug and publicationDate
+        const article = await fetchArticle(
+          details.slug,
+          details.publicationDate,
+          (article) => article
+        );
+        return article;
+      } catch (error) {
+        console.error('Failed to fetch article details for URL:', url, error);
+        return null;
+      }
+    } else {
+      console.error('URL parsing failed or returned incomplete details:', url);
+      return null;
+    }
+  });
+
+  // Wait for all promises to resolve and filter out null values
+  const results = await Promise.all(articlePromises);
+  return results.filter((article): article is Article => article !== null);
+}
+
 export async function fetchEditorsPicks(): Promise<EditorsPickArticle[]> {
   try {
     // Fetch the initial list of editor's picks URLs
     const requestOptions = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "X-API-KEY": process.env.EXPO_PUBLIC_API_KEY,
+        'Content-Type': 'application/json',
+        'X-API-KEY': process.env.EXPO_PUBLIC_API_KEY,
       },
     };
 
     // TODO: this should be an env variable
-    const response = await fetch(
-      process.env.EXPO_PUBLIC_EDITOR_PICKS_URL,
-      requestOptions
-    );
+    const response = await fetch(process.env.EXPO_PUBLIC_EDITOR_PICKS_URL, requestOptions);
     console.log(response);
     const urls: EditorsPick[] = await response.json();
 
-    // Array to store the fetched articles
-    const articles: Article[] = [];
-
-    // Process each URL to fetch the full article details
-    for (const urlObject of urls) {
-      console.log("article url", urlObject.url);
-      const details = parseArticleUrl(urlObject.url, false); // Call parseArticleUrl to extract slug and publicationDate
+    // Process each URL to fetch the full article details in parallel
+    const articlePromises = urls.map(async (urlObject) => {
+      console.log('article url', urlObject.url);
+      const details = parseArticleUrl(urlObject.url, false);
       if (details && details.slug && details.publicationDate) {
         try {
           // Fetch the full article data using the extracted slug and publicationDate
@@ -165,26 +206,26 @@ export async function fetchEditorsPicks(): Promise<EditorsPickArticle[]> {
             (article) => article
           );
           if (article) {
-            articles.push(article);
+            return { ...article, rank: urlObject.rank };
           }
         } catch (error) {
-          console.error(
-            "Failed to fetch article details for URL:",
-            urlObject.url,
-            error
-          );
+          console.error('Failed to fetch article details for URL:', urlObject.url, error);
         }
       } else {
-        console.error(
-          "URL parsing failed or returned incomplete details:",
-          urlObject.url
-        );
+        console.error('URL parsing failed or returned incomplete details:', urlObject.url);
       }
-    }
+      return null;
+    });
+
+    // Wait for all promises to resolve and filter out null values
+    const results = await Promise.all(articlePromises);
+    const articles = results.filter((article): article is EditorsPickArticle => article !== null);
+
     console.log(articles);
     return articles;
   } catch (error) {
-    console.error("Failed to fetch editor's picks:", error);
+    const errorParsed = JSON.parse(error as string);
+    console.error("Failed to fetch editor's picks:", errorParsed);
     throw new Error("Failed to fetch editor's picks");
   }
 }

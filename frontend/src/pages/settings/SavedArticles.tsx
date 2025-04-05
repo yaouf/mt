@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { FlatList, SafeAreaView, Text, View } from "react-native";
-import { baseStyles, text } from "src/styles/styles";
-import { NavProp } from "src/types/navStacks";
-import { SavedContext } from "../MainTabNavigator";
-import BottomSavedArticlesBar from "./BottomSavedArticlesBar";
-import FavArticle from "./FavArticle";
+import { useContext } from 'react';
+import { FlatList, SafeAreaView, Text, View } from 'react-native';
+import { baseStyles, text } from 'src/styles/styles';
+import { NavProp } from 'src/types/navStacks';
+import { SavedContext } from '../MainTabNavigator';
+import BottomSavedArticlesBar from './BottomSavedArticlesBar';
+import FavArticle from './FavArticle';
 
 /**
  * Page that displays all saved articles
@@ -20,9 +20,7 @@ function SavedArticles({ navigation }: NavProp) {
   return (
     <SafeAreaView style={[baseStyles.container, { flex: 1 }]}>
       <View style={[baseStyles.container, { flex: 1 }]}>
-        <Text style={{ ...text.sectionHeader1, paddingBottom: 15 }}>
-          Saved Articles
-        </Text>
+        <Text style={{ ...text.sectionHeader1, paddingBottom: 15 }}>Saved Articles</Text>
         <View style={{ flex: 1 }}>
           <FlatList
             data={savedArticleArray}

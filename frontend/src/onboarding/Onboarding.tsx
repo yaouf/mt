@@ -1,9 +1,9 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import { useNotification } from "src/pages/settings/NotificationProvider";
-import { NavProp, OnboardParams } from "../types/navStacks";
-import PushNotifsOnboardingScreen from "./PushNotifsOnboardingScreen";
-import UpdateScreen from "./UpdateScreen";
-import WelcomeScreen from "./WelcomeScreen";
+import { createStackNavigator } from '@react-navigation/stack';
+import { useNotification } from 'src/pages/settings/NotificationProvider';
+import { NavProp, OnboardParams } from '../types/navStacks';
+import PushNotifsOnboardingScreen from './PushNotifsOnboardingScreen';
+import UpdateScreen from './UpdateScreen';
+import WelcomeScreen from './WelcomeScreen';
 
 const onboardingStack = createStackNavigator<OnboardParams>();
 
@@ -11,7 +11,7 @@ const onboardingStack = createStackNavigator<OnboardParams>();
 function Onboarding({ navigation }: NavProp) {
   const { isUpdate } = useNotification();
 
-  console.log("update", isUpdate);
+  console.log('update', isUpdate);
 
   return (
     <onboardingStack.Navigator initialRouteName="WelcomeScreen">

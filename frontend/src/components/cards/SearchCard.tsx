@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Image,
   LayoutChangeEvent,
@@ -7,18 +7,11 @@ import {
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
-} from "react-native";
-import { Tag } from "src/types/data";
-import { CardProps } from "src/types/navStacks";
-import { formatDates } from "src/utils/formatDates";
-import {
-  font1,
-  font2,
-  font3,
-  varGray1,
-  varRed,
-  varTextColor,
-} from "../../styles/styles";
+} from 'react-native';
+import { Tag } from 'src/types/data';
+import { CardProps } from 'src/types/navStacks';
+import { formatDates } from 'src/utils/formatDates';
+import { font1, font2, font3, varGray1, varRed, varTextColor } from '../../styles/styles';
 
 function SearchCard({ article, navigation }: CardProps) {
   const { fontScale } = useWindowDimensions();
@@ -26,18 +19,18 @@ function SearchCard({ article, navigation }: CardProps) {
   let breaking = false;
 
   for (let i = 0; i < all_tags.length; i++) {
-    if (all_tags[i] == "breaking") {
+    if (all_tags[i] == 'breaking') {
       breaking = true;
     }
   }
 
   let img_uri =
-    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+    'https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png';
   if (article.dominantMedia.attachment_uuid) {
     img_uri =
-      "https://snworksceo.imgix.net/bdh/" +
+      'https://snworksceo.imgix.net/bdh/' +
       article.dominantMedia.attachment_uuid +
-      ".sized-1000x1000." +
+      '.sized-1000x1000.' +
       article.dominantMedia.extension;
   }
 
@@ -52,10 +45,10 @@ function SearchCard({ article, navigation }: CardProps) {
   const [cardHeight, setCardHeight] = useState(INITIAL_CARD_HEIGHT);
 
   useEffect(() => {
-    console.log("fontScale", fontScale);
+    console.log('fontScale', fontScale);
     // Adjust height calculation based on fontScale
     const scaledHeight = INITIAL_CARD_HEIGHT * fontScale;
-    console.log("newHeight", scaledHeight);
+    console.log('newHeight', scaledHeight);
     if (scaledHeight !== cardHeight) {
       setCardHeight(scaledHeight);
     }
@@ -64,14 +57,11 @@ function SearchCard({ article, navigation }: CardProps) {
   return (
     <View>
       <TouchableWithoutFeedback
-        onPress={() => navigation.push("Article", { data: article })}
+        onPress={() => navigation.push('Article', { data: article })}
         accessibilityRole="button"
         accessibilityHint={`Double tap to open article`}
       >
-        <View
-          style={[styles.card, { height: cardHeight }]}
-          onLayout={onLayoutHandler}
-        >
+        <View style={[styles.card, { height: cardHeight }]} onLayout={onLayoutHandler}>
           <Image
             source={{
               uri: img_uri,
@@ -81,38 +71,28 @@ function SearchCard({ article, navigation }: CardProps) {
           <View style={styles.bottomTextArea}>
             <View style={styles.titlesContainer}>
               {breaking ? (
-                <View
-                  style={styles.breakingBox}
-                  accessibilityLabel="Section: Breaking News."
-                >
+                <View style={styles.breakingBox} accessibilityLabel="Section: Breaking News.">
                   <Text style={styles.breaking}>Breaking News</Text>
                 </View>
               ) : (
                 <Text
                   style={styles.section}
-                  accessibilityLabel={`Section: ${all_tags[0].replace(
-                    "&;",
-                    "&"
-                  )}.`}
+                  accessibilityLabel={`Section: ${all_tags[0].replace('&;', '&')}.`}
                 >
-                  {all_tags[0].replace("&;", "&")}
+                  {all_tags[0].replace('&;', '&')}
                 </Text>
               )}
               <Text
                 style={styles.title}
                 accessibilityLabel={`Headline: ${article.headline}.`}
-                numberOfLines={Math.floor(
-                  TITLE_LINES * 1.2 * Math.sqrt(fontScale)
-                )}
+                numberOfLines={Math.floor(TITLE_LINES * 1.2 * Math.sqrt(fontScale))}
                 ellipsizeMode="tail"
               >
                 {article.headline}
               </Text>
               <Text
                 style={styles.subhead}
-                numberOfLines={Math.floor(
-                  SUBHEADER_LINES * 1.2 * Math.sqrt(fontScale)
-                )}
+                numberOfLines={Math.floor(SUBHEADER_LINES * 1.2 * Math.sqrt(fontScale))}
                 ellipsizeMode="tail"
                 accessibilityLabel={`Subtitle: ${article.subhead}`}
               >
@@ -123,9 +103,7 @@ function SearchCard({ article, navigation }: CardProps) {
               <View style={styles.publishedSection}>
                 <Text
                   style={styles.published}
-                  accessibilityLabel={`Published on ${formatDates(
-                    article.published_at
-                  )}`}
+                  accessibilityLabel={`Published on ${formatDates(article.published_at)}`}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
@@ -144,33 +122,33 @@ export default SearchCard;
 
 const styles = StyleSheet.create({
   title: {
-    alignSelf: "stretch",
-    overflow: "hidden",
-    flexWrap: "nowrap",
+    alignSelf: 'stretch',
+    overflow: 'hidden',
+    flexWrap: 'nowrap',
     fontFamily: font1,
     fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     lineHeight: 18,
   },
   subhead: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 18,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 22,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 12,
   },
   card: {
-    display: "flex",
-    width: "100%",
+    display: 'flex',
+    width: '100%',
     paddingBottom: 0,
-    flexDirection: "column",
-    alignItems: "stretch",
+    flexDirection: 'column',
+    alignItems: 'stretch',
     borderRadius: 10,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: '#f2f2f2',
     // height: cardHeight,
     // shadow looks bad
     // shadowColor: varTextColor,
@@ -182,15 +160,15 @@ const styles = StyleSheet.create({
     // shadowRadius: 29.949,
     // elevation: 3,
     marginTop: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
     // marginVertical: 12,
   },
   section: {
     color: varRed,
     fontFamily: font3,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     marginBottom: 5,
     /* lineHeight: 'normal',*/
   },
@@ -198,54 +176,54 @@ const styles = StyleSheet.create({
     color: varGray1,
     fontFamily: font3,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "500",
+    fontStyle: 'normal',
+    fontWeight: '500',
     /* line-height: normal; */
   },
   image: {
-    backgroundColor: "#C9C9C9",
-    display: "flex",
+    backgroundColor: '#C9C9C9',
+    display: 'flex',
     height: 150,
     aspectRatio: 2 / 1,
-    width: "100%",
+    width: '100%',
     paddingTop: 59.893,
     paddingBottom: 58.055,
     paddingHorizontal: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "stretch",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'stretch',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
   },
   bottomTextArea: {
-    display: "flex",
+    display: 'flex',
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     paddingTop: 12,
     paddingBottom: 8,
     paddingHorizontal: 16,
-    alignItems: "flex-start",
-    alignSelf: "stretch",
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
     gap: 4,
   },
   bottom: {
-    display: "flex",
-    justifyContent: "flex-start",
-    flexDirection: "row",
-    alignItems: "flex-end",
-    alignSelf: "stretch",
+    display: 'flex',
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    alignSelf: 'stretch',
   },
   titlesContainer: {
     flex: 1,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
     gap: 6,
   },
   publishedSection: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     gap: 4,
   },
   options: {
@@ -253,23 +231,23 @@ const styles = StyleSheet.create({
     height: 23.959,
   },
   breaking: {
-    color: "#FFF",
+    color: '#FFF',
     fontFamily: font2,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "600",
+    fontStyle: 'normal',
+    fontWeight: '600',
     // line-height: normal;
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   breakingBox: {
-    display: "flex",
+    display: 'flex',
     paddingVertical: 6,
     paddingHorizontal: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 0.661,
-    borderStyle: "solid",
-    borderColor: "#ED1C24",
-    backgroundColor: "#ED1C24",
+    borderStyle: 'solid',
+    borderColor: '#ED1C24',
+    backgroundColor: '#ED1C24',
   },
 });

@@ -1,17 +1,17 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const sections = [
-  "Arts & Culture",
-  "News",
-  "Science",
-  "Sports",
-  "Opinion",
-  "Projects",
-  "Multimedia",
-  "University News",
-  "STEM",
-  "Columns",
+  'Arts & Culture',
+  'News',
+  'Science',
+  'Sports',
+  'Opinion',
+  'Projects',
+  'Multimedia',
+  'University News',
+  'STEM',
+  'Columns',
 ];
 
 type SectionFiltersProps = {
@@ -19,12 +19,8 @@ type SectionFiltersProps = {
   setSelectedSections: Dispatch<SetStateAction<string[]>>;
 };
 
-function SectionFilters({
-  selectedSections,
-  setSelectedSections,
-}: SectionFiltersProps) {
-  const [tempSelectedSections, setTempSelectedSections] =
-    useState<string[]>(selectedSections);
+function SectionFilters({ selectedSections, setSelectedSections }: SectionFiltersProps) {
+  const [tempSelectedSections, setTempSelectedSections] = useState<string[]>(selectedSections);
 
   useEffect(() => {
     setSelectedSections(tempSelectedSections);
@@ -32,9 +28,7 @@ function SectionFilters({
 
   const toggleSection = (section: string) => {
     if (tempSelectedSections.includes(section)) {
-      setTempSelectedSections(
-        tempSelectedSections.filter((s) => s !== section)
-      );
+      setTempSelectedSections(tempSelectedSections.filter((s) => s !== section));
     } else {
       setTempSelectedSections([section]);
     }
@@ -45,10 +39,7 @@ function SectionFilters({
       {sections.map((section, index) => (
         <TouchableOpacity
           key={index}
-          style={[
-            styles.button,
-            tempSelectedSections.includes(section) ? styles.selected : {},
-          ]}
+          style={[styles.button, tempSelectedSections.includes(section) ? styles.selected : {}]}
           onPress={() => toggleSection(section)}
         >
           <Text style={styles.text}>{section}</Text>
@@ -60,23 +51,23 @@ function SectionFilters({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
   button: {
     padding: 8,
     margin: 5,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     borderRadius: 5,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: '#f8f8f8',
   },
   selected: {
-    backgroundColor: "#cccccc",
+    backgroundColor: '#cccccc',
   },
   text: {
-    color: "#333",
+    color: '#333',
   },
 });
 
