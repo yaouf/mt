@@ -1,7 +1,7 @@
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useContext, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Text, TouchableOpacity, View } from "react-native";
 import {
   NestableDraggableFlatList,
   NestableScrollContainer,
@@ -113,6 +113,8 @@ function SectionPrefScreen({ navigation }: NavProp) {
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;
   const logoStyle = isDarkMode ? "#FFFFFF" : "#1C1B1F";
+
+  const screenHeight = Dimensions.get("window").height;
   return (
     <GestureHandlerRootView
       style={[containerStyle.container, { marginBottom: marginBottom }]}
@@ -143,7 +145,10 @@ function SectionPrefScreen({ navigation }: NavProp) {
           <MaterialIcons
             name="check"
             size={28}
-            color={hasChanges() ? "#1C1B1F" : varGray1}
+            color={hasChanges() ? isDarkMode
+              ? "#FFFFFF"
+              : "#1C1B1F"
+            : varGray1 }
           />
         </TouchableOpacity>
       </View>
@@ -155,7 +160,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
       <NestableScrollContainer
         style={[menuStyle.contentContainer, { marginRight: -20 }]}
         scrollIndicatorInsets={{ right: 4 }}
-        contentContainerStyle={{ paddingRight: 20 }}
+        contentContainerStyle={{ paddingRight: 20, minHeight: screenHeight, }}
       >
         <View>
           <Text
