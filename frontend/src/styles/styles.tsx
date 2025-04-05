@@ -69,7 +69,44 @@ export const baseStyles = StyleSheet.create({
   },
   selectedFilter: {
     backgroundColor: "#cccccc",
-  }
+  },
+  skeletonCard: {
+    flexDirection: "row",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    overflow: "hidden",
+    height: 100,
+  },
+  skeletonImage: {
+    width: 85,
+    height: "100%",
+    backgroundColor: "#f0f0f0",
+  },
+  skeletonContent: {
+    flex: 1,
+    padding: 6,
+    paddingLeft: 30,
+    justifyContent: "flex-start",
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+  },
+  skeletonTitle: {
+    height: 20,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 4,
+    width: "90%",
+  },
+  skeletonDate: {
+    height: 16,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 4,
+    width: "40%",
+  },
+  skeletonContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
 });
 export const darkStyles = StyleSheet.create({
   container: {
@@ -110,7 +147,44 @@ export const darkStyles = StyleSheet.create({
   },
   selectedFilter: {
     backgroundColor: "#575963",
-  }
+  },
+  skeletonCard: {
+    flexDirection: "row",
+    backgroundColor: "#000000",
+    borderRadius: 8,
+    overflow: "hidden",
+    height: 100,
+  },
+  skeletonImage: {
+    width: 85,
+    height: "100%",
+    backgroundColor: "#404042",
+  },
+  skeletonContent: {
+    flex: 1,
+    padding: 6,
+    paddingLeft: 30,
+    justifyContent: "flex-start",
+    display: "flex",
+    flexDirection: "column",
+    gap: 10,
+  },
+  skeletonTitle: {
+    height: 20,
+    backgroundColor: "#404042",
+    borderRadius: 4,
+    width: "90%",
+  },
+  skeletonDate: {
+    height: 16,
+    backgroundColor: "#404042",
+    borderRadius: 4,
+    width: "40%",
+  },
+  skeletonContainer: {
+    flex: 1,
+    backgroundColor: "#1F1F1F",
+  },
 });
 
 /**
@@ -268,7 +342,12 @@ export const text = StyleSheet.create({
   },
   sectionFilterText: {
     color: varTextColor
-  }
+  },
+  instructionText: {
+    color: varTextColor,
+    fontSize: 18,
+    textAlign: "center",
+  },
 });
 
 export const darkModeText = StyleSheet.create({
@@ -397,7 +476,12 @@ export const darkModeText = StyleSheet.create({
   },
   sectionFilterText: {
     color: darkModeTextColor
-  }
+  },
+  instructionText: {
+    color: darkModeTextColor,
+    fontSize: 18,
+    textAlign: "center",
+  },
 });
 
 export const settingsText = StyleSheet.create({

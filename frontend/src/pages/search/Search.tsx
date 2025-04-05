@@ -24,13 +24,17 @@ import { useTheme } from "src/components/ThemeContext";
 // const { width: screenWidth } = Dimensions.get('window');
 
 const SearchSkeleton = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
   return (
-    <View style={styles.container}>
-      <View style={styles.skeletonCard}>
-        <View style={styles.skeletonImage} />
-        <View style={styles.skeletonContent}>
-          <View style={styles.skeletonTitle} />
-          <View style={styles.skeletonDate} />
+    <View style={containerStyle.skeletonContainer}>
+      <View style={containerStyle.skeletonCard}>
+        <View style={containerStyle.skeletonImage} />
+        <View style={containerStyle.skeletonContent}>
+          <View style={containerStyle.skeletonTitle} />
+          <View style={containerStyle.skeletonDate} />
         </View>
       </View>
     </View>
@@ -357,7 +361,7 @@ function Search({ navigation }: NavProp) {
           />
         ) : (
           <View style={styles.instructionContainer}>
-            <Text style={styles.instructionText}>No results found.</Text>
+            <Text style={textStyle.instructionText}>No results found.</Text>
           </View>
         ))
       )}
