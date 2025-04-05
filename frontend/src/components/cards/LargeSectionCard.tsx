@@ -5,17 +5,7 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   View,
-} from "react-native";
-import { Tag } from "src/types/data";
-import { CardProps } from "src/types/navStacks";
-import {
-  font1,
-  font2,
-  font3,
-  varGray1,
-  varTextColor,
-} from "../../styles/styles";
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+} from 'react-native';
 import { Tag } from 'src/types/data';
 import { CardProps } from 'src/types/navStacks';
 import { font1, font2, font3, varGray1, varPink, varTextColor } from '../../styles/styles';
@@ -73,23 +63,21 @@ function LargeCard({ article, navigation, inSearch }: CardProps) {
                   <Text style={styles.published}>By</Text>
                   {article.authors.map((author, i) => {
                     const lastIndex = article.authors.length - 1;
-                    let separator = "";
+                    let separator = '';
 
                     if (i > 0 && i < lastIndex) {
-                      separator = ", ";
+                      separator = ', ';
                     } else if (i === lastIndex && i !== 0) {
-                      separator = " and ";
+                      separator = ' and ';
                     } else {
-                      separator = " ";
+                      separator = ' ';
                     }
                     return (
                       <View key={author.slug} style={styles.authorWrapper}>
                         <Text style={styles.published}>{separator}</Text>
 
                         <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate("Staff", { slug: author.slug })
-                          }
+                          onPress={() => navigation.navigate('Staff', { slug: author.slug })}
                         >
                           <Text style={styles.authorName}>{author.name}</Text>
                         </TouchableOpacity>
@@ -97,9 +85,7 @@ function LargeCard({ article, navigation, inSearch }: CardProps) {
                     );
                   })}
                 </View>
-                <Text style={styles.published}>
-                  {formatDates(article.published_at)}
-                </Text>
+                <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
           </View>
@@ -192,8 +178,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   publishedSection: {
-    display: "flex",
-    alignItems: "flex-start",
+    display: 'flex',
+    alignItems: 'flex-start',
     gap: 4,
   },
   options: {
@@ -221,19 +207,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#ED1C24',
   },
   authorLine: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   authorWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   authorName: {
-    color: "grey",
+    color: 'grey',
     fontFamily: font3,
     fontSize: 14,
-    fontWeight: "900",
-    fontStyle: "normal",
+    fontWeight: '900',
+    fontStyle: 'normal',
   },
 });
