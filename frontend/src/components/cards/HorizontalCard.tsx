@@ -1,56 +1,41 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
-import { CardProps } from "src/types/navStacks";
-import {
-  font1,
-  font3,
-  varGray1,
-  varPink,
-  varTextColor,
-} from "../../styles/styles";
-import { formatDates } from "../../utils/formatDates";
-import { Tag } from "src/types/data";
-import { useEffect } from "react";
+import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { CardProps } from 'src/types/navStacks';
+import { font1, font3, varGray1, varPink, varTextColor } from '../../styles/styles';
+import { formatDates } from '../../utils/formatDates';
+import { Tag } from 'src/types/data';
+import { useEffect } from 'react';
 
 function ImageCard({ article, navigation, inSearch }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
-  const section = all_tags[0].replace("&;", "&");
+  const section = all_tags[0].replace('&;', '&');
 
   let img_uri =
-    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+    'https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png';
   if (article.dominantMedia) {
     img_uri =
-      "https://snworksceo.imgix.net/bdh/" +
+      'https://snworksceo.imgix.net/bdh/' +
       article.dominantMedia.attachment_uuid +
-      ".sized-1000x1000." +
+      '.sized-1000x1000.' +
       article.dominantMedia.extension;
   }
 
   return (
     <View>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.push("Article", { data: article })}
-      >
+      <TouchableWithoutFeedback onPress={() => navigation.push('Article', { data: article })}>
         <View
           style={[
             styles.card,
-            section == "post- magazine" &&
+            section == 'post- magazine' &&
               !inSearch && {
                 backgroundColor: varPink,
-                padding: "5%",
+                padding: '5%',
                 borderRadius: 15,
               },
           ]}
         >
           <View style={styles.content}>
             <View style={styles.imageWrapper}>
-              {article.dominantMedia &&
-              article.dominantMedia.attachment_uuid ? (
+              {article.dominantMedia && article.dominantMedia.attachment_uuid ? (
                 <Image
                   source={{
                     uri: img_uri,
@@ -59,27 +44,21 @@ function ImageCard({ article, navigation, inSearch }: CardProps) {
                 />
               ) : (
                 <Image
-                  source={require("../../../assets/post-logo.png")}
+                  source={require('../../../assets/post-logo.png')}
                   style={{
                     width: 80,
                     height: 35,
-                    alignSelf: "center",
+                    alignSelf: 'center',
                   }}
                 />
               )}
             </View>
             <View style={styles.text}>
               <View style={styles.innerText}>
-                <Text
-                  style={styles.title}
-                  numberOfLines={4}
-                  ellipsizeMode="tail"
-                >
+                <Text style={styles.title} numberOfLines={4} ellipsizeMode="tail">
                   {article.headline}
                 </Text>
-                <Text style={styles.published}>
-                  {formatDates(article.published_at)}
-                </Text>
+                <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
           </View>
@@ -93,13 +72,13 @@ export default ImageCard;
 
 const styles = StyleSheet.create({
   card: {
-    display: "flex",
+    display: 'flex',
     // width: 358,
-    width: "100%",
-    flexDirection: "column",
+    width: '100%',
+    flexDirection: 'column',
     flexShrink: 0,
     borderRadius: 0,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,
@@ -107,13 +86,13 @@ const styles = StyleSheet.create({
     // },
     // shadowOpacity: 0.08,
     // shadowRadius: 29.949,
-    overflow: "visible",
+    overflow: 'visible',
   },
   content: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
     gap: 16,
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
   },
   imageWrapper: {
     // paddingTop: 35.893,
@@ -128,26 +107,26 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 3,
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
   },
   innerText: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     gap: 4,
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
   },
   subhead: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 18,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 22,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 12,
   },
 
@@ -155,26 +134,26 @@ const styles = StyleSheet.create({
     color: varGray1,
     fontFamily: font3,
     fontSize: 10,
-    fontStyle: "normal",
-    fontWeight: "500",
+    fontStyle: 'normal',
+    fontWeight: '500',
     // lineHeight: 1,
   },
   title: {
-    alignSelf: "stretch",
-    overflow: "hidden",
-    flexWrap: "nowrap",
+    alignSelf: 'stretch',
+    overflow: 'hidden',
+    flexWrap: 'nowrap',
     fontFamily: font1,
     fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     lineHeight: 18,
   },
   published: {
     color: varGray1,
     fontFamily: font3,
     fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "500",
+    fontStyle: 'normal',
+    fontWeight: '500',
     // lineHeight: "normal";
   },
   options: {

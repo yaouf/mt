@@ -1,24 +1,24 @@
-import { Dimensions, Image, View } from "react-native";
+import { Dimensions, Image, View } from 'react-native';
 
 function Header() {
-  const screenWidth = Dimensions.get("window").width;
+  const screenWidth = Dimensions.get('window').width;
   return (
     <View
       style={{
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        marginHorizontal: "auto",
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginHorizontal: 'auto',
       }}
     >
       <View style={{ width: screenWidth * 0.9 }}>
         <Image
-          source={require("assets/post-logo.png")}
+          source={require('assets/post-logo.png')}
           style={{
             width: 80,
             height: 35,
-            alignSelf: "center",
+            alignSelf: 'center',
           }}
         />
       </View>

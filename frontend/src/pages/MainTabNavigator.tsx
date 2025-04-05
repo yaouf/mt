@@ -1,35 +1,21 @@
-import { trackEvent } from "@aptabase/react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  getFocusedRouteNameFromRoute,
-  useNavigation,
-} from "@react-navigation/native";
-import * as Notifications from "expo-notifications";
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { HoldMenuProvider } from "react-native-hold-menu";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  fetchArticle,
-  fetchEditorsPicks,
-  fetchMostPopular,
-} from "src/api/fetchContent";
-import Header from "src/components/Header";
-import { NO_NAV_BAR_SCREENS } from "src/consts/consts";
-import { Article } from "src/types/data";
-import { getAsync } from "src/utils/helpers";
-import HomeStackScreen from "./home/HomeStackScreen";
-import SearchStackScreen from "./search/SearchStackScreen";
-import { NotificationProvider } from "./settings/NotificationProvider";
-import SettingsStackScreen from "./settings/SettingsStackScreen";
+import { trackEvent } from '@aptabase/react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute, useNavigation } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
+import { Dispatch, SetStateAction, createContext, useEffect, useRef, useState } from 'react';
+import { HoldMenuProvider } from 'react-native-hold-menu';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { fetchArticle, fetchEditorsPicks, fetchMostPopular } from 'src/api/fetchContent';
+import Header from 'src/components/Header';
+import { NO_NAV_BAR_SCREENS } from 'src/consts/consts';
+import { Article } from 'src/types/data';
+import { getAsync } from 'src/utils/helpers';
+import HomeStackScreen from './home/HomeStackScreen';
+import SearchStackScreen from './search/SearchStackScreen';
+import { NotificationProvider } from './settings/NotificationProvider';
+import SettingsStackScreen from './settings/SettingsStackScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -58,7 +44,7 @@ export const SavedContext = createContext<SavedContextType>({
 export function parseArticleUrl(url: string, isUid: boolean) {
   try {
     const parsedUrl = new URL(url);
-    const pathSegments = parsedUrl.pathname.split("/").filter(Boolean);
+    const pathSegments = parsedUrl.pathname.split('/').filter(Boolean);
 
     if (isUid) {
       // Assuming the UID is the last segment in the URL
@@ -84,8 +70,8 @@ export function parseArticleUrl(url: string, isUid: boolean) {
       };
     }
   } catch (error) {
-    console.error("tried parsing article with", url, "and isUid", isUid);
-    console.error("Error parsing URL:", error);
+    console.error('tried parsing article with', url, 'and isUid', isUid);
+    console.error('Error parsing URL:', error);
     return null;
   }
 }
@@ -108,9 +94,9 @@ export default function MainTabNavigator() {
   const [savedArticles, setSavedArticles] = useState<Object>({});
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
-  const [notification, setNotification] = useState<
-    Notifications.Notification | undefined
-  >(undefined);
+  const [notification, setNotification] = useState<Notifications.Notification | undefined>(
+    undefined
+  );
 
   const [searchContentPrefetched, setSearchContentPrefetched] = useState(false);
 
@@ -123,20 +109,14 @@ export default function MainTabNavigator() {
         const popularStories = await fetchMostPopular();
 
         // Store prefetched data in AsyncStorage for quick access
-        await AsyncStorage.setItem(
-          "prefetchedEditorsPicks",
-          JSON.stringify(editorsPicks)
-        );
-        await AsyncStorage.setItem(
-          "prefetchedPopularStories",
-          JSON.stringify(popularStories)
-        );
+        await AsyncStorage.setItem('prefetchedEditorsPicks', JSON.stringify(editorsPicks));
+        await AsyncStorage.setItem('prefetchedPopularStories', JSON.stringify(popularStories));
 
         setSearchContentPrefetched(true);
       } catch (error) {
         const errorParsed = JSON.parse(error as string);
-        console.log("errorParsed", errorParsed);
-        console.error("Error prefetching search content:", errorParsed);
+        console.log('errorParsed', errorParsed);
+        console.error('Error prefetching search content:', errorParsed);
       }
     }
   };
@@ -148,16 +128,14 @@ export default function MainTabNavigator() {
   useEffect(() => {
     const load = async () => {
       try {
-        const saved = await getAsync("savedArticles");
+        const saved = await getAsync('savedArticles');
         if (!saved) {
           setSavedArticles({});
         } else {
           setSavedArticles(saved);
         }
 
-        await AsyncStorage.getAllKeys().then((resp) =>
-          console.log("**!!", resp)
-        );
+        await AsyncStorage.getAllKeys().then((resp) => console.log('**!!', resp));
       } catch (err) {
         console.log(err);
       }
@@ -173,7 +151,7 @@ export default function MainTabNavigator() {
     const listener = async () => {
       if (response) {
         console.log(response);
-        console.log("response in listener", response);
+        console.log('response in listener', response);
 
         const setArticle = async (article: Article) => {
           // navigation.navigate("Article", {data: article});
@@ -185,22 +163,20 @@ export default function MainTabNavigator() {
         );
 
         if (parsedArticle?.slug && parsedArticle?.publicationDate) {
-          console.log("parsedArticle", parsedArticle);
+          console.log('parsedArticle', parsedArticle);
           const fetchedArticle = await fetchArticle(
             parsedArticle.slug,
             parsedArticle.publicationDate,
             setArticle
           );
-          navigation.navigate("Article", { data: fetchedArticle });
-          trackEvent("notification_clicked", {
+          navigation.navigate('Article', { data: fetchedArticle });
+          trackEvent('notification_clicked', {
             action: response.actionIdentifier,
             slug: parsedArticle.slug,
             date: parsedArticle.publicationDate,
           });
         } else {
-          console.log(
-            "Notification data does not contain a valid slug or publication date"
-          );
+          console.log('Notification data does not contain a valid slug or publication date');
           // TODO: handle UUID case
         }
       }
@@ -210,47 +186,43 @@ export default function MainTabNavigator() {
   }, [response]);
 
   console.log(
-    "Title",
+    'Title',
     notification && notification.request.content.title,
-    "Body",
+    'Body',
     notification && notification.request.content.body,
-    "Data",
+    'Data',
     notification && JSON.stringify(notification.request.content.data)
   );
 
   return (
     <SafeAreaView
       style={{ flex: 1, paddingTop: 0, marginTop: 0 }}
-      edges={["bottom", "left", "right"]}
+      edges={['bottom', 'left', 'right']}
     >
-      <HoldMenuProvider
-        safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}
-      >
+      <HoldMenuProvider safeAreaInsets={{ top: 0, bottom: 0, right: 0, left: 0 }}>
         <NotificationProvider>
           <SavedContext.Provider value={{ savedArticles, setSavedArticles }}>
             <Tab.Navigator
               screenOptions={({ route }) => {
-                const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
+                const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
 
                 return {
                   tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
                     let label;
 
-                    if (route.name === "Home") {
-                      iconName = focused ? "home-sharp" : "home-outline";
-                      label = "Home";
-                    } else if (route.name === "Settings") {
-                      iconName = focused
-                        ? "settings-sharp"
-                        : "settings-outline";
-                      label = "Settings";
-                    } else if (route.name === "Search") {
-                      iconName = focused ? "search-sharp" : "search-outline";
-                      label = "Search";
-                    } else if (route.name === "For You") {
-                      iconName = focused ? "star-sharp" : "star-outline";
-                      label = "For You";
+                    if (route.name === 'Home') {
+                      iconName = focused ? 'home-sharp' : 'home-outline';
+                      label = 'Home';
+                    } else if (route.name === 'Settings') {
+                      iconName = focused ? 'settings-sharp' : 'settings-outline';
+                      label = 'Settings';
+                    } else if (route.name === 'Search') {
+                      iconName = focused ? 'search-sharp' : 'search-outline';
+                      label = 'Search';
+                    } else if (route.name === 'For You') {
+                      iconName = focused ? 'star-sharp' : 'star-outline';
+                      label = 'For You';
                     }
                     return (
                       <Ionicons
@@ -261,8 +233,8 @@ export default function MainTabNavigator() {
                       />
                     );
                   },
-                  tabBarActiveTintColor: "#ED1C24",
-                  tabBarInactiveTintColor: "gray",
+                  tabBarActiveTintColor: '#ED1C24',
+                  tabBarInactiveTintColor: 'gray',
                   tabBarStyle: {
                     height: 60,
                     marginBottom: 0,
@@ -270,9 +242,7 @@ export default function MainTabNavigator() {
                     paddingBottom: 2,
                     paddingRight: 20,
                     paddingLeft: 20,
-                    display: NO_NAV_BAR_SCREENS.includes(routeName)
-                      ? "none"
-                      : "flex",
+                    display: NO_NAV_BAR_SCREENS.includes(routeName) ? 'none' : 'flex',
                   },
                   tabBarShowLabel: false,
                   headerShown: !NO_NAV_BAR_SCREENS.includes(routeName),

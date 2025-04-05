@@ -1,13 +1,13 @@
-import { StackNavigationProp } from "@react-navigation/stack";
-import { View } from "react-native";
-import SmallCardTop from "src/components/cards/SmallCardTop";
-import SmallPhotoCardTop from "src/components/cards/SmallPhotoCardTop";
-import Divider from "src/components/Divider";
-import { baseStyles } from "src/styles/styles";
-import { Article } from "src/types/data";
-import LargeCard from "../../../components/cards/LargeCard";
-import { useEffect } from "react";
-import Header from "src/components/Header";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { View } from 'react-native';
+import SmallCardTop from 'src/components/cards/SmallCardTop';
+import SmallPhotoCardTop from 'src/components/cards/SmallPhotoCardTop';
+import Divider from 'src/components/Divider';
+import { baseStyles } from 'src/styles/styles';
+import { Article } from 'src/types/data';
+import LargeCard from '../../../components/cards/LargeCard';
+import { useEffect } from 'react';
+import Header from 'src/components/Header';
 
 type TopProps = {
   navigation: StackNavigationProp<any, any>;
@@ -25,7 +25,7 @@ function Top(props: TopProps) {
   }
   return (
     <View style={baseStyles.container}>
-      <View style={{ overflow: "visible" }}>
+      <View style={{ overflow: 'visible' }}>
         <LargeCard
           article={props.topStories[0]}
           navigation={props.navigation}

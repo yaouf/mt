@@ -1,6 +1,6 @@
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Dispatch, SetStateAction } from "react";
-import { Article } from "./data";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Dispatch, SetStateAction } from 'react';
+import { Article } from './data';
 
 /**
  * format is the name of the screens used in that stack

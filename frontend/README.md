@@ -5,6 +5,7 @@ A React Native application built with Expo for The Brown Daily Herald news outle
 ## Project Setup
 
 ### Prerequisites
+
 - Node.js (v14+)
 - Yarn
 - Expo CLI
@@ -12,6 +13,7 @@ A React Native application built with Expo for The Brown Daily Herald news outle
 - Android Studio (for Android development)
 
 ### Environment Setup
+
 1. Create a `.env` file in the root directory with necessary environment variables:
    ```
    EXPO_PUBLIC_API_KEY=your_api_key
@@ -21,6 +23,7 @@ A React Native application built with Expo for The Brown Daily Herald news outle
    ```
 
 ### Installation
+
 ```bash
 yarn install
 ```
@@ -28,6 +31,7 @@ yarn install
 ## Development
 
 ### Running the App
+
 ```bash
 # Start the development server with tunnel
 yarn start
@@ -40,6 +44,7 @@ yarn android
 ```
 
 ### Utility Commands
+
 ```bash
 # Diagnose Expo issues
 yarn doctor
@@ -57,6 +62,7 @@ yarn submit:ios
 ## Project Structure
 
 ### Core Folders
+
 - `/src`: Main source code
   - `/api`: API client functions for backend communication
   - `/components`: Reusable UI components
@@ -77,12 +83,14 @@ yarn submit:ios
 - `/assets`: Static resources (images, fonts, icons)
 
 ### Main Components
+
 - `BdhApp.tsx`: Root application component with navigation setup
 - `MainTabNavigator.tsx`: Bottom tab navigation configuration
 
 ## Navigation
 
 The app uses React Navigation with a combination of:
+
 - Stack navigators for screen flows
 - Bottom tab navigator for main navigation
 - Drawer navigator for filters
@@ -90,6 +98,7 @@ The app uses React Navigation with a combination of:
 ## Styling
 
 Styles are organized in the `/src/styles` directory with specific files for different sections:
+
 - `styles.tsx`: Common styles
 - `article.tsx`: Article-specific styles
 - `pages.tsx`: Page-level styles
@@ -107,6 +116,7 @@ Styles are organized in the `/src/styles` directory with specific files for diff
 ## Build and Deployment
 
 The app uses EAS (Expo Application Services) for building and submitting to app stores:
+
 ```bash
 # Build for iOS
 yarn build:ios
