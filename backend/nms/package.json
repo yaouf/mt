@@ -16,7 +16,8 @@
     "test:all:debug": "cross-env NODE_ENV=test npm run test:pw -- --debug && npm run test",
     "kill:redis": "npx cross-port-killer 6379",
     "format": "npx prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "format:check": "npx prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
+    "format:check": "npx prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "predev": "yarn install"
   },
   "dependencies": {
     "@babel/preset-env": "^7.24.5",
