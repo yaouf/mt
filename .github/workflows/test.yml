@@ -17,10 +17,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js 21
+      - name: Set up Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 21
+          node-version: 18
 
       # Cache the repository for other jobs to use
       - name: Cache repository
@@ -52,10 +52,10 @@ jobs:
           path: .
           key: repo-${{ github.sha }}
 
-      - name: Set up Node.js 21
+      - name: Set up Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 21
+          node-version: 18
 
       - name: Create .env files for DB (for Firebase Functions)
         run: |
@@ -116,10 +116,10 @@ jobs:
           path: .
           key: repo-${{ github.sha }}
 
-      - name: Set up Node.js 21
+      - name: Set up Node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 21
+          node-version: 18
 
       # Cache yarn dependencies specifically for NMS
       - name: Cache NMS node modules
