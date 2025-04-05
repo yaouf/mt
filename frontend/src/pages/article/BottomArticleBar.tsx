@@ -1,12 +1,12 @@
-import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
-import { useContext, useEffect, useState } from "react";
-import { TouchableOpacity } from "react-native";
-import BottomActionBar from "src/components/common/BottomActionBar";
-import { ArticleDetailProps } from "src/types/other";
-import { handleBookmark } from "src/utils/helpers";
-import { SavedContext } from "../MainTabNavigator";
-import { shareArticle } from "./ShareArticle";
+import { Ionicons } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
+import { useContext, useEffect, useState } from 'react';
+import { TouchableOpacity } from 'react-native';
+import BottomActionBar from 'src/components/common/BottomActionBar';
+import { ArticleDetailProps } from 'src/types/other';
+import { handleBookmark } from 'src/utils/helpers';
+import { SavedContext } from '../MainTabNavigator';
+import { shareArticle } from './ShareArticle';
 
 /**
  * action bar at the bottom of each article
@@ -21,10 +21,8 @@ function BottomArticleBar(props: ArticleDetailProps) {
   }, [savedArticles, saved]);
 
   function handleShare() {
-    const split = props.published_at.split("-");
-    shareArticle(
-      `https://www.browndailyherald.com/article/${split[0]}/${split[1]}/${props.slug}`
-    );
+    const split = props.published_at.split('-');
+    shareArticle(`https://www.browndailyherald.com/article/${split[0]}/${split[1]}/${props.slug}`);
   }
 
   const bookmarkButton = (
@@ -54,9 +52,7 @@ function BottomArticleBar(props: ArticleDetailProps) {
     </TouchableOpacity>
   );
 
-  return (
-    <BottomActionBar onShare={handleShare} rightButtons={bookmarkButton} />
-  );
+  return <BottomActionBar onShare={handleShare} rightButtons={bookmarkButton} />;
 }
 
 export default BottomArticleBar;

@@ -1,26 +1,17 @@
-import { StackScreenProps } from "@react-navigation/stack";
-import { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  Image,
-  SafeAreaView,
-  Text,
-  View,
-} from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { fetchAuthor } from "src/api/fetchContent";
-import Divider from "src/components/Divider";
-import ImageCard from "src/components/cards/HorizontalCard";
-import { articleStyles } from "src/styles/article";
-import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
-import { Article, Author, Media } from "src/types/data";
-import { SettingsStackProps } from "src/types/navStacks";
-import BottomStaffBar from "./BottomStaffBar";
+import { StackScreenProps } from '@react-navigation/stack';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Image, SafeAreaView, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { fetchAuthor } from 'src/api/fetchContent';
+import Divider from 'src/components/Divider';
+import ImageCard from 'src/components/cards/HorizontalCard';
+import { articleStyles } from 'src/styles/article';
+import { baseStyles, layout, text, varGray1 } from 'src/styles/styles';
+import { Article, Author, Media } from 'src/types/data';
+import { SettingsStackProps } from 'src/types/navStacks';
+import BottomStaffBar from './BottomStaffBar';
 
-function Staff({
-  route,
-  navigation,
-}: StackScreenProps<SettingsStackProps, "Staff">) {
+function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staff'>) {
   const [author, setAuthor] = useState<Author | undefined>();
   const [articles, setArticles] = useState<Article[] | undefined>();
   const [media, setMedia] = useState<Media[] | undefined>();
@@ -55,9 +46,9 @@ function Staff({
           <View>
             <View
               style={{
-                flexDirection: "row",
+                flexDirection: 'row',
                 gap: 8,
-                alignItems: "center",
+                alignItems: 'center',
                 marginBottom: 14,
                 marginTop: 24,
               }}
@@ -75,11 +66,11 @@ function Staff({
                 <Text style={text.sectionHeader1} accessibilityRole="header">
                   {author.name}
                 </Text>
-                {author.tagline !== "" && (
+                {author.tagline !== '' && (
                   <Text
                     style={{
                       ...text.textMedium,
-                      fontStyle: "italic",
+                      fontStyle: 'italic',
                       marginTop: 4,
                     }}
                     accessibilityLabel="Staff member's tagline"
@@ -90,17 +81,14 @@ function Staff({
               </View>
             </View>
 
-            {author.bio !== "" && (
+            {author.bio !== '' && (
               <View accessible={true}>
                 <Divider marginTop={0} marginBottom={8} />
                 <Text
                   style={{ ...articleStyles.articleBody, marginTop: 8 }}
                   accessibilityLabel="Staff member's biography"
                 >
-                  {author.bio
-                    .replaceAll("<p>", "")
-                    .replaceAll("</p>", "")
-                    .replaceAll("&amp;", "&")}
+                  {author.bio.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('&amp;', '&')}
                 </Text>
               </View>
             )}
@@ -133,8 +121,8 @@ function Staff({
               </Text>
               <View
                 style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
                   rowGap: 16,
                   columnGap: 12,
                   marginTop: 16,
@@ -149,7 +137,7 @@ function Staff({
                     style={{ width: 170, height: 150 }}
                     onError={(error) =>
                       console.log(
-                        "Image load error:",
+                        'Image load error:',
                         media.attachment_uuid,
                         media.preview_extension
                       )
@@ -163,7 +151,7 @@ function Staff({
           {/* Gives space for last article so that it is not covered by bottom bar */}
           <View style={{ height: 70 }} />
         </ScrollView>
-        <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
+        <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
           <BottomStaffBar slug={slug} />
         </View>
       </View>

@@ -1,25 +1,25 @@
-import { StyleSheet } from "react-native";
-import { varGray1 } from "./styles";
+import { StyleSheet } from 'react-native';
+import { varGray1 } from './styles';
 
 export const search = StyleSheet.create({
   container: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   img: {
-    width: "90%",
-    height: "90%"
-    },
+    width: '90%',
+    height: '90%',
+  },
 
   searchbar: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#F3F3F3",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#F3F3F3',
     borderRadius: 4,
     height: 40,
-    width: "100%",
+    width: '100%',
     marginTop: 16,
   },
 
@@ -30,8 +30,8 @@ export const search = StyleSheet.create({
   },
 
   searchButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 5,
     borderRadius: 10,
     zIndex: 1, // places above WebView
@@ -39,18 +39,18 @@ export const search = StyleSheet.create({
 
   text: {
     fontSize: 12,
-    color: "black",
+    color: 'black',
   },
 
   searchCancel: {
-    color: "black",
+    color: 'black',
     fontSize: 30,
     zIndex: 2,
   },
   searchInput: {
     flex: 1,
     borderBottomWidth: 1,
-    borderColor: "whitesmoke",
+    borderColor: 'whitesmoke',
     borderRadius: 10,
   },
 });

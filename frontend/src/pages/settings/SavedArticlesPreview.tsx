@@ -1,11 +1,11 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { settings } from "src/styles/pages";
-import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
-import { NavProp } from "src/types/navStacks";
-import { SavedContext } from "../MainTabNavigator";
-import FavArticle from "./FavArticle";
+import { Ionicons } from '@expo/vector-icons';
+import { useContext } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { settings } from 'src/styles/pages';
+import { baseStyles, layout, text, varGray1 } from 'src/styles/styles';
+import { NavProp } from 'src/types/navStacks';
+import { SavedContext } from '../MainTabNavigator';
+import FavArticle from './FavArticle';
 
 /* 
         onPress={() => {
@@ -20,9 +20,7 @@ function SavedArticlesPreview({ navigation }: NavProp) {
 
   return (
     <View style={baseStyles.container}>
-      <Text style={{ ...text.sectionHeader1, marginTop: 16 }}>
-        Saved Articles
-      </Text>
+      <Text style={{ ...text.sectionHeader1, marginTop: 16 }}>Saved Articles</Text>
       {Object.keys(savedArticles).length > 0 ? (
         <View style={layout.vStack}>
           {Object.keys(savedArticles)
@@ -39,20 +37,16 @@ function SavedArticlesPreview({ navigation }: NavProp) {
             ))}
           {Object.keys(savedArticles).length > 2 && (
             <TouchableOpacity
-              onPress={() => navigation.push("SavedArticles")}
+              onPress={() => navigation.push('SavedArticles')}
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 gap: 10,
                 marginTop: 10,
               }}
             >
               <Text style={settings.smallHeading}>View all saved articles</Text>
-              <Ionicons
-                name="chevron-forward-outline"
-                size={16}
-                color={varGray1}
-              />
+              <Ionicons name="chevron-forward-outline" size={16} color={varGray1} />
             </TouchableOpacity>
           )}
         </View>

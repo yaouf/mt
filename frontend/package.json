@@ -9,7 +9,10 @@
     "doctor": "npx expo-doctor",
     "fix": "npx expo install --fix",
     "build:ios": "eas build --platform ios",
-    "submit:ios": "eas submit --platform ios"
+    "submit:ios": "eas submit --platform ios",
+    "format": "npx prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format:check": "npx prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "prestart": "yarn install"
   },
   "dependencies": {
     "@aptabase/react-native": "^0.3.10",
@@ -32,7 +35,6 @@
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-draglist": "^3.6.0",
     "react-native-gesture-handler": "~2.16.1",
-    "react-native-google-mobile-ads": "^14.2.5",
     "react-native-hold-menu": "^0.1.6",
     "react-native-reanimated": "~3.10.1",
     "react-native-render-html": "^6.3.4",
@@ -52,6 +54,7 @@
     "@types/react-test-renderer": "^18.0.7",
     "dotenv": "^16.4.7",
     "expo-dev-client": "^5.0.5",
+    "prettier": "^3.2.5",
     "pretty-format": "^29.7.0",
     "react-native-dotenv": "^3.4.11",
     "typescript": "~5.3.3"

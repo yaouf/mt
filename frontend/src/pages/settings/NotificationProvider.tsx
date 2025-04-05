@@ -1,5 +1,5 @@
-import * as Device from "expo-device";
-import * as Notifications from "expo-notifications";
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 import React, {
   Dispatch,
   SetStateAction,
@@ -7,9 +7,9 @@ import React, {
   useContext,
   useEffect,
   useState,
-} from "react";
-import { AppState, AppStateStatus, Platform } from "react-native";
-import { setAsync } from "src/utils/helpers";
+} from 'react';
+import { AppState, AppStateStatus, Platform } from 'react-native';
+import { setAsync } from 'src/utils/helpers';
 
 interface NotificationContextType {
   systemPermissionStatus: string;
@@ -43,10 +43,10 @@ interface NotificationContextType {
 
 // These are just defaults in case the child can't find a provider parent
 export const NotificationContext = createContext<NotificationContextType>({
-  systemPermissionStatus: "undetermined",
+  systemPermissionStatus: 'undetermined',
   setSystemPermissionStatus: () => {},
   checkPermissions: () => {},
-  requestPermission: async () => "",
+  requestPermission: async () => '',
   breaking: true,
   setBreaking: () => {},
   universityNews: true,
@@ -61,7 +61,7 @@ export const NotificationContext = createContext<NotificationContextType>({
   setScienceAndResearch: () => {},
   opinions: true,
   setOpinions: () => {},
-  deviceID: "",
+  deviceID: '',
   setDeviceID: () => {},
   isUpdate: false,
   setIsUpdate: () => {},
@@ -69,8 +69,7 @@ export const NotificationContext = createContext<NotificationContextType>({
 
 export const NotificationProvider = ({ children }) => {
   // State for managing the actual system permission status
-  const [systemPermissionStatus, setSystemPermissionStatus] =
-    useState("undetermined");
+  const [systemPermissionStatus, setSystemPermissionStatus] = useState('undetermined');
 
   // Notifications
   const [universityNews, setUniversityNews] = useState(true);
@@ -82,7 +81,7 @@ export const NotificationProvider = ({ children }) => {
   const [opinions, setOpinions] = useState(true);
 
   // Device ID & push token
-  const [deviceID, setDeviceID] = useState("");
+  const [deviceID, setDeviceID] = useState('');
 
   const [isUpdate, setIsUpdate] = useState(false);
 
@@ -95,12 +94,12 @@ export const NotificationProvider = ({ children }) => {
   // Function to register for push notifications
   const requestPermission = async (): Promise<string> => {
     // Special setup for Android: Ensure that the notification channel is created
-    if (Platform.OS === "android") {
-      Notifications.setNotificationChannelAsync("default", {
-        name: "default",
+    if (Platform.OS === 'android') {
+      Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
-        lightColor: "#FF231F7C",
+        lightColor: '#FF231F7C',
       });
     }
 
@@ -108,29 +107,26 @@ export const NotificationProvider = ({ children }) => {
     if (Device.isDevice) {
       const { status } = await Notifications.requestPermissionsAsync();
       setSystemPermissionStatus(status);
-      setAsync("systemPermissionStatus", status);
+      setAsync('systemPermissionStatus', status);
       return status;
     } else {
-      console.log("Must use physical device for Push Notifications");
-      return "error";
+      console.log('Must use physical device for Push Notifications');
+      return 'error';
     }
   };
 
   useEffect(() => {
     // Handler for AppState changes
     const handleAppStateChange = async (nextAppState: AppStateStatus) => {
-      if (nextAppState === "active") {
+      if (nextAppState === 'active') {
         const { status } = await Notifications.getPermissionsAsync();
         setSystemPermissionStatus(status);
-        console.log("App has come to the foreground");
+        console.log('App has come to the foreground');
       }
     };
 
     // Subscribe to AppState changes
-    const subscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange
-    );
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
 
     // Initial permission check
     checkPermissions();
@@ -143,7 +139,7 @@ export const NotificationProvider = ({ children }) => {
 
   // Effect to check permissions when the app loads
   useEffect(() => {
-    console.log("Checking permissions useEffect in NotificationProvider");
+    console.log('Checking permissions useEffect in NotificationProvider');
     checkPermissions();
   }, []);
 

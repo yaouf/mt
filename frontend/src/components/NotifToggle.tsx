@@ -1,11 +1,11 @@
-import * as Notifications from "expo-notifications";
-import { Dispatch, SetStateAction, useContext } from "react";
-import { Alert, Linking, Switch, Text, View } from "react-native";
-import { updateSettings } from "src/api/backendAPIs";
-import { NotificationContext } from "src/pages/settings/NotificationProvider";
-import { fyp } from "src/styles/pages";
-import { text } from "src/styles/styles";
-import { setAsync } from "src/utils/helpers";
+import * as Notifications from 'expo-notifications';
+import { Dispatch, SetStateAction, useContext } from 'react';
+import { Alert, Linking, Switch, Text, View } from 'react-native';
+import { updateSettings } from 'src/api/backendAPIs';
+import { NotificationContext } from 'src/pages/settings/NotificationProvider';
+import { fyp } from 'src/styles/pages';
+import { text } from 'src/styles/styles';
+import { setAsync } from 'src/utils/helpers';
 
 type NotifProps = {
   title: string;
@@ -16,26 +16,15 @@ type NotifProps = {
   asyncName?: string;
 };
 
-function NotifToggle({
-  title,
-  description,
-  value,
-  setValue,
-  onboarding,
-  asyncName,
-}: NotifProps) {
-  const {
-    systemPermissionStatus,
-    setSystemPermissionStatus,
-    requestPermission,
-    deviceID,
-  } = useContext(NotificationContext);
+function NotifToggle({ title, description, value, setValue, onboarding, asyncName }: NotifProps) {
+  const { systemPermissionStatus, setSystemPermissionStatus, requestPermission, deviceID } =
+    useContext(NotificationContext);
 
   const updateBackend = (newVal: boolean) => {
     try {
       // TODO: refactor this to be cleaner, maybe take in an object of all the notifs to update
       // Still keep all new notif preferences so that settings stay in sync
-      if (asyncName === "breakingNotifs") {
+      if (asyncName === 'breakingNotifs') {
         updateSettings(
           deviceID,
           newVal,
@@ -46,7 +35,7 @@ function NotifToggle({
           undefined,
           undefined
         );
-      } else if (asyncName === "universityNewsNotifs") {
+      } else if (asyncName === 'universityNewsNotifs') {
         updateSettings(
           deviceID,
           undefined,
@@ -57,7 +46,7 @@ function NotifToggle({
           undefined,
           undefined
         );
-      } else if (asyncName === "metroNotifs") {
+      } else if (asyncName === 'metroNotifs') {
         updateSettings(
           deviceID,
           undefined,
@@ -68,7 +57,7 @@ function NotifToggle({
           undefined,
           undefined
         );
-      } else if (asyncName === "opinionsNotifs") {
+      } else if (asyncName === 'opinionsNotifs') {
         updateSettings(
           deviceID,
           undefined,
@@ -79,7 +68,7 @@ function NotifToggle({
           undefined,
           undefined
         );
-      } else if (asyncName === "artsAndCultureNotifs") {
+      } else if (asyncName === 'artsAndCultureNotifs') {
         updateSettings(
           deviceID,
           undefined,
@@ -90,7 +79,7 @@ function NotifToggle({
           undefined,
           undefined
         );
-      } else if (asyncName === "sportsNotifs") {
+      } else if (asyncName === 'sportsNotifs') {
         updateSettings(
           deviceID,
           undefined,
@@ -101,7 +90,7 @@ function NotifToggle({
           newVal,
           undefined
         );
-      } else if (asyncName === "scienceAndResearchNotifs") {
+      } else if (asyncName === 'scienceAndResearchNotifs') {
         updateSettings(
           deviceID,
           undefined,
@@ -114,44 +103,44 @@ function NotifToggle({
         );
       }
     } catch (error) {
-      console.log("error updating settings", error);
+      console.log('error updating settings', error);
     }
   };
 
   const toggle = async () => {
     if (onboarding) {
-      console.log("calling setState in onboarding toggle", !value);
+      console.log('calling setState in onboarding toggle', !value);
       setValue((previousState: boolean) => !previousState);
     } else {
       // update system permission status (on device and in backend)
-      if (systemPermissionStatus === "granted") {
-        console.log("new value in toggle", !value);
+      if (systemPermissionStatus === 'granted') {
+        console.log('new value in toggle', !value);
         const newValue = !value;
         setValue(newValue);
         setAsync(asyncName as string, JSON.stringify(newValue));
         updateBackend(newValue); // TODO: is this the right value even if toggle quickly??
-      } else if (systemPermissionStatus === "denied") {
+      } else if (systemPermissionStatus === 'denied') {
         Alert.alert(
-          "Enable Notifications",
-          "To enable notifications, please go to Settings and turn on notifications for this app.",
+          'Enable Notifications',
+          'To enable notifications, please go to Settings and turn on notifications for this app.',
           [
             {
-              text: "Cancel",
-              onPress: () => console.log("cancel"),
-              style: "cancel",
+              text: 'Cancel',
+              onPress: () => console.log('cancel'),
+              style: 'cancel',
             },
-            { text: "Open Settings", onPress: () => Linking.openSettings() },
+            { text: 'Open Settings', onPress: () => Linking.openSettings() },
           ]
         );
         // don't update background here because system settings is disallowed
       } else {
-        console.log("if of undetermined"); // (said maybe later in settings)
+        console.log('if of undetermined'); // (said maybe later in settings)
         await requestPermission();
         const { status } = await Notifications.getPermissionsAsync();
-        if (status === "granted") {
-          console.log("in true");
+        if (status === 'granted') {
+          console.log('in true');
           setValue(true);
-          setAsync(asyncName as string, "true");
+          setAsync(asyncName as string, 'true');
           updateBackend(!value);
         }
         setSystemPermissionStatus(status);
@@ -161,11 +150,9 @@ function NotifToggle({
     }
   };
 
-  const toggleValue = onboarding
-    ? value
-    : systemPermissionStatus === "granted" && value;
+  const toggleValue = onboarding ? value : systemPermissionStatus === 'granted' && value;
 
-  console.log("value for toggle title in NotifToggle", title, toggleValue);
+  console.log('value for toggle title in NotifToggle', title, toggleValue);
 
   return (
     <View style={fyp.toggleRow}>
@@ -176,7 +163,7 @@ function NotifToggle({
         </Text>
       </View>
       <Switch
-        trackColor={{ true: "#000000", false: "grey" }}
+        trackColor={{ true: '#000000', false: 'grey' }}
         value={toggleValue}
         onValueChange={() => toggle()}
         accessibilityLabel={`${title} notifications`}

@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, install redis with 
+First, install redis with
 `brew install redis` on mac
 `sudo apt-get install redis-server` on ubuntu
 `choco install redis-64` on windows
@@ -12,8 +12,8 @@ Is intended to run on node 21.6.2 and npm 10.2.4
 Then, run the development server:
 
 ```bash
-npm i 
-then 
+npm i
+then
 npm run dev
 # or
 yarn dev

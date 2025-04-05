@@ -1,24 +1,26 @@
-import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/24/solid";
-import { useCallback, useState } from "react";
-import { EditorPick } from "../../pages/api/types/types";
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/24/solid';
+import { useCallback, useState } from 'react';
+import { EditorPick } from '../../pages/api/types/types';
+
 // TODO: having EditorsPick and EditorsPicks is confusing.
-const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
-  const [url, setUrl] = useState("");
+const EditorsPicks = ({ editorsPicks, setEditorsPicks, token }) => {
+  const [url, setUrl] = useState('');
   const [startindex, setStartIndex] = useState<number | null>(null);
 
   const sortedEditorsPicks = [...editorsPicks].sort((a, b) => a.rank - b.rank);
 
   const handleAddPick = async () => {
     if (!url) {
-      console.error("URL cannot be empty");
+      console.error('URL cannot be empty');
       return;
     }
 
     try {
-      const response = await fetch("/api/editors-picks/add", {
-        method: "POST",
+      const response = await fetch('/api/editors-picks/add', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ url }),
       });
@@ -26,30 +28,44 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
       if (response.ok) {
         const data = await response.json();
         setEditorsPicks((prev) => [...prev, data]);
-        setUrl("");
+        setUrl('');
       } else {
         console.error("Error adding editor's pick");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   };
 
   const handleDeletePick = async (url) => {
     try {
       const response = await fetch(`/api/editors-picks/delete`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ url }),
       });
       // Log the response to see if the deletion was successful
-      console.log("Delete response:", response);
+      console.log('Delete response:', response);
 
       if (response.ok) {
-        // Filter out the deleted pick from the state
-        setEditorsPicks(editorsPicks.filter((pick) => pick.url !== url));
+        // Find and delete the pick from the state
+        const deletedPickIndex = editorsPicks.findIndex((pick) => pick.url === url);
+        const updatedPicks = editorsPicks.filter((pick) => pick.url !== url);
+
+        // Update the ranks of the remaining picks
+        const newPicksWithUpdatedRanks = updatedPicks.map((pick, index) => {
+          // If the pick's rank is above the deleted pick's rank, decrease the rank
+          return {
+            ...pick,
+            rank: index < deletedPickIndex ? pick.rank : pick.rank - 1,
+          };
+        });
+
+        // Set the new state
+        setEditorsPicks(newPicksWithUpdatedRanks);
       } else {
         console.error("Failed to delete editor's pick");
       }
@@ -72,10 +88,7 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
     }
     const newPicks = [...editorsPicks];
     if (startindex !== null) {
-      [newPicks[startindex], newPicks[index]] = [
-        newPicks[index],
-        newPicks[startindex],
-      ];
+      [newPicks[startindex], newPicks[index]] = [newPicks[index], newPicks[startindex]];
       setEditorsPicks(newPicks);
       updateRanks(newPicks);
     }
@@ -85,10 +98,11 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
   const updateRanks = async (newPicks: EditorPick[]) => {
     try {
       // Update ranks on the server
-      const response = await fetch("/api/editors-picks/update-ranks", {
-        method: "POST",
+      const response = await fetch('/api/editors-picks/update-ranks', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(
           newPicks.map((pick, index) => ({
@@ -97,44 +111,45 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
           }))
         ),
       });
+      console.log('Update ranks response:', response);
 
       if (!response.ok) {
-        console.error("Failed to update ranks");
+        console.error('Failed to update ranks');
       }
     } catch (error) {
-      console.error("Error updating ranks:", error);
+      console.error('Error updating ranks:', error);
     }
   };
 
   const fetchLatestPicks = useCallback(async () => {
     try {
-      const response = await fetch("/api/editors-picks", {
-        method: "GET",
+      const response = await fetch('/api/editors-picks', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (response.ok) {
         const data = await response.json();
         setEditorsPicks(data);
       }
     } catch (error) {
-      console.error("Error fetching latest picks:", error);
+      console.error('Error fetching latest picks:', error);
     }
-  }, [setEditorsPicks]);
+  }, [setEditorsPicks, token]);
 
-  const moveItem = async (index: number, direction: "up" | "down") => {
+  const moveItem = async (index: number, direction: 'up' | 'down') => {
     if (
-      (direction === "up" && index === 0) ||
-      (direction === "down" && index === editorsPicks.length - 1)
+      (direction === 'up' && index === 0) ||
+      (direction === 'down' && index === editorsPicks.length - 1)
     ) {
       return;
     }
 
     const newPicks = [...editorsPicks];
-    const swapIndex = direction === "up" ? index - 1 : index + 1;
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
 
-    [newPicks[index], newPicks[swapIndex]] = [
-      newPicks[swapIndex],
-      newPicks[index],
-    ];
+    [newPicks[index], newPicks[swapIndex]] = [newPicks[swapIndex], newPicks[index]];
     setEditorsPicks(newPicks);
 
     // First update the ranks
@@ -172,23 +187,23 @@ const EditorsPicks = ({ editorsPicks, setEditorsPicks }) => {
                   <span>{pick.rank}</span>
                   <div className="flex items-center gap-1">
                     <button
-                      onClick={() => moveItem(index, "up")}
+                      onClick={() => moveItem(index, 'up')}
                       disabled={index === 0}
                       className={`h-5 w-5 ${
                         index === 0
-                          ? "text-gray-300 cursor-not-allowed"
-                          : "text-gray-600 hover:text-blue-500"
+                          ? 'text-gray-300 cursor-not-allowed'
+                          : 'text-gray-600 hover:text-blue-500'
                       }`}
                     >
                       <ArrowUpIcon />
                     </button>
                     <button
-                      onClick={() => moveItem(index, "down")}
+                      onClick={() => moveItem(index, 'down')}
                       disabled={index === editorsPicks.length - 1}
                       className={`h-5 w-5 ${
                         index === editorsPicks.length - 1
-                          ? "text-gray-300 cursor-not-allowed"
-                          : "text-gray-600 hover:text-blue-500"
+                          ? 'text-gray-300 cursor-not-allowed'
+                          : 'text-gray-600 hover:text-blue-500'
                       }`}
                     >
                       <ArrowDownIcon />

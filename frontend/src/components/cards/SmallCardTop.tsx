@@ -6,50 +6,53 @@ import {
   TouchableWithoutFeedback,
   View,
   ViewStyle,
-} from "react-native";
-import { Tag } from "src/types/data";
-import { CardProps } from "src/types/navStacks";
-import {
-  font1,
-  font2,
-  font3,
-  varGray1,
-  varRed,
-  varTextColor,
-} from "../../styles/styles";
-import { formatDates } from "../../utils/formatDates";
-  
-  function SmallCardTop({ article, navigation }: CardProps) {
-    const all_tags = article.tags.map((t: Tag) => t.name);
-  
-    let cardSize: StyleProp<ViewStyle> = { minWidth: "100%" };
-  
-  
-    return (
-      <View style={cardSize}>
-        <TouchableWithoutFeedback
-          style={styles2.touchableItem}
-          onPress={() => navigation.push("Article", { data: article })}
-          accessibilityRole="button"
-          accessibilityHint={`Double tap to open article`}
-        >
-          <View style={styles.card}>
-            <View style={styles.text}>
-            <View style={{display: "flex", width: "100%", justifyContent: "space-between", flexDirection: "row", alignItems: "flex-end", marginBottom: 8}}>
-            <Text style={{color: varRed, fontWeight: 700, fontFamily: font2, fontSize: 12,}}
-              accessibilityLabel={`Section: ${all_tags[0].replace("&;", "&")}.`}
+} from 'react-native';
+import { Tag } from 'src/types/data';
+import { CardProps } from 'src/types/navStacks';
+import { font1, font2, font3, varGray1, varRed, varTextColor } from '../../styles/styles';
+import { formatDates } from '../../utils/formatDates';
+
+function SmallCardTop({ article, navigation }: CardProps) {
+  const all_tags = article.tags.map((t: Tag) => t.name);
+
+  let cardSize: StyleProp<ViewStyle> = { minWidth: '100%' };
+
+  return (
+    <View style={cardSize}>
+      <TouchableWithoutFeedback
+        style={styles2.touchableItem}
+        onPress={() => navigation.push('Article', { data: article })}
+        accessibilityRole="button"
+        accessibilityHint={`Double tap to open article`}
+      >
+        <View style={styles.card}>
+          <View style={styles.text}>
+            <View
+              style={{
+                display: 'flex',
+                width: '100%',
+                justifyContent: 'space-between',
+                flexDirection: 'row',
+                alignItems: 'flex-end',
+                marginBottom: 8,
+              }}
             >
-              {all_tags[0].replace("&;", "&")}
-            </Text>
-            </View>
-              <Text style={styles.title}
-                accessibilityLabel={`Headline: ${article.headline}.`}
+              <Text
+                style={{ color: varRed, fontWeight: 700, fontFamily: font2, fontSize: 12 }}
+                accessibilityLabel={`Section: ${all_tags[0].replace('&;', '&')}.`}
               >
-                {article.headline}
+                {all_tags[0].replace('&;', '&')}
               </Text>
-              <Text style={styles.subhead} numberOfLines={6} ellipsizeMode="tail"
-                accessibilityLabel={`Subtitle: ${article.subhead}.`}
-              >
+            </View>
+            <Text style={styles.title} accessibilityLabel={`Headline: ${article.headline}.`}>
+              {article.headline}
+            </Text>
+            <Text
+              style={styles.subhead}
+              numberOfLines={6}
+              ellipsizeMode="tail"
+              accessibilityLabel={`Subtitle: ${article.subhead}.`}
+            >
               {article.subhead}
             </Text>
               <Text style={styles.published}
@@ -238,4 +241,4 @@ import { formatDates } from "../../utils/formatDates";
       fontStyle: "normal",
     },
   });
-  
+ 

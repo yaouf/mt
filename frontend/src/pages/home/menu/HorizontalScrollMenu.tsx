@@ -1,42 +1,35 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useContext, useEffect, useRef } from "react";
-import {
-  PixelRatio,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { menuStyles } from "src/styles/sectionMenu";
-import { NavProp } from "src/types/navStacks";
-import { setAsync } from "src/utils/helpers";
-import { menuItems } from "src/utils/setupDevice";
-import { MenuContext } from "../HomeStackScreen";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import React, { useContext, useEffect, useRef } from 'react';
+import { PixelRatio, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { menuStyles } from 'src/styles/sectionMenu';
+import { NavProp } from 'src/types/navStacks';
+import { setAsync } from 'src/utils/helpers';
+import { menuItems } from 'src/utils/setupDevice';
+import { MenuContext } from '../HomeStackScreen';
+import Header from 'src/components/Header';
+import PostHeader from 'src/components/PostHeader';
 
 function HorizontalScrollMenu({ navigation }: NavProp) {
-  const { sectionMenu, currSection, setCurrSection, setSectionMenu } =
-    useContext(MenuContext);
+  const { sectionMenu, currSection, setCurrSection, setSectionMenu } = useContext(MenuContext);
   const scrollViewRef = useRef<ScrollView>(null);
   // const itemRef = useRef<View>(null);
   const itemPositions = useRef<{ [key: string]: number }>({});
 
   if (!sectionMenu) {
     setSectionMenu(menuItems);
-    setAsync("sectionMenu", JSON.stringify(menuItems));
+    setAsync('sectionMenu', JSON.stringify(menuItems));
   }
 
   const textSizeMultiplier = PixelRatio.getFontScale();
-  console.log("textSizeMultiplier", textSizeMultiplier);
+  console.log('textSizeMultiplier', textSizeMultiplier);
   const calculatedIconSize = 24 * Math.sqrt(textSizeMultiplier);
-  console.log("calculatedIconSize", calculatedIconSize);
+  console.log('calculatedIconSize', calculatedIconSize);
 
   useEffect(() => {
     // Need to wait for layout to complete before scrolling
     setTimeout(() => {
-      const allButton = currSection === "all" ? 1 : 0;
-      const currentIndex = sectionMenu.findIndex(
-        (item) => item.slug === currSection
-      );
+      const allButton = currSection === 'all' ? 1 : 0;
+      const currentIndex = sectionMenu.findIndex((item) => item.slug === currSection);
 
       // Calculate approximate position (may need to adjust these values later)
       const itemWidth = 80; // Approximate width of each menu item
@@ -47,7 +40,17 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
         animated: true,
       });
     }, 100);
+
+    currSection == `post-magazine`
+      ? navigation.getParent()?.setOptions({ headerTitle: () => <PostHeader /> })
+      : navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
   }, [currSection]);
+
+  useEffect(() => {
+    currSection == `post-magazine`
+      ? navigation.getParent()?.setOptions({ headerTitle: () => <PostHeader /> })
+      : navigation.getParent()?.setOptions({ headerTitle: () => <Header /> });
+  });
 
   return (
     <ScrollView
@@ -55,26 +58,22 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
       horizontal
       ref={scrollViewRef}
       showsHorizontalScrollIndicator={false}
-      style={{ borderBottomWidth: 1, borderColor: "#ccc" }}
+      style={{ borderBottomWidth: 1, borderColor: '#ccc' }}
       accessibilityLabel="Section menu"
       accessibilityHint="Scroll horizontally to view different BDH sections"
     >
       <TouchableOpacity
         key={1}
         style={[menuStyles.menuItem, { paddingLeft: 20 }]}
-        onPress={() => navigation.push("SectionPref")}
+        onPress={() => navigation.push('SectionPref')}
         accessible={true}
         accessibilityRole="button"
         accessibilityLabel="Filter options"
       >
-        <Ionicons
-          name="filter-outline"
-          size={calculatedIconSize}
-          color="black"
-        />
+        <Ionicons name="filter-outline" size={calculatedIconSize} color="black" />
       </TouchableOpacity>
 
-      {currSection === "all" ? (
+      {currSection === 'all' ? (
         <View
           style={menuStyles.menuItem}
           accessible={true}
@@ -90,8 +89,8 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
           style={menuStyles.menuItem}
           onPress={() => {
             // TODO: should this also be navigate?
-            navigation.navigate("HomeScreen", { slug: "all" });
-            setCurrSection("all");
+            navigation.navigate('HomeScreen', { slug: 'all' });
+            setCurrSection('all');
           }}
           accessible={true}
           accessibilityRole="button"
@@ -120,9 +119,9 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
             style={menuStyles.menuItem}
             onPress={() => {
               if (
-                menuItem.title == "Sports" ||
-                menuItem.title == "Arts & Culture" ||
-                menuItem.title == "Science & Research"
+                menuItem.title == 'Sports' ||
+                menuItem.title == 'Arts & Culture' ||
+                menuItem.title == 'Science & Research'
               ) {
                 const xPosition = itemPositions.current[menuItem.slug] || 0;
                 scrollViewRef.current?.scrollTo({
@@ -130,7 +129,7 @@ function HorizontalScrollMenu({ navigation }: NavProp) {
                   animated: true,
                 });
               }
-              navigation.navigate("Section", { slug: menuItem.slug });
+              navigation.navigate('Section', { slug: menuItem.slug });
               setCurrSection(menuItem.slug);
               // itemRef.current?.measureLayout(
               //   scrollViewRef.current as any,

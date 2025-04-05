@@ -1,18 +1,19 @@
-import * as Notifications from "expo-notifications";
-import { Dispatch, SetStateAction } from "react";
-import { createDevice } from "../api/backendAPIs";
-import { MenuItem } from "../types/other";
-import { setAsync } from "./helpers";
+import * as Notifications from 'expo-notifications';
+import { Dispatch, SetStateAction } from 'react';
+import { createDevice } from '../api/backendAPIs';
+import { MenuItem } from '../types/other';
+import { setAsync } from './helpers';
 
 // for the horizontal section menu
 // TODO: are we including post, multimedia, special projects ... and what order
 export const menuItems: MenuItem[] = [
-  { id: 3, title: "university news", slug: "university-news" },
-  { id: 4, title: "metro", slug: "metro" },
-  { id: 5, title: "opinions", slug: "opinions" },
-  { id: 6, title: "arts & culture", slug: "arts-culture" },
-  { id: 7, title: "sports", slug: "sports" },
-  { id: 8, title: "science & research", slug: "science-research" },
+  { id: 3, title: 'university news', slug: 'university-news' },
+  { id: 4, title: 'metro', slug: 'metro' },
+  { id: 5, title: 'opinions', slug: 'opinions' },
+  { id: 6, title: 'arts & culture', slug: 'arts-culture' },
+  { id: 7, title: 'sports', slug: 'sports' },
+  { id: 8, title: 'science & research', slug: 'science-research' },
+  { id: 9, title: 'post-', slug: 'post-magazine' },
   // { id: 9, title: "podcasts", slug: "podcasts" },
 ];
 
@@ -22,6 +23,7 @@ export const menuItems: MenuItem[] = [
  *
  * returns the device id after calling createDevice
  */
+// TODO: add post- notifs
 export const setUpDevice = async (
   setBreaking: Dispatch<SetStateAction<boolean>>,
   setUniversityNews: Dispatch<SetStateAction<boolean>>,
@@ -39,26 +41,26 @@ export const setUpDevice = async (
   sports?: boolean,
   scienceAndResearch?: boolean
 ): Promise<string> => {
-  setAsync("hasOnboarded", "true");
-  let deviceID: string = "";
+  setAsync('hasOnboarded', 'true');
+  let deviceID: string = '';
 
   let token = (
     await Notifications.getExpoPushTokenAsync({
-      projectId: "2f15114e-2295-4fe6-bd82-606b41277acc",
+      projectId: '2f15114e-2295-4fe6-bd82-606b41277acc',
     })
   ).data;
   // token = token.replace("ExponentPushToken[", "").replace("]", "");
-  console.log("PERMISSION", systemPermissionStatus);
+  console.log('PERMISSION', systemPermissionStatus);
 
   try {
-    if (systemPermissionStatus === "granted") {
-      setAsync("breakingNotifs", JSON.stringify(breaking));
-      setAsync("universityNewsNotifs", JSON.stringify(universityNews));
-      setAsync("metroNotifs", JSON.stringify(metro));
-      setAsync("opinionsNotifs", JSON.stringify(opinions));
-      setAsync("artsAndCultureNotifs", JSON.stringify(artsAndCulture));
-      setAsync("sportsNotifs", JSON.stringify(sports));
-      setAsync("scienceAndResearchNotifs", JSON.stringify(scienceAndResearch));
+    if (systemPermissionStatus === 'granted') {
+      setAsync('breakingNotifs', JSON.stringify(breaking));
+      setAsync('universityNewsNotifs', JSON.stringify(universityNews));
+      setAsync('metroNotifs', JSON.stringify(metro));
+      setAsync('opinionsNotifs', JSON.stringify(opinions));
+      setAsync('artsAndCultureNotifs', JSON.stringify(artsAndCulture));
+      setAsync('sportsNotifs', JSON.stringify(sports));
+      setAsync('scienceAndResearchNotifs', JSON.stringify(scienceAndResearch));
       deviceID = await createDevice(
         {
           breaking: breaking ?? false,
@@ -71,9 +73,9 @@ export const setUpDevice = async (
         },
         token
       );
-      console.log("deviceID after createDevice", deviceID);
-      console.log("push token", token);
-      console.log("notif settings", {
+      console.log('deviceID after createDevice', deviceID);
+      console.log('push token', token);
+      console.log('notif settings', {
         breaking: breaking ?? false,
         universityNews: universityNews ?? false,
         metro: metro ?? false,
@@ -90,13 +92,13 @@ export const setUpDevice = async (
       setArtsAndCulture(false);
       setSports(false);
       setScienceAndResearch(false);
-      setAsync("breakingNotifs", JSON.stringify(false));
-      setAsync("universityNewsNotifs", JSON.stringify(false));
-      setAsync("metroNotifs", JSON.stringify(false));
-      setAsync("opinionsNotifs", JSON.stringify(false));
-      setAsync("artsAndCultureNotifs", JSON.stringify(false));
-      setAsync("sportsNotifs", JSON.stringify(false));
-      setAsync("scienceAndResearchNotifs", JSON.stringify(false));
+      setAsync('breakingNotifs', JSON.stringify(false));
+      setAsync('universityNewsNotifs', JSON.stringify(false));
+      setAsync('metroNotifs', JSON.stringify(false));
+      setAsync('opinionsNotifs', JSON.stringify(false));
+      setAsync('artsAndCultureNotifs', JSON.stringify(false));
+      setAsync('sportsNotifs', JSON.stringify(false));
+      setAsync('scienceAndResearchNotifs', JSON.stringify(false));
       deviceID = await createDevice(
         {
           breaking: false,
@@ -109,15 +111,15 @@ export const setUpDevice = async (
         },
         token
       );
-      console.log("deviceID being set in line 65 of setup.ts", deviceID);
-      console.log("push token", token);
+      console.log('deviceID being set in line 65 of setup.ts', deviceID);
+      console.log('push token', token);
     }
   } catch (error) {
-    console.log("error creating device", error);
+    console.log('error creating device', error);
   }
-  console.log("deviceID in setUpDevice", deviceID);
-  setAsync("deviceID", deviceID);
-  setAsync("savedArticles", JSON.stringify({}));
-  setAsync("sectionMenu", JSON.stringify(menuItems));
+  console.log('deviceID in setUpDevice', deviceID);
+  setAsync('deviceID', deviceID);
+  setAsync('savedArticles', JSON.stringify({}));
+  setAsync('sectionMenu', JSON.stringify(menuItems));
   return deviceID;
 };

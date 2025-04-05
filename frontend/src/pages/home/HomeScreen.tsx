@@ -1,14 +1,14 @@
-import { trackEvent } from "@aptabase/react-native";
-import { useScrollToTop } from "@react-navigation/native";
-import * as SplashScreen from "expo-splash-screen";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { FlatList, RefreshControl, View } from "react-native";
-import { fetchSectionHome } from "src/api/fetchContent";
-import { Article } from "src/types/data";
-import { NavProp } from "src/types/navStacks";
-import OpinionsGroup from "./sections/OpinionsGroup";
-import SmallHorzGroup from "./sections/SmallHorzGroup";
-import Top from "./sections/Top";
+import { trackEvent } from '@aptabase/react-native';
+import { useScrollToTop } from '@react-navigation/native';
+import * as SplashScreen from 'expo-splash-screen';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FlatList, RefreshControl, View } from 'react-native';
+import { fetchSectionHome } from 'src/api/fetchContent';
+import { Article } from 'src/types/data';
+import { NavProp } from 'src/types/navStacks';
+import OpinionsGroup from './sections/OpinionsGroup';
+import SmallHorzGroup from './sections/SmallHorzGroup';
+import Top from './sections/Top';
 
 export interface Section_Type {
   id: number;
@@ -28,7 +28,7 @@ function HomeScreen({ navigation }: NavProp) {
 
   const fetchTop = async () => {
     try {
-      const data: Article[] = await fetchSectionHome("homepage", 5);
+      const data: Article[] = await fetchSectionHome('homepage', 5);
       const top: string[] = data.map((a) => a.uuid);
       setTop(top);
       setTopStories(data);
@@ -36,7 +36,7 @@ function HomeScreen({ navigation }: NavProp) {
       console.warn(e);
     } finally {
       setTopLoaded(true);
-      trackEvent("homescreen", {});
+      trackEvent('homescreen', {});
     }
   };
 
@@ -63,7 +63,7 @@ function HomeScreen({ navigation }: NavProp) {
   const sections: Section_Type[] = [
     {
       id: 1,
-      component: <Top topStories={topStories} navigation={navigation} />,
+      component: <Top topStories={topStories!} navigation={navigation} />,
     },
     {
       id: 2,
@@ -80,13 +80,7 @@ function HomeScreen({ navigation }: NavProp) {
     {
       id: 3,
       component: (
-        <SmallHorzGroup
-          navigation={navigation}
-          slug="metro"
-          count={4}
-          title="Metro"
-          top={top}
-        />
+        <SmallHorzGroup navigation={navigation} slug="metro" count={4} title="Metro" top={top} />
       ),
     },
 
@@ -117,13 +111,7 @@ function HomeScreen({ navigation }: NavProp) {
     {
       id: 6,
       component: (
-        <SmallHorzGroup
-          navigation={navigation}
-          slug="sports"
-          count={4}
-          title="Sports"
-          top={top}
-        />
+        <SmallHorzGroup navigation={navigation} slug="sports" count={4} title="Sports" top={top} />
       ),
     },
     {
@@ -138,6 +126,18 @@ function HomeScreen({ navigation }: NavProp) {
         />
       ),
     },
+    {
+      id: 8,
+      component: (
+        <SmallHorzGroup
+          navigation={navigation}
+          slug="post-magazine"
+          count={4}
+          title="post-"
+          top={top}
+        />
+      ),
+    },
   ];
 
   return (
@@ -147,13 +147,9 @@ function HomeScreen({ navigation }: NavProp) {
         data={sections}
         renderItem={({ item }) => item.component}
         keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => (
-          <View style={{ marginHorizontal: 16 }}></View>
-        )}
+        ItemSeparatorComponent={() => <View style={{ marginHorizontal: 16 }}></View>}
         initialNumToRender={1}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         accessibilityLabel="Section Headers List"
       />
     </View>
