@@ -10,6 +10,8 @@ import {
 import SectionFilters from "./SectionFilters";
 import { Ionicons } from "@expo/vector-icons";
 import { SearchStackProps } from "src/types/navStacks";
+import { baseStyles, darkStyles, text, darkModeText } from "../../styles/styles";
+import { useTheme } from "src/components/ThemeContext";
 
 function FiltersScreen({ route, navigation }) {
   const {
@@ -35,25 +37,31 @@ function FiltersScreen({ route, navigation }) {
     console.log("after searchType:", sortType);
   }, [sortOption, sortType]);
 
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
+  const arrowColor = isDarkMode ? "white" : "black";
+
   return (
-    <>
+    <View style={[containerStyle.container, {flex: 1} ]}>
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => navigation.goBack()}
       >
-        <Ionicons name="arrow-back" size={20} color="black" />
+        <Ionicons name="arrow-back" size={20} color={arrowColor} />
       </TouchableOpacity>
-      <ScrollView style={styles.container}>
-        <Text style={styles.header}>Sort by</Text>
+      <ScrollView style={containerStyle.container}>
+        <Text style={textStyle.filterHeader}>Sort by</Text>
         <TouchableOpacity
           style={styles.optionContainer}
           onPress={() => setSortOption("date")}
         >
-          <Text style={styles.optionText}>Date</Text>
+          <Text style={textStyle.filterText}>Date</Text>
           <View
             style={[
-              styles.radioCircle,
-              sortOption === "date" ? styles.selected : {},
+              textStyle.radioCircle,
+              sortOption === "date" ? textStyle.selectedRadioCircle : {},
             ]}
           />
         </TouchableOpacity>
@@ -61,30 +69,30 @@ function FiltersScreen({ route, navigation }) {
           style={styles.optionContainer}
           onPress={() => setSortOption("title")}
         >
-          <Text style={styles.optionText}>Title</Text>
+          <Text style={textStyle.filterText}>Title</Text>
           <View
             style={[
-              styles.radioCircle,
-              sortOption === "title" ? styles.selected : {},
+              textStyle.radioCircle,
+              sortOption === "title" ? textStyle.selectedRadioCircle : {},
             ]}
           />
         </TouchableOpacity>
-        <Text style={styles.header}>Sections</Text>
+        <Text style={textStyle.filterHeader}>Sections</Text>
         <SectionFilters
           selectedSections={selectedSections}
           setSelectedSections={setSelectedSections}
         />
 
-        <Text style={styles.header}>Type</Text>
+        <Text style={textStyle.filterHeader}>Type</Text>
         <TouchableOpacity
           style={styles.optionContainer}
           onPress={() => setSearchMode("Article")}
         >
-          <Text style={styles.optionText}>Article</Text>
+          <Text style={textStyle.filterText}>Article</Text>
           <View
             style={[
-              styles.radioCircle,
-              searchMode === "Article" ? styles.selected : {},
+              textStyle.radioCircle,
+              searchMode === "Article" ? textStyle.selectedRadioCircle : {},
             ]}
           />
         </TouchableOpacity>
@@ -94,11 +102,11 @@ function FiltersScreen({ route, navigation }) {
             setSearchMode("Writer");
           }}
         >
-          <Text style={styles.optionText}>Writer</Text>
+          <Text style={textStyle.filterText}>Writer</Text>
           <View
             style={[
-              styles.radioCircle,
-              searchMode === "Writer" ? styles.selected : {},
+              textStyle.radioCircle,
+              searchMode === "Writer" ? textStyle.selectedRadioCircle : {},
             ]}
           />
         </TouchableOpacity>
@@ -106,18 +114,18 @@ function FiltersScreen({ route, navigation }) {
           style={styles.optionContainer}
           onPress={() => setSearchMode("Photographer")}
         >
-          <Text style={[styles.optionText, { paddingBottom: 10 }]}>
+          <Text style={[textStyle.filterText, { paddingBottom: 10 }]}>
             Photographer
           </Text>
           <View
             style={[
-              styles.radioCircle,
-              searchMode === "Photographer" ? styles.selected : {},
+              textStyle.radioCircle,
+              searchMode === "Photographer" ? textStyle.selectedRadioCircle : {},
             ]}
           />
         </TouchableOpacity>
       </ScrollView>
-    </>
+    </View>
   );
 }
 

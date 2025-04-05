@@ -231,6 +231,7 @@ function Search({ navigation }: NavProp) {
 
   const containerStyle = isDarkMode ? darkStyles : baseStyles;
   const textStyle = isDarkMode ? darkModeText : text;
+  const searchColor = isDarkMode ? "white" : "#cccccc"
 
   return (
     <View style={[containerStyle.container]}>
@@ -261,6 +262,7 @@ function Search({ navigation }: NavProp) {
             ref={textInputRef}
             value={text}
             placeholder="Search"
+            placeholderTextColor={searchColor}
             style={textStyle.searchInput}
             onFocus={handleFocus}
             onSubmitEditing={handleSearch}

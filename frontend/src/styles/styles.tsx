@@ -56,6 +56,20 @@ export const baseStyles = StyleSheet.create({
     paddingVertical: 5,
     flex: 1,
   },
+  sectionFilterButton: {
+    padding: 8,
+    margin: 5,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    backgroundColor: "#f8f8f8",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  selectedFilter: {
+    backgroundColor: "#cccccc",
+  }
 });
 export const darkStyles = StyleSheet.create({
   container: {
@@ -83,6 +97,20 @@ export const darkStyles = StyleSheet.create({
     paddingVertical: 5,
     flex: 1,
   },
+  sectionFilterButton: {
+    padding: 8,
+    margin: 5,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 5,
+    backgroundColor: "#1F1F1F",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+  },
+  selectedFilter: {
+    backgroundColor: "#575963",
+  }
 });
 
 /**
@@ -209,6 +237,38 @@ export const text = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 8,
   },
+  filterHeader: {
+    color: varTextColor,
+    fontSize: 18,
+    marginBottom: 20,
+    paddingTop: 10,
+  },
+  filterText: {
+    color: varTextColor,
+    flex: 1,
+    fontSize: 16,
+  },
+  radioCircle: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectedRadioCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#000",
+  },
+  filterBack: {
+    color: varTextColor
+  },
+  sectionFilterText: {
+    color: varTextColor
+  }
 });
 
 export const darkModeText = StyleSheet.create({
@@ -306,6 +366,38 @@ export const darkModeText = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 8,
   },
+  filterHeader: {
+    color: darkModeTextColor,
+    fontSize: 18,
+    marginBottom: 20,
+    paddingTop: 10,
+  },
+  filterText: {
+    color: darkModeTextColor,
+    flex: 1,
+    fontSize: 16,
+  },
+  radioCircle: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectedRadioCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#ffffff",
+  },
+  filterBack: {
+    color: darkModeTextColor
+  },
+  sectionFilterText: {
+    color: darkModeTextColor
+  }
 });
 
 export const settingsText = StyleSheet.create({

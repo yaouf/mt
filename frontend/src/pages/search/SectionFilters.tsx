@@ -1,5 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { baseStyles, darkStyles, text, darkModeText } from "../../styles/styles";
+import { useTheme } from "src/components/ThemeContext";
 
 const sections = [
   "Arts & Culture",
@@ -40,18 +42,23 @@ function SectionFilters({
     }
   };
 
+  const { isDarkMode, toggleTheme } = useTheme();
+
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
+
   return (
     <View style={styles.container}>
       {sections.map((section, index) => (
         <TouchableOpacity
           key={index}
           style={[
-            styles.button,
-            tempSelectedSections.includes(section) ? styles.selected : {},
+            containerStyle.sectionFilterButton,
+            tempSelectedSections.includes(section) ? containerStyle.selectedFilter : {},
           ]}
           onPress={() => toggleSection(section)}
         >
-          <Text style={styles.text}>{section}</Text>
+          <Text style={textStyle.sectionFilterText}>{section}</Text>
         </TouchableOpacity>
       ))}
     </View>
