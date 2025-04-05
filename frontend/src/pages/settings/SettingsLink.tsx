@@ -1,8 +1,8 @@
-import { TouchableOpacity, Text, StyleSheet, Linking } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { text, varTextColor } from "src/styles/styles";
-import { StackNavigationProp } from "@react-navigation/stack";
-import * as WebBrowser from "expo-web-browser";
+import { TouchableOpacity, Text, StyleSheet, Linking } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { text, varTextColor } from 'src/styles/styles';
+import { StackNavigationProp } from '@react-navigation/stack';
+import * as WebBrowser from 'expo-web-browser';
 
 type SettingsLinkProps = {
   title: string;
@@ -31,9 +31,9 @@ function SettingsLink({ title, link, inApp, navigation }: SettingsLinkProps) {
     <TouchableOpacity
       onPress={() => openLink(link)}
       style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "100%",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
         paddingHorizontal: 12, // because 4 in the other padding
       }}
       accessible={true}

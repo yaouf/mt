@@ -1,7 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity, View } from "react-native";
-import { articleStyles } from "src/styles/article";
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacity, View } from 'react-native';
+import { articleStyles } from 'src/styles/article';
 
 /**
  * Bottom bar for saved articles page
@@ -11,10 +11,7 @@ function BottomSavedArticlesBar() {
   const navigation = useNavigation();
 
   return (
-    <View
-      style={articleStyles.actionBar}
-      accessibilityLabel="Article Action Bar"
-    >
+    <View style={articleStyles.actionBar} accessibilityLabel="Article Action Bar">
       <View style={articleStyles.actions}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}

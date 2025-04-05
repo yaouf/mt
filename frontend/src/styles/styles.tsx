@@ -1,28 +1,28 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from 'react-native';
 
 /**
  * file for base styles, fonts, layouts, text, etc
  */
 
-export const font1 = "Georgia";
+export const font1 = 'Georgia';
 // export const font2 = "Roboto Flex";
 // export const font3 = "Roboto Condensed";
 
 // for now until load fonts:
-export const font2 = Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif";
-export const font3 =
-  Platform.OS === "ios" ? "Helvetica Neue" : "sans-serif-condensed";
+export const font2 = Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif';
+export const font3 = Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-condensed';
 
 // to use in place of black
-export const varTextColor = "#020202";
-export const varTextSecondaryColor = "#333";
-export const varRed = "#ED1C24";
-export const varGray1 = "#9E9E9E";
+export const varTextColor = '#020202';
+export const varTextSecondaryColor = '#333';
+export const varRed = '#ED1C24';
+export const varGray1 = '#9E9E9E';
+export const varPink = '#F2DAE5';
 
 export const baseStyles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     // flex: 1,
   },
   // container: {
@@ -37,25 +37,25 @@ export const baseStyles = StyleSheet.create({
  * layout styles
  */
 export const layout = StyleSheet.create({
-  hStack: { flexDirection: "row", columnGap: 16 },
+  hStack: { flexDirection: 'row', columnGap: 16 },
   vStack: {
     rowGap: 0,
     marginTop: 0,
-    overflow: "visible"
+    overflow: 'visible',
   },
   recentArticlesStack: {
     rowGap: 10,
     marginTop: 0,
-    overflow: "visible"
+    overflow: 'visible',
   },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     columnGap: 12,
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     rowGap: 0,
     marginTop: 0,
-    overflow: "visible",
+    overflow: 'visible',
   },
 });
 
@@ -66,30 +66,30 @@ export const text = StyleSheet.create({
   sectionHeader1: {
     // main section headers
     color: varTextColor,
-    fontWeight: "800",
+    fontWeight: '800',
     fontSize: 26,
     fontFamily: font3,
-    paddingTop: 10
+    paddingTop: 10,
   },
   resetSectionsButton: {
     // main section headers
     color: varTextColor,
-    fontWeight: "800",
+    fontWeight: '800',
     fontSize: 20,
     fontFamily: font3,
-    paddingTop: 0
+    paddingTop: 0,
   },
   sectionHeader2: {
     // with added padding for settings
     color: varTextColor,
-    fontWeight: "800",
+    fontWeight: '800',
     fontSize: 20,
     fontFamily: font1,
   },
 
   seeMore: {
     // see more header for section
-    fontWeight: "600",
+    fontWeight: '600',
     color: varRed,
     fontSize: 12,
     marginRight: 16,
@@ -98,7 +98,7 @@ export const text = StyleSheet.create({
   bigTitle: {
     // top stories is a slightly larger title
     color: varTextColor,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 24,
     fontFamily: font2,
     marginBottom: 4,
@@ -108,8 +108,8 @@ export const text = StyleSheet.create({
     // like back from archive, stay updated on fyp
     color: varTextColor,
     fontFamily: font2,
-    fontStyle: "normal",
-    fontWeight: "600",
+    fontStyle: 'normal',
+    fontWeight: '600',
     fontSize: 18,
     marginBottom: 8,
     marginTop: 8,
@@ -117,32 +117,32 @@ export const text = StyleSheet.create({
   notifSmall: {
     color: varTextColor,
     fontFamily: font2,
-    fontStyle: "normal",
-    fontWeight: "400",
+    fontStyle: 'normal',
+    fontWeight: '400',
     fontSize: 16,
-    overflow: "hidden",
-    maxWidth: "100%",
-    paddingRight: 10
+    overflow: 'hidden',
+    maxWidth: '100%',
+    paddingRight: 10,
   },
   normal: {
     color: varTextColor,
     fontFamily: font2,
-    fontStyle: "normal",
-    fontWeight: "400",
+    fontStyle: 'normal',
+    fontWeight: '400',
     fontSize: 16,
   },
   textSmall: {
     color: varTextColor,
     fontFamily: font2,
-    fontStyle: "normal",
-    fontWeight: "400",
+    fontStyle: 'normal',
+    fontWeight: '400',
     fontSize: 12,
   },
   textMedium: {
     color: varTextColor,
     fontFamily: font2,
-    fontStyle: "normal",
-    fontWeight: "400",
+    fontStyle: 'normal',
+    fontWeight: '400',
     fontSize: 14,
   },
 });

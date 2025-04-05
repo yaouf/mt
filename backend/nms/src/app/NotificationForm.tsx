@@ -1,30 +1,29 @@
-"use client";
+'use client';
 
-import moment from "moment-timezone";
-import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
-import { validate as isValidUUID } from "uuid";
-import ConfirmationModal from "./ConfirmationModal";
+import moment from 'moment-timezone';
+import { useState } from 'react';
+import 'react-datepicker/dist/react-datepicker.css';
+import { validate as isValidUUID } from 'uuid';
+import ConfirmationModal from './ConfirmationModal';
 
 const TITLE_CHAR_LIM = 43; // max notif title length for normal text size (I think).
 const BODY_CHAR_LIM = 165; // max notif body length for normal text size.
 const BANNER_DURATION = 5000; // how long the dashboard banner stays up after a notification is sent.
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 const NotificationForm = ({ setScheduledNotifications }) => {
   const [newFormData, setNewFormData] = useState({
-    time: "",
-    title: "",
-    body: "",
+    time: '',
+    title: '',
+    body: '',
     tags: [] as string[],
-    url: "",
+    url: '',
   });
 
-  const [bannerMessage, setBannerMessage] = useState("");
+  const [bannerMessage, setBannerMessage] = useState('');
   const [bannerVisible, setBannerVisible] = useState(false);
-  const [bannerTimeout, setBannerTimeout] =
-    useState<ReturnType<typeof setTimeout>>();
+  const [bannerTimeout, setBannerTimeout] = useState<ReturnType<typeof setTimeout>>();
   const [isFailed, setIsFailed] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
@@ -65,7 +64,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
       const localTime = newFormData.time;
       const utcTime = moment.tz(localTime, userTimeZone).utc().format();
 
-      const lastSegment = newFormData.url.split("/").pop();
+      const lastSegment = newFormData.url.split('/').pop();
       const isUid = isValidUUID(lastSegment);
 
       // Update the form data with UTC time before sending it to the server
@@ -75,11 +74,11 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         isUid: isUid,
       };
 
-      console.log("newNotification", updatedFormData);
-      const response = await fetch("/api/notifications/add", {
-        method: "POST",
+      console.log('newNotification', updatedFormData);
+      const response = await fetch('/api/notifications/add', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedFormData),
       });
@@ -90,24 +89,24 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
         // Reset the form after scheduling
         setNewFormData({
-          time: "",
-          title: "",
-          body: "",
+          time: '',
+          title: '',
+          body: '',
           tags: [],
-          url: "",
+          url: '',
         });
 
         setIsFailed(false);
-        showBanner("Sent successfully!");
+        showBanner('Scheduled successfully!');
       } else {
-        console.error("Error scheduling notification");
+        console.error('Error scheduling notification');
         setIsFailed(true);
-        showBanner("Send failed");
+        showBanner('Send failed');
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
       setIsFailed(true);
-      showBanner("Send failed");
+      showBanner('Send failed');
     }
   };
 
@@ -115,10 +114,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
     setBannerMessage(message);
     setBannerVisible(true);
     clearTimeout(bannerTimeout);
-    document.documentElement.style.setProperty(
-      "--banner-duration",
-      `${BANNER_DURATION / 1000}s`
-    );
+    document.documentElement.style.setProperty('--banner-duration', `${BANNER_DURATION / 1000}s`);
     const timeout = setTimeout(() => {
       setBannerVisible(false);
     }, BANNER_DURATION); // Hide banner after X seconds
@@ -130,13 +126,13 @@ const NotificationForm = ({ setScheduledNotifications }) => {
       {bannerVisible && (
         <div
           className={`fixed top-4 left-1/2 transform -translate-x-1/2 text-center py-2 px-4 rounded-lg shadow-lg ${
-            isFailed ? "bg-red-500 text-white" : "bg-blue-500 text-white"
+            isFailed ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
           }`}
         >
           <span className="font-bold">{bannerMessage}</span>
           <div
             className={`h-1 mt-2 rounded-full ${
-              isFailed ? "bg-red-700" : "bg-blue-700"
+              isFailed ? 'bg-red-700' : 'bg-blue-700'
             } animate-progress`}
           ></div>
         </div>
@@ -145,10 +141,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
       <form>
         {/* Input for time */}
         <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="time"
-          >
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="time">
             Time
           </label>
           <input
@@ -163,10 +156,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
         {/* Input for title */}
         <div className="mb-4 relative">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="title"
-          >
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
             Title
           </label>
           <input
@@ -177,16 +167,14 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             onChange={handleInputChange}
             className={`border rounded-md px-3 py-2 w-full ${
               newFormData.title.length > TITLE_CHAR_LIM
-                ? "border-red-500 focus:outline-red-500"
-                : ""
+                ? 'border-red-500 focus:outline-red-500'
+                : ''
             }`}
             placeholder="Notification title"
           />
           <span
             className={`absolute bottom-1 right-2 text-sm ${
-              newFormData.title.length > TITLE_CHAR_LIM
-                ? "text-red-500"
-                : "text-gray-500"
+              newFormData.title.length > TITLE_CHAR_LIM ? 'text-red-500' : 'text-gray-500'
             }`}
           >
             {newFormData.title.length}/{TITLE_CHAR_LIM}
@@ -195,10 +183,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
         {/* Input for body */}
         <div className="mb-4 relative">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="body"
-          >
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="body">
             Body
           </label>
           <textarea
@@ -207,17 +192,13 @@ const NotificationForm = ({ setScheduledNotifications }) => {
             value={newFormData.body}
             onChange={handleInputChange}
             className={`border rounded-md px-3 py-2 w-full ${
-              newFormData.body.length > BODY_CHAR_LIM
-                ? "border-red-500 focus:outline-red-500"
-                : ""
+              newFormData.body.length > BODY_CHAR_LIM ? 'border-red-500 focus:outline-red-500' : ''
             }`}
             placeholder="Notification body"
           />
           <span
             className={`absolute bottom-1 right-2 text-sm ${
-              newFormData.body.length > BODY_CHAR_LIM
-                ? "text-red-500"
-                : "text-gray-500"
+              newFormData.body.length > BODY_CHAR_LIM ? 'text-red-500' : 'text-gray-500'
             }`}
           >
             {newFormData.body.length}/{BODY_CHAR_LIM}
@@ -227,9 +208,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
         {/* Checkboxes for tags */}
         <div className="mb-4">
           {/* TODO: add htmlFor=tags to label and id=tags for label */}
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Tags
-          </label>
+          <label className="block text-gray-700 text-sm font-bold mb-2">Tags</label>
           <div>
             <label className="inline-flex items-center">
               <input
@@ -237,7 +216,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 name="tags"
                 data-testid="breaking-news-uid"
                 value="Breaking News"
-                checked={newFormData.tags.includes("Breaking News")}
+                checked={newFormData.tags.includes('Breaking News')}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
@@ -249,7 +228,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 name="tags"
                 data-testid="university-news-uid"
                 value="University News"
-                checked={newFormData.tags.includes("University News")}
+                checked={newFormData.tags.includes('University News')}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
@@ -261,7 +240,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 name="tags"
                 value="Metro"
                 data-testid="metro-uid"
-                checked={newFormData.tags.includes("Metro")}
+                checked={newFormData.tags.includes('Metro')}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
@@ -273,7 +252,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 name="tags"
                 value="Sports"
                 data-testid="sports-uid"
-                checked={newFormData.tags.includes("Sports")}
+                checked={newFormData.tags.includes('Sports')}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
@@ -285,7 +264,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 name="tags"
                 value="Arts and Culture"
                 data-testid="arts-and-culture-uid"
-                checked={newFormData.tags.includes("Arts and Culture")}
+                checked={newFormData.tags.includes('Arts and Culture')}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
@@ -297,7 +276,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 name="tags"
                 value="Science and Research"
                 data-testid="science-and-research-uid"
-                checked={newFormData.tags.includes("Science and Research")}
+                checked={newFormData.tags.includes('Science and Research')}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
@@ -309,7 +288,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
                 name="tags"
                 value="Opinions"
                 data-testid="opinions-uid"
-                checked={newFormData.tags.includes("Opinions")}
+                checked={newFormData.tags.includes('Opinions')}
                 onChange={handleCheckboxChange}
                 className="form-checkbox"
               />
@@ -320,10 +299,7 @@ const NotificationForm = ({ setScheduledNotifications }) => {
 
         {/* Input for URL */}
         <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="url"
-          >
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="url">
             Article URL
           </label>
           <input

@@ -1,7 +1,7 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import { Image, TouchableOpacity, View } from "react-native";
-import { articleStyles } from "src/styles/article";
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Image, TouchableOpacity, View } from 'react-native';
+import { articleStyles } from 'src/styles/article';
 
 interface BottomActionBarProps {
   onShare: () => void;
@@ -19,10 +19,7 @@ function BottomActionBar({ onShare, rightButtons }: BottomActionBarProps) {
   const navigation = useNavigation();
 
   return (
-    <View
-      style={articleStyles.actionBar}
-      accessibilityLabel="Article Action Bar"
-    >
+    <View style={articleStyles.actionBar} accessibilityLabel="Article Action Bar">
       <View style={articleStyles.actions}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -36,7 +33,7 @@ function BottomActionBar({ onShare, rightButtons }: BottomActionBarProps) {
 
       <View style={articleStyles.actions}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("HomeScreen")}
+          onPress={() => navigation.navigate('HomeScreen')}
           style={{ paddingRight: 10 }}
           accessibilityLabel="Home Button"
           accessibilityHint="Press to return to the home screen"
@@ -51,10 +48,7 @@ function BottomActionBar({ onShare, rightButtons }: BottomActionBarProps) {
           accessibilityLabel="Share Button"
           accessibilityHint="Press to share the article"
         >
-          <Image
-            source={require("../../../assets/icons/share.png")}
-            style={articleStyles.icon}
-          />
+          <Image source={require('../../../assets/icons/share.png')} style={articleStyles.icon} />
         </TouchableOpacity>
       </View>
     </View>

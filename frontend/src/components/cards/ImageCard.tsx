@@ -1,25 +1,36 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import { TouchableWithoutFeedback } from "react-native";
-import { CardProps } from "src/types/navStacks";
-import { font1, varTextColor } from "../../styles/styles";
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+import { CardProps } from 'src/types/navStacks';
+import { font1, varPink, varTextColor } from '../../styles/styles';
+import { Tag } from 'src/types/data';
 
 function ImageCard({ article, navigation }: CardProps) {
+  const all_tags = article.tags.map((t: Tag) => t.name);
+  const section = all_tags[0].replace('&;', '&');
+
   let img_uri =
-    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+    'https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png';
   if (article.dominantMedia) {
     img_uri =
-      "https://snworksceo.imgix.net/bdh/" +
+      'https://snworksceo.imgix.net/bdh/' +
       article.dominantMedia.attachment_uuid +
-      ".sized-1000x1000." +
+      '.sized-1000x1000.' +
       article.dominantMedia.extension;
   }
 
   return (
     <View>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.push("Article", { data: article })}
-      >
-        <View style={styles.card}>
+      <TouchableWithoutFeedback onPress={() => navigation.push('Article', { data: article })}>
+        <View
+          style={[
+            styles.card,
+            section == 'post- magazine' && {
+              backgroundColor: varPink,
+              padding: '5%',
+              borderRadius: 15,
+            },
+          ]}
+        >
           <Image
             source={{
               uri: img_uri,
@@ -43,19 +54,19 @@ const styles = StyleSheet.create({
   title: {
     width: 96,
     height: 38,
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     lineHeight: 20,
   },
   card: {
-    display: "flex",
+    display: 'flex',
     width: 96,
-    flexDirection: "column",
-    alignItems: "stretch",
+    flexDirection: 'column',
+    alignItems: 'stretch',
     shadowColor: varTextColor,
     shadowOffset: {
       width: 0,
@@ -66,49 +77,49 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   image: {
-    backgroundColor: "#C9C9C9",
-    display: "flex",
+    backgroundColor: '#C9C9C9',
+    display: 'flex',
     height: 100,
     width: 96,
     paddingTop: 39.997,
     paddingBottom: 38.769,
     paddingHorizontal: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "stretch",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'stretch',
   },
   text: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     paddingTop: 16,
-    alignItems: "flex-start",
-    alignSelf: "stretch",
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
     gap: 4,
     height: 38,
   },
   bottom: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
   },
   option: {
-    backgroundColor: "rgba(237, 237, 237, 0.80)",
-    display: "flex",
-    alignItems: "center",
+    backgroundColor: 'rgba(237, 237, 237, 0.80)',
+    display: 'flex',
+    alignItems: 'center',
     gap: 8,
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     paddingVertical: 11,
     paddingHorizontal: 16,
     padding: 8,
     fontSize: 16,
-    borderBottomColor: "rgba(60, 60, 67, 0.36)",
+    borderBottomColor: 'rgba(60, 60, 67, 0.36)',
     borderBottomWidth: 0.5,
   },
   publishedSection: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     gap: 4,
   },
   options: {
@@ -118,6 +129,6 @@ const styles = StyleSheet.create({
   line: {
     width: 254,
     height: 0.5,
-    backgroundColor: "rgba(60, 60, 67, 0.36)",
+    backgroundColor: 'rgba(60, 60, 67, 0.36)',
   },
 });

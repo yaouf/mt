@@ -1,22 +1,18 @@
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import * as WebBrowser from "expo-web-browser";
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import * as WebBrowser from 'expo-web-browser';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 // import {
 //   BannerAd,
 //   BannerAdSize,
 //   TestIds,
 // } from "react-native-google-mobile-ads";
-import {
-  HTMLContentModel,
-  HTMLElementModel,
-  RenderHTML,
-} from "react-native-render-html";
-import WebView from "react-native-webview";
-import { fetchArticle } from "src/api/fetchContent";
-import { articleStyles } from "src/styles/article";
-import { Article } from "src/types/data";
+import { HTMLContentModel, HTMLElementModel, RenderHTML } from 'react-native-render-html';
+import WebView from 'react-native-webview';
+import { fetchArticle } from 'src/api/fetchContent';
+import { articleStyles } from 'src/styles/article';
+import { Article } from 'src/types/data';
 
 // const adUnitId = __DEV__
 //   ? TestIds.BANNER
@@ -58,8 +54,7 @@ const IframeRenderer = React.memo(
       />
     );
   },
-  (prevProps, nextProps) =>
-    prevProps.tnode.attributes.src === nextProps.tnode.attributes.src
+  (prevProps, nextProps) => prevProps.tnode.attributes.src === nextProps.tnode.attributes.src
 );
 
 type SplitArticleType = {
@@ -77,14 +72,14 @@ function SplitArticle({ content }: SplitArticleType) {
   const customHTMLElementModels = useMemo(
     () => ({
       iframe: HTMLElementModel.fromCustomModel({
-        tagName: "iframe",
+        tagName: 'iframe',
         mixedUAStyles: {
-          width: "100%",
+          width: '100%',
         },
         contentModel: HTMLContentModel.block,
       }),
       a: HTMLElementModel.fromCustomModel({
-        tagName: "a",
+        tagName: 'a',
         mixedUAStyles: articleStyles.hyperlink,
         contentModel: HTMLContentModel.textual,
       }),
@@ -94,24 +89,24 @@ function SplitArticle({ content }: SplitArticleType) {
 
   const handleLinkPress = useCallback(
     async (event: any, href: string) => {
-      const articleBaseURL = "https://www.browndailyherald.com/article/";
+      const articleBaseURL = 'https://www.browndailyherald.com/article/';
       if (href.startsWith(articleBaseURL)) {
         try {
-          const seg = href.split("/");
+          const seg = href.split('/');
           const slug = seg.pop();
           const month = seg.pop();
           const year = seg.pop();
-          const date = year + "-" + month;
+          const date = year + '-' + month;
 
           if (!slug || !year || !month) {
-            throw new Error("Invalid URL format");
+            throw new Error('Invalid URL format');
           }
 
           const fetchedArticle = await fetchArticle(slug, date, setArticle);
           setArticle(fetchedArticle);
-          navigation.push("Article", { data: fetchedArticle });
+          navigation.push('Article', { data: fetchedArticle });
         } catch (error) {
-          console.error("Error fetching article:", error);
+          console.error('Error fetching article:', error);
         }
       } else {
         await WebBrowser.openBrowserAsync(href);
@@ -132,9 +127,9 @@ function SplitArticle({ content }: SplitArticleType) {
 
   // Split content by paragraphs
   const splitContent = useMemo(() => {
-    let split = source.html.split("\n");
+    let split = source.html.split('\n');
     if (split.length === 1) {
-      split = source.html.split("</p><p>");
+      split = source.html.split('</p><p>');
     }
 
     const adFrequency = 7; // Advertisement every 7 paragraphs after the first ad
@@ -142,7 +137,7 @@ function SplitArticle({ content }: SplitArticleType) {
 
     // Insert placeholders for ads
     for (let i = firstAdPosition; i < split.length; i += adFrequency + 1) {
-      split.splice(i, 0, "<!-- ADVERTISEMENT_PLACEHOLDER -->");
+      split.splice(i, 0, '<!-- ADVERTISEMENT_PLACEHOLDER -->');
     }
 
     return split;
@@ -169,19 +164,20 @@ function SplitArticle({ content }: SplitArticleType) {
     <View style={articleStyles.articleBodyWrapper}>
       <View style={articleStyles.articleBody}>
         {splitContent.map((paragraph, index) => {
-          if (paragraph === "<!-- ADVERTISEMENT_PLACEHOLDER -->") {
+          if (paragraph === '<!-- ADVERTISEMENT_PLACEHOLDER -->') {
             return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
           }
           // Render normal paragraph content
           return (
             <RenderHTML
               key={`para-${index}`}
-              source={{ html: paragraph + "\n" }}
+              source={{ html: paragraph + '\n' }}
               baseStyle={articleStyles.text}
               customHTMLElementModels={customHTMLElementModels}
               renderers={renderers}
               renderersProps={renderersProps}
               GenericPressable={View}
+              defaultTextProps={{ selectable: true }}
             />
           );
         })}
@@ -192,7 +188,7 @@ function SplitArticle({ content }: SplitArticleType) {
 
 const styles = StyleSheet.create({
   webView: {
-    width: "100%",
+    width: '100%',
     marginVertical: 10,
   },
 });

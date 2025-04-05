@@ -1,22 +1,16 @@
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useEffect,
-  useState,
-} from "react";
-import { HomeStackProps } from "src/types/navStacks";
-import { MenuItem } from "src/types/other";
-import { getAsync } from "src/utils/helpers";
-import { menuItems } from "src/utils/setupDevice";
-import ArticleScreen from "../article/ArticleScreen";
-import SectionsScreen from "../sections/SectionsScreen";
-import Staff from "../staff/Staff";
-import HomeScreen from "./HomeScreen";
-import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
-import SectionPrefScreen from "./menu/SectionPrefScreen";
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { Dispatch, SetStateAction, createContext, useEffect, useState } from 'react';
+import { HomeStackProps } from 'src/types/navStacks';
+import { MenuItem } from 'src/types/other';
+import { getAsync } from 'src/utils/helpers';
+import { menuItems } from 'src/utils/setupDevice';
+import ArticleScreen from '../article/ArticleScreen';
+import SectionsScreen from '../sections/SectionsScreen';
+import Staff from '../staff/Staff';
+import HomeScreen from './HomeScreen';
+import HorizontalScrollMenu from './menu/HorizontalScrollMenu';
+import SectionPrefScreen from './menu/SectionPrefScreen';
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -32,7 +26,7 @@ export const MenuContext = createContext<MenuContextType>({
   original: [],
   sectionMenu: [],
   setSectionMenu: () => {},
-  currSection: "",
+  currSection: '',
   setCurrSection: () => {},
 });
 
@@ -40,26 +34,26 @@ function HomeStackScreen({ navigation, route }) {
   useEffect(() => {
     const routeName = getFocusedRouteNameFromRoute(route);
 
-    if (routeName === "Article") {
-      console.log("route is in article");
-      navigation.getParent()?.setOptions({ tabBarStyle: { display: "none" } });
+    if (routeName === 'Article') {
+      console.log('route is in article');
+      navigation.getParent()?.setOptions({ tabBarStyle: { display: 'none' } });
     } else {
-      navigation.getParent()?.setOptions({ tabBarStyle: { display: "flex" } });
+      navigation.getParent()?.setOptions({ tabBarStyle: { display: 'flex' } });
     }
-    if (routeName === "HomeScreen") {
-      navigation.getParent()?.setOptions({ tabBarActiveTintColor: "red" });
-      setCurrSection("all");
+    if (routeName === 'HomeScreen') {
+      navigation.getParent()?.setOptions({ tabBarActiveTintColor: 'red' });
+      setCurrSection('all');
     }
   }, [navigation, route]);
 
   const [sectionMenu, setSectionMenu] = useState<MenuItem[]>([]);
-  const [currSection, setCurrSection] = useState<string>("all");
+  const [currSection, setCurrSection] = useState<string>('all');
   const original = menuItems;
 
   useEffect(() => {
     const loadSectionsAsync = async () => {
       try {
-        const sections = await getAsync("sectionMenu");
+        const sections = await getAsync('sectionMenu');
         if (sections !== undefined) {
           setSectionMenu(sections);
         } else {
@@ -119,11 +113,7 @@ function HomeStackScreen({ navigation, route }) {
             animationEnabled: false,
           }}
         />
-        <HomeStack.Screen
-          name="Staff"
-          component={Staff}
-          options={{ headerShown: false }}
-        />
+        <HomeStack.Screen name="Staff" component={Staff} options={{ headerShown: false }} />
       </HomeStack.Navigator>
     </MenuContext.Provider>
   );
