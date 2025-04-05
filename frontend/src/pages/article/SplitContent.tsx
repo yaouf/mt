@@ -164,9 +164,9 @@ function SplitArticle({ content }: SplitArticleType) {
     <View style={articleStyles.articleBodyWrapper}>
       <View style={articleStyles.articleBody}>
         {splitContent.map((paragraph, index) => {
-          if (paragraph === '<!-- ADVERTISEMENT_PLACEHOLDER -->') {
-            return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
-          }
+          // if (paragraph === '<!-- ADVERTISEMENT_PLACEHOLDER -->') {
+          //   return <View key={`ad-${index}`}>{renderAdComponent()}</View>;
+          // }
           // Render normal paragraph content
           return (
             <RenderHTML
