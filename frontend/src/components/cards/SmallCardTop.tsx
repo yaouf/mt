@@ -2,6 +2,7 @@ import {
   StyleProp,
   StyleSheet,
   Text,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
   ViewStyle,
@@ -54,145 +55,190 @@ function SmallCardTop({ article, navigation }: CardProps) {
             >
               {article.subhead}
             </Text>
-            <Text
-              style={styles.published}
-              accessibilityLabel={`Published on ${formatDates(article.published_at)}.`}
-            >
-              {formatDates(article.published_at)}
-            </Text>
+              <Text style={styles.published}
+                accessibilityLabel={`Published on ${formatDates(article.published_at)}.`}
+              >
+                {formatDates(article.published_at)}
+              </Text>
+
+              <View style={styles.authorLine}>
+                  <Text style={styles.published}>By</Text>
+                  {article.authors.map((author, i) => {
+                    const lastIndex = article.authors.length - 1;
+                    let separator = "";
+
+                    if (i > 0 && i < lastIndex) {
+                      separator = ", ";
+                    } else if (i === lastIndex && i !== 0) {
+                      separator = " and ";
+                    } else {
+                      separator = " ";
+                    }
+                    return (
+                      <View key={author.slug} style={styles.authorWrapper}>
+                        <Text style={styles.published}>{separator}</Text>
+
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("Staff", { slug: author.slug })
+                          }
+                        >
+                          <Text style={styles.authorName}>{author.name}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </View>
-  );
-}
-
-export default SmallCardTop;
-
-const styles2 = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  touchableItem: {
-    width: 200,
-    height: 200,
-    backgroundColor: 'lightblue',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  showContextButton: {
-    position: 'absolute',
-    bottom: 10, // Adjust as per your requirement
-    right: 10, // Adjust as per your requirement
-    backgroundColor: 'orange',
-    padding: 10,
-    borderRadius: 8,
-  },
-});
-
-const styles = StyleSheet.create({
-  title: {
-    height: 'auto',
-    alignSelf: 'stretch',
-    color: varTextColor,
-    fontFamily: font1,
-    fontSize: 18,
-    fontStyle: 'normal',
-    fontWeight: '700',
-    lineHeight: 20,
-    overflow: 'hidden',
-    flexWrap: 'nowrap',
-    marginBottom: 8,
-  },
-  card: {
-    display: 'flex',
-    // width: 170,
-    // width: "48%",
-    flexDirection: 'column',
-    alignItems: 'stretch',
-    borderRadius: 0,
-    backgroundColor: '#FFF',
-    // shadowColor: varTextColor,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 1.497,
-    // },
-    // shadowOpacity: 0.08,
-    // shadowRadius: 29.949,
-    // elevation: 3,
-    overflow: 'visible',
-  },
-  section: {
-    color: varGray1,
-    fontFamily: font3,
-    fontSize: 10,
-    fontStyle: 'normal',
-    // fontWeight: "500",
-    /* lineHeight: 'normal',*/
-  },
-  published: {
-    color: varGray1,
-    fontFamily: font3,
-    fontSize: 12,
-    fontWeight: '500',
-    fontStyle: 'normal',
-    // fontWeight: "500",
-    /* line-height: normal; */
-  },
-  text: {
-    display: 'flex',
-    flexDirection: 'column',
-    paddingBottom: 8,
-    paddingHorizontal: 0,
-    alignItems: 'flex-start',
-    alignSelf: 'stretch',
-    gap: 4,
-  },
-  bottom: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    alignSelf: 'stretch',
-  },
-  subhead: {
-    alignSelf: 'stretch',
-    color: varTextColor,
-    fontFamily: font1,
-    fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 22,
-    fontStyle: 'italic',
-    marginBottom: 12,
-  },
-
-  option: {
-    backgroundColor: 'rgba(237, 237, 237, 0.80)',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    alignSelf: 'stretch',
-    paddingVertical: 11,
-    paddingHorizontal: 16,
-    padding: 8,
-    fontSize: 16,
-    borderBottomColor: 'rgba(60, 60, 67, 0.36)',
-    borderBottomWidth: 0.5,
-  },
-  publishedSection: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4,
-  },
-  options: {
-    width: 16,
-    height: 16,
-  },
-  line: {
-    width: 254,
-    height: 0.5,
-    backgroundColor: 'rgba(60, 60, 67, 0.36)',
-  },
-});
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  }
+  
+  export default SmallCardTop;
+  
+  const styles2 = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      },
+    touchableItem: {
+      width: 200,
+      height: 200,
+      backgroundColor: "lightblue",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    showContextButton: {
+      position: "absolute",
+      bottom: 10, // Adjust as per your requirement
+      right: 10, // Adjust as per your requirement
+      backgroundColor: "orange",
+      padding: 10,
+      borderRadius: 8,
+    },
+  });
+  
+  const styles = StyleSheet.create({
+    title: {
+      height: "auto",
+      alignSelf: "stretch",
+      color: varTextColor,
+      fontFamily: font1,
+      fontSize: 18,
+      fontStyle: "normal",
+      fontWeight: "700",
+      lineHeight: 20,
+      overflow: "hidden",
+      flexWrap: "nowrap",
+      marginBottom: 8,
+    },
+    card: {
+      display: "flex",
+      // width: 170,
+      // width: "48%",
+      flexDirection: "column",
+      alignItems: "stretch",
+      borderRadius: 0,
+      backgroundColor: "#FFF",
+      // shadowColor: varTextColor,
+      // shadowOffset: {
+      //   width: 0,
+      //   height: 1.497,
+      // },
+      // shadowOpacity: 0.08,
+      // shadowRadius: 29.949,
+      // elevation: 3,
+      overflow: "visible",
+    },
+    section: {
+      color: varGray1,
+      fontFamily: font3,
+      fontSize: 10,
+      fontStyle: "normal",
+      // fontWeight: "500",
+      /* lineHeight: 'normal',*/
+    },
+    published: {
+      color: varGray1,
+      fontFamily: font3,
+      fontSize: 12,
+      fontWeight: "500",
+      fontStyle: "normal",
+      // fontWeight: "500",
+      /* line-height: normal; */
+    },
+    text: {
+      display: "flex",
+      flexDirection: "column",
+      paddingBottom: 8,
+      paddingHorizontal: 0,
+      alignItems: "flex-start",
+      alignSelf: "stretch",
+      gap: 4,
+    },
+    bottom: {
+      display: "flex",
+      justifyContent: "space-between",
+      flexDirection: "row",
+      alignItems: "flex-start",
+      alignSelf: "stretch",
+    },
+    subhead: {
+        alignSelf: "stretch",
+        color: varTextColor,
+        fontFamily: font1,
+        fontSize: 16,
+        fontWeight: "400",
+        lineHeight: 22,
+        fontStyle: "italic",
+        marginBottom: 12, 
+      },
+    
+    option: {
+      backgroundColor: "rgba(237, 237, 237, 0.80)",
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+      alignSelf: "stretch",
+      paddingVertical: 11,
+      paddingHorizontal: 16,
+      padding: 8,
+      fontSize: 16,
+      borderBottomColor: "rgba(60, 60, 67, 0.36)",
+      borderBottomWidth: 0.5,
+    },
+    publishedSection: {
+      display: "flex",
+      alignItems: "center",
+      gap: 4,
+    },
+    options: {
+      width: 16,
+      height: 16,
+    },
+    line: {
+      width: 254,
+      height: 0.5,
+      backgroundColor: "rgba(60, 60, 67, 0.36)",
+    },
+    authorLine: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      alignItems: "center",
+    },
+    authorWrapper: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    authorName: {
+      color: "grey",
+      fontFamily: font3,
+      fontSize: 12,
+      fontWeight: "900",
+      fontStyle: "normal",
+    },
+  });
+ 
