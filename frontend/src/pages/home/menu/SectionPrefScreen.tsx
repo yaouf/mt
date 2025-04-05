@@ -1,6 +1,6 @@
-import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import {
   NestableDraggableFlatList,
@@ -18,25 +18,36 @@ import { MenuContext } from '../HomeStackScreen';
 function SectionPrefScreen({ navigation }: NavProp) {
   const { original, sectionMenu, setSectionMenu } = useContext(MenuContext);
   const [preferences, setPreferences] = useState<MenuItem[]>(sectionMenu);
-  const [removed, setRemoved] = useState<MenuItem[]>(
-    original.filter((item) => !preferences.some((pref) => pref.slug === item.slug))
-  );
-
-  const remove = (item: MenuItem) => {
-    const newPref = preferences.filter((elt) => elt !== item);
-    setPreferences(newPref);
-    setRemoved((prev) => [...prev, item]);
-  };
-
-  const add = (item: MenuItem) => {
-    const newRem = removed.filter((elt) => elt !== item);
-    setRemoved(newRem);
-    setPreferences((prev) => [...prev, item]);
-  };
+  
+  // Ensure all original menu items are included in preferences
+  useEffect(() => {
+    // Check if all original menu items are in preferences
+    const allIncluded = original.every(item => 
+      preferences.some(pref => pref.slug === item.slug)
+    );
+    
+    // If any are missing, add them
+    if (!allIncluded) {
+      const missingItems = original.filter(item => 
+        !preferences.some(pref => pref.slug === item.slug)
+      );
+      setPreferences(prev => [...prev, ...missingItems]);
+    }
+  }, []);
 
   const applyChanges = () => {
-    setSectionMenu(preferences);
-    setAsync('sectionMenu', JSON.stringify(preferences)); // update async
+    // Ensure all original items are present before saving
+    const updatedPreferences = [...preferences];
+    
+    // Check if any original items are missing and add them
+    original.forEach(item => {
+      if (!updatedPreferences.some(pref => pref.slug === item.slug)) {
+        updatedPreferences.push(item);
+      }
+    });
+    
+    setSectionMenu(updatedPreferences);
+    setAsync('sectionMenu', JSON.stringify(updatedPreferences)); // update async
     navigation.pop();
   };
 
@@ -52,14 +63,6 @@ function SectionPrefScreen({ navigation }: NavProp) {
         delayLongPress={100}
         style={[menuStyles.rowItem, { height: itemHeight }]}
       >
-        {/* <TouchableOpacity onPress={() => remove(item)}>
-          <Feather
-            name="minus-circle"
-            size={28}
-            color={varRed}
-            style={menuStyles.icon}
-          />
-        </TouchableOpacity> */}
         <Text style={menuStyles.rowText}>{item.title}</Text>
         <Ionicons name="reorder-three-outline" size={28} color="#1C1B1F" style={menuStyles.icon} />
       </TouchableOpacity>
@@ -132,7 +135,7 @@ function SectionPrefScreen({ navigation }: NavProp) {
             Favorite Sections
           </Text>
           <Text style={[menuStyles.descriptionText]}>
-            Add and reorder sections to customize your home page.
+            Reorder sections to customize your home page.
           </Text>
           {/* TODO: do we need a lock icon? */}
           <View style={[menuStyles.rowItem, { height: itemHeight }]}>
@@ -155,32 +158,15 @@ function SectionPrefScreen({ navigation }: NavProp) {
           />
         </View>
 
-        <View>
-          {removed.length > 0 && (
-            <Text style={[{ marginBottom: 12, marginTop: 16 }, text.sectionHeader3]}>
-              Removed Sections
-            </Text>
-          )}
-          {removed.map((item) => (
-            <TouchableOpacity
-              onPress={() => add(item)}
-              style={[menuStyles.rowItem, { height: itemHeight }]}
-              key={`section-${item.id}`}
-            >
-              <Feather name="plus-circle" size={28} color="#249607" style={menuStyles.icon} />
-              <Text style={menuStyles.rowText}>{item.title}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        {/* Removed the "Removed Sections" section since we're ensuring all sections are always included */}
 
         <TouchableOpacity
           onPress={() => {
             setPreferences([...original]);
-            setRemoved([]);
           }}
           style={[menuStyles.rowItem, menuStyles.reset, { height: itemHeight }]}
         >
-          <Text style={menuStyles.otherText}>Reset to Default</Text>
+          <Text style={menuStyles.otherText}>Reset to Default Order</Text>
         </TouchableOpacity>
       </NestableScrollContainer>
     </GestureHandlerRootView>
