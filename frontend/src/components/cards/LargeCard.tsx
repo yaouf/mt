@@ -15,7 +15,8 @@ import {
   varRed,
   varTextColor,
   darkModeTextColor,
-  darkModeBackgroundColor
+  darkModeBackgroundColor,
+  darkModeBgColorStd
 } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 import { useTheme } from "../ThemeContext";
@@ -257,7 +258,7 @@ const darkStyles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "stretch",
     borderRadius: 0,
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: darkModeBgColorStd,
     marginTop: 16,
     overflow: "visible",
   },

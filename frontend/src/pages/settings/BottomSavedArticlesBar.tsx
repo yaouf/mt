@@ -1,7 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View } from "react-native";
-import { articleStyles } from "src/styles/article";
+import { useTheme } from "src/components/ThemeContext";
+import { articleStyles, darkArticleStyles } from "src/styles/article";
 
 /**
  * Bottom bar for saved articles page
@@ -9,20 +10,23 @@ import { articleStyles } from "src/styles/article";
  */
 function BottomSavedArticlesBar() {
   const navigation = useNavigation();
+  const { isDarkMode, toggleTheme } = useTheme();
+  const articleStyle = isDarkMode ? darkArticleStyles : articleStyles;
+  const logoColor = isDarkMode ? "#FFFFFF" : "#1C1B1F";
 
   return (
     <View
-      style={articleStyles.actionBar}
+      style={articleStyle.actionBar}
       accessibilityLabel="Article Action Bar"
     >
-      <View style={articleStyles.actions}>
+      <View style={articleStyle.actions}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{}}
           accessibilityLabel="Back Button"
           accessibilityHint="Press to go back to the previous screen"
         >
-          <Ionicons name="arrow-back" size={26} color="#1C1B1F" />
+          <Ionicons name="arrow-back" size={26} color={logoColor} />
         </TouchableOpacity>
       </View>
 

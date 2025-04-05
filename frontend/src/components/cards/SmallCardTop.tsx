@@ -10,6 +10,7 @@ import { Tag } from "src/types/data";
 import { CardProps } from "src/types/navStacks";
 import {
   darkModeBackgroundColor,
+  darkModeBgColorStd,
   darkModeTextColor,
   font1,
   font2,
@@ -217,7 +218,7 @@ import { useTheme } from "../ThemeContext";
       flexDirection: "column",
       alignItems: "stretch",
       borderRadius: 0,
-      backgroundColor: darkModeBackgroundColor,
+      backgroundColor: darkModeBgColorStd,
       overflow: "visible",
     },
     section: {

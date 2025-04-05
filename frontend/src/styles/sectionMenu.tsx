@@ -159,5 +159,6 @@ export const darkMenuStyles = StyleSheet.create({
   },
   contentContainer: {
     marginBottom: 70,
+    backgroundColor: darkModeBackgroundColor
   },
 });

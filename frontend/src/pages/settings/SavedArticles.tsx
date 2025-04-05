@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { FlatList, SafeAreaView, Text, View } from "react-native";
-import { baseStyles, text } from "src/styles/styles";
+import { baseStyles, darkStyles, darkModeText, text } from "src/styles/styles";
 import { NavProp } from "src/types/navStacks";
 import { SavedContext } from "../MainTabNavigator";
 import BottomSavedArticlesBar from "./BottomSavedArticlesBar";
 import FavArticle from "./FavArticle";
+import { useTheme } from "src/components/ThemeContext";
 
 /**
  * Page that displays all saved articles
@@ -16,11 +17,13 @@ function SavedArticles({ navigation }: NavProp) {
     slug: savedArticles[uuid].slug,
     published_at: savedArticles[uuid].date,
   }));
-
+  const { isDarkMode, toggleTheme } = useTheme();
+  const containerStyle = isDarkMode ? darkStyles : baseStyles;
+  const textStyle = isDarkMode ? darkModeText : text;
   return (
-    <SafeAreaView style={[baseStyles.container, { flex: 1 }]}>
-      <View style={[baseStyles.container, { flex: 1 }]}>
-        <Text style={{ ...text.sectionHeader1, paddingBottom: 15 }}>
+    <SafeAreaView style={[containerStyle.container, { flex: 1 }]}>
+      <View style={[containerStyle.container, { flex: 1 }]}>
+        <Text style={{ ...textStyle.sectionHeader1, paddingBottom: 15 }}>
           Saved Articles
         </Text>
         <View style={{ flex: 1 }}>

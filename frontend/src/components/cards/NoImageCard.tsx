@@ -7,7 +7,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { CardProps } from "src/types/navStacks";
-import { darkModeBackgroundColor, darkModeTextColor, font1, font3, varGray1, varTextColor } from "../../styles/styles";
+import { darkModeBackgroundColor, darkModeBgColorStd, darkModeTextColor, font1, font3, varGray1, varTextColor } from "../../styles/styles";
 import { formatDates } from "../../utils/formatDates";
 import { useTheme } from "../ThemeContext";
 
@@ -181,7 +181,7 @@ const darkStyles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "stretch",
     borderWidth: 0,
-    backgroundColor: darkModeBackgroundColor,
+    backgroundColor: darkModeBgColorStd,
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,
