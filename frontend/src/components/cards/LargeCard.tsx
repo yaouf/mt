@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import React from "react"; // Added import for React.Fragment
 import { Tag } from "src/types/data";
 import { CardProps } from "src/types/navStacks";
 import {
@@ -86,7 +87,49 @@ function LargeCard({ article, navigation }: CardProps) {
               {article.subhead}
             </Text>
             <View style={styles.bottom}>
-              <View style={styles.authorLine}>
+              <View style={styles.authorContainer}>
+
+                
+                <View style={styles.authorLine}>
+                  <Text style={styles.published}>By </Text>
+                  
+                  {article.authors.map((author, i) => {
+                    const lastIndex = article.authors.length - 1;
+                    
+                    if (i > 0 && i < lastIndex) {
+                      return (
+                        <React.Fragment key={author.slug}>
+                          <Text style={styles.published}>, </Text>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate("Staff", {slug: author.slug})}
+                          >
+                            <Text style={styles.authorName}>{author.name}</Text>
+                          </TouchableOpacity>
+                        </React.Fragment>
+                      );
+                    } else if (i === lastIndex && i !== 0) {
+                      return (
+                        <React.Fragment key={author.slug}>
+                          <Text style={styles.published}> and </Text>
+                          <TouchableOpacity
+                            onPress={() => navigation.navigate("Staff", {slug: author.slug})}
+                          >
+                            <Text style={styles.authorName}>{author.name}</Text>
+                          </TouchableOpacity>
+                        </React.Fragment>
+                      );
+                    } else {
+                      return (
+                        <TouchableOpacity
+                          key={author.slug}
+                          onPress={() => navigation.navigate("Staff", {slug: author.slug})}
+                        >
+                          <Text style={styles.authorName}>{author.name}</Text>
+                        </TouchableOpacity>
+                      );
+                    }
+                  })}
+                </View>
                 <Text
                   style={styles.published}
                   accessibilityLabel={`Published on ${formatDates(
@@ -95,34 +138,6 @@ function LargeCard({ article, navigation }: CardProps) {
                 >
                   {formatDates(article.published_at)}
                 </Text>
-              <View style={styles.authorLine}>
-                  <Text style={styles.published}>By</Text>
-                  {article.authors.map((author, i) => {
-                    const lastIndex = article.authors.length - 1;
-                    let separator = "";
-
-                    if (i > 0 && i < lastIndex) {
-                      separator = ", ";
-                    } else if (i === lastIndex && i !== 0) {
-                      separator = "and ";
-                    } else {
-                      separator = " ";
-                    }
-                    return (
-                      <View key={author.slug} style={styles.authorWrapper}>
-                        <Text style={styles.published}>{separator}</Text>
-
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate("Staff", { slug: author.slug })
-                          }
-                        >
-                          <Text style={styles.authorName}>{author.name}</Text>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  })}
-                </View>
               </View>
             </View>
           </View>
@@ -135,6 +150,11 @@ function LargeCard({ article, navigation }: CardProps) {
 export default LargeCard;
 
 const styles = StyleSheet.create({
+  authorContainer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 4,
+  },
   title: {
     alignSelf: "stretch",
     color: varTextColor,
@@ -255,7 +275,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    gap: 4,
   },
   authorWrapper: {
     flexDirection: "row",
