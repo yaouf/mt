@@ -79,8 +79,10 @@ function Search({ navigation }: NavProp) {
     trackEvent('search', { text });
     try {
       let queryUrl = 'https://www.browndailyherald.com/search.json?a=1';
-      if (searchType === 'Writer' || searchType === 'Photographer') {
-        queryUrl += `&au=${text}`;
+      if (searchType === 'Writer') {
+        queryUrl += `&au=${text}&ty=article`;
+      } else if (searchType == 'Photographer') {
+        queryUrl += `&au=${text}&ty=media`;
       } else if (searchType === 'Article') {
         queryUrl += `&s=${text}&ty=article`;
       }
@@ -225,18 +227,6 @@ function Search({ navigation }: NavProp) {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-        {/* <TouchableOpacity
-          onPress={() => navigation.push("FilterScreen")}
-          accessibilityLabel="Open filter drawer"
-        >
-          <MaterialIcons
-            name="tune"
-            size={20}
-            color={varGray1}
-            style={styles.searchIcon}
-            accessible={false}
-          />
-        </TouchableOpacity> */}
         <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
           <MaterialIcons
             name="search"

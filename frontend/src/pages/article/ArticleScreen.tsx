@@ -32,6 +32,8 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(article.uuid in savedArticles);
 
+  console.log(article);
+
   useEffect(() => {
     trackEvent('article', {
       uuid: route.params.data.uuid,
@@ -101,7 +103,7 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
             <View style={baseStyles.container}>
               <View style={articleStyles.headingContainer}>
                 <Text selectable style={articleStyles.title}>
-                  {article.headline}
+                  {article.headline ? article.headline : article.title}
                 </Text>
                 {article.subhead ? (
                   <Text selectable style={articleStyles.lead}>
@@ -120,7 +122,7 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                 />
               </View>
 
-              {article.dominantMedia.authors && (
+              {article.dominantMedia?.authors && (
                 <View>
                   <Image
                     source={{
@@ -187,7 +189,7 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                           <TouchableOpacity
                             key={i}
                             onPress={() =>
-                              navigation.navigate("Staff", {
+                              navigation.navigate('Staff', {
                                 slug: author.slug,
                               })
                             }
@@ -206,16 +208,13 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
 
                   {/* Author names and date column */}
                   <View style={[articleStyles.authorTextContainer, { flexShrink: 1 }]}>
-                    <Text style={[articleStyles.author, {flexWrap: 'wrap' }]}>
+                    <Text style={[articleStyles.author, { flexWrap: 'wrap' }]}>
                       {article.authors.map((author, i) => (
                         <TouchableOpacity
                           key={author.slug}
                           onPress={() => {
-                            console.log(
-                              "Navigating to Staff with slug:",
-                              author.slug
-                            );
-                            navigation.navigate("Staff", { slug: author.slug });
+                            console.log('Navigating to Staff with slug:', author.slug);
+                            navigation.navigate('Staff', { slug: author.slug });
                           }}
                           accessible={true}
                           accessibilityHint="View Author's Profile"
@@ -238,7 +237,17 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                 </View>
               </View>
 
-              <SplitArticle content={article.content} />
+              {article.headline ? (
+                <SplitArticle content={article.content} />
+              ) : (
+                <Image
+                  source={{
+                    uri: `https://snworksceo.imgix.net/bdh/${article.attachment_uuid}.sized-1000x1000.${article.extension}`,
+                  }}
+                  style={articleStyles.image}
+                  accessibilityLabel="Article Image"
+                />
+              )}
             </View>
             <View style={{ height: 80 }}></View>
           </ScrollView>

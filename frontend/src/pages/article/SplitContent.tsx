@@ -93,14 +93,6 @@ function SplitArticle({ content }: SplitArticleType) {
         tagName: 'div',
         contentModel: HTMLContentModel.block,
       }),
-      img: HTMLElementModel.fromCustomModel({
-        tagName: 'img',
-        mixedUAStyles: {
-          maxWidth: '100%',
-          height: 'auto',
-        },
-        contentModel: HTMLContentModel.inline,
-      }),
     }),
     []
   );
