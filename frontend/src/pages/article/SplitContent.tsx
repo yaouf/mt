@@ -142,6 +142,7 @@ function SplitArticle({ content }: SplitArticleType) {
             </View>
           );
         } else if (isLiveHeader) {
+          console.log(tnode.value);
           return (
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
               <props.TDefaultRenderer
@@ -150,13 +151,6 @@ function SplitArticle({ content }: SplitArticleType) {
                 // contentWidth={300}
                 customHTMLElementModels={customHTMLElementModels}
                 renderers={renderers}
-                // customStyles={{
-                //   img: {
-                //     width: 100,
-                //     height: 100,
-                //     // objectFit: 'contain',
-                //   },
-                // }}
               />
             </View>
           );
@@ -176,6 +170,7 @@ function SplitArticle({ content }: SplitArticleType) {
     }),
     []
   );
+
   const renderersProps = useMemo(
     () => ({
       a: {
@@ -210,7 +205,9 @@ function SplitArticle({ content }: SplitArticleType) {
       if (section.includes('What you need to know:')) {
         return `<div class="live-update">${section}</div>`;
       } else if (section.includes('<div class="live-entry"')) {
-        return `<div class="live-container">${section}</div>`;
+        const noImagesInLiveEntry = section.replace(/<img[^>]*>/g, '');
+        return `<div class="live-container">${noImagesInLiveEntry}</div>`;
+        // return `<div class="live-container">${section}</div>`;
       }
       if (section.includes('<img')) {
         return `<div class="header-container">${section}</div>`;
