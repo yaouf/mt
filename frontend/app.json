@@ -2,7 +2,7 @@
   "expo": {
     "name": "BDH",
     "slug": "push-notif",
-    "version": "1.2.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
@@ -19,8 +19,12 @@
         "CFBundleURLTypes": [
           {
             "CFBundleURLSchemes": ["browndailyherald"]
+          },
+          {
+            "CFBundleURLSchemes": ["browndailyherald"]
           }
-        ]
+        ],
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {

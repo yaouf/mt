@@ -81,7 +81,7 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
               </View>
             </View>
 
-            {author.bio !== '' && (
+            {author.bio && author.bio !== '' && (
               <View accessible={true}>
                 <Divider marginTop={0} marginBottom={8} />
                 <Text

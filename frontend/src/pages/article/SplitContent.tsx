@@ -2,16 +2,22 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 // import {
 //   BannerAd,
 //   BannerAdSize,
 //   TestIds,
 // } from "react-native-google-mobile-ads";
-import { HTMLContentModel, HTMLElementModel, RenderHTML } from 'react-native-render-html';
+import {
+  HTMLContentModel,
+  HTMLElementModel,
+  MixedStyleDeclaration,
+  RenderHTML,
+} from 'react-native-render-html';
 import WebView from 'react-native-webview';
 import { fetchArticle } from 'src/api/fetchContent';
-import { articleStyles } from 'src/styles/article';
+import { articleStyles, fontsizeHeader } from 'src/styles/article';
+import { font2, varTextSecondaryColor } from 'src/styles/styles';
 import { Article } from 'src/types/data';
 
 // const adUnitId = __DEV__
@@ -83,6 +89,10 @@ function SplitArticle({ content }: SplitArticleType) {
         mixedUAStyles: articleStyles.hyperlink,
         contentModel: HTMLContentModel.textual,
       }),
+      div: HTMLElementModel.fromCustomModel({
+        tagName: 'div',
+        contentModel: HTMLContentModel.block,
+      }),
     }),
     []
   );
@@ -115,7 +125,57 @@ function SplitArticle({ content }: SplitArticleType) {
     [navigation]
   );
 
-  const renderers = useMemo(() => ({ iframe: IframeRenderer }), []);
+  const renderers = useMemo(
+    () => ({
+      iframe: IframeRenderer,
+      div: (props) => {
+        const { tnode } = props;
+        const isLiveUpdate = tnode.classes?.includes('live-update');
+        const isLiveHeader = tnode.classes?.includes('header-container');
+        const isLiveEntry = tnode.classes?.includes('live-container');
+        // console.log(tnode);
+        if (isLiveUpdate) {
+          return (
+            <View style={styles.liveUpdateContainer}>
+              {/* <Text style={styles.liveLabel}>LIVE UPDATE</Text> */}
+              <props.TDefaultRenderer {...props} />
+            </View>
+          );
+        } else if (isLiveHeader) {
+          return (
+            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
+              <props.TDefaultRenderer
+                {...props}
+                source={{ html: tnode.value }}
+                // contentWidth={300}
+                customHTMLElementModels={customHTMLElementModels}
+                renderers={renderers}
+                // customStyles={{
+                //   img: {
+                //     width: 100,
+                //     height: 100,
+                //     // objectFit: 'contain',
+                //   },
+                // }}
+              />
+            </View>
+          );
+        }
+        // else if (isLiveEntry) {
+        //   return (
+        //     <View style={styles.liveEntryContainer}>
+        //       <View style={styles.liveEntryHeader}>
+        //         <Text style={styles.liveLabel}>LIVE ENTRY</Text>
+        //       </View>
+        //       <props.TDefaultRenderer {...props} />
+        //     </View>
+        //   );
+        // }
+        return <props.TDefaultRenderer {...props} />;
+      },
+    }),
+    []
+  );
   const renderersProps = useMemo(
     () => ({
       a: {
@@ -136,9 +196,27 @@ function SplitArticle({ content }: SplitArticleType) {
     const firstAdPosition = 5; // First ad after the 5th paragraph
 
     // Insert placeholders for ads
-    for (let i = firstAdPosition; i < split.length; i += adFrequency + 1) {
-      split.splice(i, 0, '<!-- ADVERTISEMENT_PLACEHOLDER -->');
-    }
+    // for (let i = firstAdPosition; i < split.length; i += adFrequency + 1) {
+    //   split.splice(i, 0, '<!-- ADVERTISEMENT_PLACEHOLDER -->');
+    // }
+
+    if (!source.html.includes('live-entry')) return split;
+
+    const liveEntryRegex =
+      /(<div class="live-entry"[^>]*>.*?\.\s*<\/div>\s*<\/div>|<p>.*?Live coverage by:*.?<\/p>|<div[^>].*?<i><b.*?>What you need to know:.*?<\/div>)/gs;
+
+    split = source.html.split(liveEntryRegex).map((section) => {
+      console.log(section);
+      if (section.includes('What you need to know:')) {
+        return `<div class="live-update">${section}</div>`;
+      } else if (section.includes('<div class="live-entry"')) {
+        return `<div class="live-container">${section}</div>`;
+      }
+      if (section.includes('<img')) {
+        return `<div class="header-container">${section}</div>`;
+      }
+      return section;
+    });
 
     return split;
   }, [source.html]);
@@ -174,7 +252,7 @@ function SplitArticle({ content }: SplitArticleType) {
               source={{ html: paragraph + '\n' }}
               baseStyle={articleStyles.text}
               customHTMLElementModels={customHTMLElementModels}
-              enableCSSInlineProcessing={true}
+              enableCSSInlineProcessing={false}
               renderers={renderers}
               renderersProps={renderersProps}
               GenericPressable={View}
@@ -192,6 +270,30 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: 10,
   },
+  liveUpdateContainer: {
+    backgroundColor: '#efefef',
+    padding: 10,
+    marginVertical: 8,
+    borderRadius: 4,
+  },
+  liveLabel: {
+    color: '#EC2027',
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  liveEntryHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+  },
+  liveEntryContainer: {
+    backgroundColor: '#fef2f2',
+    padding: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: '#EC2027',
+    marginVertical: 8,
+    borderRadius: 4,
+  },
 });
 
-export default React.memo(SplitArticle);
+export default SplitArticle;

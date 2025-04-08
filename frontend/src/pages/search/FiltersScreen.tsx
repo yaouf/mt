@@ -67,7 +67,7 @@ function FiltersScreen({ route, navigation }) {
           style={styles.optionContainer}
           onPress={() => setSearchMode('Photographer')}
         >
-          <Text style={[styles.optionText, { paddingBottom: 10 }]}>Photographer</Text>
+          <Text style={[styles.optionText, { paddingBottom: 10 }]}>Photographer / Illustrator</Text>
           <View
             style={[styles.radioCircle, searchMode === 'Photographer' ? styles.selected : {}]}
           />
