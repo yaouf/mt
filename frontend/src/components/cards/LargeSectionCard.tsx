@@ -5,44 +5,47 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   View,
-} from "react-native";
-import { Tag } from "src/types/data";
-import { CardProps } from "src/types/navStacks";
-import {
-  font1,
-  font2,
-  font3,
-  varGray1,
-  varTextColor,
-} from "../../styles/styles";
-import { formatDates } from "../../utils/formatDates";
+} from 'react-native';
+import { Tag } from 'src/types/data';
+import { CardProps } from 'src/types/navStacks';
+import { font1, font2, font3, varGray1, varPink, varTextColor } from '../../styles/styles';
+import { formatDates } from '../../utils/formatDates';
 
-function LargeCard({ article, navigation }: CardProps) {
+function LargeCard({ article, navigation, inSearch }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
+  const section = all_tags[0].replace('&;', '&');
 
   for (let i = 0; i < all_tags.length; i++) {
-    if (all_tags[i] == "breaking") {
+    if (all_tags[i] == 'breaking') {
       breaking = true;
     }
   }
 
   let img_uri =
-    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+    'https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png';
   if (article.dominantMedia) {
     img_uri =
-      "https://snworksceo.imgix.net/bdh/" +
+      'https://snworksceo.imgix.net/bdh/' +
       article.dominantMedia.attachment_uuid +
-      ".sized-1000x1000." +
+      '.sized-1000x1000.' +
       article.dominantMedia.extension;
   }
 
   return (
     <View>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.push("Article", { data: article })}
-      >
-        <View style={styles.card}>
+      <TouchableWithoutFeedback onPress={() => navigation.push('Article', { data: article })}>
+        <View
+          style={[
+            styles.card,
+            section == 'post- magazine' &&
+              !inSearch && {
+                backgroundColor: varPink,
+                padding: '5%',
+                borderRadius: 15,
+              },
+          ]}
+        >
           <Image
             source={{
               uri: img_uri,
@@ -56,17 +59,18 @@ function LargeCard({ article, navigation }: CardProps) {
             </Text>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
-
                 <View style={styles.authorLine}>
                   <Text style={styles.published}>By </Text>
                   {article.authors.map((author, i) => {
                     const lastIndex = article.authors.length - 1;
-                    let separator = "";
+                    let separator = '';
 
                     if (i > 0 && i < lastIndex) {
-                      separator = ", ";
+                      separator = ', ';
                     } else if (i === lastIndex && i !== 0) {
-                      separator = " and ";
+                      separator = ' and ';
+                    } else {
+                      separator = ' ';
                     }
 
                     return (
@@ -74,9 +78,7 @@ function LargeCard({ article, navigation }: CardProps) {
                         <Text style={styles.published}>{separator}</Text>
 
                         <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate("Staff", { slug: author.slug })
-                          }
+                          onPress={() => navigation.navigate('Staff', { slug: author.slug })}
                         >
                           <Text style={styles.authorName}>{author.name}</Text>
                         </TouchableOpacity>
@@ -84,9 +86,7 @@ function LargeCard({ article, navigation }: CardProps) {
                     );
                   })}
                 </View>
-                <Text style={styles.published}>
-                  {formatDates(article.published_at)}
-                </Text>
+                <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
           </View>
@@ -100,33 +100,33 @@ export default LargeCard;
 
 const styles = StyleSheet.create({
   title: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 22,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     lineHeight: 28,
     marginBottom: 8,
   },
   subhead: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 18,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 22,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 12,
   },
   card: {
-    display: "flex",
-    width: "100%",
+    display: 'flex',
+    width: '100%',
     paddingBottom: 8,
-    flexDirection: "column",
-    alignItems: "stretch",
+    flexDirection: 'column',
+    alignItems: 'stretch',
     borderRadius: 0,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,
@@ -136,51 +136,51 @@ const styles = StyleSheet.create({
     // shadowRadius: 29.949,
     // elevation: 3,
     marginTop: 16,
-    overflow: "visible",
+    overflow: 'visible',
     // marginVertical: 12,
   },
   published: {
     color: varGray1,
     fontFamily: font3,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "500",
+    fontStyle: 'normal',
+    fontWeight: '500',
     /* line-height: normal; */
   },
   image: {
-    backgroundColor: "#C9C9C9",
-    display: "flex",
+    backgroundColor: '#C9C9C9',
+    display: 'flex',
     height: 250,
-    width: "100%",
+    width: '100%',
     paddingTop: 59.893,
     paddingBottom: 58.055,
     paddingHorizontal: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "stretch",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'stretch',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
   },
   text: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     paddingTop: 12,
     paddingBottom: 8,
     paddingHorizontal: 0,
-    alignItems: "flex-start",
-    alignSelf: "stretch",
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
     gap: 4,
   },
   bottom: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
   },
   publishedSection: {
-    display: "flex",
-    alignItems: "flex-start",
+    display: 'flex',
+    alignItems: 'flex-start',
     gap: 4,
   },
   options: {
@@ -188,39 +188,39 @@ const styles = StyleSheet.create({
     height: 23.959,
   },
   breaking: {
-    color: "#FFF",
+    color: '#FFF',
     fontFamily: font2,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "600",
+    fontStyle: 'normal',
+    fontWeight: '600',
     // line-height: normal;
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   breakingBox: {
-    display: "flex",
+    display: 'flex',
     paddingVertical: 6,
     paddingHorizontal: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 0.661,
-    borderStyle: "solid",
-    borderColor: "#ED1C24",
-    backgroundColor: "#ED1C24",
+    borderStyle: 'solid',
+    borderColor: '#ED1C24',
+    backgroundColor: '#ED1C24',
   },
   authorLine: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   authorWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   authorName: {
-    color: "grey",
+    color: 'grey',
     fontFamily: font3,
     fontSize: 14,
-    fontWeight: "900",
-    fontStyle: "normal",
+    fontWeight: '900',
+    fontStyle: 'normal',
   },
 });

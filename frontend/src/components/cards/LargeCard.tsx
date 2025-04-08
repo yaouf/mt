@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react"; // Added import for React.Fragment
+import React from "react"; 
 import { Tag } from "src/types/data";
 import { CardProps } from "src/types/navStacks";
 import {
@@ -24,25 +24,25 @@ function LargeCard({ article, navigation }: CardProps) {
   let breaking = false;
 
   for (let i = 0; i < all_tags.length; i++) {
-    if (all_tags[i] == "breaking") {
+    if (all_tags[i] == 'breaking') {
       breaking = true;
     }
   }
 
   let img_uri =
-    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+    'https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png';
   if (article.dominantMedia) {
     img_uri =
-      "https://snworksceo.imgix.net/bdh/" +
+      'https://snworksceo.imgix.net/bdh/' +
       article.dominantMedia.attachment_uuid +
-      ".sized-1000x1000." +
+      '.sized-1000x1000.' +
       article.dominantMedia.extension;
   }
 
   return (
     <View>
       <TouchableWithoutFeedback
-        onPress={() => navigation.push("Article", { data: article })}
+        onPress={() => navigation.push('Article', { data: article })}
         accessibilityRole="button"
         accessibilityHint={`Double tap to open article`}
       >
@@ -55,27 +55,18 @@ function LargeCard({ article, navigation }: CardProps) {
           />
           <View style={styles.text}>
             {breaking ? (
-              <View
-                style={styles.breakingBox}
-                accessibilityLabel="Section: Breaking News."
-              >
+              <View style={styles.breakingBox} accessibilityLabel="Section: Breaking News.">
                 <Text style={styles.breaking}>Breaking News</Text>
               </View>
             ) : (
               <Text
                 style={styles.section}
-                accessibilityLabel={`Section: ${all_tags[0].replace(
-                  "&;",
-                  "&"
-                )}.`}
+                accessibilityLabel={`Section: ${all_tags[0].replace('&;', '&')}.`}
               >
-                {all_tags[0].replace("&;", "&")}
+                {all_tags[0].replace('&;', '&')}
               </Text>
             )}
-            <Text
-              style={styles.title}
-              accessibilityLabel={`Headline: ${article.headline}.`}
-            >
+            <Text style={styles.title} accessibilityLabel={`Headline: ${article.headline}.`}>
               {article.headline}
             </Text>
             <Text
@@ -139,6 +130,12 @@ function LargeCard({ article, navigation }: CardProps) {
                   {formatDates(article.published_at)}
                 </Text>
               </View>
+              <Text
+                style={styles.published}
+                accessibilityLabel={`Published on ${formatDates(article.published_at)}`}
+              >
+                {formatDates(article.published_at)}
+              </Text>
             </View>
           </View>
         </View>
@@ -156,33 +153,33 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   title: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 22,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     lineHeight: 28,
     marginBottom: 8,
   },
   subhead: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 18,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 22,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 12,
   },
   card: {
-    display: "flex",
-    width: "100%",
+    display: 'flex',
+    width: '100%',
     paddingBottom: 0,
-    flexDirection: "column",
-    alignItems: "stretch",
+    flexDirection: 'column',
+    alignItems: 'stretch',
     borderRadius: 0,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,
@@ -192,59 +189,59 @@ const styles = StyleSheet.create({
     // shadowRadius: 29.949,
     // elevation: 3,
     marginTop: 16,
-    overflow: "visible",
+    overflow: 'visible',
     // marginVertical: 12,
   },
   section: {
     color: varRed,
     fontFamily: font3,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     /* lineHeight: 'normal',*/
   },
   published: {
     color: varGray1,
     fontFamily: font3,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "500",
+    fontStyle: 'normal',
+    fontWeight: '500',
     /* line-height: normal; */
   },
   image: {
-    backgroundColor: "#C9C9C9",
-    display: "flex",
+    backgroundColor: '#C9C9C9',
+    display: 'flex',
     height: 250,
-    width: "100%",
+    width: '100%',
     paddingTop: 59.893,
     paddingBottom: 58.055,
     paddingHorizontal: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    alignSelf: "stretch",
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'stretch',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
   },
   text: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     paddingTop: 12,
     paddingBottom: 8,
     paddingHorizontal: 0,
-    alignItems: "flex-start",
-    alignSelf: "stretch",
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
     gap: 4,
   },
   bottom: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "flex-start",
-    alignSelf: "stretch",
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    alignSelf: 'stretch',
   },
   publishedSection: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     gap: 4,
   },
   options: {
@@ -252,39 +249,40 @@ const styles = StyleSheet.create({
     height: 23.959,
   },
   breaking: {
-    color: "#FFF",
+    color: '#FFF',
     fontFamily: font2,
     fontSize: 14,
-    fontStyle: "normal",
-    fontWeight: "600",
+    fontStyle: 'normal',
+    fontWeight: '600',
     // line-height: normal;
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   breakingBox: {
-    display: "flex",
+    display: 'flex',
     paddingVertical: 6,
     paddingHorizontal: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 0.661,
-    borderStyle: "solid",
-    borderColor: "#ED1C24",
-    backgroundColor: "#ED1C24",
+    borderStyle: 'solid',
+    borderColor: '#ED1C24',
+    backgroundColor: '#ED1C24',
   },
   authorLine: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: 4,
   },
   authorWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   authorName: {
-    color: "grey",
+    color: 'grey',
     fontFamily: font3,
     fontSize: 14,
-    fontWeight: "900",
-    fontStyle: "normal",
+    fontWeight: '900',
+    fontStyle: 'normal',
   },
 });

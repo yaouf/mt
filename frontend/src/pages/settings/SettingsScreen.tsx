@@ -1,14 +1,14 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useContext, useEffect } from "react";
-import { ScrollView, Text, View } from "react-native";
-import Divider from "src/components/Divider";
-import NotifToggle from "src/components/NotifToggle";
-import { settings } from "src/styles/pages";
-import { baseStyles, font2, text, varTextColor } from "src/styles/styles";
-import { NavProp } from "src/types/navStacks";
-import { NotificationContext } from "./NotificationProvider";
-import SavedArticlesPreview from "./SavedArticlesPreview";
-import SettingsLink from "./SettingsLink";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useContext, useEffect } from 'react';
+import { ScrollView, Text, View } from 'react-native';
+import Divider from 'src/components/Divider';
+import NotifToggle from 'src/components/NotifToggle';
+import { settings } from 'src/styles/pages';
+import { baseStyles, font2, text, varTextColor } from 'src/styles/styles';
+import { NavProp } from 'src/types/navStacks';
+import { NotificationContext } from './NotificationProvider';
+import SavedArticlesPreview from './SavedArticlesPreview';
+import SettingsLink from './SettingsLink';
 
 /**
  * Page for settings
@@ -47,7 +47,7 @@ function SettingsScreen({ navigation }: NavProp) {
   useEffect(() => {
     // TODO 1: maybe do these checks before loading notif components?
     // log all react context
-    console.log("react context in settings screen", {
+    console.log('react context in settings screen', {
       breaking,
       universityNews,
       metro,
@@ -58,7 +58,7 @@ function SettingsScreen({ navigation }: NavProp) {
     });
     const load = async () => {
       console.log(
-        "notification settings in settings screen",
+        'notification settings in settings screen',
         systemPermissionStatus,
         breaking,
         universityNews,
@@ -70,57 +70,79 @@ function SettingsScreen({ navigation }: NavProp) {
       );
 
       try {
-        const breakingNotifs = await AsyncStorage.getItem("breakingNotifs");
-        console.log("Calling setState in settings screen with value", breakingNotifs === "true", "for breakingNotifs");
-        setBreaking(breakingNotifs === "true");
-        console.log("breakingNotifs", breakingNotifs);
-
-        const universityNewsNotifs = await AsyncStorage.getItem(
-          "universityNewsNotifs"
+        const breakingNotifs = await AsyncStorage.getItem('breakingNotifs');
+        console.log(
+          'Calling setState in settings screen with value',
+          breakingNotifs === 'true',
+          'for breakingNotifs'
         );
-        console.log("Calling setState in settings screen with value", universityNewsNotifs === "true", "for universityNewsNotifs");
-        setUniversityNews(universityNewsNotifs === "true");
-        console.log("universityNewsNotifs", universityNewsNotifs);
+        setBreaking(breakingNotifs === 'true');
+        console.log('breakingNotifs', breakingNotifs);
 
-        const metroNotifs = await AsyncStorage.getItem("metroNotifs");
-        console.log("Calling setState in settings screen with value", metroNotifs === "true", "for metroNotifs");
-        setMetro(metroNotifs === "true");
-        console.log("metroNotifs", metroNotifs);
-
-        const sportsNotifs = await AsyncStorage.getItem("sportsNotifs");
-        console.log("Calling setState in settings screen with value", sportsNotifs === "true", "for sportsNotifs");
-        setSports(sportsNotifs === "true");
-        console.log("sportsNotifs", sportsNotifs);
-
-        const artsAndCultureNotifs = await AsyncStorage.getItem(
-          "artsAndCultureNotifs"
+        const universityNewsNotifs = await AsyncStorage.getItem('universityNewsNotifs');
+        console.log(
+          'Calling setState in settings screen with value',
+          universityNewsNotifs === 'true',
+          'for universityNewsNotifs'
         );
-        console.log("Calling setState in settings screen with value", artsAndCultureNotifs === "true", "for artsAndCultureNotifs");
-        setArtsAndCulture(artsAndCultureNotifs === "true");
-        console.log("artsAndCultureNotifs", artsAndCultureNotifs);
+        setUniversityNews(universityNewsNotifs === 'true');
+        console.log('universityNewsNotifs', universityNewsNotifs);
 
-        const scienceAndResearchNotifs = await AsyncStorage.getItem(
-          "scienceAndResearchNotifs"
+        const metroNotifs = await AsyncStorage.getItem('metroNotifs');
+        console.log(
+          'Calling setState in settings screen with value',
+          metroNotifs === 'true',
+          'for metroNotifs'
         );
-        console.log("Calling setState in settings screen with value", scienceAndResearchNotifs === "true", "for scienceAndResearchNotifs");
-        setScienceAndResearch(scienceAndResearchNotifs === "true");
-        console.log("scienceAndResearchNotifs", scienceAndResearchNotifs);
+        setMetro(metroNotifs === 'true');
+        console.log('metroNotifs', metroNotifs);
 
-        const opinionsNotifs = await AsyncStorage.getItem("opinionsNotifs");
-        console.log("Calling setState in settings screen with value", opinionsNotifs === "true", "for opinionsNotifs");
-        setOpinions(opinionsNotifs === "true");
-        console.log("opinionsNotifs", opinionsNotifs);
+        const sportsNotifs = await AsyncStorage.getItem('sportsNotifs');
+        console.log(
+          'Calling setState in settings screen with value',
+          sportsNotifs === 'true',
+          'for sportsNotifs'
+        );
+        setSports(sportsNotifs === 'true');
+        console.log('sportsNotifs', sportsNotifs);
 
-        const id = await AsyncStorage.getItem("deviceID");
+        const artsAndCultureNotifs = await AsyncStorage.getItem('artsAndCultureNotifs');
+        console.log(
+          'Calling setState in settings screen with value',
+          artsAndCultureNotifs === 'true',
+          'for artsAndCultureNotifs'
+        );
+        setArtsAndCulture(artsAndCultureNotifs === 'true');
+        console.log('artsAndCultureNotifs', artsAndCultureNotifs);
+
+        const scienceAndResearchNotifs = await AsyncStorage.getItem('scienceAndResearchNotifs');
+        console.log(
+          'Calling setState in settings screen with value',
+          scienceAndResearchNotifs === 'true',
+          'for scienceAndResearchNotifs'
+        );
+        setScienceAndResearch(scienceAndResearchNotifs === 'true');
+        console.log('scienceAndResearchNotifs', scienceAndResearchNotifs);
+
+        const opinionsNotifs = await AsyncStorage.getItem('opinionsNotifs');
+        console.log(
+          'Calling setState in settings screen with value',
+          opinionsNotifs === 'true',
+          'for opinionsNotifs'
+        );
+        setOpinions(opinionsNotifs === 'true');
+        console.log('opinionsNotifs', opinionsNotifs);
+
+        const id = await AsyncStorage.getItem('deviceID');
         // FIXME: why is this null first time?
-        console.log("this is the device id in the settingsscreen", id);
+        console.log('this is the device id in the settingsscreen', id);
         if (id) {
           setDeviceID(id);
         } else {
-          console.log("Device ID is not being set in settings screen");
+          console.log('Device ID is not being set in settings screen');
         }
         // TODO: if deviceID is null or "", go to onboarding screen
-        console.log("Device ID from context in settings before update:", deviceID);
+        console.log('Device ID from context in settings before update:', deviceID);
 
         checkPermissions(); // Check system permissions everytime app loads
       } catch (err) {
@@ -135,43 +157,43 @@ function SettingsScreen({ navigation }: NavProp) {
     // { id: 1, title: "Manage Account", link: "" }, // TODO: once make accounts and stuff, addd this
     {
       id: 2,
-      title: "Report a Bug",
-      link: "https://docs.google.com/forms/d/1elxuyYjd2ApaVcOmxDiCEvAkzURuOwMjVB_WeMfjyNg/edit",
+      title: 'Report a Bug',
+      link: 'https://docs.google.com/forms/d/1elxuyYjd2ApaVcOmxDiCEvAkzURuOwMjVB_WeMfjyNg/edit',
     }, // TODO: add link
     {
       id: 3,
-      title: "Contact Us",
-      link: "https://www.browndailyherald.com/page/contact", // TODO: might want to add a mobile team email here
+      title: 'Contact Us',
+      link: 'https://www.browndailyherald.com/page/contact', // TODO: might want to add a mobile team email here
     },
     {
       id: 4,
-      title: "Privacy Policy",
-      link: "https://www.browndailyherald.com/page/privacy",
+      title: 'Privacy Policy',
+      link: 'https://www.browndailyherald.com/page/privacy',
     },
   ];
 
   const links = [
-    { id: 1, title: "Website", link: "https://www.browndailyherald.com/" },
+    { id: 1, title: 'Website', link: 'https://www.browndailyherald.com/' },
     {
       id: 2,
-      title: "Instagram",
-      link: "https://www.instagram.com/browndailyherald/",
+      title: 'Instagram',
+      link: 'https://www.instagram.com/browndailyherald/',
     },
-    { id: 3, title: "Twitter", link: "https://x.com/the_herald" },
+    { id: 3, title: 'Twitter', link: 'https://x.com/the_herald' },
     {
       id: 4,
-      title: "Facebook",
-      link: "https://www.facebook.com/browndailyherald",
+      title: 'Facebook',
+      link: 'https://www.facebook.com/browndailyherald',
     },
     {
       id: 5,
-      title: "Submit a Tip",
-      link: "https://www.browndailyherald.com/page/submit",
+      title: 'Submit a Tip',
+      link: 'https://www.browndailyherald.com/page/submit',
     },
     {
       id: 6,
-      title: "Donate",
-      link: "https://secure.lglforms.com/form_engine/s/JydyLYLlWAfeK0wrZwuLgg",
+      title: 'Donate',
+      link: 'https://secure.lglforms.com/form_engine/s/JydyLYLlWAfeK0wrZwuLgg',
     },
   ];
 
@@ -248,10 +270,7 @@ function SettingsScreen({ navigation }: NavProp) {
           Support
         </Text>
         {support.map((link, i) => (
-          <View
-            key={`support-${i}`}
-            style={{ paddingHorizontal: 4, marginBottom: 12 }}
-          >
+          <View key={`support-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
             <SettingsLink title={link.title} link={link.link} />
           </View>
         ))}
@@ -268,10 +287,7 @@ function SettingsScreen({ navigation }: NavProp) {
           More BDH
         </Text>
         {links.map((link, i) => (
-          <View
-            key={`more-bdh-${i}`}
-            style={{ paddingHorizontal: 4, marginBottom: 12 }}
-          >
+          <View key={`more-bdh-${i}`} style={{ paddingHorizontal: 4, marginBottom: 12 }}>
             <SettingsLink title={link.title} link={link.link} />
           </View>
         ))}
@@ -290,7 +306,7 @@ function SettingsScreen({ navigation }: NavProp) {
         <View style={{ paddingHorizontal: 4 }}>
           <SettingsLink
             title="Development Team"
-            link={"DevTeam"}
+            link={'DevTeam'}
             inApp={true}
             navigation={navigation}
           />

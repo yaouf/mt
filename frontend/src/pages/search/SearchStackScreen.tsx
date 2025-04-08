@@ -1,8 +1,8 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import { SearchStackProps } from "src/types/navStacks";
-import ArticleScreen from "../article/ArticleScreen";
-import FiltersScreen from "./FiltersScreen";
-import SearchScreen from "./SearchScreen";
+import { createStackNavigator } from '@react-navigation/stack';
+import { SearchStackProps } from 'src/types/navStacks';
+import ArticleScreen from '../article/ArticleScreen';
+import FiltersScreen from './FiltersScreen';
+import SearchScreen from './SearchScreen';
 
 const SearchStack = createStackNavigator<SearchStackProps>();
 
@@ -22,7 +22,7 @@ function SearchStackScreen() {
       <SearchStack.Screen
         name="FiltersScreen"
         component={FiltersScreen}
-        options={{ headerShown: false, title: "Filters" }}
+        options={{ headerShown: false, title: 'Filters' }}
       />
     </SearchStack.Navigator>
   );

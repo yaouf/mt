@@ -5,56 +5,78 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   View,
-} from "react-native";
-import { CardProps } from "src/types/navStacks";
-import { font1, font3, varGray1, varTextColor } from "../../styles/styles";
-import { formatDates } from "../../utils/formatDates";
+} from 'react-native';
+import { CardProps } from 'src/types/navStacks';
+import { font1, font3, varGray1, varPink, varTextColor } from '../../styles/styles';
+import { formatDates } from '../../utils/formatDates';
+import { Tag } from 'src/types/data';
+import { useEffect } from 'react';
 
-function ImageCard({ article, navigation }: CardProps) {
+function ImageCard({ article, navigation, inSearch }: CardProps) {
+  const all_tags = article.tags?.map((t: Tag) => t.name);
+  const section = all_tags ? all_tags[0].replace('&;', '&') : '';
+
   let img_uri =
-    "https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png";
+    'https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png';
   if (article.dominantMedia) {
     img_uri =
-      "https://snworksceo.imgix.net/bdh/" +
+      'https://snworksceo.imgix.net/bdh/' +
       article.dominantMedia.attachment_uuid +
-      ".sized-1000x1000." +
+      '.sized-1000x1000.' +
       article.dominantMedia.extension;
   }
 
   return (
     <View>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.push("Article", { data: article })}
-      >
-        <View style={styles.card}>
+      <TouchableWithoutFeedback onPress={() => navigation.push('Article', { data: article })}>
+        <View
+          style={[
+            styles.card,
+            section == 'post- magazine' &&
+              !inSearch && {
+                backgroundColor: varPink,
+                padding: '5%',
+                borderRadius: 15,
+              },
+          ]}
+        >
           <View style={styles.content}>
             <View style={styles.imageWrapper}>
-              <Image
-                source={{
-                  uri: img_uri,
-                }}
-                style={styles.image}
-              />
+              {article.dominantMedia && article.dominantMedia.attachment_uuid ? (
+                <Image
+                  source={{
+                    uri: img_uri,
+                  }}
+                  style={styles.image}
+                />
+              ) : (
+                <Image
+                  source={require('../../../assets/post-logo.png')}
+                  style={{
+                    width: 80,
+                    height: 35,
+                    alignSelf: 'center',
+                  }}
+                />
+              )}
             </View>
             <View style={styles.text}>
               <View style={styles.innerText}>
-                <Text
-                  style={styles.title}
-                  numberOfLines={4}
-                  ellipsizeMode="tail"
-                >
-                  {article.headline}
+                <Text style={styles.title} numberOfLines={4} ellipsizeMode="tail">
+                  {article.headline ? article.headline : article.title}
                 </Text>
-              <View style={styles.authorLine}>
-                  <Text style={styles.published}>By </Text>
+                <View style={styles.authorLine}>
+                  <Text style={styles.published}>By</Text>
                   {article.authors.map((author, i) => {
                     const lastIndex = article.authors.length - 1;
-                    let separator = "";
+                    let separator = '';
 
                     if (i > 0 && i < lastIndex) {
-                      separator = ", ";
+                      separator = ', ';
                     } else if (i === lastIndex && i !== 0) {
-                      separator = " and ";
+                      separator = ' and ';
+                    } else {
+                      separator = ' ';
                     }
 
                     return (
@@ -62,9 +84,7 @@ function ImageCard({ article, navigation }: CardProps) {
                         <Text style={styles.published}>{separator}</Text>
 
                         <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate("Staff", { slug: author.slug })
-                          }
+                          onPress={() => navigation.navigate('Staff', { slug: author.slug })}
                         >
                           <Text style={styles.authorName}>{author.name}</Text>
                         </TouchableOpacity>
@@ -72,9 +92,7 @@ function ImageCard({ article, navigation }: CardProps) {
                     );
                   })}
                 </View>
-                <Text style={styles.published}>
-                  {formatDates(article.published_at)}
-                </Text>
+                <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
           </View>
@@ -88,13 +106,13 @@ export default ImageCard;
 
 const styles = StyleSheet.create({
   card: {
-    display: "flex",
+    display: 'flex',
     // width: 358,
-    width: "100%",
-    flexDirection: "column",
+    width: '100%',
+    flexDirection: 'column',
     flexShrink: 0,
     borderRadius: 0,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     // shadowColor: varTextColor,
     // shadowOffset: {
     //   width: 0,
@@ -102,13 +120,13 @@ const styles = StyleSheet.create({
     // },
     // shadowOpacity: 0.08,
     // shadowRadius: 29.949,
-    overflow: "visible",
+    overflow: 'visible',
   },
   content: {
-    display: "flex",
-    flexDirection: "row",
+    display: 'flex',
+    flexDirection: 'row',
     gap: 16,
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
   },
   imageWrapper: {
     // paddingTop: 35.893,
@@ -123,26 +141,26 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 3,
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
   },
   innerText: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-start",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     gap: 4,
     flexGrow: 1,
     flexShrink: 0,
     flexBasis: 0,
   },
   subhead: {
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     color: varTextColor,
     fontFamily: font1,
     fontSize: 18,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 22,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 12,
   },
 
@@ -150,26 +168,26 @@ const styles = StyleSheet.create({
     color: varGray1,
     fontFamily: font3,
     fontSize: 10,
-    fontStyle: "normal",
-    fontWeight: "500",
+    fontStyle: 'normal',
+    fontWeight: '500',
     // lineHeight: 1,
   },
   title: {
-    alignSelf: "stretch",
-    overflow: "hidden",
-    flexWrap: "nowrap",
+    alignSelf: 'stretch',
+    overflow: 'hidden',
+    flexWrap: 'nowrap',
     fontFamily: font1,
     fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: "700",
+    fontStyle: 'normal',
+    fontWeight: '700',
     lineHeight: 18,
   },
   published: {
     color: varGray1,
     fontFamily: font3,
     fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "500",
+    fontStyle: 'normal',
+    fontWeight: '500',
     // lineHeight: "normal";
   },
   options: {
@@ -178,19 +196,19 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   authorLine: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    alignItems: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   authorWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   authorName: {
-    color: "grey",
+    color: 'grey',
     fontFamily: font3,
     fontSize: 12,
-    fontStyle: "normal",
-    fontWeight: "900",
+    fontStyle: 'normal',
+    fontWeight: '900',
   },
 });

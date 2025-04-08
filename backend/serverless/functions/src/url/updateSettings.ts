@@ -1,12 +1,13 @@
 import * as logger from "firebase-functions/logger";
 import { onRequest } from "firebase-functions/v2/https";
 import Joi from "joi";
+import { Knex } from "knex";
 import db from "../../../db/dist/data/db-config";
 import { validateApiKey, validateUuidV4 } from "../utils";
 
 /**
  * Updates the settings for a device.
- * Takes a deviceId and an object with the keys "Breaking News", "University News", "Metro", and "isPushEnabled"
+ * Takes a deviceId and an object with category preferences and isPushEnabled
  * and their corresponding boolean values to update to.
  * Called when a user changes their push notification settings in the app.
  */
@@ -66,37 +67,6 @@ export const updateSettings = onRequest(async (request, response) => {
     const scienceAndResearch = validBody["Science and Research"];
     const isPushEnabled = validBody["isPushEnabled"];
 
-    // Define the type of updateData
-    type UpdateData = {
-      "Breaking News"?: boolean;
-      "University News"?: boolean;
-      Metro?: boolean;
-      Opinions?: boolean;
-      "Arts and Culture"?: boolean;
-      Sports?: boolean;
-      "Science and Research"?: boolean;
-      isPushEnabled?: boolean;
-    };
-
-    // Construct update object based on what's provided in the request body
-    // TODO: Code would be a lot cleaner if columns were camel case
-    const updateData: UpdateData = {
-      ...(breakingNews !== undefined ? { "Breaking News": breakingNews } : {}),
-      ...(universityNews !== undefined
-        ? { "University News": universityNews }
-        : {}),
-      ...(metro !== undefined ? { Metro: metro } : {}),
-      ...(opinions !== undefined ? { Opinions: opinions } : {}),
-      ...(artsAndCulture !== undefined
-        ? { "Arts and Culture": artsAndCulture }
-        : {}),
-      ...(sports !== undefined ? { Sports: sports } : {}),
-      ...(scienceAndResearch !== undefined
-        ? { "Science and Research": scienceAndResearch }
-        : {}),
-      ...(isPushEnabled !== undefined ? { isPushEnabled: isPushEnabled } : {}),
-    };
-
     // Get the device ID from the request body
     const deviceId = validBody.deviceId;
 
@@ -114,17 +84,85 @@ export const updateSettings = onRequest(async (request, response) => {
       return;
     }
 
-    // Update device settings in device table
-    const res = await db("devices").where("id", deviceId).update(updateData);
+    // Get all category IDs for later use
+    const categories = await db("categories").select("id", "name");
+    const categoryMap = new Map(
+      categories.map((cat: { id: number; name: string }) => [cat.name, cat.id])
+    );
 
-    await db.destroy();
+    // Begin transaction to ensure all updates are atomic
+    await db.transaction(async (trx: Knex.Transaction) => {
+      // Update is_push_enabled if provided
+      if (isPushEnabled !== undefined) {
+        await trx("devices")
+          .where("id", deviceId)
+          .update({ is_push_enabled: isPushEnabled });
+      }
 
-    // log the result of the update
-    logger.info(res);
-    // Log the result of update - For logging purposes, might query again or just log the update was successful
+      // Handle category preferences updates
+      const categoryUpdates = [
+        { name: "Breaking News", value: breakingNews },
+        { name: "University News", value: universityNews },
+        { name: "Metro", value: metro },
+        { name: "Opinions", value: opinions },
+        { name: "Arts and Culture", value: artsAndCulture },
+        { name: "Sports", value: sports },
+        { name: "Science and Research", value: scienceAndResearch },
+      ];
+
+      // Get current preferences
+      const currentPreferences = await trx("device_preferences")
+        .where("device_id", deviceId)
+        .join("categories", "device_preferences.category_id", "categories.id")
+        .select("categories.name", "categories.id");
+
+      const currentPreferenceMap = new Map(
+        currentPreferences.map((pref: { name: string; id: number }) => [
+          pref.name,
+          pref.id,
+        ])
+      );
+
+      // Process each category update
+      for (const update of categoryUpdates) {
+        if (update.value === undefined) continue;
+
+        const categoryId = categoryMap.get(update.name);
+        if (!categoryId) continue;
+
+        const hasPreference = currentPreferenceMap.has(update.name);
+
+        if (update.value && !hasPreference) {
+          // Add preference
+          await trx("device_preferences").insert({
+            device_id: deviceId,
+            category_id: categoryId,
+          });
+        } else if (!update.value && hasPreference) {
+          // Remove preference
+          await trx("device_preferences")
+            .where({
+              device_id: deviceId,
+              category_id: categoryId,
+            })
+            .delete();
+        }
+      }
+    });
+
+    // Log the result of update
     logger.info("Device settings updated for deviceId: ", {
       deviceId,
-      updates: updateData,
+      updates: {
+        "Breaking News": breakingNews,
+        "University News": universityNews,
+        Metro: metro,
+        Opinions: opinions,
+        "Arts and Culture": artsAndCulture,
+        Sports: sports,
+        "Science and Research": scienceAndResearch,
+        is_push_enabled: isPushEnabled,
+      },
     });
 
     response.send("Settings updated!");

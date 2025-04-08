@@ -1,6 +1,6 @@
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Dispatch, SetStateAction } from "react";
-import { Article } from "./data";
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Dispatch, SetStateAction } from 'react';
+import { Article } from './data';
 
 /**
  * format is the name of the screens used in that stack
@@ -56,6 +56,7 @@ export type NavProp = {
 export type CardProps = {
   article: Article;
   navigation: StackNavigationProp<any, any>;
+  inSearch: boolean;
 };
 
 // for sections (like on home page)

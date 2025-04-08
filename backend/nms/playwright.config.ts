@@ -10,6 +10,6 @@ export default defineConfig({
   },
   use: {
     headless: true, // Run tests in headful mode
-    baseURL: 'http://localhost:3000/'
+    baseURL: 'http://localhost:3000/',
   },
 });

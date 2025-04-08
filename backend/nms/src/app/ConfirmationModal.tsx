@@ -1,5 +1,3 @@
-import React from "react";
-
 interface ConfirmModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -7,12 +5,7 @@ interface ConfirmModalProps {
   message: string;
 }
 
-const ConfirmationModal: React.FC<ConfirmModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  message,
-}) => {
+function ConfirmationModal({ isOpen, onClose, onConfirm, message }: ConfirmModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -21,10 +14,7 @@ const ConfirmationModal: React.FC<ConfirmModalProps> = ({
         <h2 className="text-xl font-bold mb-4">Confirm Action</h2>
         <p className="mb-6">{message}</p>
         <div className="flex justify-end">
-          <button
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2"
-            onClick={onClose}
-          >
+          <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md mr-2" onClick={onClose}>
             Cancel
           </button>
           <button
@@ -40,6 +30,6 @@ const ConfirmationModal: React.FC<ConfirmModalProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default ConfirmationModal;

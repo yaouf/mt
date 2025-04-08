@@ -17,29 +17,14 @@ export function formatDates(publishedAt: string) {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-    timeZoneName: 'short'
+    timeZoneName: 'short',
   };
 
   // Format the localDate to the required string format
   const formattedDate = localDate.toLocaleDateString(undefined, options);
 
   return formattedDate;
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
 
 export function shortFormatDates(publishedAt: string) {
   const publishedDate = new Date(publishedAt);
@@ -55,7 +40,7 @@ export function shortFormatDates(publishedAt: string) {
   if (timeDifference < oneDay) {
     let hour = publishedDate.getHours();
     const minute = publishedDate.getMinutes();
-    const ampm = hour >= 12 ? "pm" : "am";
+    const ampm = hour >= 12 ? 'pm' : 'am';
     const formattedHour = hour % 12 || 12; // Convert to 12-hour format
     const formattedMinute = minute.toString().padStart(2, '0');
 
@@ -63,7 +48,20 @@ export function shortFormatDates(publishedAt: string) {
   }
 
   // Otherwise, return formatted date
-  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
   const month = monthNames[publishedDate.getMonth()];
   const day = publishedDate.getDate();
 

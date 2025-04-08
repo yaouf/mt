@@ -1,6 +1,6 @@
-import BottomActionBar from "src/components/common/BottomActionBar";
-import { StaffDetailProps } from "src/types/other";
-import { shareArticle } from "../article/ShareArticle";
+import BottomActionBar from 'src/components/common/BottomActionBar';
+import { StaffDetailProps } from 'src/types/other';
+import { shareArticle } from '../article/ShareArticle';
 
 /**
  * action bar at the bottom of the staff page
