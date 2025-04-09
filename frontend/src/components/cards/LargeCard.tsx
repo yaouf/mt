@@ -78,9 +78,7 @@ function LargeCard({ article, navigation }: CardProps) {
               {article.subhead}
             </Text>
             <View style={styles.bottom}>
-              <View style={styles.authorContainer}>
-
-                
+              <View style={styles.publishedSection}>
                 <View style={styles.authorLine}>
                   <Text style={styles.published}>By </Text>
                   
@@ -120,6 +118,7 @@ function LargeCard({ article, navigation }: CardProps) {
                       );
                     }
                   })}
+                  <Text style={styles.published}>{formatDates(article.published_at)}</Text>
                 </View>
                 <Text
                   style={styles.published}
@@ -130,12 +129,6 @@ function LargeCard({ article, navigation }: CardProps) {
                   {formatDates(article.published_at)}
                 </Text>
               </View>
-              <Text
-                style={styles.published}
-                accessibilityLabel={`Published on ${formatDates(article.published_at)}`}
-              >
-                {formatDates(article.published_at)}
-              </Text>
             </View>
           </View>
         </View>

@@ -107,6 +107,7 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
                     article={article}
                     navigation={navigation}
                     key={`sports-home-${i + 2}`}
+                    inSearch={true}
                   />
                 ))}
               </View>
