@@ -32,8 +32,6 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
   const [saved, setSaved] = useState<boolean>(article.uuid in savedArticles);
 
-  console.log(article);
-
   useEffect(() => {
     trackEvent('article', {
       uuid: route.params.data.uuid,
