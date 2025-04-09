@@ -198,7 +198,7 @@ function SplitArticle({ content }: SplitArticleType) {
               <Image source={{ uri: header.image }} style={articleStyles.authorImage} />
             </View>
           )}
-          <View style={[articleStyles.authorTextContainer, { flexShrink: 1 }]}>
+          <View style={[articleStyles.authorTextContainer, { flexShrink: 1, width: '60%' }]}>
             {header.name && header.slug && (
               <TouchableOpacity
                 key={header.slug}
@@ -227,7 +227,9 @@ function SplitArticle({ content }: SplitArticleType) {
           </View>
           {header.date && (
             <View style={(articleStyles.publishedDetails, styles.liveEntryHeaderPublished)}>
-              <Text style={articleStyles.publishedDetailsText}>{header.date}</Text>
+              <Text style={[articleStyles.publishedDetailsText, { fontSize: 12 }]}>
+                {header.date}
+              </Text>
             </View>
           )}
         </View>
@@ -473,7 +475,8 @@ const styles = StyleSheet.create({
     gap: 4,
     alignSelf: 'flex-start',
     justifyContent: 'center',
-    width: '30%',
+    // width: '25%',
+    paddingLeft: 10,
   },
   bylineStyle: {
     fontStyle: 'italic',
