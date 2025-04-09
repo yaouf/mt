@@ -473,6 +473,7 @@ const styles = StyleSheet.create({
     gap: 4,
     alignSelf: 'flex-start',
     justifyContent: 'center',
+    width: '30%',
   },
   bylineStyle: {
     fontStyle: 'italic',
