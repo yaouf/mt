@@ -18,6 +18,19 @@ type Notification = {
   is_uid?: boolean;
 };
 
+/**
+ * Retrieves notifications from the database.
+ *
+ * @param req - The API request object. Accepts a `jobId` query parameter to fetch a specific notification.
+ * @param res - The API response object that returns either a list of notifications, a single notification, or an error message.
+ *
+ * @remarks
+ * - If `jobId` is provided, the API will return a single notification with its associated categories.
+ * - If `jobId` is not provided, all notifications will be returned, ordered by time (descending).
+ * - Categories are aggregated as comma-separated strings and returned as `tags` in the response.
+ *
+ * @returns A JSON response with either a list of notifications, a single notification, or an error message.
+ */
 async function getNotificationHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData | Notification[]>
@@ -85,6 +98,16 @@ async function getNotificationHelper(
     res.status(500).json({ message: 'Internal server error.' });
   }
 }
+
+/**
+ * API route handler for fetching notifications.
+ * Applies CORS and authentication middleware before retrieving notification data.
+ *
+ * @param req - The API request object.
+ * @param res - The API response object.
+ *
+ * @returns Executes `getNotificationHelper` after applying CORS and authentication.
+ */
 export default async function getNotification(
   req: NextApiRequest,
   res: NextApiResponse<Notification[] | ResponseData>

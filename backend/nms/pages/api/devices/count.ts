@@ -8,6 +8,21 @@ type ResponseData = {
   message?: string;
 };
 
+/**
+ * Retrieves the count of devices from the database, filtered based on the optional `search` query.
+ *
+ * @param req - The incoming API request object from Next.js.
+ * @param res - The API response object used to return the device count or error.
+ *
+ * @remarks
+ * - If no `search` query is provided, it returns the total number of devices.
+ * - If `search` is:
+ *   - `"isPushEnabled"`: Counts distinct devices with push enabled and associated preferences.
+ *   - `"is_push_enabled"`: Counts devices with push enabled.
+ *   - A category name (string): Counts devices in that category with push enabled.
+ *
+ * @returns A JSON response with the device `count`, or an error message on failure.
+ */
 async function getDeviceCountHelper(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   try {
     const search = req.query.search ? (req.query.search as string) : '';
@@ -16,7 +31,6 @@ async function getDeviceCountHelper(req: NextApiRequest, res: NextApiResponse<Re
     if (search !== '') {
       if (search === 'isPushEnabled') {
         // Count all devices that have at least one category enabled and push notifications enabled
-        // This combines both approaches - using the new schema with device_preferences
         result = await db('devices')
           .countDistinct('devices.id as count')
           .join('device_preferences', 'devices.id', 'device_preferences.device_id')
@@ -51,6 +65,15 @@ async function getDeviceCountHelper(req: NextApiRequest, res: NextApiResponse<Re
   }
 }
 
+/**
+ * API route handler for fetching device count.
+ * Applies CORS middleware and authentication before executing the main logic.
+ *
+ * @param req - The incoming Next.js API request object.
+ * @param res - The Next.js API response object.
+ *
+ * @returns Executes the getDeviceCountHelper function after passing CORS and auth checks.
+ */
 export default async function getDeviceCount(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
