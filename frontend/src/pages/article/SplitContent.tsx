@@ -149,6 +149,7 @@ function SplitArticle({ content }: SplitArticleType) {
         const isLiveEntry = tnode.classes?.includes('live-container');
         const isByline = tnode.classes?.includes('byline');
         if (isLiveUpdate) {
+          console.log('hello there');
           return (
             <View style={styles.liveUpdateContainer}>
               {/* <Text style={styles.liveLabel}>LIVE UPDATE</Text> */}
@@ -169,6 +170,46 @@ function SplitArticle({ content }: SplitArticleType) {
           return renderByline();
         }
         return <props.TDefaultRenderer {...props} />;
+      },
+      img: (props) => {
+        const { tnode } = props;
+        const src = tnode.attributes?.src;
+
+        // Check if parent is <a> with href
+        const parentLink = tnode.parent?.tagName === 'a' ? tnode.parent.attributes?.href : null;
+
+        if (!src) return null;
+
+        if (parentLink) {
+          return (
+            <TouchableOpacity
+              onPress={() => handleLinkPress(null, parentLink)}
+              style={{ marginVertical: 10 }}
+              accessible={true}
+              accessibilityHint="View linked image content"
+            >
+              <Image
+                source={{ uri: src }}
+                style={{ width: '100%', height: 200, resizeMode: 'cover' }}
+              />
+            </TouchableOpacity>
+          );
+        }
+      },
+      ul: (props) => {
+        return <View style={{ paddingLeft: 20, marginVertical: 8 }}>{props.tnode.children}</View>;
+      },
+      li: (props) => {
+        return (
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }}>
+            <Text style={{ fontSize: 18, lineHeight: 24, paddingHorizontal: 5 }}>
+              {'\u2022' + ' '}
+            </Text>
+            <View style={{ flex: 1 }}>
+              <props.TDefaultRenderer {...props} />
+            </View>
+          </View>
+        );
       },
     }),
     [parsedHeaders]
@@ -311,7 +352,11 @@ function SplitArticle({ content }: SplitArticleType) {
     let headerCount = 0;
 
     split = source.html.split(liveEntryRegex).map((section) => {
-      if (section.includes('What you need to know:')) {
+      console.log(section);
+      if (
+        section.includes('What you need to know:') ||
+        section.includes('The latest of what you need to know:')
+      ) {
         return `<div class="live-update">${section}</div>`;
       } else if (section.includes('Live coverage by')) {
         parseByLine(section);
