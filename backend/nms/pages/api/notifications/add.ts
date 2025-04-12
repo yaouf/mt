@@ -3,13 +3,25 @@ import db from '../../../dist/data/db-config';
 import { notificationQueue } from '../queue/queue';
 import { Notification, NotificationId, ResponseData } from '../types/types';
 
+/**
+ * API route handler to add a new notification and schedule it in the notification queue.
+ *
+ * @param req - The API request object containing notification details in the request body.
+ * @param res - The API response object returning all notifications or an error message.
+ *
+ * @remarks
+ * - Required fields: `time`, `title`, `tags`, and `url`.
+ * - Tags must match existing categories in the `categories` table.
+ * - Notification is inserted into the `notifications` table with status `'pending'`.
+ * - A job is added to the `notificationQueue` to schedule sending based on the `time`.
+ * - Response includes all notifications with their categories.
+ */
 export default async function getNotification(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData | Notification[]>
 ) {
   try {
-    // Assuming the request body contains the notification data
-    // if a string, parse it
+    // Parse JSON body if it's a string
     let data: any;
     if (typeof req.body === 'string') {
       data = JSON.parse(req.body);
@@ -17,7 +29,6 @@ export default async function getNotification(
       data = req.body;
     }
 
-    // TODO: validate this automatically
     // Extract the notification data
     const time = data.time;
     const title = data.title;
@@ -28,7 +39,6 @@ export default async function getNotification(
 
     // Validate required fields
     if (!time || !title || !tags || !url) {
-      // Determine which field is missing
       console.log('Missing fields:', { time, title, tags, url });
       return res.status(400).json({ message: 'Missing fields.' });
     }
@@ -58,12 +68,11 @@ export default async function getNotification(
       return res.status(400).json({ message: `Invalid tags: ${missingTags.join(', ')}` });
     }
 
+    // Insert category relationships into notification_categories
     const notificationCategories = categories.map((category) => ({
       notification_id: notificationIdObject.id,
       category_id: category.id,
     }));
-
-    // Insert category relationships into notification_categories
     await db('notification_categories').insert(notificationCategories);
 
     // Schedule the notification using the queue
