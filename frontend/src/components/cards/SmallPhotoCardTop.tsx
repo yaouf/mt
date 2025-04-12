@@ -57,8 +57,8 @@ function LargeCard({ article, navigation }: CardProps) {
             </Text>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
-                <View style={styles.authorLine}>
-                  <Text style={styles.published}>By</Text>
+              <View style={styles.authorLine}>
+                  <Text style={styles.published}>By </Text>
                   {article.authors.map((author, i) => {
                     const lastIndex = article.authors.length - 1;
                     let separator = '';
@@ -70,6 +70,7 @@ function LargeCard({ article, navigation }: CardProps) {
                     } else {
                       separator = ' ';
                     }
+
                     return (
                       <View key={author.slug} style={styles.authorWrapper}>
                         <Text style={styles.published}>{separator}</Text>

@@ -55,31 +55,38 @@ function SmallCardTop({ article, navigation }: CardProps) {
             >
               {article.subhead}
             </Text>
-            <View style={styles.authorLine}>
-              <Text style={styles.published}>By</Text>
-              {article.authors.map((author, i) => {
-                const lastIndex = article.authors.length - 1;
-                let separator = '';
+              <View style={styles.authorLine}>
+                  <Text style={styles.published}>By </Text>
+                  {article.authors.map((author, i) => {
+                    const lastIndex = article.authors.length - 1;
+                    let separator = "";
 
-                if (i > 0 && i < lastIndex) {
-                  separator = ', ';
-                } else if (i === lastIndex && i !== 0) {
-                  separator = ' and ';
-                } else {
-                  separator = ' ';
-                }
-                return (
-                  <View key={author.slug} style={styles.authorWrapper}>
-                    <Text style={styles.published}>{separator}</Text>
+                    if (i > 0 && i < lastIndex) {
+                      separator = ", ";
+                    } else if (i === lastIndex && i !== 0) {
+                      separator = " and ";
+                    }
 
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('Staff', { slug: author.slug })}
-                    >
-                      <Text style={styles.authorName}>{author.name}</Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
+                    return (
+                      <View key={author.slug} style={styles.authorWrapper}>
+                        <Text style={styles.published}>{separator}</Text>
+
+                        <TouchableOpacity
+                          onPress={() =>
+                            navigation.navigate("Staff", { slug: author.slug })
+                          }
+                        >
+                          <Text style={styles.authorName}>{author.name}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
+                <Text style={styles.published}
+                accessibilityLabel={`Published on ${formatDates(article.published_at)}.`}
+              >
+                {formatDates(article.published_at)}
+              </Text>
             </View>
             <Text
               style={styles.published}

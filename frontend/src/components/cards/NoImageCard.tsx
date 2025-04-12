@@ -57,9 +57,8 @@ function NoImageCard({ article, navigation }: CardProps) {
                       separator = ", ";
                     } else if (i === lastIndex && i !== 0) {
                       separator = " and ";
-                    } else {
-                      separator = " ";
                     }
+
                     return (
                       <View key={author.slug} style={styles.authorWrapper}>
                         <Text style={styles.published}>{separator}</Text>
@@ -75,7 +74,7 @@ function NoImageCard({ article, navigation }: CardProps) {
                     );
                   })}
                 </View>
-              <Text style={styles.published}>
+                <Text style={styles.published}>
                 {formatDates(article.published_at)}
               </Text>
             </View>
