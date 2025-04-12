@@ -8,7 +8,12 @@ const connection = {
   port: 6379,
 };
 
-// Connect to a local Redis instance. For production, configure the connection accordingly.
+/**
+ * Creates a queue for managing notifications.
+ * This queue processes jobs related to sending push notifications.
+ * 
+ * For production, the Redis connection should be configured accordingly.
+ */
 const notificationQueue = new Queue('notificationQueue', {
   connection,
   defaultJobOptions: {
@@ -20,68 +25,63 @@ const notificationQueue = new Queue('notificationQueue', {
 });
 console.log('connected to queue');
 
+// Set global concurrency for the worker
 notificationQueue.setGlobalConcurrency(1);
 
-// Handle failures.
-
-// Send notifications to corresponding devices
+/**
+ * Worker for processing notification jobs.
+ * This worker listens for jobs in the 'notificationQueue' and sends push notifications to devices based on the data in the job.
+ */
 const worker = new Worker(
   'notificationQueue',
   async (job) => {
-    // This is the job data that was passed to `notificationQueue.add()`
+    // Destructure the job data
     const { time, title, body, tags, url, isUid, notificationId } = job.data;
-    // Fetch all devices that have subscribed to the tags
-    let expoPushTokens: Set<string> = new Set(); // Use a map with push token as key
+
+    // Set to store unique Expo push tokens
+    let expoPushTokens: Set<string> = new Set();
+
+    // Fetch devices that have subscribed to the tags associated with the notification
     for (let tag of tags) {
       const devices = (await db('devices')
         .select('devices.expo_push_token')
         .join('device_preferences', 'devices.id', 'device_preferences.device_id')
         .join('categories', 'device_preferences.category_id', 'categories.id')
         .where('categories.name', tag)) as DeviceToken[];
+
+      // Add push tokens to the set
       for (let device of devices) {
         expoPushTokens.add(device.expo_push_token);
       }
     }
 
+    // Convert the set of tokens to an array for further processing
     const tokensArray = Array.from(expoPushTokens);
-    // Send notifications to all devices
+
+    // Initialize Expo SDK for sending push notifications
+    const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
+
+    // Loop over each device token and send a notification
     tokensArray.forEach((token) => {
-      // Send the notification to the device
-      // console.log(`Sending notification to ${device.expoPushToken}`);
-
-      // Notifcation sending
-
-      // Initialize a new Expo SDK client with the provided access token
-      const expo = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN });
-
-      // Extract the Expo push tokens from the devices
-
-      // const somePushTokens: string[] = [device.expoPushToken]
-
-      // Create the messages that you want to send to clients
-      const pushToken = token;
-      if (!Expo.isExpoPushToken(pushToken)) {
-        console.error(`Push token ${pushToken} is not a valid Expo push token`);
+      if (!Expo.isExpoPushToken(token)) {
+        console.error(`Push token ${token} is not a valid Expo push token`);
         return;
       }
 
-      // Construct a push notification message for each valid push token
-
-      const messages: ExpoPushMessage[] = [];
-      messages.push({
-        to: pushToken,
+      // Prepare the push notification message
+      const messages: ExpoPushMessage[] = [{
+        to: token,
         sound: 'default',
         title: title,
         body: body,
         data: { url, isUid },
-      });
+      }];
 
-      // The Expo push notification service accepts batches of notifications so
-      // we use `chunkPushNotifications` to divide the array of messages into chunks
+      // Chunk the messages before sending (Expo's API limits the number of messages per request)
       const chunks = expo.chunkPushNotifications(messages);
       const tickets: ExpoPushTicket[] = [];
 
-      // Send the chunks to the Expo push notification service
+      // Send the push notification chunks to Expo service
       (async () => {
         for (const chunk of chunks) {
           try {
@@ -94,7 +94,7 @@ const worker = new Worker(
         }
       })();
 
-      // Create an array to store the receipt IDs for each notification
+      // Collect the receipt IDs from the tickets
       let receiptIds: string[] = [];
       for (let ticket of tickets) {
         if (ticket && 'id' in ticket) {
@@ -102,26 +102,20 @@ const worker = new Worker(
         }
       }
 
-      // Divide the receipt IDs into chunks
+      // Divide receipt IDs into chunks for querying receipt status
       let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
 
-      // Retrieve the receipts for each chunk of receipt IDs
+      // Fetch receipt statuses and handle any errors
       (async () => {
         for (let chunk of receiptIdChunks) {
           try {
             let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
-            // console.log(receipts);
-
-            // Handle the receipts to determine if the notifications were successfully sent
             for (let receiptId in receipts) {
               let { status, details } = receipts[receiptId];
               if (status === 'ok') {
                 continue;
               } else if (status === 'error') {
-                console.error(`There was an error sending a notification:`);
-                if (details && 'error' in details) {
-                  console.error(`The error code is ${details.error}`);
-                }
+                console.error(`Error sending notification: ${details?.error}`);
               }
             }
           } catch (error) {
@@ -131,13 +125,10 @@ const worker = new Worker(
       })();
     });
 
-    // Update notification status to "sent" in the database
+    // Update notification status in the database once the notification is sent
     try {
-      console.log('notificationId', notificationId);
       await db('notifications').where({ id: notificationId }).update({ status: 'sent' });
-      console.log(
-        `Notification with ID ${notificationId} at time ${time} successfully updated to status "sent"`
-      );
+      console.log(`Notification with ID ${notificationId} successfully updated to status "sent"`);
     } catch (error) {
       console.error('Error updating notification status:', error);
     }
@@ -145,14 +136,16 @@ const worker = new Worker(
   { connection }
 );
 
+// Handle job failures
 worker.on('failed', (job: Job, error: Error) => {
-  // Do something with the return value.
-  console.error('job with data : ', job.data, ' failed with error: ', error);
+  console.error('Job failed with error:', error);
+  console.error('Job data:', job.data);
 });
 
+// Handle worker errors
 worker.on('error', (err) => {
-  // log the error
-  console.error('worker failed with error', err);
+  console.error('Worker failed with error:', err);
 });
 
+// Export the queue and worker for external usage
 export { notificationQueue, worker };

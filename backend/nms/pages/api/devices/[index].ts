@@ -9,6 +9,22 @@ type ResponseData = {
   totalDevices?: number;
 };
 
+/**
+ * Retrieves a paginated and optionally filtered list of devices from the database.
+ * Applies a search filter on the `expo_push_token` field if provided in the query string.
+ * Also returns the total number of devices matching the search term.
+ *
+ * @param req - The incoming Next.js API request object.
+ * @param res - The Next.js API response object used to send the JSON response.
+ *
+ * @remarks
+ * - The following query parameters are supported:
+ *   - `search` (string): A keyword to filter devices by `expo_push_token`.
+ *   - `page` (number): The page index for pagination.
+ *   - `perPage` (number): Number of devices to return per page.
+ *
+ * @returns A JSON object with `totalDevices` and `devices` array, or an error message.
+ */
 async function getDevicesHelper(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   try {
     const search = req.query.search ? (req.query.search as string) : '';
@@ -62,6 +78,15 @@ async function getDevicesHelper(req: NextApiRequest, res: NextApiResponse<Respon
   }
 }
 
+/**
+ * API route handler for fetching devices.
+ * Applies CORS middleware and authentication before executing the main logic.
+ *
+ * @param req - The incoming Next.js API request object.
+ * @param res - The Next.js API response object.
+ *
+ * @returns Executes the getDevicesHelper function after passing CORS and auth checks.
+ */
 export default async function getDevices(req: NextApiRequest, res: NextApiResponse<ResponseData>) {
   corsMiddleware(req, res, async () => {
     await authMiddleware(req, res, getDevicesHelper);

@@ -12,6 +12,20 @@ type ResponseData =
   | EditorPick
   | EditorPick[];
 
+/**
+ * Inserts a new editor's pick into the `editors_picks` table.
+ * Automatically assigns a rank based on the current maximum rank in the table.
+ *
+ * @param req - The incoming Next.js API request object.
+ * @param res - The Next.js API response object used to return the created pick or an error.
+ *
+ * @remarks
+ * - Expects a JSON body with a `url` field representing the pick.
+ * - Parses the body if sent as a string.
+ * - Ranks are incremented based on the highest existing rank.
+ *
+ * @returns A JSON object representing the newly created `EditorPick`, or an error message.
+ */
 async function addEditorPickHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData | EditorPick>
@@ -49,6 +63,15 @@ async function addEditorPickHelper(
   }
 }
 
+/**
+ * API route handler for adding a new editor's pick.
+ * Applies CORS middleware and authentication before executing the insertion logic.
+ *
+ * @param req - The incoming API request object from Next.js.
+ * @param res - The API response object used to return the result.
+ *
+ * @returns Executes the addEditorPickHelper after passing CORS and authentication.
+ */
 export default async function addEditorPick(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
