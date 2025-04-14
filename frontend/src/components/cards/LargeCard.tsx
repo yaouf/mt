@@ -94,8 +94,8 @@ function LargeCard({ article, navigation }: CardProps) {
                       </View>
                     );
                   })}
-                  <Text style={styles.published}>{formatDates(article.published_at)}</Text>
                 </View>
+                <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
           </View>
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   publishedSection: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 4,
   },
   options: {

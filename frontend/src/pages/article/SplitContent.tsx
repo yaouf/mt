@@ -14,6 +14,7 @@ import {
   MixedStyleDeclaration,
   RenderHTML,
 } from 'react-native-render-html';
+import { TDefaultBlockRenderer } from 'react-native-render-html/lib/typescript/TNodeRenderer';
 import WebView from 'react-native-webview';
 import { fetchArticle } from 'src/api/fetchContent';
 import { articleStyles, fontsizeHeader } from 'src/styles/article';
@@ -149,7 +150,6 @@ function SplitArticle({ content }: SplitArticleType) {
         const isLiveEntry = tnode.classes?.includes('live-container');
         const isByline = tnode.classes?.includes('byline');
         if (isLiveUpdate) {
-          console.log('hello there');
           return (
             <View style={styles.liveUpdateContainer}>
               {/* <Text style={styles.liveLabel}>LIVE UPDATE</Text> */}
@@ -174,6 +174,7 @@ function SplitArticle({ content }: SplitArticleType) {
       img: (props) => {
         const { tnode } = props;
         const src = tnode.attributes?.src;
+        const height = tnode.attributes?.height;
 
         // Check if parent is <a> with href
         const parentLink = tnode.parent?.tagName === 'a' ? tnode.parent.attributes?.href : null;
@@ -190,9 +191,16 @@ function SplitArticle({ content }: SplitArticleType) {
             >
               <Image
                 source={{ uri: src }}
-                style={{ width: '100%', height: 200, resizeMode: 'cover' }}
+                style={{ width: '100%', height: height ? height : 200, resizeMode: 'cover' }}
               />
             </TouchableOpacity>
+          );
+        } else {
+          return (
+            <Image
+              source={{ uri: src }}
+              style={{ width: '100%', height: height ? height : 200, resizeMode: 'cover' }}
+            />
           );
         }
       },
@@ -333,7 +341,7 @@ function SplitArticle({ content }: SplitArticleType) {
   const splitContent = useMemo(() => {
     let split = source.html.split('\n');
     if (split.length === 1) {
-      split = source.html.split('</p><p>');
+      split = source.html.split('</p><p>').map((section) => '<p>' + section);
     }
 
     const adFrequency = 7; // Advertisement every 7 paragraphs after the first ad
@@ -352,7 +360,6 @@ function SplitArticle({ content }: SplitArticleType) {
     let headerCount = 0;
 
     split = source.html.split(liveEntryRegex).map((section) => {
-      console.log(section);
       if (
         section.includes('What you need to know:') ||
         section.includes('The latest of what you need to know:')

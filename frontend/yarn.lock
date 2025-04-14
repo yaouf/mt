@@ -841,7 +841,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-development@npm:^7.25.9":
+"@babel/plugin-transform-react-jsx-development@npm:^7.25.9":
   version: 7.25.9
   resolution: "@babel/plugin-transform-react-jsx-development@npm:7.25.9"
   dependencies:
