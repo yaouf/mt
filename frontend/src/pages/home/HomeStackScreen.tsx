@@ -17,6 +17,8 @@ import Staff from "../staff/Staff";
 import HomeScreen from "./HomeScreen";
 import HorizontalScrollMenu from "./menu/HorizontalScrollMenu";
 import SectionPrefScreen from "./menu/SectionPrefScreen";
+import { Animated } from "react-native";
+import { GestureHandlerRootView, PanGestureHandler, State} from 'react-native-gesture-handler';
 
 const HomeStack = createStackNavigator<HomeStackProps>();
 
@@ -72,60 +74,135 @@ function HomeStackScreen({ navigation, route }) {
     loadSectionsAsync();
   }, []);
 
+  const translateX = new Animated.Value(0);
+
+  const onGestureEvent = Animated.event(
+    [{ nativeEvent: { translationX: translateX } }],
+    { useNativeDriver: false }
+  );
+
+  const onHandlerStateChange = (event) => {
+    if (event.nativeEvent.state === State.END) {
+      const swipeThreshold = 100;
+      const currentIndex = sectionMenu.findIndex((item) => item.slug === currSection);
+
+      if (event.nativeEvent.translationX > swipeThreshold) {
+        setCurrSection(prevSection => {
+          const prevIndex = currentIndex - 1;
+          if (prevIndex >= 0) {
+            console.log(sectionMenu[prevIndex].slug)
+            navigation.navigate("Section", { slug: sectionMenu[prevIndex].slug });
+
+            Animated.spring(translateX, {
+              toValue: 0,
+              useNativeDriver: true,
+              friction: 10,
+            }).start();
+
+            console.log("X:")
+            console.log(translateX)
+
+            return sectionMenu[prevIndex].slug;
+          }
+          console.log(prevSection)
+          return prevSection;
+      });
+    } else if (event.nativeEvent.translationX < -swipeThreshold) {
+      setCurrSection((prevSection) => {
+        const nextIndex = currentIndex + 1;
+        if (nextIndex < sectionMenu.length) {
+          console.log(sectionMenu[nextIndex].slug)
+          navigation.navigate("Section", { slug: sectionMenu[nextIndex].slug });
+
+          Animated.spring(translateX, {
+            toValue: 0,
+            useNativeDriver: true,
+            friction: 10,
+          }).start();
+
+          console.log("X")
+          console.log(translateX)
+
+          return sectionMenu[nextIndex].slug;
+        }
+        console.log(prevSection)
+        return prevSection;
+      });
+    }
+
+    }
+  };
+
   return (
-    <MenuContext.Provider
-      value={{
-        original,
-        sectionMenu,
-        setSectionMenu,
-        currSection,
-        setCurrSection,
-      }}
+    <GestureHandlerRootView style={{ flex: 1 }}>
+    <PanGestureHandler
+      onGestureEvent={onGestureEvent}
+      onHandlerStateChange={onHandlerStateChange}
     >
-      <HomeStack.Navigator
-        initialRouteName="HomeScreen"
-        screenOptions={{
-          header: HorizontalScrollMenu,
-          headerStyle: {
-            height: 20,
-          },
-        }}
-      >
-        <HomeStack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{ headerShown: true }}
-        />
-        <HomeStack.Screen
-          name="Article"
-          component={ArticleScreen}
-          options={{
-            headerShown: false,
+      <Animated.View
+          style={{
+            flex: 1,
+            transform: [{ translateX }],
           }}
-        />
-        <HomeStack.Screen
-          name="SectionPref"
-          component={SectionPrefScreen}
-          options={{
-            headerShown: false,
+            >
+        <MenuContext.Provider
+          value={{
+            original,
+            sectionMenu,
+            setSectionMenu,
+            currSection,
+            setCurrSection,
           }}
-        />
-        <HomeStack.Screen
-          name="Section"
-          component={SectionsScreen}
-          options={{
-            headerShown: true,
-            gestureEnabled: false,
-            animationEnabled: false,
-          }}
-        />
-        <HomeStack.Screen
-          name="Staff"
-          component={Staff}
-          options={{ headerShown: false }}
-        />
-      </HomeStack.Navigator>
-    </MenuContext.Provider>
+        >
+          <HomeStack.Navigator
+            initialRouteName="HomeScreen"
+            screenOptions={{
+              header: HorizontalScrollMenu,
+              headerStyle: {
+                height: 20,
+                position: 'absolute',
+              },
+            }}
+          
+          >
+            <HomeStack.Screen
+              name="HomeScreen"
+              component={HomeScreen}
+              options={{ headerShown: true }}
+            />
+            <HomeStack.Screen
+              name="Article"
+              component={ArticleScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <HomeStack.Screen
+              name="SectionPref"
+              component={SectionPrefScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <HomeStack.Screen
+              name="Section"
+              component={SectionsScreen}
+              options={{
+                headerShown: true,
+                gestureEnabled: false,
+                animationEnabled: false,
+              }}
+            />
+            <HomeStack.Screen
+              name="Staff"
+              component={Staff}
+              options={{ headerShown: false }}
+            />
+          </HomeStack.Navigator>
+        </MenuContext.Provider>
+        </Animated.View>
+      </PanGestureHandler>
+    </GestureHandlerRootView>
   );
 }
 

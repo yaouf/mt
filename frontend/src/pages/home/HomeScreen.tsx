@@ -9,6 +9,7 @@ import { NavProp } from "src/types/navStacks";
 import OpinionsGroup from "./sections/OpinionsGroup";
 import SmallHorzGroup from "./sections/SmallHorzGroup";
 import Top from "./sections/Top";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export interface Section_Type {
   id: number;
@@ -140,23 +141,26 @@ function HomeScreen({ navigation }: NavProp) {
     },
   ];
 
+
   return (
-    <View onLayout={onLayoutRootView} accessibilityLabel="Home Screen">
-      <FlatList
-        ref={flatListRef}
-        data={sections}
-        renderItem={({ item }) => item.component}
-        keyExtractor={(item) => item.id.toString()}
-        ItemSeparatorComponent={() => (
-          <View style={{ marginHorizontal: 16 }}></View>
-        )}
-        initialNumToRender={1}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        accessibilityLabel="Section Headers List"
-      />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View onLayout={onLayoutRootView} accessibilityLabel="Home Screen">
+        <FlatList
+          ref={flatListRef}
+          data={sections}
+          renderItem={({ item }) => item.component}
+          keyExtractor={(item) => item.id.toString()}
+          ItemSeparatorComponent={() => (
+            <View style={{ marginHorizontal: 16 }}></View>
+          )}
+          initialNumToRender={1}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          accessibilityLabel="Section Headers List"
+        />
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
