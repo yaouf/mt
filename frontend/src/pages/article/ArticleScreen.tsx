@@ -211,68 +211,69 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                 </View>
               )}
               <View style={{ flexDirection: "column" }}>
-                {/* Combine author images and names in the same row, place bell icon on the right */}
+              {/* Combine author images and names in the same row, place bell icon on the right */}
+              <View
+                style={[
+                  articleStyles.authorRow,
+                  {
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 10,
+                  },
+                ]}
+              >
+                {/* Left side: images (if any) plus author/name/date */}
                 <View
-                  style={[
-                    articleStyles.authorRow,
-                    {
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      marginBottom: 10,
-                    },
-                  ]}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    flex: 1,
+                  }}
                 >
-                  {/* Left side: images (if any) plus author/name/date */}
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      flex: 1,
-                    }}
-                  >
-                    {article.authors.some((author) => {
-                      try {
-                        const metadata =
-                          typeof author.metadata === "string"
-                            ? JSON.parse(author.metadata)
-                            : author.metadata;
-                        return metadata && metadata.length > 0;
-                      } catch {
-                        return false;
-                      }
-                    }) && (
-                      <View style={articleStyles.authorImagesContainer}>
-                        {article.authors.map((author, i) => {
-                          let metadata = [];
-                          if (author.metadata) {
-                            try {
-                              metadata =
-                                typeof author.metadata === "string"
-                                  ? JSON.parse(author.metadata)
-                                  : author.metadata;
-                            } catch (error) {
-                              console.error(
-                                `Failed to parse metadata for author ${i}:`,
-                                error
-                              );
-                            }
+                  {article.authors.some((author) => {
+                    try {
+                      const metadata =
+                        typeof author.metadata === "string"
+                          ? JSON.parse(author.metadata)
+                          : author.metadata;
+                      return metadata && metadata.length > 0;
+                    } catch {
+                      return false;
+                    }
+                  }) && (
+                    <View style={[articleStyles.authorImagesContainer, { flexShrink: 1 }]}>
+                      {article.authors.map((author, i) => {
+                        let metadata = [];
+                        if (author.metadata) {
+                          try {
+                            metadata =
+                              typeof author.metadata === "string"
+                                ? JSON.parse(author.metadata)
+                                : author.metadata;
+                          } catch (error) {
+                            console.error(
+                              `Failed to parse metadata for author ${i}:`,
+                              error
+                            );
                           }
-                          const imageUri =
-                            metadata.length > 0 && metadata[0].value
-                              ? metadata[0].value
-                              : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
-                          return (
-                            <TouchableOpacity
+                        }
+            
+                        const imageUri =
+                          metadata.length > 0 && metadata[0].value
+                            ? metadata[0].value
+                            : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
+            
+                        return (
+                          <TouchableOpacity
                             key={i}
                             onPress={() =>
-                              navigation.navigate('Staff', {
+                              navigation.navigate("Staff", {
                                 slug: author.slug,
                               })
                             }
-                            >
+                          >
                             <Image
-                              key={i}
                               source={{ uri: imageUri }}
                               style={articleStyles.authorImage}
                               accessibilityLabel="Staff member's profile picture"
@@ -282,35 +283,36 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                       })}
                     </View>
                   )}
-
-                  {/* Author names and date column */}
-                  <View style={[articleStyles.authorTextContainer, { flexShrink: 1 }]}>
-                    <Text style={[articleStyles.author, { flexWrap: 'wrap' }]}>
-                      {article.authors.map((author, i) => (
-                        <TouchableOpacity
-                          key={author.slug}
-                          onPress={() => {
-                            console.log('Navigating to Staff with slug:', author.slug);
-                            navigation.navigate('Staff', { slug: author.slug });
-                          }}
-                          accessible={true}
-                          accessibilityHint="View Author's Profile"
-                        >
-                          <Text style={articleStyles.author}>
-                            {author.name}
-                            {i < article.authors.length - 1 ? ', ' : ''}
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </Text>
-                    <Text
-                      selectable
-                      style={articleStyles.publishedDetailsText}
-                      accessibilityLabel="Published Date"
-                    >
-                      {formatDates(article.published_at)}
-                    </Text>
-                  </View>
+                </View>
+            
+                {/* Author names and date column */}
+                <View style={[articleStyles.authorTextContainer, { flexShrink: 1 }]}>
+                  <Text style={[articleStyles.author, { flexWrap: "wrap" }]}>
+                    {article.authors.map((author, i) => (
+                      <TouchableOpacity
+                        key={author.slug}
+                        onPress={() => {
+                          console.log("Navigating to Staff with slug:", author.slug);
+                          navigation.navigate("Staff", { slug: author.slug });
+                        }}
+                        accessible={true}
+                        accessibilityHint="View Author's Profile"
+                      >
+                        <Text style={articleStyles.author}>
+                          {author.name}
+                          {i < article.authors.length - 1 ? ", " : ""}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </Text>
+                  <Text
+                    selectable
+                    style={articleStyles.publishedDetailsText}
+                    accessibilityLabel="Published Date"
+                  >
+                    {formatDates(article.published_at)}
+                  </Text>
+                </View>
 
                   {/* Right side: Bell icon */}
                   {article.authors &&
