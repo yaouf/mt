@@ -213,23 +213,11 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
               <View style={{ flexDirection: "column" }}>
               {/* Combine author images and names in the same row, place bell icon on the right */}
               <View
-                style={[
-                  articleStyles.authorRow,
-                  {
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    marginBottom: 10,
-                  },
-                ]}
+                style={{ flexDirection: 'column' }}
               >
                 {/* Left side: images (if any) plus author/name/date */}
                 <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    flex: 1,
-                  }}
+                  style={articleStyles.authorRow}
                 >
                   {article.authors.some((author) => {
                     try {
@@ -283,7 +271,7 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                       })}
                     </View>
                   )}
-                </View>
+                
             
                 {/* Author names and date column */}
                 <View style={[articleStyles.authorTextContainer, { flexShrink: 1 }]}>
@@ -337,6 +325,7 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                       </TouchableOpacity>
                     )}
                 </View>
+              </View>
               </View>
 
               {article.headline ? (

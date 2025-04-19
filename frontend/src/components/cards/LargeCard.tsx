@@ -118,9 +118,7 @@ function LargeCard({ article, navigation }: CardProps) {
                       );
                     }
                   })}
-                  <Text style={styles.published}>{formatDates(article.published_at)}</Text>
-                </View>
-                <Text
+                  <Text
                   style={styles.published}
                   accessibilityLabel={`Published on ${formatDates(
                     article.published_at
@@ -128,6 +126,7 @@ function LargeCard({ article, navigation }: CardProps) {
                 >
                   {formatDates(article.published_at)}
                 </Text>
+                </View>
               </View>
             </View>
           </View>
