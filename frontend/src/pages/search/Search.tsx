@@ -5,11 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import {
   Animated,
   FlatList,
+  Modal,
   RefreshControl,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { fetchEditorsPicks, fetchMostPopular } from "src/api/fetchContent";
@@ -20,6 +22,7 @@ import { varGray1, varTextColor } from "../../styles/styles";
 import { Section_Type } from "../home/HomeScreen";
 import EditorsPicks from "../home/sections/EditorsPicks";
 import MostPopular from "../home/sections/MostPopular";
+import SectionFilters from "./SectionFilters";
 
 // const { width: screenWidth } = Dimensions.get('window');
 
@@ -234,6 +237,45 @@ function Search({ navigation }: NavProp) {
     },
   ];
 
+  const [isSortVisible, setSortVisible] = useState(false);
+  const [sortOption, setSortOption] = useState(sortType);
+  const [isSectionVisible, setSectionVisible] = useState(false);
+  const [isTypeVisible, setTypeVisible] = useState(false);
+
+  const [searchMode, setSearchMode] = useState(searchType);
+    
+  const drawerAnim = useRef(new Animated.Value(100)).current;
+
+  useEffect(() => {
+    const shouldOpen = isSortVisible || isSectionVisible || isTypeVisible;
+    if (shouldOpen) {
+      Animated.timing(drawerAnim, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    } 
+    else {
+      Animated.timing(drawerAnim, {
+        toValue: 100,
+        duration: 100,
+        useNativeDriver: true,
+      }).start();
+    }
+  });
+
+  const closeDrawer = () => {
+    Animated.timing(drawerAnim, {
+      toValue: 500,
+      duration: 100,
+      useNativeDriver: true,
+    }).start(() => {
+      setSortVisible(false);
+      setSectionVisible(false);
+      setTypeVisible(false)
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -249,6 +291,7 @@ function Search({ navigation }: NavProp) {
             accessible={false}
           />
         </TouchableOpacity> */}
+        <View style={styles.searchBarContainer}>
         <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
           <MaterialIcons
             name="search"
@@ -268,7 +311,7 @@ function Search({ navigation }: NavProp) {
             accessibilityLabel="Search input"
             accessibilityHint="Enter keywords to search for articles"
           />
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate("FiltersScreen", {
                 searchType,
@@ -287,7 +330,7 @@ function Search({ navigation }: NavProp) {
               style={styles.searchIcon}
               accessible={false}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           {text.length > 0 && (
             <TouchableOpacity
               onPress={handleClearText}
@@ -307,6 +350,160 @@ function Search({ navigation }: NavProp) {
             <Text style={styles.cancelText}>Cancel</Text>
           </TouchableOpacity>
         )}
+        </View>
+        <View style={styles.filterButtons}>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setSortVisible(true)}
+            accessibilityLabel="Cancel search"
+            accessibilityHint="Clear search input and cancel search"
+            accessibilityRole="button"
+          >
+            <View style={styles.filterContent}>
+            <Text style={styles.filterText}>Sort</Text>
+            <Ionicons name="chevron-down-outline" size={22} color={varTextColor} />
+            </View>
+          </TouchableOpacity>
+          <Modal
+            transparent
+            animationType="fade"
+            visible={isSortVisible}
+            onRequestClose={() => setSortVisible(false)}
+          >
+            <TouchableWithoutFeedback onPress={() => closeDrawer()}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+            <Animated.View style={[styles.bottomDrawer, { transform: [{ translateY: drawerAnim }] }]}>
+              <View style={styles.drawerTop}>
+              <Text style={styles.drawerTitle}>Sort by</Text>
+                         </View>
+               <TouchableOpacity
+                        style={styles.optionContainer}
+                        onPress={() => setSortOption("date")}
+                      >
+                        <Text style={styles.optionText}>Date</Text>
+                        <View
+                          style={[
+                            styles.radioCircle,
+                            sortOption === "date" ? styles.selected : {},
+                          ]}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.optionContainer}
+                        onPress={() => setSortOption("title")}
+                      >
+                        <Text style={styles.optionText}>Title</Text>
+                        <View
+                          style={[
+                            styles.radioCircle,
+                            sortOption === "title" ? styles.selected : {},
+                          ]}
+                        />
+                      </TouchableOpacity>
+            </Animated.View>
+          </Modal>
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setSectionVisible(true)}
+            accessibilityLabel="Section"
+            accessibilityHint="Section search results"
+          >
+            <View style={styles.filterContent}>
+            <Text style={styles.filterText}>Section</Text>
+            <Ionicons name="chevron-down-outline" size={22} color={varTextColor} />
+            </View>
+          </TouchableOpacity>
+
+          <Modal
+            transparent
+            animationType="fade"
+            visible={isSectionVisible}
+            onRequestClose={() => setSectionVisible(false)}
+          >
+            <TouchableWithoutFeedback onPress={() => closeDrawer()}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+            <Animated.View style={[styles.bottomDrawer, { transform: [{ translateY: drawerAnim }] }]}>
+              <View style={styles.drawerTop}>
+              <Text style={styles.drawerTitle}>Sections</Text>
+                         </View>
+                         <SectionFilters
+          selectedSections={selectedSections}
+          setSelectedSections={setSelectedSections}
+        />
+            </Animated.View>
+          </Modal>
+
+          <TouchableOpacity
+            style={styles.filterButton}
+            onPress={() => setTypeVisible(true)}
+            accessibilityLabel="Type"
+            accessibilityHint="Type search filters"
+          >
+            <View style={styles.filterContent}>
+            <Text style={styles.filterText}>Type</Text>
+            <Ionicons name="chevron-down-outline" size={22} color={varTextColor} />
+            </View>
+  </TouchableOpacity>
+
+  <Modal
+            transparent
+            animationType="fade"
+            visible={isTypeVisible}
+            onRequestClose={() => setTypeVisible(false)}
+          >
+            <TouchableWithoutFeedback onPress={() => closeDrawer()}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+            <Animated.View style={[styles.bottomDrawer, { transform: [{ translateY: drawerAnim }] }]}>
+              <View style={styles.drawerTop}>
+              <Text style={styles.drawerTitle}>Type</Text>
+            </View>
+                        <TouchableOpacity
+                                  style={styles.optionContainer}
+                                  onPress={() => setSearchMode("Article")}
+                                >
+                                  <Text style={styles.optionText}>Article</Text>
+                                  <View
+                                    style={[
+                                      styles.radioCircle,
+                                      searchMode === "Article" ? styles.selected : {},
+                                    ]}
+                                  />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={styles.optionContainer}
+                                  onPress={() => {
+                                    setSearchMode("Writer");
+                                  }}
+                                >
+                                  <Text style={styles.optionText}>Writer</Text>
+                                  <View
+                                    style={[
+                                      styles.radioCircle,
+                                      searchMode === "Writer" ? styles.selected : {},
+                                    ]}
+                                  />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                  style={styles.optionContainer}
+                                  onPress={() => setSearchMode("Photographer")}
+                                >
+                                  <Text style={[styles.optionText, { paddingBottom: 10 }]}>
+                                    Photographer
+                                  </Text>
+                                  <View
+                                    style={[
+                                      styles.radioCircle,
+                                      searchMode === "Photographer" ? styles.selected : {},
+                                    ]}
+                                  />
+                                </TouchableOpacity>
+            </Animated.View>
+          </Modal>
+  
+        </View>
       </View>
 
       {!searchCompleted && !loading && (
@@ -404,12 +601,41 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   searchContainer: {
-    flexDirection: "row",
+    flexDirection: "column",
     alignItems: "center",
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
+  },
+  searchBarContainer: {
+    flexDirection: "row", 
+    alignItems: "center"
+  },
+  filterButtons: {
+    flexDirection: "row",
+    paddingTop: 16,
+    paddingBottom: 8
+  },
+  filterButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingVertical: 10,
+    marginHorizontal: 8,
+    backgroundColor: '#ffffff',
+    borderColor: "#9E9E9E",
+    borderWidth: 1,
+    borderRadius: 18,
+  },
+  filterContent: {
+    flexDirection: "row"
+  },
+  filterText: {
+    color: varTextColor,
+    fontSize: 16,
+    flexShrink: 1,
+    marginRight: 8,
   },
   inputContainer: {
     flexDirection: "row",
@@ -434,6 +660,12 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     flexShrink: 1,
   },
+  textDrawer: {
+    color: varTextColor,
+    fontSize: 16,
+    marginLeft: 10,
+    marginBottom: 24,
+  },
   instructionContainer: {
     flex: 1,
     justifyContent: "center",
@@ -453,6 +685,62 @@ const styles = StyleSheet.create({
   resultsContainer: {
     paddingHorizontal: 15,
     paddingTop: 16,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  },
+  
+  bottomDrawer: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    },
+  
+  drawerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 24,
+  },
+
+  drawerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  optionContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  optionText: {
+    flex: 1,
+    fontSize: 16,
+  },
+  radioCircle: {
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#000",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selected: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#000",
+  },
+  backButton: {
+    marginTop: 15,
+    marginLeft: 15,
   },
 });
 

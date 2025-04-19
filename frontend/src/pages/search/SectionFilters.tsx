@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 5,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#ffffff",
   },
   selected: {
     backgroundColor: "#cccccc",
