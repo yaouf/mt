@@ -196,7 +196,10 @@ export default function Home() {
 
             {isAdmin(user) && (
               <>
-                <NotificationForm setScheduledNotifications={setScheduledNotifications} />
+                <NotificationForm
+                  setScheduledNotifications={setScheduledNotifications}
+                  token={token}
+                />
                 <div className="flex justify-center py-10"></div>
                 <EditorsPicks
                   editorsPicks={editorsPicks}

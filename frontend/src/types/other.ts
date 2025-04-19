@@ -11,6 +11,7 @@ export type ArticleDetailProps = {
   slug: string;
   uuid: string;
   large?: boolean;
+  authorSlug?: string; // Optional author slug for notification subscription
 };
 
 // for staff page bottom bar and share context menu

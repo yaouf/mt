@@ -1,9 +1,10 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import { SettingsStackProps } from 'src/types/navStacks';
-import ArticleScreen from '../article/ArticleScreen';
-import SettingsScreen from './SettingsScreen';
-import SavedArticles from './SavedArticles';
-import DevTeam from './DevTeam';
+import { createStackNavigator } from "@react-navigation/stack";
+import { SettingsStackProps } from "src/types/navStacks";
+import ArticleScreen from "../article/ArticleScreen";
+import AuthorSubscriptions from "./AuthorSubscriptions";
+import DevTeam from "./DevTeam";
+import SavedArticles from "./SavedArticles";
+import SettingsScreen from "./SettingsScreen";
 
 const SettingsStack = createStackNavigator<SettingsStackProps>();
 
@@ -23,6 +24,11 @@ function SettingsStackScreen() {
       <SettingsStack.Screen
         name="SavedArticles" // all saved articles page
         component={SavedArticles}
+        options={{ headerShown: false }}
+      />
+      <SettingsStack.Screen
+        name="AuthorSubscriptions"
+        component={AuthorSubscriptions}
         options={{ headerShown: false }}
       />
       <SettingsStack.Screen

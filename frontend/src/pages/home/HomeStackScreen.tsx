@@ -78,7 +78,8 @@ function HomeStackScreen({ navigation, route }) {
           setSectionMenu(menuItems); // first load
         }
       } catch (err) {
-        console.log(err);
+        console.log("Error loading section menu:", err);
+        setSectionMenu(menuItems); // fallback to default menu items
       }
     };
     loadSectionsAsync();

@@ -132,12 +132,19 @@ export default function MainTabNavigator() {
         if (!saved) {
           setSavedArticles({});
         } else {
-          setSavedArticles(saved);
+          // Parse the JSON string from AsyncStorage
+          try {
+            setSavedArticles(JSON.parse(saved));
+          } catch (parseError) {
+            console.error("Error parsing saved articles:", parseError);
+            setSavedArticles({});
+          }
         }
 
         await AsyncStorage.getAllKeys().then((resp) => console.log('**!!', resp));
       } catch (err) {
-        console.log(err);
+        console.error("Error loading saved articles:", err);
+        setSavedArticles({});
       }
     };
     load();

@@ -17,17 +17,17 @@ export async function setAsync(key: string, value: string) {
 }
 
 /**
- * gets the key from Async storage and parses json
+ * gets the key from Async storage
  * @param key the key name of the item in Async storage
+ * @returns the stored value as a string, or null if it doesn't exist
  */
 export async function getAsync(key: string) {
   try {
     const storedItem = await AsyncStorage.getItem(key);
-    if (storedItem !== null) {
-      return JSON.parse(storedItem);
-    }
+    return storedItem;
   } catch (error) {
-    console.error('Error loading data: ', error, 'for key: ', key);
+    console.error("Error loading data: ", error, "for key: ", key);
+    return null;
   }
 }
 

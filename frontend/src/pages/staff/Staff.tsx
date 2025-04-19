@@ -1,15 +1,22 @@
-import { StackScreenProps } from '@react-navigation/stack';
-import { useEffect, useState } from 'react';
-import { ActivityIndicator, Image, SafeAreaView, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
-import { fetchAuthor } from 'src/api/fetchContent';
-import Divider from 'src/components/Divider';
-import ImageCard from 'src/components/cards/HorizontalCard';
-import { articleStyles } from 'src/styles/article';
-import { baseStyles, layout, text, varGray1 } from 'src/styles/styles';
-import { Article, Author, Media } from 'src/types/data';
-import { SettingsStackProps } from 'src/types/navStacks';
-import BottomStaffBar from './BottomStaffBar';
+import { StackScreenProps } from "@react-navigation/stack";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  Text,
+  View,
+} from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { fetchAuthor } from "src/api/fetchContent";
+import Divider from "src/components/Divider";
+import AuthorNotifToggle from "src/components/AuthorNotifToggle";
+import ImageCard from "src/components/cards/HorizontalCard";
+import { articleStyles } from "src/styles/article";
+import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
+import { Article, Author, Media } from "src/types/data";
+import { SettingsStackProps } from "src/types/navStacks";
+import BottomStaffBar from "./BottomStaffBar";
 
 function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staff'>) {
   const [author, setAuthor] = useState<Author | undefined>();
@@ -78,6 +85,8 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
                     {author.tagline}
                   </Text>
                 )}
+                {/* Author notification toggle */}
+                <AuthorNotifToggle author={author} compact={true} />
               </View>
             </View>
 

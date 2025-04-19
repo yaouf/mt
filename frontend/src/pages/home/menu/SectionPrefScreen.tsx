@@ -17,23 +17,24 @@ import { MenuContext } from '../HomeStackScreen';
 
 function SectionPrefScreen({ navigation }: NavProp) {
   const { original, sectionMenu, setSectionMenu } = useContext(MenuContext);
-  const [preferences, setPreferences] = useState<MenuItem[]>(sectionMenu);
-  
-  // Ensure all original menu items are included in preferences
-  useEffect(() => {
-    // Check if all original menu items are in preferences
-    const allIncluded = original.every(item => 
-      preferences.some(pref => pref.slug === item.slug)
-    );
-    
-    // If any are missing, add them
-    if (!allIncluded) {
-      const missingItems = original.filter(item => 
-        !preferences.some(pref => pref.slug === item.slug)
-      );
-      setPreferences(prev => [...prev, ...missingItems]);
-    }
-  }, []);
+  const [preferences, setPreferences] = useState<MenuItem[]>(sectionMenu && sectionMenu.length > 0 ? sectionMenu : original);
+  const [removed, setRemoved] = useState<MenuItem[]>(
+    original.filter(
+      (item) => !(preferences && preferences.some((pref) => pref.slug === item.slug))
+    )
+  );
+
+  const remove = (item: MenuItem) => {
+    const newPref = preferences.filter((elt) => elt !== item);
+    setPreferences(newPref);
+    setRemoved((prev) => [...prev, item]);
+  };
+
+  const add = (item: MenuItem) => {
+    const newRem = removed.filter((elt) => elt !== item);
+    setRemoved(newRem);
+    setPreferences((prev) => [...prev, item]);
+  };
 
   const applyChanges = () => {
     // Ensure all original items are present before saving

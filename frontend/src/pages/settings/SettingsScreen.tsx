@@ -255,6 +255,14 @@ function SettingsScreen({ navigation }: NavProp) {
             setValue={setOpinions}
             asyncName="opinionsNotifs"
           />
+          <View style={{ marginTop: 16 }}>
+            <SettingsLink
+              title="Manage Author Notifications"
+              link="AuthorSubscriptions"
+              inApp={true}
+              navigation={navigation}
+            />
+          </View>
         </View>
       </View>
       <Divider />

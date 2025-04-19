@@ -141,3 +141,10 @@ export interface EditorPick {
    */
   rank: number;
 }
+
+export interface Author {
+  id: number;
+  name: string;
+  slug: string;
+  dateCreated?: Date;
+}

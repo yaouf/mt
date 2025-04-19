@@ -21,11 +21,18 @@ API_KEY = os.getenv("API_KEY")
 ENV = os.getenv("ENV", "development")  # Default to 'development'
 STORAGE_FILE = "popular_articles.json"
 
+# Initialize storage file if it doesn't exist or is empty
+def initialize_storage_file():
+    if not os.path.exists(STORAGE_FILE) or os.path.getsize(STORAGE_FILE) == 0:
+        with open(STORAGE_FILE, 'w') as f:
+            json.dump([], f)
+        print(f"Initialized {STORAGE_FILE} with empty array")
+
 def scrape_popular_articles():
     """Scrape the popular pages from Brown Daily Herald."""
     url = "https://www.browndailyherald.com/"
 
-# Add headers to mimic a browser
+    # Add headers to mimic a browser
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -44,6 +51,10 @@ def scrape_popular_articles():
             print("403 Forbidden Error detected!")
             print(f"Response headers: {dict(response.headers)}")
             print(f"Response content: {response.text[:500]}...")  # Print first 500 chars
+            # Initialize with empty array if we can't scrape
+            with open(STORAGE_FILE, 'w') as f:
+                json.dump([], f)
+            print(f"Initialized {STORAGE_FILE} with empty array due to 403 error")
             return  # Exit function if we get a 403
             
         response.raise_for_status()  # Raise exception for other HTTP errors
@@ -86,20 +97,43 @@ def scrape_popular_articles():
             print(f"Saved {len(articles_data)} articles to {STORAGE_FILE}")
         else:
             print("No articles found to save")
+            # Initialize with empty array if no articles found
+            with open(STORAGE_FILE, 'w') as f:
+                json.dump([], f)
+            print(f"Initialized {STORAGE_FILE} with empty array as no articles were found")
     except requests.exceptions.HTTPError as e:
         print(f"HTTP Error occurred: {e}")
         print(f"Response status code: {e.response.status_code}")
         print(f"Response headers: {dict(e.response.headers)}")
+        # Initialize with empty array on error
+        with open(STORAGE_FILE, 'w') as f:
+            json.dump([], f)
+        print(f"Initialized {STORAGE_FILE} with empty array due to HTTP error")
     except Exception as e:
         print(f"Error occurred during scraping: {type(e).__name__}: {e}")
+        # Initialize with empty array on error
+        with open(STORAGE_FILE, 'w') as f:
+            json.dump([], f)
+        print(f"Initialized {STORAGE_FILE} with empty array due to error: {e}")
 
 # Load stored articles
 def load_articles():
     if os.path.exists(STORAGE_FILE):
-        with open(STORAGE_FILE, "r") as f:
-            data= json.load(f)
-            print("loaded",data)
-            return data
+        # Check if file is empty
+        if os.path.getsize(STORAGE_FILE) == 0:
+            print(f"Warning: {STORAGE_FILE} is empty")
+            return []
+            
+        try:
+            with open(STORAGE_FILE, "r") as f:
+                data = json.load(f)
+                print("loaded", data)
+                return data
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON from {STORAGE_FILE}: {e}")
+            # If the file is corrupted, return empty list and trigger a new scrape
+            scrape_popular_articles()
+            return []
     return []
 
 # Health check endpoint (no authentication required)
@@ -138,6 +172,24 @@ def get_popular_articles():
     print(f"Returning articles: {articles}")  # Print articles being returned
     return jsonify(articles)
 
+# Manual scrape endpoint
+@app.route("/api/scrape-popular", methods=["POST"])
+def manual_scrape():
+    api_key = request.headers.get("X-API-KEY")
+    
+    if api_key != API_KEY:
+        error_response = {
+            "error": "Unauthorized", 
+            "message": "Invalid or missing API key",
+            "status_code": 401
+        }
+        return jsonify(error_response), 401
+    
+    try:
+        scrape_popular_articles()
+        return jsonify({"status": "success", "message": "Scraping completed"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 # Scheduler to scrape every 12 hours
 scheduler = BackgroundScheduler(timezone=pytz.UTC)
@@ -146,6 +198,7 @@ scheduler.start()
 
 
 # Initial scrape on startup
+initialize_storage_file()
 scrape_popular_articles()
 
 

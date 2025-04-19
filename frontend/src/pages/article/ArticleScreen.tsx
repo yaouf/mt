@@ -1,7 +1,14 @@
-import { trackEvent } from '@aptabase/react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import * as Haptics from 'expo-haptics';
-import { default as React, useContext, useEffect, useRef, useState } from 'react';
+import { trackEvent } from "@aptabase/react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { StackScreenProps } from "@react-navigation/stack";
+import * as Haptics from "expo-haptics";
+import {
+  default as React,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Animated,
   Image,
@@ -12,17 +19,19 @@ import {
   Text,
   TouchableOpacity,
   View,
-} from 'react-native';
-import { State, TapGestureHandler } from 'react-native-gesture-handler';
-import { articleStyles } from 'src/styles/article';
-import { Article } from 'src/types/data';
-import { HomeStackProps } from 'src/types/navStacks';
-import { formatDates } from 'src/utils/formatDates';
-import { handleBookmark } from 'src/utils/helpers';
-import { baseStyles } from '../../styles/styles';
-import { SavedContext } from '../MainTabNavigator';
-import BottomArticleBar from './BottomArticleBar';
-import SplitArticle from './SplitContent';
+} from "react-native";
+import { State, TapGestureHandler } from "react-native-gesture-handler";
+import { fetchAuthor } from "src/api/fetchContent";
+import { articleStyles } from "src/styles/article";
+import { Article, Author } from "src/types/data";
+import { HomeStackProps } from "src/types/navStacks";
+import { formatDates } from "src/utils/formatDates";
+import { handleBookmark } from "src/utils/helpers";
+import { baseStyles } from "../../styles/styles";
+import { SavedContext } from "../MainTabNavigator";
+import AuthorSubscriptionModal from "./AuthorSubscriptionModal";
+import BottomArticleBar from "./BottomArticleBar";
+import SplitArticle from "./SplitContent";
 
 function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, 'Article'>) {
   const article: Article = route.params.data;
@@ -30,7 +39,15 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
   const scrollOffset = useRef(0);
   const translateY = useRef(new Animated.Value(0)).current; // Animated value for translateY
   const { savedArticles, setSavedArticles } = useContext(SavedContext);
-  const [saved, setSaved] = useState<boolean>(article.uuid in savedArticles);
+  const [saved, setSaved] = useState<boolean>(
+    savedArticles &&
+      typeof savedArticles === "object" &&
+      article.uuid in savedArticles
+  );
+
+  // Author notification modal state
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [authorsData, setAuthorsData] = useState<Author[]>([]);
 
   useEffect(() => {
     trackEvent('article', {
@@ -38,6 +55,43 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
       slug: route.params.data.slug,
     });
   }, []);
+
+  // Function to handle author notification subscription for all article authors
+  const handleAuthorSubscription = async () => {
+    try {
+      Haptics.selectionAsync();
+
+      if (!article.authors || article.authors.length === 0) return;
+
+      // For multiple authors, fetch each author's data
+      const authorPromises = article.authors.map((author) => {
+        return new Promise<Author | null>((resolve) => {
+          if (!author.slug) {
+            resolve(null);
+            return;
+          }
+
+          fetchAuthor(
+            author.slug,
+            (fetchedAuthor) => resolve(fetchedAuthor || null),
+            () => {},
+            () => {},
+            () => {}
+          ).catch(() => resolve(null));
+        });
+      });
+
+      const results = await Promise.all(authorPromises);
+      const validAuthors = results.filter((a): a is Author => a !== null);
+
+      if (validAuthors.length > 0) {
+        setAuthorsData(validAuthors);
+        setIsModalVisible(true);
+      }
+    } catch (error) {
+      console.error("Error fetching author data:", error);
+    }
+  };
 
   useEffect(() => {
     // Animate the bottom bar in or out based on visibility state
@@ -78,12 +132,17 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
   const onDoubleTap = (event) => {
     if (event.nativeEvent.state === State.END) {
       Haptics.selectionAsync();
+
+      // Ensure savedArticles is an object before passing to handleBookmark
+      const articlesToUse =
+        savedArticles && typeof savedArticles === "object" ? savedArticles : {};
+
       handleBookmark(
         saved,
         article.slug,
         article.published_at,
         article.uuid,
-        savedArticles,
+        articlesToUse,
         setSavedArticles,
         setSaved
       );
@@ -151,47 +210,67 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                   </View>
                 </View>
               )}
-              <View style={{ flexDirection: 'column' }}>
-                <View style={articleStyles.authorRow}>
-                  {/* Author images column */}
-                  {/* Only render image container if there are images to show */}
-                  {article.authors.some((author) => {
-                    try {
-                      const metadata =
-                        typeof author.metadata === 'string'
-                          ? JSON.parse(author.metadata)
-                          : author.metadata;
-                      return metadata && metadata.length > 0;
-                    } catch {
-                      return false;
-                    }
-                  }) && (
-                    <View style={[articleStyles.authorImagesContainer, { flexShrink: 1 }]}>
-                      {article.authors.map((author, i) => {
-                        let metadata = [];
-                        if (author.metadata) {
-                          try {
-                            metadata =
-                              typeof author.metadata === 'string'
-                                ? JSON.parse(author.metadata)
-                                : author.metadata;
-                          } catch (error) {
-                            console.error(`Failed to parse metadata for author ${i}:`, error);
+              <View style={{ flexDirection: "column" }}>
+                {/* Combine author images and names in the same row, place bell icon on the right */}
+                <View
+                  style={[
+                    articleStyles.authorRow,
+                    {
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: 10,
+                    },
+                  ]}
+                >
+                  {/* Left side: images (if any) plus author/name/date */}
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      flex: 1,
+                    }}
+                  >
+                    {article.authors.some((author) => {
+                      try {
+                        const metadata =
+                          typeof author.metadata === "string"
+                            ? JSON.parse(author.metadata)
+                            : author.metadata;
+                        return metadata && metadata.length > 0;
+                      } catch {
+                        return false;
+                      }
+                    }) && (
+                      <View style={articleStyles.authorImagesContainer}>
+                        {article.authors.map((author, i) => {
+                          let metadata = [];
+                          if (author.metadata) {
+                            try {
+                              metadata =
+                                typeof author.metadata === "string"
+                                  ? JSON.parse(author.metadata)
+                                  : author.metadata;
+                            } catch (error) {
+                              console.error(
+                                `Failed to parse metadata for author ${i}:`,
+                                error
+                              );
+                            }
                           }
-                        }
-                        const imageUri =
-                          metadata.length > 0 && metadata[0].value
-                            ? metadata[0].value
-                            : 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png';
-                        return (
-                          <TouchableOpacity
+                          const imageUri =
+                            metadata.length > 0 && metadata[0].value
+                              ? metadata[0].value
+                              : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png";
+                          return (
+                            <TouchableOpacity
                             key={i}
                             onPress={() =>
                               navigation.navigate('Staff', {
                                 slug: author.slug,
                               })
                             }
-                          >
+                            >
                             <Image
                               key={i}
                               source={{ uri: imageUri }}
@@ -232,6 +311,29 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                       {formatDates(article.published_at)}
                     </Text>
                   </View>
+
+                  {/* Right side: Bell icon */}
+                  {article.authors &&
+                    article.authors.length > 0 &&
+                    article.authors.some((author) => author && author.slug) && (
+                      <TouchableOpacity
+                        onPress={handleAuthorSubscription}
+                        accessible={true}
+                        accessibilityLabel="Subscribe to author notifications"
+                        accessibilityHint="Get notified when this author publishes new articles"
+                        style={{
+                          padding: 5,
+                          paddingRight: 15,
+                          alignSelf: "center",
+                        }}
+                      >
+                        <Ionicons
+                          name="notifications-outline"
+                          size={26}
+                          color="#1C1B1F"
+                        />
+                      </TouchableOpacity>
+                    )}
                 </View>
               </View>
 
@@ -267,6 +369,13 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
           uuid={article.uuid}
         />
       </Animated.View>
+
+      {/* Author Subscription Modal */}
+      <AuthorSubscriptionModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        authors={authorsData}
+      />
     </SafeAreaView>
   );
 }
