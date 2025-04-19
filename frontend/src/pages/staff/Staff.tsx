@@ -5,6 +5,7 @@ import {
   Image,
   SafeAreaView,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -17,12 +18,18 @@ import { baseStyles, layout, text, varGray1 } from "src/styles/styles";
 import { Article, Author, Media } from "src/types/data";
 import { SettingsStackProps } from "src/types/navStacks";
 import BottomStaffBar from "./BottomStaffBar";
+import AuthorSubscriptionModal from "../article/AuthorSubscriptionModal";
+import * as Haptics from "expo-haptics";
+import { Ionicons } from "@expo/vector-icons";
 
 function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staff'>) {
   const [author, setAuthor] = useState<Author | undefined>();
   const [articles, setArticles] = useState<Article[] | undefined>();
   const [media, setMedia] = useState<Media[] | undefined>();
   const [posts, setPosts] = useState<string[] | undefined>();
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [authorsData, setAuthorsData] = useState<Author[]>([]);
 
   const slug = route.params.slug;
 
@@ -41,6 +48,29 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
       />
     );
   }
+  const handleAuthorSubscription = async () => {
+      try {
+        Haptics.selectionAsync();
+  
+        if (!author || !author.slug) return;
+        fetchAuthor(
+          author.slug,
+          (fetchedAuthor) => {
+            if (fetchedAuthor) {
+              setAuthorsData([fetchedAuthor]);
+              setIsModalVisible(true);
+            }
+          },
+          () => {},
+          () => {},
+          () => {}
+        ).catch((error) => {
+          console.error("Error fetching author data:", error);
+        });
+      } catch (error) {
+        console.error("Unexpected error in handleAuthorSubscription:", error);
+      }
+    };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -70,9 +100,35 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
                 />
               )}
               <View style={{ flex: 1 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Text style={text.sectionHeader1} accessibilityRole="header">
                   {author.name}
                 </Text>
+                {/* Author notification toggle */}
+                <TouchableOpacity
+                        onPress={handleAuthorSubscription}
+                        accessible={true}
+                        accessibilityLabel="Subscribe to author notifications"
+                        accessibilityHint="Get notified when this author publishes new articles"
+                        style={{
+                          padding: 5,
+                          paddingRight: 15,
+                          alignSelf: "center",
+                        }}
+                      >
+                        <Ionicons
+                          name="notifications-outline"
+                          size={26}
+                          color="#1C1B1F"
+                        />
+                      </TouchableOpacity>
+                    </View>
                 {author.tagline !== '' && (
                   <Text
                     style={{
@@ -85,8 +141,6 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
                     {author.tagline}
                   </Text>
                 )}
-                {/* Author notification toggle */}
-                <AuthorNotifToggle author={author} compact={true} />
               </View>
             </View>
 
@@ -165,6 +219,11 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
           <BottomStaffBar slug={slug} />
         </View>
       </View>
+      <AuthorSubscriptionModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        authors={authorsData}
+      />
     </SafeAreaView>
   );
 }
