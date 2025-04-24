@@ -3,6 +3,7 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useRef, useState } from 'react';
 import {
+  ActivityIndicator,
   Animated,
   FlatList,
   RefreshControl,
@@ -48,6 +49,9 @@ function Search({ navigation }: NavProp) {
   const [searchType, setSearchType] = useState('Article');
   const [selectedSections, setSelectedSections] = useState<string[]>([]);
   const [sortType, setSortType] = useState('date');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage,   setLastPage]   = useState<number|undefined>();
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const [usingPrefetchedData, setUsingPrefetchedData] = useState(true);
 
@@ -74,11 +78,12 @@ function Search({ navigation }: NavProp) {
     loadPrefetchedData();
   }, []);
 
-  const handleSearch = async () => {
-    setLoading(true);
-    trackEvent('search', { text });
+  const handleSearch = async (page = 1) => {
+    if (page > 1) setIsLoadingMore(true);
+    setLoading(page === 1);
+    trackEvent('search', { text, page });
     try {
-      let queryUrl = 'https://www.browndailyherald.com/search.json?a=1';
+      let queryUrl = `https://www.browndailyherald.com/search.json?a=1&page=${page}`;
       if (searchType === 'Writer') {
         queryUrl += `&au=${text}&ty=article`;
       } else if (searchType == 'Photographer') {
@@ -102,10 +107,13 @@ function Search({ navigation }: NavProp) {
       const response = await fetch(queryUrl);
       const jsonString = await response.text();
       const resultObject = JSON.parse(jsonString);
-      const articleList: Article[] = resultObject.items;
+      const fetched: Article[] = resultObject.items;
 
-      setArticles(articleList);
-      setLoading(false);
+      setArticles(prev => page === 1 ? fetched : [...prev, ...fetched]);
+      setLastPage(resultObject.last_page);
+      setCurrentPage(page);
+      if (page > 1) setIsLoadingMore(false);
+      else setLoading(false);
       setSearchCompleted(true);
     } catch (error) {
       setLoading(false);
@@ -181,52 +189,21 @@ function Search({ navigation }: NavProp) {
   const onRefresh = async () => {
     setRefreshing(true);
     setUsingPrefetchedData(false);
-    console.log('starting refresh...');
-    try {
-      // Use Promise.allSettled to wait for both fetches, regardless of success/failure
-      const results = await Promise.allSettled([
-        new Promise<EditorsPickArticle[]>((resolve, reject) => {
-          // Keep the timeout if needed for sequencing, but consider if it's necessary
-          setTimeout(async () => {
-            try {
-              console.log('starting fetch to editors picks inside timeout');
-              const editorsPicks = await fetchEditorsPicks();
-              setEditorsPicksStories(editorsPicks);
-              resolve(editorsPicks);
-            } catch (error) {
-              console.error("Failed to fetch editor's picks:", error);
-              reject(error); // Reject the promise on error
-            }
-          }, 100); // Consider removing or adjusting this timeout
-        }),
-        (async () => {
-          try {
-            console.log('starting fetch to most popular');
-            const mostPopular = await fetchMostPopular();
-            setMostPopularStories(mostPopular);
-            return mostPopular;
-          } catch (error) {
-            console.error('Failed to fetch most popular:', error);
-            throw error; // Re-throw to be caught by allSettled
-          }
-        })(),
-      ]);
-
-      // Log results (optional)
-      results.forEach((result, index) => {
-        if (result.status === 'rejected') {
-          console.error(`Fetch ${index === 0 ? 'Editors Picks' : 'Most Popular'} failed:`, result.reason);
-        }
-      });
-
-    } catch (error) {
-      // Catch any unexpected errors outside the promises (less likely with allSettled)
-      console.error('An unexpected error occurred during refresh:', error);
-    } finally {
-      // This block will always execute, even if errors occurred
-      console.log('refresh finished, setting refreshing to false');
-      setRefreshing(false);
-    }
+    console.log('starting fetch to editors picks');
+    setTimeout(async () => {
+      try {
+        const editorsPicks = await fetchEditorsPicks();
+        setEditorsPicksStories(editorsPicks);
+      } catch (error) {
+        const errorParsed = JSON.parse(error as string);
+        console.log('errorParsed', errorParsed);
+        console.error("Failed to fetch editor's picks:", errorParsed);
+      }
+    }, 100);
+    console.log('starting fetch to most popular');
+    const mostPopular = await fetchMostPopular();
+    setMostPopularStories(mostPopular);
+    setRefreshing(false);
   };
 
   // const onLayoutRootView = useCallback(async () => {
@@ -255,6 +232,15 @@ function Search({ navigation }: NavProp) {
     },
   ];
 
+  const loadMore = () => {
+    // if (isLoadingMore || !lastPage || currentPage >= lastPage) return;
+    // handleSearch(currentPage + 1);
+    if (isLoadingMore) return;
+    if (lastPage !== undefined && currentPage >= lastPage) return;
+    console.log(`loadMore → fetching page ${currentPage+1}`);
+    handleSearch(currentPage + 1);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -273,7 +259,7 @@ function Search({ navigation }: NavProp) {
             placeholder="Search"
             style={styles.input}
             onFocus={handleFocus}
-            onSubmitEditing={handleSearch}
+            onSubmitEditing={() => handleSearch(1)}
             accessibilityLabel="Search input"
             accessibilityHint="Enter keywords to search for articles"
           />
@@ -351,6 +337,11 @@ function Search({ navigation }: NavProp) {
                 inSearch={true}
               />
             )}
+            keyExtractor={item => item.uuid}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={isLoadingMore ? <ActivityIndicator style={{ padding: 16 }} /> : null}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); handleSearch(1).then(()=>setRefreshing(false)); }} />}
             ItemSeparatorComponent={() => <View style={{ height: 16 }}></View>}
             contentContainerStyle={styles.resultsContainer}
             initialNumToRender={8}
