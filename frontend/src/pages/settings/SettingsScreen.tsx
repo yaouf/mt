@@ -259,12 +259,12 @@ function SettingsScreen({ navigation }: NavProp) {
       </View>
       <View>
         <View key={'manage-author-notifs'} style={{ marginTop: 16, paddingHorizontal: 4, marginBottom: 12 }}>
-        <SettingsLink
-              title="Manage Author Notifications"
-              link="AuthorSubscriptions"
-              inApp={true}
-              navigation={navigation}
-            />
+          <SettingsLink
+            title="Manage Author Notifications"
+            link="AuthorSubscriptions"
+            inApp={true}
+            navigation={navigation}
+          />
         </View>
       </View>
       <Divider />
