@@ -128,24 +128,6 @@ export default async function getNotification(
       { delay, jobId: `${notificationIdObject.id}_n` }
     );
 
-<<<<<<< HEAD
-    // Fetch all notifications with their categories
-    const notifications = await db('notifications as n')
-      .leftJoin('notification_categories as nc', 'n.id', 'nc.notification_id')
-      .leftJoin('categories as c', 'nc.category_id', 'c.id')
-      .select(
-        'n.id',
-        'n.time',
-        'n.title',
-        'n.body',
-        'n.status',
-        'n.url',
-        'n.is_uid',
-        db.raw("STRING_AGG(c.name, ',') AS categories")
-      )
-      .groupBy('n.id', 'n.time', 'n.title', 'n.body', 'n.status', 'n.url', 'n.is_uid')
-      .orderBy('n.time', 'desc');
-=======
     // Fetch all notifications with their categories and authors
     const notifications = await db("notifications as n")
       .leftJoin("notification_categories as nc", "n.id", "nc.notification_id")
@@ -174,7 +156,6 @@ export default async function getNotification(
         "n.is_uid"
       )
       .orderBy("n.time", "desc");
->>>>>>> origin/fullstack/author-notifs
 
     res.status(200).json(notifications);
   } catch (error) {

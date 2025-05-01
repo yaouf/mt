@@ -1,7 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { useContext, useEffect, useState } from "react";
 import { Alert, Linking, Switch, Text, View } from "react-native";
-import { updateAuthorSubscription } from "src/api/backendAPIs";
 import { NotificationContext } from "src/pages/settings/NotificationProvider";
 import { text } from "src/styles/styles";
 import { getAsync, setAsync } from "src/utils/helpers";
