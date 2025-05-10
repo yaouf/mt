@@ -212,9 +212,9 @@ function ArticleScreen({ route, navigation }: StackScreenProps<HomeStackProps, '
                           key={author.slug}
                           onPress={() => {
                             console.log('Navigating to Staff with slug:', author.slug);
-         
-                            navigation.push('Staff', { 
-                              slug: author.slug 
+
+                            navigation.push('Staff', {
+                              slug: author.slug,
                             });
                           }}
                           accessible={true}

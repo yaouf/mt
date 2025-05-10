@@ -69,8 +69,6 @@ function LargeCard({ article, navigation, inSearch }: CardProps) {
                       separator = ', ';
                     } else if (i === lastIndex && i !== 0) {
                       separator = ' and ';
-                    } else {
-                      separator = ' ';
                     }
 
                     return (
@@ -80,7 +78,7 @@ function LargeCard({ article, navigation, inSearch }: CardProps) {
                         <TouchableOpacity
                           onPress={() => navigation.navigate('Staff', { slug: author.slug })}
                         >
-                          <Text style={styles.authorName}>{author.name}</Text>
+                          <Text style={styles.authorName}>{author.name.trim()}</Text>
                         </TouchableOpacity>
                       </View>
                     );

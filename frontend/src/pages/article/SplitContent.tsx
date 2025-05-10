@@ -77,10 +77,6 @@ type LiveEntryHeader = {
   section: string;
 };
 
-type BylineSlugs = {
-  [name: string]: string;
-};
-
 function SplitArticle({ content }: SplitArticleType) {
   const source = {
     html: content,
@@ -152,7 +148,6 @@ function SplitArticle({ content }: SplitArticleType) {
         if (isLiveUpdate) {
           return (
             <View style={styles.liveUpdateContainer}>
-              {/* <Text style={styles.liveLabel}>LIVE UPDATE</Text> */}
               <props.TDefaultRenderer {...props} />
             </View>
           );
@@ -160,13 +155,10 @@ function SplitArticle({ content }: SplitArticleType) {
           const headerIndex = Number(tnode.attributes['data-index'] ?? '0');
           return (
             <View style={styles.liveEntryContainer}>
-              {/* <Text style={styles.liveLabel}>LIVE ENTRY</Text> */}
               {parsedHeaders[headerIndex] && renderHeader(parsedHeaders[headerIndex])}
-              {/* <props.TDefaultRenderer {...props} /> */}
             </View>
           );
         } else if (isByline) {
-          // return <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}></Text>;
           return renderByline();
         }
         return <props.TDefaultRenderer {...props} />;
@@ -176,7 +168,6 @@ function SplitArticle({ content }: SplitArticleType) {
         const src = tnode.attributes?.src;
         const height = tnode.attributes?.height;
 
-        // Check if parent is <a> with href
         const parentLink = tnode.parent?.tagName === 'a' ? tnode.parent.attributes?.href : null;
 
         if (!src) return null;
@@ -204,21 +195,30 @@ function SplitArticle({ content }: SplitArticleType) {
           );
         }
       },
-      ul: (props) => {
-        return <View style={{ paddingLeft: 20, marginVertical: 8 }}>{props.tnode.children}</View>;
-      },
-      li: (props) => {
-        return (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }}>
-            <Text style={{ fontSize: 18, lineHeight: 24, paddingHorizontal: 5 }}>
-              {'\u2022' + ' '}
-            </Text>
-            <View style={{ flex: 1 }}>
-              <props.TDefaultRenderer {...props} />
-            </View>
-          </View>
-        );
-      },
+      // li: (props) => {
+      //   const parentTag = props.tnode.parent?.tagName;
+      //   const isOrdered = parentTag === 'ol';
+      //   const index = props.tnode.index ?? 0;
+
+      //   const prefix = isOrdered ? `${index + 1}. ` : '\u2022 ';
+      //   return (
+      //     <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }}>
+      //       <Text style={{ fontSize: 18, lineHeight: 24, paddingHorizontal: 5 }}>{prefix}</Text>
+      //       <View style={{ flex: 1 }}>
+      //         <Text
+      //           style={{
+      //             fontSize: 18,
+      //             lineHeight: 24,
+      //             color: varTextSecondaryColor,
+      //             fontFamily: font1,
+      //           }}
+      //         >
+      //           {props.tnode.textContent}
+      //         </Text>
+      //       </View>
+      //     </View>
+      //   );
+      // },
     }),
     [parsedHeaders]
   );

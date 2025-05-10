@@ -5,19 +5,11 @@ import {
   TouchableWithoutFeedback,
   TouchableOpacity,
   View,
-} from "react-native";
-import React from "react"; 
-import { Tag } from "src/types/data";
-import { CardProps } from "src/types/navStacks";
-import {
-  font1,
-  font2,
-  font3,
-  varGray1,
-  varRed,
-  varTextColor,
-} from "../../styles/styles";
-import { formatDates } from "../../utils/formatDates";
+} from 'react-native';
+import { Tag } from 'src/types/data';
+import { CardProps } from 'src/types/navStacks';
+import { font1, font2, font3, varGray1, varRed, varTextColor } from '../../styles/styles';
+import { formatDates } from '../../utils/formatDates';
 
 function LargeCard({ article, navigation }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
@@ -80,43 +72,27 @@ function LargeCard({ article, navigation }: CardProps) {
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
                 <View style={styles.authorLine}>
-                  <Text style={styles.published}>By </Text>
-                  
+                  <Text style={styles.published}>By</Text>
                   {article.authors.map((author, i) => {
                     const lastIndex = article.authors.length - 1;
-                    
+                    let separator = '';
+
                     if (i > 0 && i < lastIndex) {
-                      return (
-                        <React.Fragment key={author.slug}>
-                          <Text style={styles.published}>, </Text>
-                          <TouchableOpacity
-                            onPress={() => navigation.navigate("Staff", {slug: author.slug})}
-                          >
-                            <Text style={styles.authorName}>{author.name}</Text>
-                          </TouchableOpacity>
-                        </React.Fragment>
-                      );
+                      separator = ', ';
                     } else if (i === lastIndex && i !== 0) {
-                      return (
-                        <React.Fragment key={author.slug}>
-                          <Text style={styles.published}> and </Text>
-                          <TouchableOpacity
-                            onPress={() => navigation.navigate("Staff", {slug: author.slug})}
-                          >
-                            <Text style={styles.authorName}>{author.name}</Text>
-                          </TouchableOpacity>
-                        </React.Fragment>
-                      );
-                    } else {
-                      return (
+                      separator = 'and ';
+                    }
+                    return (
+                      <View key={author.slug} style={styles.authorWrapper}>
+                        <Text style={styles.published}>{separator}</Text>
+
                         <TouchableOpacity
-                          key={author.slug}
-                          onPress={() => navigation.navigate("Staff", {slug: author.slug})}
+                          onPress={() => navigation.navigate('Staff', { slug: author.slug })}
                         >
                           <Text style={styles.authorName}>{author.name}</Text>
                         </TouchableOpacity>
-                      );
-                    }
+                      </View>
+                    );
                   })}
                 </View>
                 <Text style={styles.published}>{formatDates(article.published_at)}</Text>
@@ -132,11 +108,6 @@ function LargeCard({ article, navigation }: CardProps) {
 export default LargeCard;
 
 const styles = StyleSheet.create({
-  authorContainer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 4,
-  },
   title: {
     alignSelf: 'stretch',
     color: varTextColor,
