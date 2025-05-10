@@ -6,7 +6,7 @@ import { Tag } from 'src/types/data';
 
 function ImageCard({ article, navigation }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
-  const section = all_tags[0].replace('&;', '&');
+  const section = all_tags ? all_tags[0]?.replace('&;', '&') : '';
 
   let img_uri =
     'https://d35jcxe8no8yhr.cloudfront.net/1054f24d72785fb7b6a4e1283656e2ab/dist/img/placeholder-4x3.png';

@@ -20,10 +20,16 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
   const slug = route.params.slug;
 
   useEffect(() => {
+
+    setAuthor(undefined);
+    setArticles(undefined);
+    setMedia(undefined);
+    setPosts(undefined);
+    
     fetchAuthor(slug, setAuthor, setArticles, setMedia, setPosts).then(() =>
       console.log(`loaded ${slug}`)
     );
-  }, []);
+  }, [slug]);
 
   if (!author || !articles || !media || !posts) {
     return (

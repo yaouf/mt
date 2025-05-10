@@ -14,7 +14,7 @@ import { formatDates } from '../../utils/formatDates';
 function LargeCard({ article, navigation, inSearch }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
-  const section = all_tags[0].replace('&;', '&');
+  const section = all_tags ? all_tags[0]?.replace('&;', '&') : '';
 
   for (let i = 0; i < all_tags.length; i++) {
     if (all_tags[i] == 'breaking') {

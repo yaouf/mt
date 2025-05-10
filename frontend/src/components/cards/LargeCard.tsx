@@ -118,16 +118,8 @@ function LargeCard({ article, navigation }: CardProps) {
                       );
                     }
                   })}
-                  <Text style={styles.published}>{formatDates(article.published_at)}</Text>
                 </View>
-                <Text
-                  style={styles.published}
-                  accessibilityLabel={`Published on ${formatDates(
-                    article.published_at
-                  )}`}
-                >
-                  {formatDates(article.published_at)}
-                </Text>
+                <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
           </View>
@@ -234,7 +226,7 @@ const styles = StyleSheet.create({
   },
   publishedSection: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 4,
   },
   options: {

@@ -14,6 +14,7 @@ import {
   MixedStyleDeclaration,
   RenderHTML,
 } from 'react-native-render-html';
+import { TDefaultBlockRenderer } from 'react-native-render-html/lib/typescript/TNodeRenderer';
 import WebView from 'react-native-webview';
 import { fetchArticle } from 'src/api/fetchContent';
 import { articleStyles, fontsizeHeader } from 'src/styles/article';
@@ -170,6 +171,54 @@ function SplitArticle({ content }: SplitArticleType) {
         }
         return <props.TDefaultRenderer {...props} />;
       },
+      img: (props) => {
+        const { tnode } = props;
+        const src = tnode.attributes?.src;
+        const height = tnode.attributes?.height;
+
+        // Check if parent is <a> with href
+        const parentLink = tnode.parent?.tagName === 'a' ? tnode.parent.attributes?.href : null;
+
+        if (!src) return null;
+
+        if (parentLink) {
+          return (
+            <TouchableOpacity
+              onPress={() => handleLinkPress(null, parentLink)}
+              style={{ marginVertical: 10 }}
+              accessible={true}
+              accessibilityHint="View linked image content"
+            >
+              <Image
+                source={{ uri: src }}
+                style={{ width: '100%', height: height ? height : 200, resizeMode: 'cover' }}
+              />
+            </TouchableOpacity>
+          );
+        } else {
+          return (
+            <Image
+              source={{ uri: src }}
+              style={{ width: '100%', height: height ? height : 200, resizeMode: 'cover' }}
+            />
+          );
+        }
+      },
+      ul: (props) => {
+        return <View style={{ paddingLeft: 20, marginVertical: 8 }}>{props.tnode.children}</View>;
+      },
+      li: (props) => {
+        return (
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 }}>
+            <Text style={{ fontSize: 18, lineHeight: 24, paddingHorizontal: 5 }}>
+              {'\u2022' + ' '}
+            </Text>
+            <View style={{ flex: 1 }}>
+              <props.TDefaultRenderer {...props} />
+            </View>
+          </View>
+        );
+      },
     }),
     [parsedHeaders]
   );
@@ -292,7 +341,7 @@ function SplitArticle({ content }: SplitArticleType) {
   const splitContent = useMemo(() => {
     let split = source.html.split('\n');
     if (split.length === 1) {
-      split = source.html.split('</p><p>');
+      split = source.html.split('</p><p>').map((section) => '<p>' + section);
     }
 
     const adFrequency = 7; // Advertisement every 7 paragraphs after the first ad
@@ -311,7 +360,10 @@ function SplitArticle({ content }: SplitArticleType) {
     let headerCount = 0;
 
     split = source.html.split(liveEntryRegex).map((section) => {
-      if (section.includes('What you need to know:')) {
+      if (
+        section.includes('What you need to know:') ||
+        section.includes('The latest of what you need to know:')
+      ) {
         return `<div class="live-update">${section}</div>`;
       } else if (section.includes('Live coverage by')) {
         parseByLine(section);
