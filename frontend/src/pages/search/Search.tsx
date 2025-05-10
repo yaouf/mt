@@ -26,6 +26,10 @@ import SectionFilters from "./SectionFilters";
 
 // const { width: screenWidth } = Dimensions.get('window');
 
+const DrawerIcon = (
+  <Ionicons name="chevron-down-outline" size={18} color={varTextColor} />
+);
+
 const SearchSkeleton = () => {
   return (
     <View style={styles.container}>
@@ -243,7 +247,7 @@ function Search({ navigation }: NavProp) {
   const [isTypeVisible, setTypeVisible] = useState(false);
 
   const [searchMode, setSearchMode] = useState(searchType);
-    
+
   const drawerAnim = useRef(new Animated.Value(100)).current;
 
   useEffect(() => {
@@ -254,8 +258,7 @@ function Search({ navigation }: NavProp) {
         duration: 100,
         useNativeDriver: true,
       }).start();
-    } 
-    else {
+    } else {
       Animated.timing(drawerAnim, {
         toValue: 100,
         duration: 100,
@@ -272,7 +275,7 @@ function Search({ navigation }: NavProp) {
     }).start(() => {
       setSortVisible(false);
       setSectionVisible(false);
-      setTypeVisible(false)
+      setTypeVisible(false);
     });
   };
 
@@ -292,26 +295,26 @@ function Search({ navigation }: NavProp) {
           />
         </TouchableOpacity> */}
         <View style={styles.searchBarContainer}>
-        <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
-          <MaterialIcons
-            name="search"
-            size={20}
-            color={varGray1}
-            style={styles.searchIcon}
-            accessible={false}
-          />
-          <TextInput
-            onChangeText={onChangeText}
-            ref={textInputRef}
-            value={text}
-            placeholder="Search"
-            style={styles.input}
-            onFocus={handleFocus}
-            onSubmitEditing={handleSearch}
-            accessibilityLabel="Search input"
-            accessibilityHint="Enter keywords to search for articles"
-          />
-          {/* <TouchableOpacity
+          <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
+            <MaterialIcons
+              name="search"
+              size={20}
+              color={varGray1}
+              style={styles.searchIcon}
+              accessible={false}
+            />
+            <TextInput
+              onChangeText={onChangeText}
+              ref={textInputRef}
+              value={text}
+              placeholder="Search"
+              style={styles.input}
+              onFocus={handleFocus}
+              onSubmitEditing={handleSearch}
+              accessibilityLabel="Search input"
+              accessibilityHint="Enter keywords to search for articles"
+            />
+            {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate("FiltersScreen", {
                 searchType,
@@ -331,25 +334,25 @@ function Search({ navigation }: NavProp) {
               accessible={false}
             />
           </TouchableOpacity> */}
-          {text.length > 0 && (
+            {text.length > 0 && (
+              <TouchableOpacity
+                onPress={handleClearText}
+                accessibilityLabel="Clear search text"
+              >
+                <Ionicons name="close-circle" size={20} color={varGray1} />
+              </TouchableOpacity>
+            )}
+          </Animated.View>
+          {searchActivated && (
             <TouchableOpacity
-              onPress={handleClearText}
-              accessibilityLabel="Clear search text"
+              onPress={handleSearchCancel}
+              accessibilityLabel="Cancel search"
+              accessibilityHint="Clear search input and cancel search"
+              accessibilityRole="button"
             >
-              <Ionicons name="close-circle" size={20} color={varGray1} />
+              <Text style={styles.cancelText}>Cancel</Text>
             </TouchableOpacity>
           )}
-        </Animated.View>
-        {searchActivated && (
-          <TouchableOpacity
-            onPress={handleSearchCancel}
-            accessibilityLabel="Cancel search"
-            accessibilityHint="Clear search input and cancel search"
-            accessibilityRole="button"
-          >
-            <Text style={styles.cancelText}>Cancel</Text>
-          </TouchableOpacity>
-        )}
         </View>
         <View style={styles.filterButtons}>
           <TouchableOpacity
@@ -360,8 +363,8 @@ function Search({ navigation }: NavProp) {
             accessibilityRole="button"
           >
             <View style={styles.filterContent}>
-            <Text style={styles.filterText}>Sort</Text>
-            <Ionicons name="chevron-down-outline" size={22} color={varTextColor} />
+              <Text style={styles.filterText}>Sort</Text>
+              {DrawerIcon}
             </View>
           </TouchableOpacity>
           <Modal
@@ -373,34 +376,39 @@ function Search({ navigation }: NavProp) {
             <TouchableWithoutFeedback onPress={() => closeDrawer()}>
               <View style={styles.modalOverlay} />
             </TouchableWithoutFeedback>
-            <Animated.View style={[styles.bottomDrawer, { transform: [{ translateY: drawerAnim }] }]}>
+            <Animated.View
+              style={[
+                styles.bottomDrawer,
+                { transform: [{ translateY: drawerAnim }] },
+              ]}
+            >
               <View style={styles.drawerTop}>
-              <Text style={styles.drawerTitle}>Sort by</Text>
-                         </View>
-               <TouchableOpacity
-                        style={styles.optionContainer}
-                        onPress={() => setSortOption("date")}
-                      >
-                        <Text style={styles.optionText}>Date</Text>
-                        <View
-                          style={[
-                            styles.radioCircle,
-                            sortOption === "date" ? styles.selected : {},
-                          ]}
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.optionContainer}
-                        onPress={() => setSortOption("title")}
-                      >
-                        <Text style={styles.optionText}>Title</Text>
-                        <View
-                          style={[
-                            styles.radioCircle,
-                            sortOption === "title" ? styles.selected : {},
-                          ]}
-                        />
-                      </TouchableOpacity>
+                <Text style={styles.drawerTitle}>Sort by</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.optionContainer}
+                onPress={() => setSortOption("date")}
+              >
+                <Text style={styles.optionText}>Date</Text>
+                <View
+                  style={[
+                    styles.radioCircle,
+                    sortOption === "date" ? styles.selected : {},
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionContainer}
+                onPress={() => setSortOption("title")}
+              >
+                <Text style={styles.optionText}>Title</Text>
+                <View
+                  style={[
+                    styles.radioCircle,
+                    sortOption === "title" ? styles.selected : {},
+                  ]}
+                />
+              </TouchableOpacity>
             </Animated.View>
           </Modal>
           <TouchableOpacity
@@ -410,8 +418,8 @@ function Search({ navigation }: NavProp) {
             accessibilityHint="Section search results"
           >
             <View style={styles.filterContent}>
-            <Text style={styles.filterText}>Section</Text>
-            <Ionicons name="chevron-down-outline" size={22} color={varTextColor} />
+              <Text style={styles.filterText}>Section</Text>
+              {DrawerIcon}
             </View>
           </TouchableOpacity>
 
@@ -424,14 +432,19 @@ function Search({ navigation }: NavProp) {
             <TouchableWithoutFeedback onPress={() => closeDrawer()}>
               <View style={styles.modalOverlay} />
             </TouchableWithoutFeedback>
-            <Animated.View style={[styles.bottomDrawer, { transform: [{ translateY: drawerAnim }] }]}>
+            <Animated.View
+              style={[
+                styles.bottomDrawer,
+                { transform: [{ translateY: drawerAnim }] },
+              ]}
+            >
               <View style={styles.drawerTop}>
-              <Text style={styles.drawerTitle}>Sections</Text>
-                         </View>
-                         <SectionFilters
-          selectedSections={selectedSections}
-          setSelectedSections={setSelectedSections}
-        />
+                <Text style={styles.drawerTitle}>Sections</Text>
+              </View>
+              <SectionFilters
+                selectedSections={selectedSections}
+                setSelectedSections={setSelectedSections}
+              />
             </Animated.View>
           </Modal>
 
@@ -442,12 +455,12 @@ function Search({ navigation }: NavProp) {
             accessibilityHint="Type search filters"
           >
             <View style={styles.filterContent}>
-            <Text style={styles.filterText}>Type</Text>
-            <Ionicons name="chevron-down-outline" size={22} color={varTextColor} />
+              <Text style={styles.filterText}>Type</Text>
+              {DrawerIcon}
             </View>
-  </TouchableOpacity>
+          </TouchableOpacity>
 
-  <Modal
+          <Modal
             transparent
             animationType="fade"
             visible={isTypeVisible}
@@ -456,53 +469,57 @@ function Search({ navigation }: NavProp) {
             <TouchableWithoutFeedback onPress={() => closeDrawer()}>
               <View style={styles.modalOverlay} />
             </TouchableWithoutFeedback>
-            <Animated.View style={[styles.bottomDrawer, { transform: [{ translateY: drawerAnim }] }]}>
+            <Animated.View
+              style={[
+                styles.bottomDrawer,
+                { transform: [{ translateY: drawerAnim }] },
+              ]}
+            >
               <View style={styles.drawerTop}>
-              <Text style={styles.drawerTitle}>Type</Text>
-            </View>
-                        <TouchableOpacity
-                                  style={styles.optionContainer}
-                                  onPress={() => setSearchMode("Article")}
-                                >
-                                  <Text style={styles.optionText}>Article</Text>
-                                  <View
-                                    style={[
-                                      styles.radioCircle,
-                                      searchMode === "Article" ? styles.selected : {},
-                                    ]}
-                                  />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                  style={styles.optionContainer}
-                                  onPress={() => {
-                                    setSearchMode("Writer");
-                                  }}
-                                >
-                                  <Text style={styles.optionText}>Writer</Text>
-                                  <View
-                                    style={[
-                                      styles.radioCircle,
-                                      searchMode === "Writer" ? styles.selected : {},
-                                    ]}
-                                  />
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                  style={styles.optionContainer}
-                                  onPress={() => setSearchMode("Photographer")}
-                                >
-                                  <Text style={[styles.optionText, { paddingBottom: 10 }]}>
-                                    Photographer
-                                  </Text>
-                                  <View
-                                    style={[
-                                      styles.radioCircle,
-                                      searchMode === "Photographer" ? styles.selected : {},
-                                    ]}
-                                  />
-                                </TouchableOpacity>
+                <Text style={styles.drawerTitle}>Type</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.optionContainer}
+                onPress={() => setSearchMode("Article")}
+              >
+                <Text style={styles.optionText}>Article</Text>
+                <View
+                  style={[
+                    styles.radioCircle,
+                    searchMode === "Article" ? styles.selected : {},
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionContainer}
+                onPress={() => {
+                  setSearchMode("Writer");
+                }}
+              >
+                <Text style={styles.optionText}>Writer</Text>
+                <View
+                  style={[
+                    styles.radioCircle,
+                    searchMode === "Writer" ? styles.selected : {},
+                  ]}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.optionContainer}
+                onPress={() => setSearchMode("Photographer")}
+              >
+                <Text style={[styles.optionText, { paddingBottom: 10 }]}>
+                  Photographer
+                </Text>
+                <View
+                  style={[
+                    styles.radioCircle,
+                    searchMode === "Photographer" ? styles.selected : {},
+                  ]}
+                />
+              </TouchableOpacity>
             </Animated.View>
           </Modal>
-  
         </View>
       </View>
 
@@ -609,27 +626,27 @@ const styles = StyleSheet.create({
     borderBottomColor: "#f0f0f0",
   },
   searchBarContainer: {
-    flexDirection: "row", 
-    alignItems: "center"
+    flexDirection: "row",
+    alignItems: "center",
   },
   filterButtons: {
     flexDirection: "row",
     paddingTop: 16,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   filterButton: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignItems: "center",
+    justifyContent: "flex-start",
     paddingVertical: 10,
     marginHorizontal: 8,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     borderColor: "#9E9E9E",
     borderWidth: 1,
     borderRadius: 18,
   },
   filterContent: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   filterText: {
     color: varTextColor,
@@ -688,30 +705,30 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
-  
+
   bottomDrawer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 20,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    },
-  
+  },
+
   drawerTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 24,
   },
 
   drawerTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   optionContainer: {
