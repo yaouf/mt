@@ -78,6 +78,7 @@ function ImageCard({ article, navigation, inSearch }: CardProps) {
                     } else {
                       separator = ' ';
                     }
+
                     return (
                       <View key={author.slug} style={styles.authorWrapper}>
                         <Text style={styles.published}>{separator}</Text>

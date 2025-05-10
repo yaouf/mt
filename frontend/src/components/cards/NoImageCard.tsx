@@ -52,7 +52,7 @@ function NoImageCard({ article, navigation }: CardProps) {
                 {article.authors.map((author, i) => {
                   const lastIndex = article.authors.length - 1;
                   let separator = '';
-
+                  
                   if (i > 0 && i < lastIndex) {
                     separator = ', ';
                   } else if (i === lastIndex && i !== 0) {
