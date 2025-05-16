@@ -79,8 +79,10 @@ function Search({ navigation }: NavProp) {
     trackEvent('search', { text });
     try {
       let queryUrl = 'https://www.browndailyherald.com/search.json?a=1';
-      if (searchType === 'Writer' || searchType === 'Photographer') {
-        queryUrl += `&au=${text}`;
+      if (searchType === 'Writer') {
+        queryUrl += `&au=${text}&ty=article`;
+      } else if (searchType == 'Photographer') {
+        queryUrl += `&au=${text}&ty=media`;
       } else if (searchType === 'Article') {
         queryUrl += `&s=${text}&ty=article`;
       }
@@ -179,21 +181,52 @@ function Search({ navigation }: NavProp) {
   const onRefresh = async () => {
     setRefreshing(true);
     setUsingPrefetchedData(false);
-    console.log('starting fetch to editors picks');
-    setTimeout(async () => {
-      try {
-        const editorsPicks = await fetchEditorsPicks();
-        setEditorsPicksStories(editorsPicks);
-      } catch (error) {
-        const errorParsed = JSON.parse(error as string);
-        console.log('errorParsed', errorParsed);
-        console.error("Failed to fetch editor's picks:", errorParsed);
-      }
-    }, 100);
-    console.log('starting fetch to most popular');
-    const mostPopular = await fetchMostPopular();
-    setMostPopularStories(mostPopular);
-    setRefreshing(false);
+    console.log('starting refresh...');
+    try {
+      // Use Promise.allSettled to wait for both fetches, regardless of success/failure
+      const results = await Promise.allSettled([
+        new Promise<EditorsPickArticle[]>((resolve, reject) => {
+          // Keep the timeout if needed for sequencing, but consider if it's necessary
+          setTimeout(async () => {
+            try {
+              console.log('starting fetch to editors picks inside timeout');
+              const editorsPicks = await fetchEditorsPicks();
+              setEditorsPicksStories(editorsPicks);
+              resolve(editorsPicks);
+            } catch (error) {
+              console.error("Failed to fetch editor's picks:", error);
+              reject(error); // Reject the promise on error
+            }
+          }, 100); // Consider removing or adjusting this timeout
+        }),
+        (async () => {
+          try {
+            console.log('starting fetch to most popular');
+            const mostPopular = await fetchMostPopular();
+            setMostPopularStories(mostPopular);
+            return mostPopular;
+          } catch (error) {
+            console.error('Failed to fetch most popular:', error);
+            throw error; // Re-throw to be caught by allSettled
+          }
+        })(),
+      ]);
+
+      // Log results (optional)
+      results.forEach((result, index) => {
+        if (result.status === 'rejected') {
+          console.error(`Fetch ${index === 0 ? 'Editors Picks' : 'Most Popular'} failed:`, result.reason);
+        }
+      });
+
+    } catch (error) {
+      // Catch any unexpected errors outside the promises (less likely with allSettled)
+      console.error('An unexpected error occurred during refresh:', error);
+    } finally {
+      // This block will always execute, even if errors occurred
+      console.log('refresh finished, setting refreshing to false');
+      setRefreshing(false);
+    }
   };
 
   // const onLayoutRootView = useCallback(async () => {
@@ -225,18 +258,6 @@ function Search({ navigation }: NavProp) {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
-        {/* <TouchableOpacity
-          onPress={() => navigation.push("FilterScreen")}
-          accessibilityLabel="Open filter drawer"
-        >
-          <MaterialIcons
-            name="tune"
-            size={20}
-            color={varGray1}
-            style={styles.searchIcon}
-            accessible={false}
-          />
-        </TouchableOpacity> */}
         <Animated.View style={[styles.inputContainer, { width: inputWidth }]}>
           <MaterialIcons
             name="search"

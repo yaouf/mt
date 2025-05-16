@@ -9,6 +9,19 @@ type ResponseData = {
   editorspicks?: { url: string }[];
 };
 
+/**
+ * Deletes an editor's pick from the `editors_picks` table based on the provided URL.
+ *
+ * @param req - The incoming Next.js API request object.
+ * @param res - The Next.js API response object used to return the updated picks or an error.
+ *
+ * @remarks
+ * - Expects a JSON body with a `url` field identifying the pick to delete.
+ * - If the URL is found, the pick is deleted and the remaining picks are returned.
+ * - If not found, returns a 404 with an error message.
+ *
+ * @returns A list of remaining editor picks, or an error response.
+ */
 async function deleteEditorPickHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData | EditorPick[]>
@@ -43,6 +56,15 @@ async function deleteEditorPickHelper(
   }
 }
 
+/**
+ * API route handler for deleting an editor's pick by URL.
+ * Applies CORS and authentication middleware before proceeding to deletion logic.
+ *
+ * @param req - The API request object from Next.js.
+ * @param res - The API response object used to return the result.
+ *
+ * @returns Executes the deleteEditorPickHelper after CORS and authentication.
+ */
 export default async function deleteEditorPick(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>

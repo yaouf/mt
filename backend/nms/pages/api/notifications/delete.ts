@@ -5,41 +5,40 @@ import { Notification, RequestData, ResponseData } from '../types/types';
 import corsMiddleware from '../../../config/cors';
 import { authMiddleware } from '../../../middleware/authMiddleware';
 
+/**
+ * Helper function to handle notification deletion logic.
+ *
+ * @param req - API request containing the job ID in the body.
+ * @param res - API response returning updated notifications or an error message.
+ */
 async function deleteNotificationHelper(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData | Notification[]>
 ) {
   try {
     // Parse the request body
-    let data: any;
-    if (typeof req.body === 'string') {
-      data = JSON.parse(req.body);
-    } else {
-      data = req.body;
-    }
-
-    const { jobId } = data as RequestData;
+    const data: RequestData = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const { jobId } = data;
 
     // Validate required fields
     if (!jobId) {
       return res.status(400).json({ message: 'Invalid notification data.' });
     }
 
-    // Delete the notification from the job queue
-    const job = await notificationQueue.getJob(jobId.toString() + '_n');
-    console.log(notificationQueue.getActive());
+    // Remove the job from the notification queue
+    const job = await notificationQueue.getJob(`${jobId}_n`);
     if (job) {
       console.log('Job deleted from queue.');
       await job.remove();
     } else {
-      console.warn('Could not find job in queue with id:', jobId.toString() + '_n');
+      console.warn(`Could not find job in queue with ID: ${jobId}_n`);
     }
 
-    // Delete the notification from the "notifications" table
+    // Delete the notification from the database
     const deletedCount = await db('notifications').where({ id: jobId }).del();
 
     if (deletedCount > 0) {
-      // Fetch all notifications with their categories after deletion
+      // Fetch all notifications with their categories
       const notifications = await db('notifications as n')
         .leftJoin('notification_categories as nc', 'n.id', 'nc.notification_id')
         .leftJoin('categories as c', 'nc.category_id', 'c.id')
@@ -57,12 +56,9 @@ async function deleteNotificationHelper(
         .orderBy('n.time', 'desc');
 
       console.log('Notifications in database after deletion:', notifications);
-
       res.status(200).json(notifications);
     } else {
-      res.status(404).json({
-        message: 'Notification not found in database.',
-      });
+      res.status(404).json({ message: 'Notification not found in database.' });
     }
   } catch (error) {
     console.error('Error deleting notification from the database:', error);
@@ -70,6 +66,17 @@ async function deleteNotificationHelper(
   }
 }
 
+/**
+ * API route handler for deleting a scheduled notification.
+ *
+ * @param req - The incoming HTTP request.
+ * @param res - The HTTP response that returns updated notifications or an error.
+ *
+ * @remarks
+ * - Expects a JSON body containing the `jobId`.
+ * - Deletes the corresponding job from the notification queue and the database.
+ * - Returns updated list of notifications with their categories.
+ */
 export default async function deleteNotification(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData | Notification[]>
@@ -78,6 +85,7 @@ export default async function deleteNotification(
     await authMiddleware(req, res, deleteNotificationHelper);
   });
 }
+
 
 // import type { NextApiRequest, NextApiResponse } from "next";
 // import db from "../../../dist/data/db-config";

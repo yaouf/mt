@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { font1, font2, font3, varGray1, varTextColor, varTextSecondaryColor } from './styles';
 
-const fontsizeHeader = 16; // figma says 12.456??
+export const fontsizeHeader = 16; // figma says 12.456??
 //spacing is also a little weird in the header with the fonts rn
 
 export const articleStyles = StyleSheet.create({
@@ -47,8 +47,8 @@ export const articleStyles = StyleSheet.create({
     color: varTextSecondaryColor,
     fontFamily: font2,
     fontSize: fontsizeHeader,
-    fontWeight: "700",
-    flexWrap: "wrap",
+    fontWeight: '700',
+    flexWrap: 'wrap',
     flexShrink: 1,
   },
   publishedDetails: {
@@ -62,8 +62,8 @@ export const articleStyles = StyleSheet.create({
     color: varGray1,
     fontFamily: font3,
     fontSize: fontsizeHeader,
-    fontWeight: "400",
-    flexWrap: "wrap",
+    fontWeight: '400',
+    flexWrap: 'wrap',
     flexShrink: 1,
   },
   articleBodyWrapper: {
@@ -190,14 +190,14 @@ export const articleStyles = StyleSheet.create({
     marginLeft: 2,
   },
   authorImagesContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     gap: 5,
     alignSelf: 'flex-start',
     marginRight: 15,
     flexShrink: 1,
-    flexWrap: "wrap",
-    maxWidth: "60%" // Can also decrease if we prefer the author container to take up more space
+    flexWrap: 'wrap',
+    maxWidth: '60%', // Can also decrease if we prefer the author container to take up more space
   },
   authorImage: {
     width: 48,
@@ -208,10 +208,10 @@ export const articleStyles = StyleSheet.create({
     flexDirection: 'column',
     gap: 4,
     alignSelf: 'flex-start',
-    justifyContent: "center",
+    justifyContent: 'center',
     flexShrink: 1,
     flex: 1,
-    maxWidth: "90%",
+    maxWidth: '90%',
     minWidth: 90,
   },
   /*publishedDetailsText: {

@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Tag } from 'src/types/data';
 import { CardProps } from 'src/types/navStacks';
 import { font1, font2, font3, varGray1, varPink, varTextColor } from '../../styles/styles';
@@ -7,7 +14,7 @@ import { formatDates } from '../../utils/formatDates';
 function LargeCard({ article, navigation, inSearch }: CardProps) {
   const all_tags = article.tags.map((t: Tag) => t.name);
   let breaking = false;
-  const section = all_tags[0].replace('&;', '&');
+  const section = all_tags ? all_tags[0]?.replace('&;', '&') : '';
 
   for (let i = 0; i < all_tags.length; i++) {
     if (all_tags[i] == 'breaking') {
@@ -52,6 +59,31 @@ function LargeCard({ article, navigation, inSearch }: CardProps) {
             </Text>
             <View style={styles.bottom}>
               <View style={styles.publishedSection}>
+                <View style={styles.authorLine}>
+                  <Text style={styles.published}>By </Text>
+                  {article.authors.map((author, i) => {
+                    const lastIndex = article.authors.length - 1;
+                    let separator = '';
+
+                    if (i > 0 && i < lastIndex) {
+                      separator = ', ';
+                    } else if (i === lastIndex && i !== 0) {
+                      separator = ' and ';
+                    }
+
+                    return (
+                      <View key={author.slug} style={styles.authorWrapper}>
+                        <Text style={styles.published}>{separator}</Text>
+
+                        <TouchableOpacity
+                          onPress={() => navigation.navigate('Staff', { slug: author.slug })}
+                        >
+                          <Text style={styles.authorName}>{author.name.trim()}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  })}
+                </View>
                 <Text style={styles.published}>{formatDates(article.published_at)}</Text>
               </View>
             </View>
@@ -146,7 +178,7 @@ const styles = StyleSheet.create({
   },
   publishedSection: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 4,
   },
   options: {
@@ -172,5 +204,21 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderColor: '#ED1C24',
     backgroundColor: '#ED1C24',
+  },
+  authorLine: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  authorWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  authorName: {
+    color: 'grey',
+    fontFamily: font3,
+    fontSize: 14,
+    fontWeight: '900',
+    fontStyle: 'normal',
   },
 });

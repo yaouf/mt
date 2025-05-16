@@ -20,10 +20,16 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
   const slug = route.params.slug;
 
   useEffect(() => {
+
+    setAuthor(undefined);
+    setArticles(undefined);
+    setMedia(undefined);
+    setPosts(undefined);
+    
     fetchAuthor(slug, setAuthor, setArticles, setMedia, setPosts).then(() =>
       console.log(`loaded ${slug}`)
     );
-  }, []);
+  }, [slug]);
 
   if (!author || !articles || !media || !posts) {
     return (
@@ -81,7 +87,7 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
               </View>
             </View>
 
-            {author.bio !== '' && (
+            {author.bio && author.bio !== '' && (
               <View accessible={true}>
                 <Divider marginTop={0} marginBottom={8} />
                 <Text
@@ -107,6 +113,7 @@ function Staff({ route, navigation }: StackScreenProps<SettingsStackProps, 'Staf
                     article={article}
                     navigation={navigation}
                     key={`sports-home-${i + 2}`}
+                    inSearch={true}
                   />
                 ))}
               </View>

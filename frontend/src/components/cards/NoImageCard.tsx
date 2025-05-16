@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -14,7 +15,7 @@ import { Tag } from 'src/types/data';
 function NoImageCard({ article, navigation }: CardProps) {
   let cardSize: StyleProp<ViewStyle> = { minWidth: '100%' };
   const all_tags = article.tags.map((t: Tag) => t.name);
-  const section = all_tags[0].replace('&;', '&');
+  const section = all_tags ? all_tags[0]?.replace('&;', '&') : '';
 
   return (
     <View style={cardSize}>
@@ -42,10 +43,36 @@ function NoImageCard({ article, navigation }: CardProps) {
                 display: 'flex',
                 width: '100%',
                 justifyContent: 'space-between',
-                flexDirection: 'row',
-                alignItems: 'flex-end',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
               }}
             >
+              <View style={styles.authorLine}>
+                <Text style={styles.published}>By</Text>
+                {article.authors.map((author, i) => {
+                  const lastIndex = article.authors.length - 1;
+                  let separator = '';
+                  
+                  if (i > 0 && i < lastIndex) {
+                    separator = ', ';
+                  } else if (i === lastIndex && i !== 0) {
+                    separator = ' and ';
+                  } else {
+                    separator = ' ';
+                  }
+                  return (
+                    <View key={author.slug} style={styles.authorWrapper}>
+                      <Text style={styles.published}>{separator}</Text>
+
+                      <TouchableOpacity
+                        onPress={() => navigation.navigate('Staff', { slug: author.slug })}
+                      >
+                        <Text style={styles.authorName}>{author.name}</Text>
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })}
+              </View>
               <Text style={styles.published}>{formatDates(article.published_at)}</Text>
             </View>
           </View>
@@ -163,5 +190,21 @@ const styles = StyleSheet.create({
     width: 254,
     height: 0.5,
     backgroundColor: 'rgba(60, 60, 67, 0.36)',
+  },
+  authorLine: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+  },
+  authorWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  authorName: {
+    color: 'grey',
+    fontFamily: font3,
+    fontSize: 12,
+    fontWeight: '900',
+    fontStyle: 'normal',
   },
 });
