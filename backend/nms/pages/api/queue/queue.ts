@@ -115,7 +115,7 @@ const worker = new Worker(
               if (status === 'ok') {
                 continue;
               } else if (status === 'error') {
-                console.error(`Error sending notification: ${details?.error}`);
+                console.error(`Error sending notification: ${details}`);
               }
             }
           } catch (error) {
